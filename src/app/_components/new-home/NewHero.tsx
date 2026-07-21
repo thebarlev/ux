@@ -29,21 +29,25 @@ export function NewHero({ copy }: { copy: HeroCopy }) {
             </div>
           </div>
 
-          {/* TEXT */}
-          <div className="order-2 md:order-1 flex flex-col items-end text-right md:py-2">
-            <h1 className="text-black w-full font-semibold text-right">
-              <span className="block w-full tracking-[-1px] text-[52px] leading-[0.95] sm:text-[60px] md:text-[64px] md:leading-[0.98] lg:text-[84px] xl:text-[96px] xl:leading-[92px] xl:tracking-[-1.5px]">
+          {/* TEXT
+              One column, one shared right edge. `items-start` is correct here:
+              in a column flex container under dir="rtl" the cross-axis start is
+              the right side, so every child hugs the same line. Using
+              `items-end` would push them left and break the alignment. */}
+          <div className="order-2 md:order-1 flex flex-col items-start text-right md:py-2">
+            <h1 className="w-full max-w-[520px] text-right font-semibold text-black">
+              <span className="block text-[34px] leading-[1.12] tracking-[-0.4px] sm:text-[38px] md:text-[42px] lg:text-[48px] xl:text-[52px] xl:leading-[1.08]">
                 {copy.title}
               </span>
             </h1>
 
-            <p className="mt-4 w-full max-w-[560px] text-right text-[20px] font-normal leading-[30px] text-[color:var(--vow-muted)] md:mt-6 md:text-[22px] md:leading-[32px]">
+            <p className="mt-4 w-full max-w-[520px] text-right text-[19px] font-normal leading-[30px] text-[color:var(--vow-muted)] md:mt-5 md:text-[20px] md:leading-[32px]">
               {copy.subtitle}
             </p>
 
             <a
               href="#contact"
-              className="btn-primary mt-6 w-full sm:w-[200px] md:mt-8"
+              className="btn-primary mt-6 w-full self-stretch sm:w-[200px] sm:self-start md:mt-7"
             >
               {copy.cta}
             </a>

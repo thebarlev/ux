@@ -29,10 +29,6 @@ export const HERO_B: HeroCopy = {
 }
 
 /** Approved, verbatim. Do not edit. */
-export const ABOUT_TEXT =
-  "אנחנו צוות קטן ורעב, מחויבים להצלחה שלכם. כל אתגר שתביאו, אנחנו לוקחים עליו אחריות מלאה: עיצוב, אפיון, פיתוח ושיווק. יותר מ-25 שנות ניסיון מתכנסות כאן למקום אחד, עם צוות מתכנתים מנצח שנותן לכם את החבילה השלמה."
-
-/** Approved, verbatim. Do not edit. */
 export const STORY_A =
   "רוב העסקים מפזרים את הפרויקט בין כמה ספקים. מעצב במקום אחד, מאפיין בשני, מתכנת בשלישי, ומישהו נוסף שאמור לדאוג לשיווק. בדרך הזו הרעיון מאבד את עצמו. אצלנו הכל יושב תחת צוות אחד שמכיר את המוצר שלכם מהרגע הראשון, בונה אותו נכון, ומלווה אותו גם אחרי ההשקה. ככה הזמן מתקצר, ההיגיון נשמר, והמוצר יוצא שלם."
 
@@ -46,6 +42,8 @@ export type ProjectCard = {
   description: string
   ctaLabel: string
   href: string
+  /** Real artwork once supplied; a placeholder renders while this is absent. */
+  image?: string
 }
 
 export const PROJECTS: readonly ProjectCard[] = [
@@ -53,19 +51,19 @@ export const PROJECTS: readonly ProjectCard[] = [
     id: "auditor",
     name: "Auditor",
     description: "כלי שמנתח את האתר שלכם ומשפר את החשיפה שלו בגוגל ובמנועי ה-AI.",
-    ctaLabel: "כניסה",
+    ctaLabel: "לבדיקת הדומיין שלכם",
     href: "#",
   },
   {
     id: "invoices",
     name: "חשבוניות דיגיטליות",
     description: "מערכת להפקת חשבוניות ומסמכים דיגיטליים לעסק.",
-    ctaLabel: "כניסה",
+    ctaLabel: "להצטרפות חינם",
     href: "#",
   },
   {
     id: "mioshy",
-    name: "Mioshy",
+    name: "אבחון זוגיות",
     description: "מערכת אונליין לניהול תהליכי ייעוץ זוגי.",
     ctaLabel: "הצטרפות",
     href: "#",

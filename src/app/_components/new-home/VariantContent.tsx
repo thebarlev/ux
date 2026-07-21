@@ -1,37 +1,53 @@
 "use client"
 
-import { useState } from "react"
+import { createContext, useContext, useState, type ReactNode } from "react"
 
 import { NewHero } from "./NewHero"
-import { AboutUsSection } from "./AboutUsSection"
 import { StorySection } from "./StorySection"
 import { HERO_A, HERO_B, STORY_A, STORY_B } from "./newHome.constants"
 
 type Variant = "a" | "b"
 
+type VariantState = {
+  hero: Variant
+  story: Variant
+}
+
+const VariantCtx = createContext<VariantState>({ hero: "a", story: "a" })
+
 /**
- * Wraps the hero and the story section so both copy variants can be compared
- * live. The floating switcher is a review-only control and is not part of the
- * design; it should be removed before this page goes anywhere near production.
+ * Holds the copy-variant state and renders the review-only switcher.
+ * Hero and story are separate consumers so each can sit anywhere in the page
+ * order without being locked next to the other.
+ *
+ * The switcher is not part of the design and is scheduled for removal once a
+ * variant is chosen.
  */
-export function VariantContent() {
+export function VariantProvider({ children }: { children: ReactNode }) {
   const [hero, setHero] = useState<Variant>("a")
   const [story, setStory] = useState<Variant>("a")
 
   return (
-    <>
+    <VariantCtx.Provider value={{ hero, story }}>
       <VariantSwitcher
         hero={hero}
         story={story}
         onHeroChange={setHero}
         onStoryChange={setStory}
       />
-
-      <NewHero copy={hero === "a" ? HERO_A : HERO_B} />
-      <AboutUsSection />
-      <StorySection text={story === "a" ? STORY_A : STORY_B} />
-    </>
+      {children}
+    </VariantCtx.Provider>
   )
+}
+
+export function VariantHero() {
+  const { hero } = useContext(VariantCtx)
+  return <NewHero copy={hero === "a" ? HERO_A : HERO_B} />
+}
+
+export function VariantStory() {
+  const { story } = useContext(VariantCtx)
+  return <StorySection text={story === "a" ? STORY_A : STORY_B} />
 }
 
 function VariantSwitcher({
@@ -67,20 +83,8 @@ function VariantSwitcher({
             </button>
           </div>
 
-          <VariantRow
-            label="הירו"
-            value={hero}
-            onChange={onHeroChange}
-            aName="מאושר"
-            bName="חלופי"
-          />
-          <VariantRow
-            label="סיפור השירות"
-            value={story}
-            onChange={onStoryChange}
-            aName="מאושר"
-            bName="חלופי"
-          />
+          <VariantRow label="הירו" value={hero} onChange={onHeroChange} />
+          <VariantRow label="סיפור השירות" value={story} onChange={onStoryChange} />
 
           <p className="mt-3 text-[13px] leading-[18px] text-[color:var(--vow-muted)]">
             כלי סקירה בלבד. לא חלק מהעיצוב.
@@ -103,14 +107,10 @@ function VariantRow({
   label,
   value,
   onChange,
-  aName,
-  bName,
 }: {
   label: string
   value: Variant
   onChange: (v: Variant) => void
-  aName: string
-  bName: string
 }) {
   return (
     <div className="mt-3">
@@ -129,7 +129,7 @@ function VariantRow({
                 : "border-black/15 bg-white text-black hover:bg-black/5",
             ].join(" ")}
           >
-            {v === "a" ? aName : bName}
+            {v === "a" ? "מאושר" : "חלופי"}
           </button>
         ))}
       </div>
