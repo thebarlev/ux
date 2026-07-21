@@ -1,14 +1,16 @@
 import Image from "next/image"
 
-import { CLIENT_LOGOS } from "@/app/_components/home/home.constants"
-import type { HeroCopy } from "./newHome.constants"
+import { HERO, NEW_HOME_LOGOS } from "./newHome.constants"
 
 /**
  * Light hero for the alternative home page.
- * Reuses the existing hero asset (/D-hero.webp) and the existing client logos,
- * keeping the cream background and the image-left / text-right composition of the live hero.
+ * Reuses the existing hero asset (/D-hero.webp) and keeps the cream background
+ * and the image-left / text-right composition of the live hero. The logo strip
+ * comes from NEW_HOME_LOGOS, this page's own list.
  */
-export function NewHero({ copy }: { copy: HeroCopy }) {
+export function NewHero() {
+  const copy = HERO
+
   return (
     <section className="w-full bg-[#F4F1EC]" dir="rtl">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4 pt-0 pb-[var(--space-section)] md:py-[var(--space-section)]">
@@ -58,7 +60,7 @@ export function NewHero({ copy }: { copy: HeroCopy }) {
         <div className="mt-10 md:mt-14">
           <h2 className="sr-only">לקוחות שעבדנו איתם</h2>
           <div className="grid grid-cols-3 gap-x-6 gap-y-6 py-2 sm:gap-x-8 sm:gap-y-6 md:grid-cols-6 md:gap-x-[80px] md:gap-y-8">
-            {CLIENT_LOGOS.map((logo) => (
+            {NEW_HOME_LOGOS.map((logo) => (
               <div
                 key={logo.src}
                 className="flex min-w-0 items-center justify-center overflow-hidden px-1"

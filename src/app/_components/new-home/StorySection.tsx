@@ -1,10 +1,12 @@
 import { H2 } from "@/components/ui/Heading"
 
+import { STORY_PARAGRAPHS } from "./newHome.constants"
+
 /**
- * The heart of the page: why one team beats a chain of separate vendors.
- * Copy is passed in so the variant switcher can swap it without touching layout.
+ * The founder's story, in first person: the path that led to Uxellent and the
+ * gap it exists to close.
  */
-export function StorySection({ text }: { text: string }) {
+export function StorySection() {
   return (
     <section
       id="story"
@@ -15,11 +17,16 @@ export function StorySection({ text }: { text: string }) {
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
         <div className="border-r-[3px] border-[color:var(--vow-accent)] pr-5 md:pr-8">
           <H2 id="story-heading" className="w-full text-right">
-            למה צוות אחד עושה את ההבדל
+            הסיפור מאחורי Uxellent
           </H2>
-          <p className="mt-4 max-w-[980px] text-right text-[21px] leading-[34px] text-black md:mt-6 md:text-[24px] md:leading-[40px]">
-            {text}
-          </p>
+          {STORY_PARAGRAPHS.map((paragraph) => (
+            <p
+              key={paragraph}
+              className="mt-4 max-w-[980px] text-right text-[21px] leading-[34px] text-black md:mt-6 md:text-[24px] md:leading-[40px]"
+            >
+              {paragraph}
+            </p>
+          ))}
         </div>
       </div>
     </section>

@@ -3,11 +3,8 @@ import type { Metadata } from "next"
 import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { Testimonials } from "@/app/_components/home/Testimonials"
-import {
-  VariantProvider,
-  VariantHero,
-  VariantStory,
-} from "@/app/_components/new-home/VariantContent"
+import { NewHero } from "@/app/_components/new-home/NewHero"
+import { StorySection } from "@/app/_components/new-home/StorySection"
 import { ProjectsSection } from "@/app/_components/new-home/ProjectsSection"
 import { ContactSection } from "@/app/_components/new-home/ContactSection"
 
@@ -32,13 +29,11 @@ export default function NewHomePage() {
     <div className="min-h-screen bg-[#F4F1EC]">
       <SiteHeader />
       <main id="main">
-        <VariantProvider>
-          <VariantHero />
-          <ProjectsSection />
-          <VariantStory />
-          <Testimonials locale="he" />
-          <ContactSection />
-        </VariantProvider>
+        <NewHero />
+        <ProjectsSection />
+        <StorySection />
+        <Testimonials locale="he" />
+        <ContactSection />
       </main>
       <SiteFooter />
     </div>
