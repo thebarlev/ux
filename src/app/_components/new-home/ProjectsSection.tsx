@@ -16,11 +16,13 @@ export function ProjectsSection() {
           דוגמאות אהובות שלנו
         </H2>
 
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 md:mt-8 md:gap-8">
+        {/* `items-stretch` plus `h-full` on the card keeps both cards in a row
+            the same height however unevenly the bullets wrap. */}
+        <div className="mt-6 grid items-stretch gap-6 sm:grid-cols-2 md:mt-8 md:gap-8">
           {PROJECTS.map((project) => (
             <article
               key={project.id}
-              className="flex flex-col overflow-hidden rounded-[18px] bg-white transition-shadow duration-200 hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
+              className="flex h-full flex-col overflow-hidden rounded-[18px] bg-white transition-shadow duration-200 hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#E9E4DC]">
                 {project.image ? (
@@ -47,9 +49,27 @@ export function ProjectsSection() {
                 <h3 className="text-right text-[24px] font-semibold leading-[30px] text-black md:text-[26px]">
                   {project.name}
                 </h3>
-                <p className="mt-3 flex-1 text-right text-[18px] leading-[28px] text-[color:var(--vow-muted)]">
+                <p className="mt-3 text-right text-[18px] leading-[28px] text-[color:var(--vow-muted)]">
                   {project.description}
                 </p>
+
+                {/* `flex-1` sits on the list, not the description, so the CTA is
+                    pushed to the bottom edge of every card. */}
+                <ul className="mt-4 flex-1 space-y-2">
+                  {project.bullets.map((bullet) => (
+                    <li
+                      key={bullet}
+                      className="flex items-start gap-2.5 text-right text-[17px] leading-[26px] text-black"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="mt-[9px] h-[6px] w-[6px] shrink-0 rounded-full bg-[color:var(--vow-accent)]"
+                      />
+                      <span className="min-w-0">{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+
                 <a
                   href={project.href}
                   className="vow-btn-primary mt-6 w-full"

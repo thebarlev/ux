@@ -13,7 +13,7 @@ import { ContactSection } from "@/app/_components/new-home/ContactSection"
  * Not linked from anywhere and explicitly noindex until it is approved.
  */
 export const metadata: Metadata = {
-  title: "Uxellent | מרעיון למוצר חי, במקום אחד",
+  title: "Uxellent | מהעיצוב והאפיון ועד הפיתוח והשיווק",
   description:
     "צוות אחד שמלווה אתכם מהעיצוב והאפיון ועד הפיתוח והשיווק, עם יותר מ-25 שנות ניסיון.",
   robots: {

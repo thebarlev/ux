@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
 import { H2 } from "@/components/ui/Heading"
-import { CONTACT_INTRO } from "./newHome.constants"
+import { CONTACT_ACTIONS, CONTACT_INTRO } from "./newHome.constants"
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_RE = /^[0-9+()\-\s]{9,}$/
@@ -74,13 +74,35 @@ export function ContactSection() {
       dir="rtl"
     >
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
-        <div className="mx-auto max-w-[640px] rounded-[18px] border border-[color:var(--vow-border)] bg-white px-6 py-10 shadow-sm sm:px-10">
+        {/* No card: the content sits straight on the cream, held to a readable
+            measure. */}
+        <div className="mx-auto max-w-[640px]">
           <H2 id="contact-heading" className="w-full text-right">
             צרו קשר
           </H2>
           <p className="mt-3 text-right text-[19px] leading-[30px] text-[color:var(--vow-muted)]">
             {CONTACT_INTRO}
           </p>
+
+          {/* The two fast paths, ahead of the form. */}
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <a
+              href={CONTACT_ACTIONS.whatsapp.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="vow-btn-primary w-full sm:flex-1"
+            >
+              {CONTACT_ACTIONS.whatsapp.label}
+            </a>
+            <a
+              href={CONTACT_ACTIONS.call.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="vow-btn-secondary w-full sm:flex-1"
+            >
+              {CONTACT_ACTIONS.call.label}
+            </a>
+          </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-8 flex flex-col gap-5" noValidate>
             <div>
