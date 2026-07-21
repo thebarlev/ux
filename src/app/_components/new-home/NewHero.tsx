@@ -1,0 +1,76 @@
+import Image from "next/image"
+
+import { CLIENT_LOGOS } from "@/app/_components/home/home.constants"
+import type { HeroCopy } from "./newHome.constants"
+
+/**
+ * Light hero for the alternative home page.
+ * Reuses the existing hero asset (/D-hero.webp) and the existing client logos,
+ * keeping the cream background and the image-left / text-right composition of the live hero.
+ */
+export function NewHero({ copy }: { copy: HeroCopy }) {
+  return (
+    <section className="w-full bg-[#F4F1EC]" dir="rtl">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4 pt-0 pb-[var(--space-section)] md:py-[var(--space-section)]">
+        <div className="flex flex-col gap-8 md:grid md:grid-cols-[1fr_1fr] md:items-center">
+          {/* IMAGE */}
+          <div className="order-1 md:order-2 flex justify-end md:items-center">
+            <div className="relative w-screen h-[300px] -mx-4 sm:-mx-6 md:mx-0 md:w-full md:h-[min(500px,52vh)]">
+              <Image
+                src="/D-hero.webp"
+                alt="ליווי מלא מרעיון ועד מוצר חי, עיצוב אפיון פיתוח ושיווק במקום אחד"
+                fill
+                priority
+                fetchPriority="high"
+                quality={60}
+                className="object-contain object-center md:object-right"
+                sizes="(max-width: 767px) 100vw, 50vw"
+              />
+            </div>
+          </div>
+
+          {/* TEXT */}
+          <div className="order-2 md:order-1 flex flex-col items-end text-right md:py-2">
+            <h1 className="text-black w-full font-semibold text-right">
+              <span className="block w-full tracking-[-1px] text-[52px] leading-[0.95] sm:text-[60px] md:text-[64px] md:leading-[0.98] lg:text-[84px] xl:text-[96px] xl:leading-[92px] xl:tracking-[-1.5px]">
+                {copy.title}
+              </span>
+            </h1>
+
+            <p className="mt-4 w-full max-w-[560px] text-right text-[20px] font-normal leading-[30px] text-[color:var(--vow-muted)] md:mt-6 md:text-[22px] md:leading-[32px]">
+              {copy.subtitle}
+            </p>
+
+            <a
+              href="#contact"
+              className="btn-primary mt-6 w-full sm:w-[200px] md:mt-8"
+            >
+              {copy.cta}
+            </a>
+          </div>
+        </div>
+
+        {/* CLIENT LOGOS */}
+        <div className="mt-10 md:mt-14">
+          <h2 className="sr-only">לקוחות שעבדנו איתם</h2>
+          <div className="grid grid-cols-3 gap-x-6 gap-y-6 py-2 sm:gap-x-8 sm:gap-y-6 md:grid-cols-6 md:gap-x-[80px] md:gap-y-8">
+            {CLIENT_LOGOS.map((logo) => (
+              <div
+                key={logo.src}
+                className="flex min-w-0 items-center justify-center overflow-hidden px-1"
+              >
+                <Image
+                  src={logo.src}
+                  alt={logo.alt}
+                  width={220}
+                  height={50}
+                  className="h-auto w-auto max-w-full max-h-[32px] object-contain object-center brightness-0 sm:max-h-[40px] md:max-h-[50px]"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
