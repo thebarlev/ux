@@ -12,12 +12,14 @@ export type HeroCopy = {
 }
 
 /**
- * Typographic hero: the sentence itself is the headline, so there is no
- * separate title line and no image. Approved, verbatim. Do not edit.
+ * Shared hero copy. Identical across the three hero design variants; only the
+ * visual treatment differs between them. Approved, verbatim. Do not edit.
  */
 export const HERO: HeroCopy = {
-  title: "אנחנו צוות קטן ורעב שמלווה אתכם מהעיצוב והאפיון ועד הפיתוח והשיווק.",
-  subtitle: "יותר מ-25 שנות ניסיון וצוות מתכנתים מנצח.",
+  title:
+    "אנחנו צוות קטן ורעב שבונה אפליקציות ומערכות SaaS מבוססות AI, ומלווה אתכם מהרעיון ועד השיווק.",
+  subtitle:
+    "עיצוב, אפיון, פיתוח ושיווק במקום אחד, עם יותר מ-25 שנות ניסיון וצוות מתכנתים מנצח.",
   cta: "בואו נדבר",
 }
 
