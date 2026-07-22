@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הירו · נושא 1 · חשבוניות ירוקות — תצוגת עיצוב לאישור</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A0F1A; --ink2:#0D1526; --panel:rgba(17,26,46,.72);
+    --line:rgba(140,170,215,.14); --brand:#5389BB; --brand-soft:rgba(83,137,187,.32);
+    --txt:#F4F6FA; --muted:rgba(226,233,245,.62); --good:#57C98F; --cream:#F4F1EC;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{overflow-x:hidden}
+  body{font-family:'Assistant',-apple-system,'Segoe UI',sans-serif;background:var(--cream);color:var(--txt)}
+
+  /* ---------- full-bleed dark hero ---------- */
+  .dark{
+    background:
+      radial-gradient(900px 420px at 78% 8%, rgba(83,137,187,.20), transparent 60%),
+      radial-gradient(700px 500px at 18% 85%, rgba(83,137,187,.10), transparent 60%),
+      linear-gradient(180deg, var(--ink) 0%, var(--ink2) 100%);
+    position:relative; overflow:hidden;
+  }
+  .dark::before{content:"";position:absolute;inset:0;
+    background-image:linear-gradient(rgba(140,170,215,.05) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(140,170,215,.05) 1px,transparent 1px);
+    background-size:56px 56px; mask-image:radial-gradient(80% 70% at 60% 30%,#000 30%,transparent 100%);}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 32px;position:relative}
+
+  /* ---------- header ---------- */
+  header{display:flex;align-items:center;justify-content:space-between;padding:22px 0;gap:16px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:24px;letter-spacing:.2px}
+  .logo .mark{width:30px;height:30px;border-radius:9px;background:conic-gradient(from 40deg,#7FB2E0,var(--brand),#2E5E8C,#7FB2E0);
+    box-shadow:0 0 22px rgba(83,137,187,.55)}
+  nav{display:flex;gap:26px;font-size:16.5px;color:var(--muted)}
+  nav span{cursor:pointer} nav span:hover{color:var(--txt)}
+  .hdr-cta{display:flex;align-items:center;gap:10px}
+  .pill{border-radius:999px;padding:9px 20px;font-size:15.5px;font-weight:700;cursor:pointer}
+  .pill.solid{background:#fff;color:#0A0F1A}
+  .pill.ghost{border:1px solid rgba(244,246,250,.35);color:var(--txt)}
+
+  /* ---------- hero grid ---------- */
+  .hero{display:grid;grid-template-columns:1.16fr 1fr;gap:44px;align-items:center;padding:44px 0 20px}
+  .tags{display:flex;gap:10px;margin-bottom:18px}
+  .tag{border:1px solid rgba(140,170,215,.35);background:rgba(83,137,187,.12);color:#BCD3E8;
+    border-radius:999px;padding:6px 16px;font-size:14.5px;font-weight:600}
+  h1{font-size:clamp(30px,4.6vw,60px);line-height:1.14;font-weight:800;letter-spacing:-0.02em;max-width:18ch}
+  .sub{margin-top:20px;font-size:19px;line-height:1.65;color:var(--muted);max-width:44ch}
+  .ctas{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+  .btn{border-radius:12px;padding:15px 26px;font-size:17px;font-weight:700;cursor:pointer}
+  .btn.primary{background:#fff;color:#0A0F1A;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+  .btn.ghost{border:1px solid rgba(244,246,250,.32);color:var(--txt);background:transparent}
+
+  /* ---------- mock: dashboard ---------- */
+  .stage{position:relative;min-height:560px}
+  .board{position:relative;background:var(--panel);backdrop-filter:blur(8px);
+    border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.5);
+    padding:18px 18px 14px;width:min(560px,100%)}
+  .chrome{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .d{width:10px;height:10px;border-radius:50%;background:rgba(226,233,245,.25)}
+  .url{flex:1;background:rgba(10,15,26,.55);border:1px solid var(--line);border-radius:999px;
+    padding:6px 16px;font-size:13px;color:var(--muted);text-align:center;direction:ltr}
+  .board-head{display:flex;align-items:center;justify-content:space-between;margin:2px 2px 12px}
+  .board-title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16.5px}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 10px var(--good);animation:blink 2.4s infinite}
+  .badge{font-size:11.5px;font-weight:800;letter-spacing:1px;color:#0A0F1A;background:var(--good);border-radius:6px;padding:3px 8px}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .kpi{background:rgba(10,15,26,.5);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+  .kpi .lbl{font-size:13px;color:var(--muted)}
+  .kpi .val{font-size:21px;font-weight:800;margin-top:3px;display:flex;align-items:baseline;gap:8px}
+  .delta{font-size:12.5px;font-weight:700;color:var(--good)}
+  .delta.neg{color:#E08A8A}
+  .chart{margin-top:12px;background:rgba(10,15,26,.5);border:1px solid var(--line);border-radius:14px;padding:14px 12px 8px}
+  .chart svg{width:100%;height:120px;display:block}
+  .growline{fill:none;stroke:var(--brand);stroke-width:2.6;stroke-linecap:round;
+    stroke-dasharray:640;stroke-dashoffset:640;animation:draw 3.2s ease forwards .4s}
+  .growfill{fill:url(#g);opacity:0;animation:fadein 1.6s ease forwards 2.2s}
+  .bars{display:flex;align-items:flex-end;gap:9px;height:86px;margin-top:14px;padding:0 4px}
+  .bcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+  .bar{width:100%;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,#79A9D6,var(--brand-soft));
+    transform-origin:bottom;animation:breathe 5.2s ease-in-out infinite}
+  .bcol span{font-size:10.5px;color:var(--muted);white-space:nowrap}
+  .feed{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+  .row{display:flex;align-items:center;gap:10px;background:rgba(10,15,26,.45);border:1px solid var(--line);
+    border-radius:12px;padding:9px 12px;font-size:14px}
+  .row .ic{width:26px;height:26px;border-radius:8px;background:rgba(83,137,187,.2);display:flex;align-items:center;justify-content:center;font-size:13px}
+  .row .t{flex:1} .row .when{font-size:12px;color:var(--muted)}
+  .row.new{animation:slidein .8s ease}
+
+  /* ---------- mock: phone overlay ---------- */
+  .phone{position:absolute;bottom:-26px;left:-14px;width:214px;background:#0B1322;
+    border:1px solid rgba(140,170,215,.28);border-radius:30px;padding:12px 10px 14px;
+    box-shadow:0 34px 70px rgba(0,0,0,.6), 0 0 0 6px rgba(16,26,46,.55);z-index:3}
+  .notch{width:64px;height:5px;background:rgba(226,233,245,.22);border-radius:99px;margin:0 auto 10px}
+  .p-head{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;padding:0 4px 8px}
+  .p-head small{color:var(--muted);font-weight:400;font-size:11px}
+  .doc{background:rgba(20,30,52,.85);border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:11.5px;margin-bottom:6px;
+    display:flex;justify-content:space-between;align-items:center}
+  .doc b{font-size:12px} .doc .sum{color:#BCD3E8;font-weight:700}
+  .sheet{background:linear-gradient(180deg,#14213A,#101A2E);border:1px solid rgba(140,170,215,.3);
+    border-radius:16px 16px 12px 12px;padding:11px 11px 12px;margin-top:8px;animation:sheet 7s ease-in-out infinite}
+  .sheet h4{font-size:12.5px;margin-bottom:8px}
+  .field{background:rgba(10,15,26,.6);border:1px solid var(--line);border-radius:8px;height:22px;margin-bottom:6px;
+    display:flex;align-items:center;padding:0 8px;font-size:10px;color:var(--muted)}
+  .go{background:var(--brand);border-radius:9px;text-align:center;font-size:12px;font-weight:800;padding:7px 0;color:#fff;
+    box-shadow:0 6px 18px rgba(83,137,187,.45)}
+  .sheet{position:relative}
+  .s-form{animation:formswap 8s ease-in-out infinite}
+  .s-done{position:absolute;inset:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    text-align:center;opacity:0;animation:doneswap 8s ease-in-out infinite}
+  .s-done .ok{width:34px;height:34px;border-radius:50%;background:var(--good);color:#052A18;font-size:18px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 0 22px rgba(87,201,143,.6)}
+  .s-done b{font-size:12.5px}
+  .s-done small{font-size:10.5px;color:var(--muted);line-height:1.5}
+  .gov{font-size:11px;color:#9FD9BC;border:1px solid rgba(87,201,143,.4);background:rgba(87,201,143,.1);
+    border-radius:999px;padding:3px 10px;font-weight:700;white-space:nowrap}
+  .confetti{position:absolute;inset:0;pointer-events:none}
+  .confetti i{position:absolute;top:36%;right:50%;width:5px;height:5px;border-radius:50%;opacity:0;
+    animation:conf 8s ease-out infinite}
+  .confetti i:nth-child(3n){background:var(--good)}
+  .confetti i:nth-child(3n+1){background:#7FB2E0}
+  .confetti i:nth-child(3n+2){background:#F4F6FA}
+  .sheet{z-index:5}
+  .fab{position:absolute;bottom:18px;left:14px;width:44px;height:44px;border-radius:50%;background:var(--good);
+    display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#052A18;
+    box-shadow:0 10px 26px rgba(87,201,143,.45);animation:pulse 2.6s infinite;z-index:4}
+  .fab::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:2px solid rgba(87,201,143,.5);animation:ring 2.6s infinite}
+  .hint{position:absolute;bottom:28px;left:68px;background:#fff;color:#0A0F1A;font-size:11.5px;font-weight:700;
+    border-radius:9px;padding:5px 9px;box-shadow:0 8px 20px rgba(0,0,0,.35);z-index:4}
+  .hint::after{content:"";position:absolute;top:50%;left:-5px;transform:translateY(-50%);
+    border:5px solid transparent;border-right-color:#fff}
+
+  /* ---------- theme dots ---------- */
+  .themes{display:flex;flex-direction:column;align-items:center;gap:9px;padding:14px 0 24px}
+  .dots{display:flex;align-items:center;gap:12px;direction:rtl}
+  .dot{width:9px;height:9px;border-radius:99px;background:rgba(226,233,245,.28);cursor:pointer;transition:.3s}
+  .dot:hover{background:rgba(226,233,245,.5)}
+  .dot.on{width:64px;background:linear-gradient(90deg,var(--brand),#7FB2E0);box-shadow:0 0 14px rgba(83,137,187,.6);position:relative}
+  .dot.on i{position:absolute;inset:0;border-radius:99px;background:rgba(255,255,255,.35);width:38%;animation:prog 6s linear infinite}
+  .tlabel{font-size:14px;color:var(--muted)}
+  .tlabel b{color:var(--txt)}
+
+  /* logos inside the dark hero */
+  .logos-hero{display:flex;flex-wrap:wrap;gap:12px 40px;align-items:center;justify-content:center;
+    padding:10px 0 4px}
+  .logos-hero span{font-weight:800;font-size:16.5px;letter-spacing:.4px;color:rgba(244,246,250,.78)}
+
+  /* seam to cream */
+  .seam{height:46px;background:linear-gradient(180deg,transparent, rgba(244,241,236,.06));border-bottom-left-radius:38px;border-bottom-right-radius:38px}
+
+  .note{position:fixed;bottom:14px;right:14px;background:#fff;color:#0A0F1A;font-size:12.5px;font-weight:700;
+    border-radius:10px;padding:7px 12px;box-shadow:0 10px 26px rgba(0,0,0,.28);z-index:9}
+
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes fadein{to{opacity:.5}}
+  @keyframes breathe{0%,100%{transform:scaleY(.86)}50%{transform:scaleY(1)}}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  @keyframes ring{0%{transform:scale(.8);opacity:.9}100%{transform:scale(1.5);opacity:0}}
+  @keyframes sheet{0%,14%{transform:translateY(58px);opacity:.0}24%,84%{transform:translateY(0);opacity:1}96%,100%{transform:translateY(58px);opacity:0}}
+  @keyframes formswap{0%,50%{opacity:1}58%,90%{opacity:0}97%,100%{opacity:1}}
+  @keyframes doneswap{0%,54%{opacity:0}62%,86%{opacity:1}94%,100%{opacity:0}}
+  @keyframes conf{0%,56%{transform:translate(0,0) scale(.4);opacity:0}
+    61%{opacity:.95}
+    78%{transform:translate(var(--dx),var(--dy)) scale(1);opacity:0}
+    100%{opacity:0}}
+  @keyframes slidein{from{transform:translateY(-8px);opacity:0}to{transform:translateY(0);opacity:1}}
+  @keyframes prog{from{transform:translateX(120%)}to{transform:translateX(-180%)}}
+
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;padding-top:34px;gap:34px}
+    nav{display:none}
+    h1{max-width:100%}
+    .stage{min-height:0;padding-bottom:40px}
+    .board{width:100%}
+    .phone{left:6px;bottom:-18px;width:186px}
+  }
+  @media (max-width:640px){
+    .wrap{padding:0 16px}
+    header{padding:16px 0}
+    .logo{font-size:20px}.logo .mark{width:24px;height:24px}
+    .pill{padding:7px 14px;font-size:13.5px}
+    .sub{font-size:16.5px}
+    .ctas{gap:10px}.btn{flex:1;text-align:center;padding:13px 10px;font-size:15.5px}
+    .kpis{gap:7px}.kpi{padding:9px 8px;border-radius:11px}
+    .kpi .lbl{font-size:11px}.kpi .val{font-size:15.5px;gap:5px}.delta{font-size:10.5px}
+    .board{padding:13px 11px 11px}
+    .url{font-size:11.5px;padding:5px 10px}
+    .bars{gap:5px}.bcol span{font-size:9px}
+    .row{font-size:12.5px;padding:8px 10px}.row .when{font-size:10.5px}
+    .phone{width:168px;left:2px;bottom:-12px}
+    .fab{width:38px;height:38px;font-size:22px;bottom:14px;left:10px}
+    .hint{display:none}
+    .logos-hero{gap:9px 22px;padding:6px 2px 2px}
+    .logos-hero span{font-size:13px}
+  }
+</style>
+</head>
+<body>
+
+<div class="dark">
+  <div class="wrap">
+    <header>
+      <div class="logo"><div class="mark"></div>UXellent</div>
+      <nav><span>מאיפיון למוצר</span><span>עיצוב ומיתוג</span><span>פיתוח AI</span><span>שיווק</span><span>יצירת קשר</span></nav>
+      <div class="hdr-cta"><div class="pill ghost">התחברות</div><div class="pill solid">הצטרפות</div></div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="tags"><div class="tag">מקצה לקצה</div><div class="tag">SaaS &amp; AI</div></div>
+        <h1>מבססים את הרעיון, בונים את המערכת, מביאים את הלקוחות.</h1>
+        <p class="sub">צוות קטן, חד ומנוסה שבונה מוצרי SaaS ואפליקציות AI מקצה לקצה. מעל 25 שנות ניסיון באפיון, עיצוב, פיתוח ושיווק דיגיטלי.</p>
+        <div class="ctas"><div class="btn primary">בואו נדבר על הפרויקט שלכם</div><div class="btn ghost">צפו בעבודות שלנו</div></div>
+      </div>
+
+      <div class="stage">
+        <div class="board">
+          <div class="chrome"><div class="d"></div><div class="d"></div><div class="d"></div><div class="url">app.uxellent.com/invoices</div></div>
+          <div class="board-head">
+            <div class="board-title"><span class="live-dot"></span>לוח חשבוניות</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="gov">✓ מחובר לרשות המסים</div>
+              <div class="badge">LIVE</div>
+            </div>
+          </div>
+          <div class="kpis">
+            <div class="kpi"><div class="lbl">הכנסות החודש</div><div class="val">₪48.2k <span class="delta">12%+</span></div></div>
+            <div class="kpi"><div class="lbl">הוצאות</div><div class="val">₪19.6k <span class="delta neg">4%-</span></div></div>
+            <div class="kpi"><div class="lbl">חשבוניות שהופקו</div><div class="val">132 <span class="delta">9%+</span></div></div>
+          </div>
+          <div class="chart">
+            <svg viewBox="0 0 520 120" preserveAspectRatio="none">
+              <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#5389BB" stop-opacity=".45"/><stop offset="1" stop-color="#5389BB" stop-opacity="0"/>
+              </linearGradient></defs>
+              <path class="growfill" d="M0,96 C60,88 90,92 130,78 C180,60 210,74 260,58 C310,44 340,52 390,36 C440,22 480,26 520,14 L520,120 L0,120 Z"/>
+              <path class="growline" d="M0,96 C60,88 90,92 130,78 C180,60 210,74 260,58 C310,44 340,52 390,36 C440,22 480,26 520,14"/>
+            </svg>
+            <div class="bars">
+              <div class="bcol"><div class="bar" style="height:78%;animation-delay:.1s"></div><span>דצמ׳</span></div>
+              <div class="bcol"><div class="bar" style="height:64%;animation-delay:.5s"></div><span>נוב׳</span></div>
+              <div class="bcol"><div class="bar" style="height:70%;animation-delay:.2s"></div><span>אוק׳</span></div>
+              <div class="bcol"><div class="bar" style="height:52%;animation-delay:.7s"></div><span>ספט׳</span></div>
+              <div class="bcol"><div class="bar" style="height:58%;animation-delay:.3s"></div><span>אוג׳</span></div>
+              <div class="bcol"><div class="bar" style="height:44%;animation-delay:.8s"></div><span>יול׳</span></div>
+              <div class="bcol"><div class="bar" style="height:49%;animation-delay:.4s"></div><span>יונ׳</span></div>
+              <div class="bcol"><div class="bar" style="height:38%;animation-delay:.6s"></div><span>מאי</span></div>
+            </div>
+          </div>
+          <div class="feed">
+            <div class="row new"><div class="ic">✓</div><div class="t">מספר הקצאה התקבל מרשות המסים</div><div class="when">עכשיו</div></div>
+            <div class="row"><div class="ic">📄</div><div class="t">חשבונית מס קבלה 1042# הופקה</div><div class="when">לפני דקה</div></div>
+            <div class="row"><div class="ic">✉️</div><div class="t">הקבלה נשלחה ללקוח במייל</div><div class="when">לפני 2 ד׳</div></div>
+          </div>
+        </div>
+
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="p-head">החשבוניות שלי <small>יולי</small></div>
+          <div class="doc"><div><b>אור עיצובים</b><br><small style="color:var(--muted)">חשבונית מס קבלה</small></div><div class="sum">₪2,400</div></div>
+          <div class="doc"><div><b>סטודיו נגר</b><br><small style="color:var(--muted)">קבלה</small></div><div class="sum">₪860</div></div>
+          <div class="sheet">
+            <div class="s-form">
+              <h4>חשבונית מס קבלה חדשה</h4>
+              <div class="field">לקוח: אור עיצובים</div>
+              <div class="field">סכום: ₪2,400 כולל מע״מ</div>
+              <div class="go">הפקה ושליחה</div>
+            </div>
+            <div class="s-done">
+              <div class="confetti">
+                <i style="--dx:-46px;--dy:-38px"></i><i style="--dx:40px;--dy:-46px"></i>
+                <i style="--dx:-60px;--dy:6px"></i><i style="--dx:58px;--dy:-6px"></i>
+                <i style="--dx:-30px;--dy:-64px"></i><i style="--dx:26px;--dy:-70px"></i>
+                <i style="--dx:52px;--dy:28px"></i><i style="--dx:-52px;--dy:34px"></i>
+                <i style="--dx:10px;--dy:-84px"></i><i style="--dx:-8px;--dy:44px"></i>
+                <i style="--dx:70px;--dy:-30px"></i><i style="--dx:-72px;--dy:-24px"></i>
+              </div>
+              <div class="ok">✓</div>
+              <b>מספר הקצאה התקבל בהצלחה</b>
+              <small>רשות המסים · חשבונית ישראל<br>החשבונית הופקה ונשלחה</small>
+            </div>
+          </div>
+          <div class="fab">+</div>
+          <div class="hint">לחיצה אחת ליצירה</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="themes">
+      <div class="dots">
+        <div class="dot on"><i></i></div>
+        <div class="dot" title="נושא 2, ייקבע בהמשך"></div>
+        <div class="dot" title="נושא 3, ייקבע בהמשך"></div>
+        <div class="dot" title="נושא 4, ייקבע בהמשך"></div>
+      </div>
+      <div class="tlabel">נושא 1 מתוך 4: <b>חשבוניות ירוקות</b></div>
+    </div>
+
+    <div class="logos-hero">
+      <span>MAX</span><span>Carrefour</span><span>soundcore</span><span>horizon</span><span>ישראכרט</span><span>אלטשולר שחם</span>
+    </div>
+  </div>
+  <div class="seam"></div>
+</div>
+
+<div class="note">תצוגת עיצוב לאישור · לא קוד סופי</div>
+
+</body>
+</html>

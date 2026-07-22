@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { Testimonials } from "@/app/_components/home/Testimonials"
 import { NewHero } from "@/app/_components/new-home/NewHero"
@@ -27,8 +26,8 @@ export const metadata: Metadata = {
 export default function NewHomePage() {
   return (
     <div className="min-h-screen bg-[#F4F1EC]">
-      <SiteHeader />
       <main id="main">
+        {/* NewHero renders its own dedicated dark header (SiteHeader untouched). */}
         <NewHero />
         <ProjectsSection />
         <StorySection />
