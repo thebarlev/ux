@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import { Frank_Ruhl_Libre } from "next/font/google"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import {
@@ -8,11 +9,13 @@ import {
   CHART_MONTHS,
   HERO,
   HERO_THEMES,
+  MIO_WHEEL_LABELS,
   NEW_HOME_LOGOS,
   THEME_TOTAL,
   type AuditorTheme,
   type HeroTheme,
   type InvoicesTheme,
+  type MioshyTheme,
 } from "./newHome.constants"
 import { NewHomeHeader } from "./NewHomeHeader"
 import styles from "./NewHero.module.css"
@@ -22,12 +25,24 @@ import styles from "./NewHero.module.css"
  * carousel of themes, each with its own palette, layout and panel:
  *   1  "חשבוניות ירוקות" — green invoices dashboard + phone.
  *   2  "Auditor"          — violet + amber deep-scan panel with a radar sweep.
- * Dots 3–4 are dimmed placeholders. The active dot fills a progress bar and
- * auto-advances at a calm pace, pauses on hover/touch, is clickable, and honours
- * prefers-reduced-motion (no auto-advance, static skins). Each theme entry
- * replays its intro and pops confetti from its external tag, so the switch is
- * felt immediately. All mockup motion is CSS transform/opacity.
+ *   3  "Mioshy"           — plum/magenta/lime spin wheel that stops, then a
+ *                           cream question popup rises.
+ * The remaining dot is a dimmed placeholder. The active dot fills a progress bar
+ * and auto-advances at a calm pace, pauses on hover/touch, is clickable, and
+ * honours prefers-reduced-motion (no auto-advance, static skins). Each theme
+ * entry replays its intro and pops confetti from its external tag, so the switch
+ * is felt immediately. All mockup motion is CSS transform/opacity.
  */
+
+// The Mioshy popup question is set in Frank Ruhl Libre italic. Loaded here (a
+// new-home file) so the shared layout stays untouched; only weight 700 exists,
+// the italic slant is applied in CSS.
+const frankRuhl = Frank_Ruhl_Libre({
+  subsets: ["hebrew"],
+  weight: "700",
+  display: "swap",
+  variable: "--nh-font-frank",
+})
 
 const CYCLE_MS = 6000
 
@@ -66,10 +81,14 @@ export function NewHero() {
   }, [reduced, paused, themeCount])
 
   const theme = HERO_THEMES[active]
-  const isAuditor = theme.kind === "auditor"
+  const stageLow = theme.kind === "auditor" || theme.kind === "mioshy"
 
   return (
-    <section className={styles.hero} dir="rtl" aria-label="Uxellent">
+    <section
+      className={`${styles.hero} ${frankRuhl.variable}`}
+      dir="rtl"
+      aria-label="Uxellent"
+    >
       <div className={styles.wrap}>
         <NewHomeHeader />
 
@@ -95,19 +114,17 @@ export function NewHero() {
           </div>
 
           <div
-            className={`${styles.stage} ${isAuditor ? styles.stageEnd : ""}`}
+            className={`${styles.stage} ${stageLow ? styles.stageEnd : ""}`}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             onTouchStart={() => setPaused(true)}
           >
             {/* keyed by active → each theme entry re-mounts and replays its intro */}
             <div key={active} className={styles.mockEnter}>
-              <FloatTag text={theme.floatTag} />
-              {theme.kind === "invoices" ? (
-                <InvoiceMock theme={theme} />
-              ) : (
-                <ScanMock theme={theme} />
-              )}
+              <FloatTag text={theme.floatTag} mio={theme.kind === "mioshy"} />
+              {theme.kind === "invoices" && <InvoiceMock theme={theme} />}
+              {theme.kind === "auditor" && <ScanMock theme={theme} />}
+              {theme.kind === "mioshy" && <WheelMock theme={theme} />}
             </div>
           </div>
         </div>
@@ -136,14 +153,14 @@ export function NewHero() {
 
 /* -------------------------------------------------------------- float tag -- */
 
-function FloatTag({ text }: { text: string }) {
+function FloatTag({ text, mio = false }: { text: string; mio?: boolean }) {
   // 10 confetti pieces that pop once on theme entry (element is remounted per theme)
   const conf = [
     "-34px,-26px", "28px,-32px", "-46px,2px", "44px,-4px", "-20px,-44px",
     "16px,-48px", "38px,18px", "-40px,22px", "6px,-56px", "-6px,30px",
   ]
   return (
-    <div className={styles.floatTag}>
+    <div className={`${styles.floatTag} ${mio ? styles.floatTagMio : ""}`}>
       <span aria-hidden="true" className={styles.tagConf}>
         {conf.map((c, i) => {
           const [dx, dy] = c.split(",")
@@ -452,6 +469,105 @@ function Gauge({ gauge }: { gauge: AuditorTheme["scan"]["gauges"][number] }) {
       <div className={styles.gMid}>
         <div className={styles.gNum}>{gauge.value}</div>
         <div className={styles.gCap}>{gauge.label}</div>
+      </div>
+    </div>
+  )
+}
+
+/* --------------------------------------------------- theme 3: Mioshy wheel - */
+
+// 12-slice geometry (matches Mioshy's Wheel.tsx: r 150, slices from top).
+const r4 = (n: number) => Math.round(n * 10000) / 10000
+const toXY = (deg: number, rad: number): [number, number] => {
+  const a = (deg * Math.PI) / 180
+  return [150 + rad * Math.cos(a), 150 + rad * Math.sin(a)]
+}
+// Fixed radial label anchors + upright rotations, straight from the reference.
+const WHEEL_LABEL_POS = [
+  { x: 179.8, y: 38.9, rot: -75 },
+  { x: 231.3, y: 68.7, rot: -45 },
+  { x: 261.1, y: 120.2, rot: -15 },
+  { x: 261.1, y: 179.8, rot: 15 },
+  { x: 231.3, y: 231.3, rot: 45 },
+  { x: 179.8, y: 261.1, rot: 75 },
+  { x: 120.2, y: 261.1, rot: -75 },
+  { x: 68.7, y: 231.3, rot: -45 },
+  { x: 38.9, y: 179.8, rot: -15 },
+  { x: 38.9, y: 120.2, rot: 15 },
+  { x: 68.7, y: 68.7, rot: 45 },
+  { x: 120.2, y: 38.9, rot: 75 },
+]
+const POINTER_D =
+  "M58 29C58 45.0163 29 80.5 29 80.5C29 80.5 0 45.0163 0 29C0 12.9837 12.9837 0 29 0C45.0163 0 58 12.9837 58 29Z"
+
+function WheelMock({ theme }: { theme: MioshyTheme }) {
+  const { popup } = theme
+  const wedges = Array.from({ length: 12 }, (_, i) => {
+    const [x0, y0] = toXY(-90 + i * 30, 150)
+    const [x1, y1] = toXY(-60 + i * 30, 150)
+    return {
+      d: `M 150 150 L ${r4(x0)} ${r4(y0)} A 150 150 0 0 1 ${r4(x1)} ${r4(y1)} Z`,
+      fill: i % 2 === 0 ? "#620085" : "#D2006F",
+    }
+  })
+  const dividers = Array.from({ length: 12 }, (_, i) => toXY(-90 + i * 30, 151))
+  const dots = Array.from({ length: 24 }, (_, i) => toXY(-90 + i * 15, 156.8))
+
+  return (
+    <div className={styles.mio}>
+      <div className={styles.mioWrap}>
+        <span aria-hidden="true" className={styles.mioRing} />
+        <span aria-hidden="true" className={styles.mioPointer}>
+          <svg viewBox="0 0 58 81" fill="none" width="100%" height="100%">
+            <path d={POINTER_D} fill="#fff" />
+          </svg>
+        </span>
+
+        <div className={styles.mioWheel}>
+          <div className={styles.wheelRot}>
+            <svg viewBox="0 0 300 300" style={{ overflow: "visible" }} aria-label="גלגל">
+              {wedges.map((w, i) => (
+                <path key={`w${i}`} d={w.d} fill={w.fill} />
+              ))}
+              {dividers.map(([x, y], i) => (
+                <line
+                  key={`d${i}`}
+                  x1="150"
+                  y1="150"
+                  x2={r4(x)}
+                  y2={r4(y)}
+                  stroke="#C7FF0F"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              ))}
+              <g className={styles.mioLabels} fill="#fff" fontSize="16" fontWeight={800} textAnchor="middle" dominantBaseline="middle">
+                {WHEEL_LABEL_POS.map((p, i) => (
+                  <text key={`l${i}`} x={p.x} y={p.y} transform={`rotate(${p.rot} ${p.x} ${p.y})`}>
+                    {MIO_WHEEL_LABELS[i % 2]}
+                  </text>
+                ))}
+              </g>
+              <g fill="#C7FF0F">
+                {dots.map(([x, y], i) => (
+                  <circle key={`c${i}`} cx={r4(x)} cy={r4(y)} r="3" />
+                ))}
+              </g>
+              <circle cx="150" cy="150" r="40" fill="#3B0638" stroke="#3B0638" strokeWidth="3" />
+            </svg>
+          </div>
+          <span aria-hidden="true" className={styles.mioGloss} />
+        </div>
+
+        <div className={styles.mioPop}>
+          <div className={styles.mioPopHead}>
+            <span className={styles.mioBadge}>✦ {popup.badge}</span>
+            <span className={styles.mioLive}>{popup.live}</span>
+          </div>
+          <p className={styles.mioQ}>{popup.question}</p>
+          <div className={styles.mioCta}>⟳ {popup.cta}</div>
+          <p className={styles.mioNote}>{popup.note}</p>
+        </div>
       </div>
     </div>
   )

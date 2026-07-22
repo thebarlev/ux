@@ -291,7 +291,7 @@
   .mio-ring{position:absolute;inset:-11px;border:7px solid #791A3E;border-radius:50%;z-index:2;pointer-events:none}
   .mio-pointer{position:absolute;top:-26px;left:50%;transform:translateX(-50%);width:34px;height:42px;z-index:4;
     filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
-  .wheel-rot{width:100%;height:100%;transform-origin:50% 50%;animation:miospin 12s cubic-bezier(.33,.05,.2,1) infinite}
+  .wheel-rot{width:100%;height:100%;transform-origin:50% 50%;animation:miospin 3.6s cubic-bezier(.16,.62,.16,1) forwards}
   .wheel-rot svg{width:100%;height:100%;display:block;border-radius:50%}
   .mio-labels text{font-family:'Assistant',sans-serif;paint-order:stroke;stroke:rgba(0,0,0,.25);stroke-width:2px}
   .mio-gloss{position:absolute;inset:0;border-radius:50%;z-index:3;pointer-events:none;
@@ -299,7 +299,7 @@
   .mio-pop{position:absolute;top:-4%;left:50%;transform:translateX(-50%);width:88%;max-width:320px;z-index:6;
     background:#FBF5F2;color:#170E14;border:1px solid rgba(233,196,202,.6);border-radius:20px;
     padding:16px 16px 14px;box-shadow:0 28px 56px -12px rgba(14,8,16,.7);
-    opacity:0;animation:miopop 12s ease infinite}
+    opacity:0;animation:miopop .7s cubic-bezier(.2,.8,.2,1) forwards 3.7s}
   .mio-pop-head{display:flex;align-items:center;gap:10px}
   .mio-badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;background:#B83C4D;color:#fff;
     padding:4px 11px;font-size:11px;font-weight:800;letter-spacing:.14em}
@@ -309,10 +309,9 @@
   .mio-cta{margin-top:13px;border-radius:999px;text-align:center;padding:10px 0;font-size:14px;font-weight:700;color:#fff;
     background:linear-gradient(110deg,#B83C4D 0%,#8B2638 55%,#3D1F3D 100%);box-shadow:0 8px 22px rgba(184,60,77,.35)}
   .mio-note{margin-top:8px;text-align:center;font-size:12px;color:#7A6A75}
-  @keyframes miospin{0%,6%{transform:rotate(0deg)}34%{transform:rotate(1455deg)}100%{transform:rotate(1455deg)}}
-  @keyframes miopop{0%,36%{opacity:0;transform:translateX(-50%) translateY(10px) scale(.94)}
-    42%,88%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
-    95%,100%{opacity:0;transform:translateX(-50%) translateY(6px) scale(.96)}}
+  @keyframes miospin{from{transform:rotate(0deg)}to{transform:rotate(690deg)}}
+  @keyframes miopop{from{opacity:0;transform:translateX(-50%) translateY(12px) scale(.94)}
+    to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
   @media (prefers-reduced-motion: reduce){
     .wheel-rot{animation:none}
     .mio-pop{animation:none;opacity:1;transform:translateX(-50%)}
@@ -426,19 +425,19 @@
                     <line x1="150" y1="150" x2="-1" y2="150" stroke="#C7FF0F" stroke-width="2" stroke-linecap="round"></line>
                     <line x1="150" y1="150" x2="19.2302" y2="74.5" stroke="#C7FF0F" stroke-width="2" stroke-linecap="round"></line>
                     <line x1="150" y1="150" x2="74.5" y2="19.2302" stroke="#C7FF0F" stroke-width="2" stroke-linecap="round"></line>
-                    <g class="mio-labels" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle" dominant-baseline="middle">
-                      <text x="173.8" y="61.1" transform="rotate(-75 173.8 61.1)">כנות</text>
-                      <text x="215.0" y="85.0" transform="rotate(-45 215.0 85.0)">אתגר</text>
-                      <text x="238.9" y="126.2" transform="rotate(-15 238.9 126.2)">כנות</text>
-                      <text x="238.9" y="173.8" transform="rotate(15 238.9 173.8)">אתגר</text>
-                      <text x="215.0" y="215.0" transform="rotate(45 215.0 215.0)">כנות</text>
-                      <text x="173.8" y="238.9" transform="rotate(75 173.8 238.9)">אתגר</text>
-                      <text x="126.2" y="238.9" transform="rotate(-75 126.2 238.9)">כנות</text>
-                      <text x="85.0" y="215.0" transform="rotate(-45 85.0 215.0)">אתגר</text>
-                      <text x="61.1" y="173.8" transform="rotate(-15 61.1 173.8)">כנות</text>
-                      <text x="61.1" y="126.2" transform="rotate(15 61.1 126.2)">אתגר</text>
-                      <text x="85.0" y="85.0" transform="rotate(45 85.0 85.0)">כנות</text>
-                      <text x="126.2" y="61.1" transform="rotate(75 126.2 61.1)">אתגר</text>
+                    <g class="mio-labels" fill="#ffffff" font-size="16" font-weight="800" text-anchor="middle" dominant-baseline="middle">
+                      <text x="179.8" y="38.9" transform="rotate(-75 179.8 38.9)">כנות</text>
+                      <text x="231.3" y="68.7" transform="rotate(-45 231.3 68.7)">אתגר</text>
+                      <text x="261.1" y="120.2" transform="rotate(-15 261.1 120.2)">כנות</text>
+                      <text x="261.1" y="179.8" transform="rotate(15 261.1 179.8)">אתגר</text>
+                      <text x="231.3" y="231.3" transform="rotate(45 231.3 231.3)">כנות</text>
+                      <text x="179.8" y="261.1" transform="rotate(75 179.8 261.1)">אתגר</text>
+                      <text x="120.2" y="261.1" transform="rotate(-75 120.2 261.1)">כנות</text>
+                      <text x="68.7" y="231.3" transform="rotate(-45 68.7 231.3)">אתגר</text>
+                      <text x="38.9" y="179.8" transform="rotate(-15 38.9 179.8)">כנות</text>
+                      <text x="38.9" y="120.2" transform="rotate(15 38.9 120.2)">אתגר</text>
+                      <text x="68.7" y="68.7" transform="rotate(45 68.7 68.7)">כנות</text>
+                      <text x="120.2" y="38.9" transform="rotate(75 120.2 38.9)">אתגר</text>
                     </g>
                     <g fill="#C7FF0F">
                       <circle cx="150" cy="-6.8" r="3"></circle><circle cx="190.58" cy="-1.46" r="3"></circle>

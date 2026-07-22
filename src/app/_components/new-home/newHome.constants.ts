@@ -117,7 +117,19 @@ export type AuditorTheme = ThemeCommon & {
   }
 }
 
-export type HeroTheme = InvoicesTheme | AuditorTheme
+/** Theme 3 — Mioshy truth-or-dare spin wheel (plum / magenta / lime), playful. */
+export type MioshyTheme = ThemeCommon & {
+  kind: "mioshy"
+  popup: {
+    badge: string
+    live: string
+    question: string
+    cta: string
+    note: string
+  }
+}
+
+export type HeroTheme = InvoicesTheme | AuditorTheme | MioshyTheme
 
 /**
  * Themes shown in the hero mockup carousel. The hero copy stays fixed; only the
@@ -205,7 +217,24 @@ export const HERO_THEMES: readonly HeroTheme[] = [
       },
     },
   },
+  {
+    kind: "mioshy",
+    id: "mioshy",
+    label: "Mioshy",
+    floatTag: "משחקים לזוגות אונליין",
+    popup: {
+      badge: "כנות",
+      live: "טעימה חיה",
+      // Hardcoded per Itzik; may become a rotating set later.
+      question: "מה היית מוחק/ת מהעבר שלנו אם יכולת?",
+      cta: "סיבוב נוסף",
+      note: "הסיבוב הבא ממשיך את הערב, בתוך המשחק עצמו.",
+    },
+  },
 ]
+
+/** The two Mioshy wheel categories, alternating around the 12 slices from top. */
+export const MIO_WHEEL_LABELS = ["כנות", "אתגר"] as const
 
 /** Total dots in the theme carousel (themes past HERO_THEMES.length are dimmed). */
 export const THEME_TOTAL = 4

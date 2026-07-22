@@ -947,6 +947,152 @@
   padding: 8px 12px;
 }
 
+/* ----------------------------------------- theme 3: Mioshy spin wheel ------ */
+
+.floatTagMio {
+  background: linear-gradient(90deg, #d2006f, #620085);
+  box-shadow: 0 12px 30px rgba(210, 0, 111, 0.45);
+}
+.floatTagMio .tagConfPiece:nth-child(3n) {
+  background: #c7ff0f;
+}
+.floatTagMio .tagConfPiece:nth-child(3n + 1) {
+  background: #ff7bb8;
+}
+.floatTagMio .tagConfPiece:nth-child(3n + 2) {
+  background: #f4f6fa;
+}
+
+.mio {
+  position: relative;
+  width: min(600px, 100%);
+  padding: 4px 6px 14px;
+}
+.mioWrap {
+  position: relative;
+  width: min(470px, 98%);
+  margin: 34px auto 0;
+}
+.mioRing {
+  position: absolute;
+  inset: -11px;
+  border: 7px solid #791a3e;
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+}
+.mioPointer {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 34px;
+  height: 42px;
+  z-index: 4;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+.mioPointer svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.mioWheel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.55);
+}
+.wheelRot {
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 50%;
+}
+.wheelRot svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.mioLabels text {
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.25);
+  stroke-width: 2px;
+}
+.mioGloss {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), transparent 55%);
+}
+.mioPop {
+  position: absolute;
+  top: -4%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 88%;
+  max-width: 320px;
+  z-index: 6;
+  background: #fbf5f2;
+  color: #170e14;
+  border: 1px solid rgba(233, 196, 202, 0.6);
+  border-radius: 20px;
+  padding: 16px 16px 14px;
+  box-shadow: 0 28px 56px -12px rgba(14, 8, 16, 0.7);
+  opacity: 1;
+}
+.mioPopHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mioBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px;
+  background: #b83c4d;
+  color: #fff;
+  padding: 4px 11px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+.mioLive {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #8b2638;
+}
+.mioQ {
+  margin-top: 11px;
+  font-family: var(--nh-font-frank), "Frank Ruhl Libre", serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1.35;
+  color: #170e14;
+}
+.mioCta {
+  margin-top: 13px;
+  border-radius: 999px;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(110deg, #b83c4d 0%, #8b2638 55%, #3d1f3d 100%);
+  box-shadow: 0 8px 22px rgba(184, 60, 77, 0.35);
+}
+.mioNote {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 12px;
+  color: #7a6a75;
+}
+
 /* -------------------------------------------------------- theme carousel --- */
 
 .themes {
@@ -1165,6 +1311,16 @@
     white-space: normal;
     max-width: 88%;
   }
+  .mioWrap {
+    width: min(300px, 86%);
+    margin-top: 30px;
+  }
+  .mioPop {
+    max-width: 280px;
+  }
+  .mioQ {
+    font-size: 17px;
+  }
   .scanHead {
     flex-wrap: wrap;
   }
@@ -1284,8 +1440,25 @@
     transform: scaleY(0);
     animation: nhPrise 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) 1.4s forwards;
   }
+
+  /* theme 3: Mioshy — one spin that brakes to a stop, then the popup rises once */
+  .wheelRot {
+    animation: nhMioSpin 3.6s cubic-bezier(0.16, 0.62, 0.16, 1) forwards;
+  }
+  .mioPop {
+    opacity: 0;
+    animation: nhMioPop 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 3.7s forwards;
+  }
 }
 
+@keyframes nhMioSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(690deg); }
+}
+@keyframes nhMioPop {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px) scale(0.94); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
 @keyframes nhDraw {
   to { stroke-dashoffset: 0; }
 }
