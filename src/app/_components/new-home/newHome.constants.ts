@@ -5,22 +5,26 @@
  * The copy here is final and approved. It must stay verbatim.
  */
 
+export type HeroCta = { label: string; href: string }
 export type HeroCopy = {
+  chips: readonly string[]
   title: string
   subtitle: string
-  cta: string
+  ctaPrimary: HeroCta
+  ctaSecondary: HeroCta
 }
 
 /**
- * Shared hero copy. Identical across the three hero design variants; only the
- * visual treatment differs between them. Approved, verbatim. Do not edit.
+ * Hero copy for the single dark ("premium") hero. Approved, verbatim.
+ * Do not edit.
  */
 export const HERO: HeroCopy = {
-  title:
-    "אנחנו צוות קטן ורעב שבונה אפליקציות ומערכות SaaS מבוססות AI, ומלווה אתכם מהרעיון ועד השיווק.",
+  chips: ["מקצה לקצה", "SaaS & AI"],
+  title: "מבססים את הרעיון, בונים את המערכת, מביאים את הלקוחות.",
   subtitle:
-    "עיצוב, אפיון, פיתוח ושיווק במקום אחד, עם יותר מ-25 שנות ניסיון וצוות מתכנתים מנצח.",
-  cta: "בואו נדבר",
+    "צוות קטן, חד ומנוסה שבונה מוצרי SaaS ואפליקציות AI מקצה לקצה. מעל 25 שנות ניסיון באפיון, עיצוב, פיתוח ושיווק דיגיטלי.",
+  ctaPrimary: { label: "בואו נדבר על הפרויקט שלכם", href: "#contact" },
+  ctaSecondary: { label: "צפו בעבודות שלנו", href: "#projects" },
 }
 
 /**
