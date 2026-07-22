@@ -10,20 +10,23 @@ import {
   HERO_THEMES,
   NEW_HOME_LOGOS,
   THEME_TOTAL,
+  type AuditorTheme,
   type HeroTheme,
+  type InvoicesTheme,
 } from "./newHome.constants"
 import { NewHomeHeader } from "./NewHomeHeader"
 import styles from "./NewHero.module.css"
 
 /**
- * Full-bleed dark hero for /new-home. Includes its own dark header, a fixed
- * copy column (wide enough for a three-line H1), a product-mockup carousel of
- * themes (only theme 1 "חשבוניות ירוקות" is live; dots 2–4 are dimmed
- * placeholders), and the white client logos at the bottom of the dark block.
- *
- * The carousel auto-advances at a calm pace with a progress-filling active dot,
- * pauses on hover/touch, is clickable, and honours prefers-reduced-motion
- * (no auto-advance, static mockup). All mockup motion is CSS transform/opacity.
+ * Full-bleed dark hero for /new-home. Fixed copy column plus a product-mockup
+ * carousel of themes, each with its own palette, layout and panel:
+ *   1  "חשבוניות ירוקות" — green invoices dashboard + phone.
+ *   2  "Auditor"          — violet + amber deep-scan panel with a radar sweep.
+ * Dots 3–4 are dimmed placeholders. The active dot fills a progress bar and
+ * auto-advances at a calm pace, pauses on hover/touch, is clickable, and honours
+ * prefers-reduced-motion (no auto-advance, static skins). Each theme entry
+ * replays its intro and pops confetti from its external tag, so the switch is
+ * felt immediately. All mockup motion is CSS transform/opacity.
  */
 
 const CYCLE_MS = 6000
@@ -52,8 +55,8 @@ export function NewHero() {
     setCycle((c) => c + 1)
   }, [themeCount])
 
-  // Fallback timer for reduced-motion users: still rotate, just without the
-  // progress-bar animation driving it. (No rotation when there is one theme.)
+  // Reduced-motion users have no progress bar to drive the timer, so rotate on
+  // an interval instead (only when there is more than one theme).
   const savedAdvance = useRef(advance)
   savedAdvance.current = advance
   useEffect(() => {
@@ -63,6 +66,7 @@ export function NewHero() {
   }, [reduced, paused, themeCount])
 
   const theme = HERO_THEMES[active]
+  const isAuditor = theme.kind === "auditor"
 
   return (
     <section className={styles.hero} dir="rtl" aria-label="Uxellent">
@@ -91,12 +95,20 @@ export function NewHero() {
           </div>
 
           <div
-            className={styles.stage}
+            className={`${styles.stage} ${isAuditor ? styles.stageEnd : ""}`}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             onTouchStart={() => setPaused(true)}
           >
-            <Mockup theme={theme} />
+            {/* keyed by active → each theme entry re-mounts and replays its intro */}
+            <div key={active} className={styles.mockEnter}>
+              <FloatTag text={theme.floatTag} />
+              {theme.kind === "invoices" ? (
+                <InvoiceMock theme={theme} />
+              ) : (
+                <ScanMock theme={theme} />
+              )}
+            </div>
           </div>
         </div>
 
@@ -119,6 +131,33 @@ export function NewHero() {
       </div>
       <div aria-hidden="true" className={styles.seam} />
     </section>
+  )
+}
+
+/* -------------------------------------------------------------- float tag -- */
+
+function FloatTag({ text }: { text: string }) {
+  // 10 confetti pieces that pop once on theme entry (element is remounted per theme)
+  const conf = [
+    "-34px,-26px", "28px,-32px", "-46px,2px", "44px,-4px", "-20px,-44px",
+    "16px,-48px", "38px,18px", "-40px,22px", "6px,-56px", "-6px,30px",
+  ]
+  return (
+    <div className={styles.floatTag}>
+      <span aria-hidden="true" className={styles.tagConf}>
+        {conf.map((c, i) => {
+          const [dx, dy] = c.split(",")
+          return (
+            <i
+              key={i}
+              className={styles.tagConfPiece}
+              style={{ ["--dx" as string]: dx, ["--dy" as string]: dy }}
+            />
+          )
+        })}
+      </span>
+      {text}
+    </div>
   )
 }
 
@@ -181,9 +220,9 @@ function ThemeDots({
   )
 }
 
-/* ----------------------------------------------------------------- mockup -- */
+/* -------------------------------------------------- theme 1: invoices ------ */
 
-function Mockup({ theme }: { theme: HeroTheme }) {
+function InvoiceMock({ theme }: { theme: InvoicesTheme }) {
   return (
     <>
       <Board theme={theme} />
@@ -192,7 +231,7 @@ function Mockup({ theme }: { theme: HeroTheme }) {
   )
 }
 
-function Board({ theme }: { theme: HeroTheme }) {
+function Board({ theme }: { theme: InvoicesTheme }) {
   const { board } = theme
   const areaPath =
     "M0,96 C60,88 90,92 130,78 C180,60 210,74 260,58 C310,44 340,52 390,36 C440,22 480,26 520,14 L520,120 L0,120 Z"
@@ -274,7 +313,7 @@ function Board({ theme }: { theme: HeroTheme }) {
   )
 }
 
-function Phone({ theme }: { theme: HeroTheme }) {
+function Phone({ theme }: { theme: InvoicesTheme }) {
   const { phone } = theme
   const confetti = [
     "-46px,-38px", "40px,-46px", "-60px,6px", "58px,-6px", "-30px,-64px", "26px,-70px",
@@ -337,6 +376,82 @@ function Phone({ theme }: { theme: HeroTheme }) {
       </div>
       <div className={styles.hint} aria-hidden="true">
         {phone.fabHint}
+      </div>
+    </div>
+  )
+}
+
+/* --------------------------------------------------- theme 2: auditor ------ */
+
+function ScanMock({ theme }: { theme: AuditorTheme }) {
+  const { scan } = theme
+  // duplicate the checks so the vertical wheel loops seamlessly
+  const wheel = [...scan.checks, ...scan.checks]
+
+  return (
+    <div className={styles.scan}>
+      <span aria-hidden="true" className={styles.radar} />
+
+      <div className={styles.scanHead}>
+        <span className={styles.scanDot} />
+        {scan.title}
+        <span className={styles.scanStatus}>✦ {scan.status}</span>
+      </div>
+
+      <div className={styles.scores}>
+        {scan.gauges.map((g) => (
+          <Gauge key={g.label} gauge={g} />
+        ))}
+        <div className={styles.checks}>
+          <div className={styles.checksTrack}>
+            {wheel.map((c, i) => (
+              <div key={i} className={styles.chk}>
+                <span className={`${styles.st} ${c.status === "warn" ? styles.stWarn : styles.stOk}`}>
+                  {c.status === "warn" ? "!" : "✓"}
+                </span>
+                <div className={styles.chkT}>
+                  <b>{c.title}</b>
+                  <small>{c.sub}</small>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.proj}>
+        <div className={styles.projHead}>{scan.proj.title}</div>
+        <div className={styles.projGrid}>
+          {scan.proj.bars.map((b) => (
+            <div key={b.label} className={styles.pcol}>
+              <span className={styles.pbar} style={{ ["--h" as string]: `${b.h}%` }} />
+              <b>{b.value}</b>
+              <small>{b.label}</small>
+            </div>
+          ))}
+        </div>
+        <div className={styles.projHook}>{scan.proj.hook}</div>
+      </div>
+    </div>
+  )
+}
+
+function Gauge({ gauge }: { gauge: AuditorTheme["scan"]["gauges"][number] }) {
+  return (
+    <div className={styles.gauge}>
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle className={styles.gBg} cx="60" cy="60" r="52" />
+        <circle
+          className={`${styles.gFg} ${gauge.tone === "amber" ? styles.gFgA : styles.gFgV}`}
+          cx="60"
+          cy="60"
+          r="52"
+          style={{ ["--goff" as string]: gauge.offset }}
+        />
+      </svg>
+      <div className={styles.gMid}>
+        <div className={styles.gNum}>{gauge.value}</div>
+        <div className={styles.gCap}>{gauge.label}</div>
       </div>
     </div>
   )

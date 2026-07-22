@@ -276,11 +276,23 @@
   position: relative;
   min-height: 560px;
   display: flex;
+  align-items: center;
   justify-content: flex-start;
+}
+/* auditor panel is anchored low in the hero, near the nav dots */
+.stageEnd {
+  align-items: flex-end;
+  min-height: 0;
+}
+/* per-theme wrapper: sizes to the panel, hosts the phone + float tag, and
+   replays a soft enter animation on every theme switch (keyed by active) */
+.mockEnter {
+  position: relative;
+  width: min(560px, 100%);
 }
 .board {
   position: relative;
-  width: min(560px, 100%);
+  width: 100%;
   background: var(--panel);
   backdrop-filter: blur(8px);
   border: 1px solid var(--line);
@@ -671,6 +683,270 @@
   border-right-color: #fff;
 }
 
+/* --------------------------------------------------- external theme tag ---- */
+
+.floatTag {
+  position: absolute;
+  top: -20px;
+  right: -8px;
+  z-index: 7;
+  background: linear-gradient(90deg, #8f7be8, #5389bb);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: 999px;
+  padding: 9px 18px;
+  box-shadow: 0 12px 30px rgba(143, 123, 232, 0.5);
+  transform: rotate(2deg);
+  white-space: nowrap;
+}
+.tagConf {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.tagConfPiece {
+  position: absolute;
+  top: 50%;
+  right: 18%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  opacity: 0;
+}
+.tagConfPiece:nth-child(3n) {
+  background: #ffc457;
+}
+.tagConfPiece:nth-child(3n + 1) {
+  background: #cdbfff;
+}
+.tagConfPiece:nth-child(3n + 2) {
+  background: #f4f6fa;
+}
+
+/* --------------------------------------------- theme 2: auditor scan panel - */
+
+.scan {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 22px 18px 18px;
+  width: 100%;
+  background: linear-gradient(160deg, rgba(46, 34, 92, 0.95), rgba(24, 20, 52, 0.96));
+  border: 1px solid rgba(150, 130, 230, 0.32);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+.radar {
+  position: absolute;
+  inset: -45%;
+  z-index: 0;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 82%,
+    rgba(143, 123, 232, 0.15) 93%,
+    transparent 100%
+  );
+}
+.scanHead {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 15px;
+  font-weight: 700;
+  min-height: 30px;
+}
+.scanDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #8f7be8;
+  box-shadow: 0 0 12px #8f7be8;
+}
+.scanStatus {
+  margin-right: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: #cdbfff;
+  border: 1px solid rgba(150, 130, 230, 0.4);
+  border-radius: 999px;
+  padding: 3px 10px;
+  background: rgba(143, 123, 232, 0.12);
+  white-space: nowrap;
+}
+.scores {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 132px 132px 1fr;
+  gap: 14px;
+  margin-top: 16px;
+  align-items: center;
+}
+.gauge {
+  position: relative;
+  width: 132px;
+  height: 132px;
+}
+.gauge svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.gBg {
+  fill: none;
+  stroke: rgba(150, 130, 230, 0.15);
+  stroke-width: 10;
+}
+.gFg {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 327;
+  stroke-dashoffset: var(--goff);
+}
+.gFgV {
+  stroke: #8f7be8;
+  filter: drop-shadow(0 0 8px rgba(143, 123, 232, 0.55));
+}
+.gFgA {
+  stroke: #ffc457;
+  filter: drop-shadow(0 0 8px rgba(255, 196, 87, 0.45));
+}
+.gMid {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.gNum {
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1;
+}
+.gCap {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.checks {
+  position: relative;
+  height: 214px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 14%, #000 86%, transparent);
+}
+.checksTrack {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.checks:hover .checksTrack {
+  animation-play-state: paused;
+}
+.chk {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: rgba(10, 15, 26, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 7px 10px;
+}
+.st {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex: none;
+}
+.stOk {
+  background: rgba(87, 201, 143, 0.16);
+  color: #7fdcaf;
+  border: 1px solid rgba(87, 201, 143, 0.4);
+}
+.stWarn {
+  background: rgba(255, 196, 87, 0.14);
+  color: #ffd9a0;
+  border: 1px solid rgba(255, 196, 87, 0.4);
+}
+.chkT b {
+  font-size: 13px;
+  display: block;
+}
+.chkT small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.proj {
+  position: relative;
+  z-index: 1;
+  margin-top: 14px;
+}
+.projHead {
+  font-size: 13px;
+  font-weight: 700;
+}
+.projGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 9px;
+  margin-top: 10px;
+}
+.pcol {
+  position: relative;
+  background: rgba(10, 15, 26, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 6px 8px;
+  text-align: center;
+  overflow: hidden;
+}
+.pbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--h);
+  background: linear-gradient(
+    180deg,
+    rgba(143, 123, 232, 0.42) 0%,
+    rgba(255, 196, 87, 0.48) 55%,
+    rgba(255, 196, 87, 0.06) 100%
+  );
+  transform: scaleY(1);
+  transform-origin: bottom;
+}
+.pcol b {
+  position: relative;
+  font-size: 16.5px;
+  display: block;
+}
+.pcol small {
+  position: relative;
+  font-size: 11px;
+  color: var(--muted);
+}
+.projHook {
+  margin-top: 11px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffd9a0;
+  text-align: center;
+  border: 1px solid rgba(255, 196, 87, 0.35);
+  background: rgba(255, 196, 87, 0.09);
+  border-radius: 11px;
+  padding: 8px 12px;
+}
+
 /* -------------------------------------------------------- theme carousel --- */
 
 .themes {
@@ -880,6 +1156,43 @@
     height: 22px;
     max-width: 96px;
   }
+  /* theme 2 mobile */
+  .floatTag {
+    top: -16px;
+    right: 0;
+    font-size: 11px;
+    padding: 7px 12px;
+    white-space: normal;
+    max-width: 88%;
+  }
+  .scanHead {
+    flex-wrap: wrap;
+  }
+  .scores {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    justify-items: center;
+  }
+  .checks {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  .gauge {
+    width: 118px;
+    height: 118px;
+  }
+  .gNum {
+    font-size: 30px;
+  }
+  .projGrid {
+    gap: 6px;
+  }
+  .pcol b {
+    font-size: 14px;
+  }
+  .pcol small {
+    font-size: 10px;
+  }
 }
 
 /* --------------------------------------------------------------- motion --- */
@@ -937,6 +1250,40 @@
   .dotProgress {
     animation: nhProg 6s linear forwards;
   }
+
+  /* theme enter: replays on every theme switch (wrapper is keyed by active) */
+  .mockEnter {
+    animation: nhMockEnter 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  /* external tag confetti pops once on theme entry */
+  .tagConfPiece {
+    animation: nhTagconf 1.4s ease-out 0.15s both;
+  }
+
+  /* theme 2: auditor */
+  .radar {
+    animation: nhSpin 7s linear infinite;
+  }
+  .scanDot {
+    animation: nhBlink 2s ease-in-out infinite;
+  }
+  .gFg {
+    stroke-dashoffset: 327;
+    animation: nhGauge 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .gFgV {
+    animation-delay: 0.7s;
+  }
+  .gFgA {
+    animation-delay: 1s;
+  }
+  .checksTrack {
+    animation: nhWheel 36s linear infinite;
+  }
+  .pbar {
+    transform: scaleY(0);
+    animation: nhPrise 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) 1.4s forwards;
+  }
 }
 
 @keyframes nhDraw {
@@ -989,4 +1336,25 @@
 }
 @keyframes nhProg {
   to { transform: scaleX(1); }
+}
+@keyframes nhMockEnter {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes nhTagconf {
+  0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+  22% { opacity: 0.95; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(1); opacity: 0; }
+}
+@keyframes nhSpin {
+  to { transform: rotate(360deg); }
+}
+@keyframes nhGauge {
+  to { stroke-dashoffset: var(--goff); }
+}
+@keyframes nhWheel {
+  to { transform: translateY(calc(-50% - 3.5px)); }
+}
+@keyframes nhPrise {
+  to { transform: scaleY(1); }
 }

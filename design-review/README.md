@@ -1,24 +1,27 @@
 # /new-home hero — design review
 
-## Round 5 (current): theme carousel + theme 1 "חשבוניות ירוקות"
-Full-bleed dark hero with a dedicated dark header (light logo; shared
-SiteHeader untouched), a fixed copy column (3-line H1), white client logos
-inside the dark block, and a product-mockup **carousel of 4 themes**. Only
-theme 1 is live (invoices skin); dots 2–4 are dimmed placeholders. The active
-dot fills a progress bar and auto-advances at a calm pace, pauses on
-hover/touch, is clickable, and honours prefers-reduced-motion (static skin).
-Built to the approved reference `theme1-preview.html`.
+## Round 6 (current): theme 2 "Auditor" joins the carousel
+The hero mockup is now a carousel of two live themes (dots 3–4 dimmed). Each
+theme has its own palette, layout, icons and panel, so switching is felt
+immediately. An external gradient tag rides each panel's top corner and pops
+~10 confetti dots on entry. Built to the approved reference `theme2-preview.html`.
+  - Theme 1 "חשבוניות ירוקות" — navy invoices dashboard + phone, tag "חשבונית דיגיטלית".
+  - Theme 2 "Auditor" — violet + amber deep-scan panel (no browser chrome): a
+    rotating radar sweep, two self-drawing gauges (google 82 / AI 74), an
+    infinite wheel of 12 checks, growth-projection bars, and the 12,000-people
+    hook. Tag "ציון לאתר שלך בתוצאות החיפוש בגוגל + AI".
 
-| file | what | width |
-| --- | --- | --- |
-| r5_desk_1440.gif | desktop hero, animated (phone loop: form → מספר הקצאה → confetti) | 1440 |
-| r5_desk_1440_still.png | desktop still | 1440 |
-| r5_mobile_390.gif | mobile mockup, animated | 390 |
-| r5_mobile_390_still.png | mobile still | 390 |
+| file | what |
+| --- | --- |
+| r6_theme1_1440.gif / _still.png | theme 1, desktop |
+| r6_theme1_390_still.png | theme 1, mobile |
+| r6_theme2_1440.gif / _still.png | theme 2, desktop |
+| r6_theme2_390.gif / _still.png | theme 2, mobile |
+| r6_switch_1440.gif | the switch moment (theme 1 → theme 2, with confetti) |
 
-Capture: WAAPI freeze (`getAnimations()` + `currentTime`) in an exact-width
-same-origin iframe, plain real-browser screenshots, assembled with Pillow.
-No parallel headless.
+Capture: WAAPI freeze in an exact-width same-origin iframe, real-browser
+screenshots, assembled with Pillow. No parallel headless.
 
-## Round 3 (superseded): single dark hero, live dashboard — r3_*
-## Round 2 (superseded): two-variant exploration — r2_*
+## Earlier rounds (superseded)
+- r5_* — round 5, theme 1 introduced (single invoices theme).
+- r3_*, r2_* — earlier explorations.
