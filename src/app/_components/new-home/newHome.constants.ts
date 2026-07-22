@@ -79,7 +79,8 @@ export const PROJECTS: readonly ProjectCard[] = [
       "דוח ממוקד עם רשימת פעולות לפי סדר עדיפות",
     ],
     ctaLabel: "לבדיקת הדומיין שלכם",
-    href: "#",
+    // Same target as the auditor links in SiteHeader (plain href, no target/rel).
+    href: "https://app.uxellent.com/auditor",
   },
   {
     id: "invoices",
