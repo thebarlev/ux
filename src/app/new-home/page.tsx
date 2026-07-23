@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
+import { FounderBand } from "@/app/_components/new-home/FounderBand"
 import { NewHero } from "@/app/_components/new-home/NewHero"
 import { ServiceSection } from "@/app/_components/new-home/ServiceSection"
 import { StorySection } from "@/app/_components/new-home/StorySection"
@@ -29,6 +30,7 @@ export default function NewHomePage() {
         {/* NewHero renders its own dedicated dark header (SiteHeader untouched). */}
         <NewHero />
         <StorySection />
+        <FounderBand />
         <TestimonialsPager />
         {/* Last section on the page: its WhatsApp call to action closes the page,
             in place of the removed contact form. Each section is self-contained,

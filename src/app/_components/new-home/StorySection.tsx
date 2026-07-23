@@ -50,16 +50,6 @@ export function StorySection() {
             </p>
           </div>
         </div>
-
-        <blockquote className={styles.quote}>
-          <span className={styles.quoteMark} aria-hidden="true">
-            &rdquo;
-          </span>
-          <p>
-            {STORY.quoteLead}
-            <b>{STORY.quoteAccent}</b>
-          </p>
-        </blockquote>
       </div>
     </section>
   )

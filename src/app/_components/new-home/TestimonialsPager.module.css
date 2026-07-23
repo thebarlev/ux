@@ -10,9 +10,10 @@
   --accent: #5389bb;
   --line: rgba(25, 21, 18, 0.1);
 
-  background: #fff;
+  /* Sits on the page's cream, with no card of its own — the dark band above
+     already provides the separation a background and top rule used to. */
+  background: #f4f1ec;
   color: var(--ink);
-  border-top: 1px solid var(--line);
   padding: 84px 0;
 }
 

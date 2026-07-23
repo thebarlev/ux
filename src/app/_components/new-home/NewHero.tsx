@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { Frank_Ruhl_Libre } from "next/font/google"
 import { useCallback, useEffect, useRef, useState } from "react"
 
@@ -10,7 +9,6 @@ import {
   HERO,
   HERO_THEMES,
   MIO_WHEEL_LABELS,
-  NEW_HOME_LOGOS,
   THEME_TOTAL,
   type AuditorTheme,
   type HeroTheme,
@@ -145,8 +143,6 @@ export function NewHero() {
           }}
           onProgressEnd={advance}
         />
-
-        <LogoStrip />
       </div>
       <div aria-hidden="true" className={styles.seam} />
     </section>
@@ -742,22 +738,3 @@ function FeedIcon({ name }: { name: "check" | "doc" | "mail" }) {
   )
 }
 
-/* --------------------------------------------------------------- logos ----- */
-
-function LogoStrip() {
-  return (
-    <div className={styles.logosHero}>
-      <h2 className="sr-only">לקוחות שעבדנו איתם</h2>
-      {NEW_HOME_LOGOS.map((logo) => (
-        <Image
-          key={logo.src}
-          src={logo.src}
-          alt={logo.alt}
-          width={200}
-          height={44}
-          className={styles.logoWhite}
-        />
-      ))}
-    </div>
-  )
-}
