@@ -15,6 +15,7 @@ import {
   type AuditorTheme,
   type HeroTheme,
   type InvoicesTheme,
+  type MeatBeatTheme,
   type MioshyTheme,
 } from "./newHome.constants"
 import { NewHomeHeader } from "./NewHomeHeader"
@@ -121,10 +122,11 @@ export function NewHero() {
           >
             {/* keyed by active → each theme entry re-mounts and replays its intro */}
             <div key={active} className={styles.mockEnter}>
-              <FloatTag text={theme.floatTag} mio={theme.kind === "mioshy"} />
+              <FloatTag text={theme.floatTag} kind={theme.kind} />
               {theme.kind === "invoices" && <InvoiceMock theme={theme} />}
               {theme.kind === "auditor" && <ScanMock theme={theme} />}
               {theme.kind === "mioshy" && <WheelMock theme={theme} />}
+              {theme.kind === "meatbeat" && <MeatBeatMock theme={theme} />}
             </div>
           </div>
         </div>
@@ -153,14 +155,16 @@ export function NewHero() {
 
 /* -------------------------------------------------------------- float tag -- */
 
-function FloatTag({ text, mio = false }: { text: string; mio?: boolean }) {
+function FloatTag({ text, kind }: { text: string; kind: HeroTheme["kind"] }) {
   // 10 confetti pieces that pop once on theme entry (element is remounted per theme)
   const conf = [
     "-34px,-26px", "28px,-32px", "-46px,2px", "44px,-4px", "-20px,-44px",
     "16px,-48px", "38px,18px", "-40px,22px", "6px,-56px", "-6px,30px",
   ]
+  const variant =
+    kind === "mioshy" ? styles.floatTagMio : kind === "meatbeat" ? styles.floatTagMeat : ""
   return (
-    <div className={`${styles.floatTag} ${mio ? styles.floatTagMio : ""}`}>
+    <div className={`${styles.floatTag} ${variant}`}>
       <span aria-hidden="true" className={styles.tagConf}>
         {conf.map((c, i) => {
           const [dx, dy] = c.split(",")
@@ -570,6 +574,116 @@ function WheelMock({ theme }: { theme: MioshyTheme }) {
         </div>
       </div>
     </div>
+  )
+}
+
+/* ------------------------------------------------- theme 4: MeatBeat ------- */
+
+function MeatBeatMock({ theme }: { theme: MeatBeatTheme }) {
+  const { board } = theme
+  // Same transparent glass board as the invoices theme, recoloured warm. The
+  // line/bar chart reuses the shared activity series (invoices-style, 1:1).
+  const areaPath =
+    "M0,96 C60,88 90,92 130,78 C180,60 210,74 260,58 C310,44 340,52 390,36 C440,22 480,26 520,14 L520,120 L0,120 Z"
+  const linePath =
+    "M0,96 C60,88 90,92 130,78 C180,60 210,74 260,58 C310,44 340,52 390,36 C440,22 480,26 520,14"
+
+  return (
+    <div className={`${styles.board} ${styles.mbBoard}`}>
+      <div className={styles.chrome}>
+        <span className={styles.cdot} />
+        <span className={styles.cdot} />
+        <span className={styles.cdot} />
+        <span className={styles.url}>{board.url}</span>
+      </div>
+
+      <div className={styles.boardHead}>
+        <span className={styles.boardTitle}>
+          <span className={styles.liveDot} />
+          {board.title}
+        </span>
+        <span className={styles.badge}>LIVE</span>
+      </div>
+
+      <div className={styles.kpis}>
+        {board.kpis.map((kpi) => (
+          <div key={kpi.label} className={styles.kpi}>
+            <div className={styles.kpiLbl}>{kpi.label}</div>
+            <div className={styles.kpiVal}>
+              {kpi.value}
+              <span className={styles.delta}>{kpi.delta}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className={styles.chart}>
+        <div className={styles.mbChartH}>{board.chartTitle}</div>
+        <svg viewBox="0 0 520 120" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="nhGrowMeat" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#E8863C" stopOpacity="0.42" />
+              <stop offset="1" stopColor="#E8863C" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <path className={styles.growfill} d={areaPath} />
+          <path className={styles.growline} d={linePath} pathLength={640} />
+        </svg>
+        <div className={styles.bars}>
+          {CHART_BAR_HEIGHTS.map((h, i) => (
+            <div key={i} className={styles.bcol}>
+              <span
+                className={`${styles.bar} ${styles[`bar${i + 1}`]}`}
+                style={{ height: `${h}%` }}
+              />
+              <span className={styles.month}>{CHART_MONTHS[i]}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.feed}>
+        {board.feed.map((row, i) => (
+          <div key={row.text} className={`${styles.row} ${i === 0 ? styles.rowNew : ""}`}>
+            <span className={styles.rowEmoji} aria-hidden="true">
+              {row.emoji}
+            </span>
+            <span className={styles.rowT}>{row.text}</span>
+            <span className={styles.when}>{row.when}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className={styles.mbDl}>
+        <span className={styles.mbDlLbl}>{board.downloadLabel}</span>
+        {board.stores.map((store) => (
+          <div key={store.kind} className={styles.store}>
+            <StoreIcon kind={store.kind} />
+            <span className={styles.storeT}>
+              <small>{store.small}</small>
+              <b>{store.name}</b>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function StoreIcon({ kind }: { kind: "apple" | "google" }) {
+  if (kind === "apple")
+    return (
+      <svg viewBox="0 0 24 24" width={16} height={16} fill="#fff" aria-hidden="true">
+        <path d="M16.37 1.43c0 1.14-.42 2.2-1.11 2.98-.79.88-2.06 1.56-3.11 1.48-.14-1.06.42-2.18 1.06-2.88.76-.86 2.11-1.51 3.16-1.58zM20.5 17.02c-.6 1.38-.89 1.99-1.66 3.2-1.08 1.7-2.6 3.82-4.48 3.83-1.68.02-2.11-1.09-4.38-1.08-2.27.01-2.75 1.1-4.43 1.09-1.88-.02-3.32-1.93-4.4-3.63C-1.36 15.9-.6 9.3 3.6 8.68c1.36-.2 2.44.73 3.28.73.84 0 2.3-.9 3.88-.77.66.03 2.51.27 3.7 2.02-3.25 2.12-2.73 6.13.04 7.36z" />
+      </svg>
+    )
+  return (
+    <svg viewBox="0 0 24 24" width={15} height={15} aria-hidden="true">
+      <path fill="#00D3FF" d="M3.6 2.2v19.6l10.3-9.8z" />
+      <path fill="#00F076" d="M3.6 2.2l14 8.1-3.7 3.5z" />
+      <path fill="#FFCE00" d="M20.6 12l-3-1.7-3.7 3.5 3.7 3.5z" />
+      <path fill="#FF3A44" d="M3.6 21.8l10.3-9.8 3.7 3.5z" />
+    </svg>
   )
 }
 

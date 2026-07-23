@@ -1093,6 +1093,104 @@
   color: #7a6a75;
 }
 
+/* ------------------------------------------ theme 4: MeatBeat community ----- */
+
+/* warm gradient tag + confetti, matching MeatBeat's amber/turquoise identity */
+.floatTagMeat {
+  background: linear-gradient(90deg, #e8863c, #c23b2e);
+  box-shadow: 0 12px 30px rgba(226, 90, 46, 0.45);
+}
+.floatTagMeat .tagConfPiece:nth-child(3n) {
+  background: #f4b45c;
+}
+.floatTagMeat .tagConfPiece:nth-child(3n + 1) {
+  background: #35c0a0;
+}
+.floatTagMeat .tagConfPiece:nth-child(3n + 2) {
+  background: #ffffff;
+}
+
+/* same invoices glass board, only more transparent + warm data accent */
+.mbBoard {
+  background: rgba(17, 26, 46, 0.56);
+}
+.mbBoard .badge {
+  background: #e8863c;
+  color: #2a140a;
+}
+.mbBoard .growline {
+  stroke: #e8863c;
+}
+.mbBoard .growfill {
+  fill: url(#nhGrowMeat);
+}
+.mbBoard .bar {
+  background: linear-gradient(180deg, #f4b45c, rgba(232, 134, 60, 0.3));
+}
+.mbChartH {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.rowEmoji {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(83, 137, 187, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* download badges — signal "it's an app you download", no iPhone frame */
+.mbDl {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 13px;
+  flex-wrap: wrap;
+}
+.mbDlLbl {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-left: 2px;
+}
+.store {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #0b0f16;
+  border: 1px solid rgba(140, 170, 215, 0.28);
+  border-radius: 11px;
+  padding: 7px 13px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+.store:hover {
+  border-color: rgba(140, 170, 215, 0.5);
+}
+.store svg {
+  flex: none;
+}
+.storeT {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+  text-align: right;
+}
+.storeT small {
+  font-size: 9.5px;
+  color: rgba(226, 233, 245, 0.7);
+}
+.storeT b {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.2px;
+}
+
 /* -------------------------------------------------------- theme carousel --- */
 
 .themes {
@@ -1348,6 +1446,16 @@
   }
   .pcol small {
     font-size: 10px;
+  }
+  /* theme 4 mobile: tighter download badges */
+  .mbDl {
+    gap: 7px;
+  }
+  .store {
+    padding: 6px 10px;
+  }
+  .storeT b {
+    font-size: 13px;
   }
 }
 

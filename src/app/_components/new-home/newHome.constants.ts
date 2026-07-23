@@ -67,6 +67,8 @@ export const CHART_BAR_HEIGHTS = [78, 64, 70, 52, 58, 44, 49, 38] as const
 
 export type ThemeKpi = { label: string; value: string; delta: string; deltaNeg?: boolean }
 export type ThemeFeedRow = { icon: "check" | "doc" | "mail"; text: string; when: string }
+export type ThemeMeatFeedRow = { emoji: string; text: string; when: string }
+export type ThemeStore = { kind: "apple" | "google"; small: string; name: string }
 export type ThemePhoneDoc = { name: string; kind: string; sum: string }
 
 export type ThemeGauge = { label: string; value: string; tone: "violet" | "amber"; offset: number }
@@ -129,7 +131,27 @@ export type MioshyTheme = ThemeCommon & {
   }
 }
 
-export type HeroTheme = InvoicesTheme | AuditorTheme | MioshyTheme
+/**
+ * Theme 4 — MeatBeat community dashboard. The same transparent glass board as
+ * the invoices theme (chrome + KPIs + line/bar chart + feed), only more
+ * transparent and with a warm amber data accent for MeatBeat's identity. No
+ * phone: a "download" row with App Store + Google Play badges signals it's an
+ * app instead of an iPhone frame.
+ */
+export type MeatBeatTheme = ThemeCommon & {
+  kind: "meatbeat"
+  board: {
+    title: string
+    url: string
+    chartTitle: string
+    kpis: readonly ThemeKpi[]
+    feed: readonly ThemeMeatFeedRow[]
+    downloadLabel: string
+    stores: readonly ThemeStore[]
+  }
+}
+
+export type HeroTheme = InvoicesTheme | AuditorTheme | MioshyTheme | MeatBeatTheme
 
 /**
  * Themes shown in the hero mockup carousel. The hero copy stays fixed; only the
@@ -229,6 +251,35 @@ export const HERO_THEMES: readonly HeroTheme[] = [
       question: "מה היית מוחק/ת מהעבר שלנו אם יכולת?",
       cta: "סיבוב נוסף",
       note: "הסיבוב הבא ממשיך את הערב, בתוך המשחק עצמו.",
+    },
+  },
+  {
+    kind: "meatbeat",
+    id: "meatbeat",
+    label: "MeatBeat",
+    floatTag: "הרשת החברתית לחובבי בשר",
+    board: {
+      title: "לוח הקהילה",
+      url: "app.meatbeat.com",
+      chartTitle: "מגמת פעילות הקהילה",
+      // Metrics + trend are true to the product: /insights aggregates
+      // community price reports; the app also has reels, follows and recipes.
+      kpis: [
+        { label: "עוקבים", value: "12.4K", delta: "+8%" },
+        { label: "דיווחי מחיר", value: "1,280", delta: "+5%" },
+        { label: "רילס החודש", value: "340", delta: "+12%" },
+      ],
+      feed: [
+        { emoji: "🎬", text: "ריל חדש עלה: איך חותכים פילה נכון", when: "עכשיו" },
+        { emoji: "👥", text: "דנה התחילה לעקוב אחריך", when: "לפני דקה" },
+        { emoji: "🏷️", text: "דיווח מחיר חדש: אנטריקוט ₪129 לק\"ג", when: "לפני 5 ד׳" },
+        { emoji: "📖", text: "מתכון נשמר: אסאדו על האש", when: "לפני 8 ד׳" },
+      ],
+      downloadLabel: "זמין להורדה",
+      stores: [
+        { kind: "apple", small: "הורידו מ-", name: "App Store" },
+        { kind: "google", small: "זמין ב-", name: "Google Play" },
+      ],
     },
   },
 ]
