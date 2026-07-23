@@ -11,11 +11,12 @@ import { usePathname } from "next/navigation"
 export function LanguageBar() {
   const pathname = usePathname() ?? "/"
 
-  // /new-home is a single-language review page with its own dark header, and the
-  // cream language row above it breaks that header. This bar comes from the root
-  // layout, so the only place it can be suppressed is here. Every other route is
-  // unaffected.
-  if (pathname === "/new-home") return null
+  // The home page has its own dark header and, by design, no language switch;
+  // the cream language row above it breaks that header. This bar comes from the
+  // root layout, so here is the only place it can be suppressed. Every other
+  // route — including /en — is unaffected, and the he/en pairing is still
+  // declared to search engines through the home page's hreflang alternates.
+  if (pathname === "/") return null
 
   const isEn = pathname.startsWith("/en")
   const hePath = isEn ? pathname.replace(/^\/en/, "") || "/" : pathname

@@ -5,6 +5,15 @@
  * The copy here is final and approved. It must stay verbatim.
  */
 
+/**
+ * Same number as the floating WhatsAppButton, so every entry point reaches the
+ * one inbox: the hero CTA, the story section's direct field, the contact
+ * actions and the service section's button.
+ *
+ * Declared first because HERO below reads it at module-evaluation time.
+ */
+export const WHATSAPP_NUMBER = "972545215193"
+
 export type HeroCta = { label: string; href: string }
 export type HeroCopy = {
   chips: readonly string[]
@@ -15,16 +24,24 @@ export type HeroCopy = {
 }
 
 /**
- * Hero copy for the single dark ("premium") hero. Approved, verbatim.
- * Do not edit.
+ * Hero copy for the single dark ("premium") hero. Copy is approved, verbatim —
+ * do not edit the labels.
+ *
+ * Both CTAs originally pointed at in-page anchors (#contact, #projects) that
+ * belonged to sections this page no longer has. They now go to the same places
+ * the rest of the page sends people: WhatsApp for "let's talk", and the
+ * portfolio page for the work.
  */
 export const HERO: HeroCopy = {
   chips: ["מקצה לקצה", "SaaS & AI"],
   title: "מבססים את הרעיון, בונים את המערכת, מביאים את הלקוחות.",
   subtitle:
     "צוות קטן, חד ומנוסה שבונה מוצרי SaaS ואפליקציות AI מקצה לקצה. מעל 25 שנות ניסיון באפיון, עיצוב, פיתוח ושיווק דיגיטלי.",
-  ctaPrimary: { label: "בואו נדבר על הפרויקט שלכם", href: "#contact" },
-  ctaSecondary: { label: "צפו בעבודות שלנו", href: "#projects" },
+  ctaPrimary: {
+    label: "בואו נדבר על הפרויקט שלכם",
+    href: `https://wa.me/${WHATSAPP_NUMBER}`,
+  },
+  ctaSecondary: { label: "צפו בעבודות שלנו", href: "/portfolio" },
 }
 
 /* -------------------------------------------------- dark new-home header --- */
@@ -555,12 +572,6 @@ export const PROJECTS: readonly ProjectCard[] = [
 export const CONTACT_INTRO =
   "הדרך המהירה היא הודעה בוואטסאפ. אפשר גם להשאיר פרטים כאן ונחזור אליכם לתיאום שיחה."
 
-/**
- * Same number as the floating WhatsAppButton, so both entry points reach the
- * one inbox. "לתאם שיחה" is WhatsApp for now; it becomes a calendar link once
- * one is available. Also used by the direct WhatsApp field in the story section.
- */
-export const WHATSAPP_NUMBER = "972545215193"
 
 const waLink = (text: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`

@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { Frank_Ruhl_Libre } from "next/font/google"
 import { useCallback, useEffect, useRef, useState } from "react"
 
@@ -103,12 +104,17 @@ export function NewHero() {
             <h1 className={styles.h1}>{HERO.title}</h1>
             <p className={styles.sub}>{HERO.subtitle}</p>
             <div className={styles.ctas}>
-              <a href={HERO.ctaPrimary.href} className={`${styles.btn} ${styles.btnPrimary}`}>
+              <a
+                href={HERO.ctaPrimary.href}
+                className={`${styles.btn} ${styles.btnPrimary}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {HERO.ctaPrimary.label}
               </a>
-              <a href={HERO.ctaSecondary.href} className={`${styles.btn} ${styles.btnGhost}`}>
+              <Link href={HERO.ctaSecondary.href} className={`${styles.btn} ${styles.btnGhost}`}>
                 {HERO.ctaSecondary.label}
-              </a>
+              </Link>
             </div>
           </div>
 

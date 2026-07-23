@@ -42,6 +42,14 @@ const nextConfig: NextConfig = {
       permanent: true,
     },
     {
+      // The review route for the current home page. Its composition is now the
+      // home page itself, so the old path is folded into it rather than 404ing.
+      // Spelled 301 rather than `permanent: true`, which Next emits as a 308.
+      source: "/new-home",
+      destination: "/",
+      statusCode: 301,
+    },
+    {
       source: "/blog/ai-seo-engine",
       destination: "/blog/seo-ai-engine",
       permanent: true,
