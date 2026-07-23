@@ -74,7 +74,14 @@
   font-weight: 700;
 }
 
+/*
+ * globals.css centres bare h2. The reference has this heading starting from the
+ * same edge as the kicker and body copy, so alignment is declared here — at both
+ * breakpoints, since the global applied to desktop too.
+ */
 .heading {
+  text-align: start;
+  margin-bottom: 0;
   font-size: clamp(29px, 3.4vw, 43px);
   line-height: 1.16;
   font-weight: 800;
@@ -171,11 +178,42 @@
     gap: 26px;
   }
 
+  /*
+   * One alignment for the whole block. globals.css centres bare h2, which left
+   * a centred heading above right-aligned body copy; both are declared here so
+   * every line starts from the same edge.
+   */
+  .text,
+  .heading,
+  .paragraph,
+  .kicker {
+    text-align: right;
+  }
+
+  /* Portrait leads on mobile: full width, and shallower so it doesn't eat the
+     screen before the copy starts. Both orders are set — giving the figure
+     order:1 alone would still leave it behind the text block's default 0. */
   .figure {
     order: 1;
-    max-width: 300px;
-    margin: 0 auto;
+    max-width: none;
     width: 100%;
+    margin: 0;
+  }
+
+  .text {
+    order: 2;
+  }
+
+  .frame {
+    aspect-ratio: 3 / 2;
+  }
+
+  .frame img {
+    object-position: center 22%;
+  }
+
+  .caption {
+    text-align: right;
   }
 
   .waLine {

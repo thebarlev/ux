@@ -1263,6 +1263,47 @@
 /* ----------------------------------------------------------- responsive --- */
 
 @media (max-width: 900px) {
+  /*
+   * Mobile reading order: heading → text → mockup → slide indicator → buttons.
+   * The buttons live inside .copy and the indicator is a sibling of .grid, two
+   * levels apart, so `order` alone can't interleave them. Collapsing .grid and
+   * .copy with `display: contents` lifts their children into .wrap's flex flow,
+   * where a single order scale can. Desktop is untouched — this only applies
+   * inside the media query.
+   */
+  .wrap {
+    display: flex;
+    flex-direction: column;
+  }
+  .grid,
+  .copy {
+    display: contents;
+  }
+  .nhHeader {
+    order: 0;
+  }
+  .chips {
+    order: 1;
+  }
+  .h1 {
+    order: 2;
+  }
+  .sub {
+    order: 3;
+  }
+  .stage {
+    order: 4;
+    margin-top: 30px;
+  }
+  .themes {
+    order: 5;
+  }
+  .ctas {
+    order: 6;
+    margin-top: 4px;
+    padding-bottom: 8px;
+  }
+
   .grid {
     grid-template-columns: 1fr;
     padding-top: 30px;

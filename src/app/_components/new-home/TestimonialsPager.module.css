@@ -62,8 +62,8 @@
 }
 
 .quote {
-  font-size: clamp(19px, 2vw, 27px);
-  line-height: 1.4;
+  font-size: clamp(21px, 2vw, 29px);
+  line-height: 1.6;
   font-weight: 400;
   color: #211c17;
   margin: 18px 0 30px;
@@ -168,6 +168,10 @@
 @media (max-width: 860px) {
   .section {
     padding: 56px 0;
+  }
+
+  .heading {
+    margin-bottom: 16px;
   }
 
   .arrow {

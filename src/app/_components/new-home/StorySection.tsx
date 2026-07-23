@@ -19,7 +19,7 @@ export function StorySection() {
     >
       <div className={styles.wrap}>
         <div className={styles.top}>
-          <div>
+          <div className={styles.text}>
             <span className={styles.kicker}>{STORY.kicker}</span>
             <h2 id="story-heading" className={styles.heading}>
               {STORY.headingLead}
