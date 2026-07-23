@@ -2,10 +2,9 @@ import type { Metadata } from "next"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { NewHero } from "@/app/_components/new-home/NewHero"
+import { ServiceSection } from "@/app/_components/new-home/ServiceSection"
 import { StorySection } from "@/app/_components/new-home/StorySection"
 import { TestimonialsPager } from "@/app/_components/new-home/TestimonialsPager"
-import { ProjectsSection } from "@/app/_components/new-home/ProjectsSection"
-import { ContactSection } from "@/app/_components/new-home/ContactSection"
 
 /**
  * Alternative home page, for review only.
@@ -29,10 +28,12 @@ export default function NewHomePage() {
       <main id="main">
         {/* NewHero renders its own dedicated dark header (SiteHeader untouched). */}
         <NewHero />
-        <ProjectsSection />
         <StorySection />
         <TestimonialsPager />
-        <ContactSection />
+        {/* Last section on the page: its WhatsApp call to action closes the page,
+            in place of the removed contact form. Each section is self-contained,
+            so reordering is a matter of moving one line. */}
+        <ServiceSection />
       </main>
       <SiteFooter />
     </div>

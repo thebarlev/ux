@@ -1,0 +1,452 @@
+/*
+ * "השירות שלנו" — dark interactive capability section for /new-home, built 1:1
+ * from the approved reference design-review/service-preview.html. Shares the
+ * hero's dark language (ink background, faint grid, brand glow) but is a fully
+ * scoped module; nothing leaks to globals or to the live pages.
+ */
+
+.section {
+  --ink: #0a0f1a;
+  --ink2: #0d1526;
+  --panel: rgba(17, 26, 46, 0.72);
+  --line: rgba(140, 170, 215, 0.16);
+  --brand: #5389bb;
+  --brand-lift: #7fb2e0;
+  --brand-soft: rgba(83, 137, 187, 0.3);
+  --txt: #f4f6fa;
+  --muted: rgba(226, 233, 245, 0.62);
+  --wa: #25a366;
+
+  position: relative;
+  overflow: hidden;
+  padding: 88px 0 96px;
+  color: var(--txt);
+  background:
+    radial-gradient(900px 460px at 80% 6%, rgba(83, 137, 187, 0.22), transparent 60%),
+    radial-gradient(720px 520px at 12% 92%, rgba(83, 137, 187, 0.12), transparent 60%),
+    linear-gradient(180deg, var(--ink), var(--ink2));
+}
+
+/* Faint blueprint grid, faded out towards the edges. */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(140, 170, 215, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(140, 170, 215, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(80% 70% at 55% 30%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(80% 70% at 55% 30%, #000 30%, transparent 100%);
+}
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 28px;
+  position: relative;
+}
+
+.head {
+  max-width: 760px;
+  margin-bottom: 44px;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #bcd3e8;
+  margin-bottom: 16px;
+}
+
+.kicker::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--brand);
+  border-radius: 2px;
+}
+
+/*
+ * globals.css styles bare h2 with `text-black`, `text-center` and a margin. On
+ * this dark panel that would render the heading near-invisible, so colour,
+ * alignment and margin are all declared here rather than inherited.
+ */
+.heading {
+  color: #fff;
+  text-align: start;
+  margin: 0;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.heading em {
+  font-style: normal;
+  color: #8fb8de;
+}
+
+.sub {
+  margin-top: 14px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 56ch;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 26px;
+  align-items: stretch;
+}
+
+/* ------------------------------------------- selector list (right) -------- */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  cursor: pointer;
+  width: 100%;
+  text-align: start;
+  font: inherit;
+  color: inherit;
+  background: rgba(10, 15, 26, 0.4);
+  border: 1px solid var(--line);
+  transition: 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.cap:hover {
+  border-color: rgba(140, 170, 215, 0.4);
+}
+
+.cap:focus-visible {
+  outline: 2px solid var(--brand-lift);
+  outline-offset: 2px;
+}
+
+.capOn {
+  background: var(--panel);
+  border-color: var(--brand-soft);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.4);
+}
+
+/* Active marker on the inline-start edge (right in RTL). */
+.capOn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: 0;
+  width: 3px;
+  background: var(--brand);
+}
+
+.capIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(83, 137, 187, 0.14);
+  border: 1px solid var(--brand-soft);
+  color: #9fc2e6;
+  transition: 0.25s;
+}
+
+.capOn .capIcon {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+
+.capIcon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.capText {
+  display: block;
+  flex: 1;
+  min-width: 0;
+}
+
+.capName {
+  color: #f4f6fa;
+  font-size: 19px;
+  font-weight: 700;
+  display: block;
+}
+
+.mini {
+  display: block;
+  height: 5px;
+  border-radius: 99px;
+  background: rgba(140, 170, 215, 0.16);
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.mini i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--brand), var(--brand-lift));
+  border-radius: 99px;
+  transition: width 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.capOn .mini i {
+  width: var(--w);
+}
+
+.capYears {
+  flex: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: #bcd3e8;
+  background: rgba(83, 137, 187, 0.14);
+  border: 1px solid var(--brand-soft);
+  border-radius: 999px;
+  padding: 5px 12px;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------- detail panel (left) ------ */
+
+.detail {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 30px 28px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+}
+
+.detailTop {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.detailIcon {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: var(--brand);
+  color: #fff;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detailIcon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.detailName {
+  color: #fff;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.detailYears {
+  margin-top: 24px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.detailNum {
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+}
+
+.detailYearsLabel {
+  font-size: 17px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.detailBar {
+  height: 8px;
+  border-radius: 99px;
+  background: rgba(140, 170, 215, 0.16);
+  margin-top: 16px;
+  overflow: hidden;
+}
+
+/*
+ * The sweep is a keyframe rather than a transition-from-zero: the panel remounts
+ * on every swap, so a transition would need a paint between two JS states to
+ * animate — which silently never happens when rAF is throttled. The keyframe
+ * always replays on mount and always lands on --bar.
+ */
+.detailBar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand), var(--brand-lift));
+  border-radius: 99px;
+  width: var(--bar);
+  box-shadow: 0 0 14px rgba(83, 137, 187, 0.6);
+  animation: barSweep 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes barSweep {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--bar);
+  }
+}
+
+.detailDesc {
+  margin-top: 22px;
+  font-size: 17px;
+  line-height: 1.7;
+  color: #dce6f2;
+}
+
+.fade {
+  animation: fade 0.5s ease;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------ CTA -------- */
+
+.cta {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  flex-wrap: wrap;
+  background: rgba(10, 15, 26, 0.45);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px 26px;
+}
+
+.ctaText {
+  color: #f4f6fa;
+  font-size: 19px;
+  font-weight: 600;
+  max-width: 60ch;
+}
+
+.waButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  background: var(--wa);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 15px 24px;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(37, 163, 102, 0.34);
+  transition: filter 0.18s;
+  white-space: nowrap;
+}
+
+.waButton:hover {
+  filter: brightness(1.06);
+}
+
+.waButton:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.waButton svg {
+  width: 22px;
+  height: 22px;
+}
+
+@media (max-width: 860px) {
+  .section {
+    padding: 56px 0 64px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .detail {
+    order: -1;
+  }
+
+  .detailNum {
+    font-size: 52px;
+  }
+
+  .cta {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .waButton {
+    justify-content: center;
+  }
+}
+
+/*
+ * Reduced motion: no fade-in, no bar sweep, no count-up (the component holds the
+ * final number). Everything lands on its finished state immediately.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .fade,
+  .detailBar i {
+    animation: none;
+  }
+
+  .cap,
+  .capIcon,
+  .mini i,
+  .waButton {
+    transition: none;
+  }
+}

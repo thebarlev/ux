@@ -397,6 +397,69 @@ export const NEW_HOME_TESTIMONIALS: readonly NewHomeTestimonial[] = [
 /** Heading above the testimonials pager. */
 export const TESTIMONIALS_HEADING = "לקוחות מספרים"
 
+/* ------------------------------------------------- "השירות שלנו" section --- */
+
+export type ServiceKey = "research" | "design" | "dev" | "market"
+
+export type ServiceCapability = {
+  key: ServiceKey
+  name: string
+  years: number
+  desc: string
+}
+
+/**
+ * The scale every experience meter is drawn against — the longest-running
+ * discipline. Kept as a constant so adding a longer one rescales all the bars.
+ */
+export const SERVICE_MAX_YEARS = 20
+
+/**
+ * The four disciplines, in the order they run in a project: research first,
+ * marketing last. Copy and year counts are approved, verbatim.
+ */
+export const SERVICE_CAPABILITIES: readonly ServiceCapability[] = [
+  {
+    key: "research",
+    name: "מחקר ואפיון",
+    years: 10,
+    desc: "מבינים את המשתמשים, את השוק ואת המטרה, ובונים אפיון מדויק שמגדיר בדיוק מה נבנה ולמה, עוד לפני שכותבים שורת קוד אחת.",
+  },
+  {
+    key: "design",
+    name: "עיצוב",
+    years: 20,
+    desc: "עיצוב חוויית משתמש וממשק שנראה מצוין ועובד עוד יותר טוב, עם שפה חזותית נקייה שמתאימה למותג ומכבדת את מי שמשתמש בו.",
+  },
+  {
+    key: "dev",
+    name: "פיתוח AI",
+    years: 5,
+    desc: "פיתוח מוצרים ומערכות SaaS מבוססות AI, נכון ומהיר כבר מהפעם הראשונה, בנוי לגדול ולהחזיק גם כשמגיעים המשתמשים.",
+  },
+  {
+    key: "market",
+    name: "שיווק",
+    years: 15,
+    desc: "מביאים למוצר את הלקוחות הנכונים, עם שיווק דיגיטלי, SEO ונוכחות במנועי החיפוש ובמנועי ה-AI, מהשקה ועד צמיחה.",
+  },
+]
+
+export const SERVICE = {
+  kicker: "השירות שלנו",
+  /** Heading rendered as: lead + accent (lighter brand tint) + tail. */
+  headingLead: "יכולת אחת שלמה, ",
+  headingAccent: "מהמחקר ועד השיווק",
+  headingTail: ".",
+  sub: "כל שלב בדרך למוצר חי נמצא אצלנו תחת קורה אחת, עם הניסיון שצברנו בכל תחום. בחרו תחום כדי לראות עוד.",
+  yearsLabel: "שנות ניסיון",
+  yearsSuffix: "שנים",
+  ctaText: "יש לכם רעיון או עסק? ספרו לנו עליו ונראה יחד איך לוקחים אותו קדימה.",
+  ctaButton: "דברו איתנו בוואטסאפ",
+  /** Seconds each discipline stays on screen before the section advances. */
+  autoAdvanceMs: 4200,
+} as const
+
 export type ClientLogo = {
   src: string
   alt: string
