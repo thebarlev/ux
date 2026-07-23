@@ -54,22 +54,12 @@
 }
 
 .kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  display: inline-block;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.05em;
   color: #bcd3e8;
   margin-bottom: 16px;
-}
-
-.kicker::before {
-  content: "";
-  width: 22px;
-  height: 2px;
-  background: var(--brand);
-  border-radius: 2px;
 }
 
 /*
