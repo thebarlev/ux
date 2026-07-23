@@ -46,9 +46,26 @@ const FOOTER_COLUMNS: readonly FooterColumn[] = [
   { title: "Uxellent", items: VOW_LINKS },
 ] as const
 
-export function SiteFooter() {
+/**
+ * Background tone. "black" is the site-wide default and the only tone any live
+ * page uses. "ink" matches the dark ink used by /new-home's hero and service
+ * section, so the footer continues that section instead of stepping to black.
+ */
+export type SiteFooterTone = "black" | "ink"
+
+/** Same value as --ink2 in the /new-home dark sections — the colour their
+ *  background gradient resolves to at its bottom edge. */
+const INK_TONE = "#0d1526"
+
+export function SiteFooter({ tone = "black" }: { tone?: SiteFooterTone } = {}) {
+  const isInk = tone === "ink"
   return (
-    <footer role="contentinfo" className="bg-black" dir="rtl">
+    <footer
+      role="contentinfo"
+      className={isInk ? undefined : "bg-black"}
+      style={isInk ? { backgroundColor: INK_TONE } : undefined}
+      dir="rtl"
+    >
       <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 lg:px-8">
 
         <div className="grid grid-cols-2 gap-x-9 gap-y-10 md:grid-cols-6 md:gap-x-10">

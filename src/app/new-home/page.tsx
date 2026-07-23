@@ -37,7 +37,9 @@ export default function NewHomePage() {
             so reordering is a matter of moving one line. */}
         <ServiceSection />
       </main>
-      <SiteFooter />
+      {/* Ink tone so the footer continues the dark service section above it
+          instead of stepping to black. Every other page keeps the default. */}
+      <SiteFooter tone="ink" />
     </div>
   )
 }

@@ -22,6 +22,11 @@
   padding: 88px 0 96px;
   color: var(--txt);
   background:
+    /* Settles the last stretch onto flat --ink2 so the bottom edge is one
+       colour edge to edge. The footer below is that same value, so the two
+       meet with nothing to see — without this, the bottom-left brand glow
+       still reads at the join and leaves a faint step across the left third. */
+    linear-gradient(180deg, transparent 84%, var(--ink2) 100%),
     radial-gradient(900px 460px at 80% 6%, rgba(83, 137, 187, 0.22), transparent 60%),
     radial-gradient(720px 520px at 12% 92%, rgba(83, 137, 187, 0.12), transparent 60%),
     linear-gradient(180deg, var(--ink), var(--ink2));
