@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
-import { Testimonials } from "@/app/_components/home/Testimonials"
 import { NewHero } from "@/app/_components/new-home/NewHero"
 import { StorySection } from "@/app/_components/new-home/StorySection"
+import { TestimonialsPager } from "@/app/_components/new-home/TestimonialsPager"
 import { ProjectsSection } from "@/app/_components/new-home/ProjectsSection"
 import { ContactSection } from "@/app/_components/new-home/ContactSection"
 
@@ -31,7 +31,7 @@ export default function NewHomePage() {
         <NewHero />
         <ProjectsSection />
         <StorySection />
-        <Testimonials locale="he" />
+        <TestimonialsPager />
         <ContactSection />
       </main>
       <SiteFooter />

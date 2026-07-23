@@ -1,33 +1,65 @@
-import { H2 } from "@/components/ui/Heading"
+import Image from "next/image"
 
-import { STORY_PARAGRAPHS } from "./newHome.constants"
+import { STORY, STORY_PARAGRAPHS } from "./newHome.constants"
+import styles from "./StorySection.module.css"
+import { WhatsAppField } from "./WhatsAppField"
 
 /**
  * The founder's story, in first person: the path that led to Uxellent and the
- * gap it exists to close.
+ * gap it exists to close. Text leads, portrait sits beside it, and a slim
+ * direct WhatsApp line sits under the copy.
  */
 export function StorySection() {
   return (
     <section
       id="story"
       aria-labelledby="story-heading"
-      className="bg-[#F4F1EC] py-[var(--space-section)]"
+      className={styles.section}
       dir="rtl"
     >
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
-        <div className="border-r-[3px] border-[color:var(--vow-accent)] pr-5 md:pr-8">
-          <H2 id="story-heading" className="w-full text-right">
-            הסיפור מאחורי Uxellent
-          </H2>
-          {STORY_PARAGRAPHS.map((paragraph) => (
-            <p
-              key={paragraph}
-              className="mt-4 max-w-[980px] text-right text-[21px] leading-[34px] text-black md:mt-6 md:text-[24px] md:leading-[40px]"
-            >
-              {paragraph}
+      <div className={styles.wrap}>
+        <div className={styles.top}>
+          <div>
+            <span className={styles.kicker}>{STORY.kicker}</span>
+            <h2 id="story-heading" className={styles.heading}>
+              {STORY.headingLead}
+              <em>{STORY.headingAccent}</em>
+              {STORY.headingTail}
+            </h2>
+            {STORY_PARAGRAPHS.map((paragraph) => (
+              <p key={paragraph} className={styles.paragraph}>
+                {paragraph}
+              </p>
+            ))}
+            <WhatsAppField />
+          </div>
+
+          <div className={styles.figure}>
+            <div className={styles.frame}>
+              <Image
+                src={STORY.portraitSrc}
+                alt={STORY.portraitAlt}
+                fill
+                sizes="(max-width: 860px) 300px, 380px"
+                className="object-cover"
+              />
+            </div>
+            <p className={styles.caption}>
+              <b>{STORY.captionName}</b>
+              {STORY.captionRole}
             </p>
-          ))}
+          </div>
         </div>
+
+        <blockquote className={styles.quote}>
+          <span className={styles.quoteMark} aria-hidden="true">
+            &rdquo;
+          </span>
+          <p>
+            {STORY.quoteLead}
+            <b>{STORY.quoteAccent}</b>
+          </p>
+        </blockquote>
       </div>
     </section>
   )

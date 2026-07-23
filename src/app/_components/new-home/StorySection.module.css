@@ -1,0 +1,235 @@
+/*
+ * Story / about section for /new-home, built 1:1 from the approved reference
+ * design-review/part2-preview.html. Scoped module — nothing leaks to globals
+ * or to the live pages.
+ */
+
+.section {
+  --cream: #f4f1ec;
+  --ink: #191512;
+  --muted: #6e655c;
+  --accent: #5389bb;
+  --accent-dark: #3e6e9c;
+  --line: rgba(25, 21, 18, 0.1);
+  --wa: #25a366;
+
+  background: var(--cream);
+  color: var(--ink);
+  padding: 88px 0;
+}
+
+.wrap {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--accent-dark);
+  margin-bottom: 20px;
+}
+
+.kicker::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 64px;
+  align-items: center;
+}
+
+/* Text is first in the DOM (it leads the section); the portrait sits after it,
+   which in this RTL grid places the portrait on the left. */
+.figure {
+  order: 2;
+}
+
+.frame {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: #dfd6c7;
+  box-shadow: 0 26px 60px rgba(25, 21, 18, 0.16);
+}
+
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.caption {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.caption b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.heading {
+  font-size: clamp(29px, 3.4vw, 43px);
+  line-height: 1.16;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.heading em {
+  font-style: normal;
+  color: var(--accent-dark);
+}
+
+.paragraph {
+  font-size: clamp(17.5px, 1.35vw, 19.5px);
+  line-height: 1.85;
+  color: #413a32;
+  margin-top: 22px;
+}
+
+/* ------------------------------------------------- slim WhatsApp line ----- */
+
+.waLine {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 26px;
+  max-width: 460px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 18px 6px 6px;
+  box-shadow: 0 4px 16px rgba(25, 21, 18, 0.05);
+}
+
+.waLine:focus-within {
+  border-color: var(--accent);
+}
+
+.waInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 15.5px;
+  color: var(--ink);
+}
+
+.waInput::placeholder {
+  color: #9a9187;
+}
+
+.waGo {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--wa);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.18s;
+}
+
+.waGo:hover {
+  filter: brightness(1.06);
+}
+
+.waGo:focus-visible {
+  outline: 2px solid var(--accent-dark);
+  outline-offset: 2px;
+}
+
+.waGo svg {
+  width: 20px;
+  height: 20px;
+}
+
+.waHint {
+  margin-top: 9px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------- pull quote ------ */
+
+.quote {
+  max-width: 820px;
+  margin: 60px auto 0;
+  text-align: center;
+}
+
+.quoteMark {
+  font-family: Georgia, serif;
+  font-size: 64px;
+  line-height: 0.5;
+  color: var(--accent);
+  opacity: 0.22;
+  display: block;
+  height: 32px;
+}
+
+.quote p {
+  font-size: clamp(21px, 2.15vw, 27px);
+  line-height: 1.55;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 10px;
+}
+
+.quote b {
+  color: var(--accent-dark);
+  font-weight: 700;
+}
+
+@media (max-width: 860px) {
+  .section {
+    padding: 56px 0;
+  }
+
+  .top {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .figure {
+    order: 1;
+    max-width: 300px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .quote {
+    margin-top: 44px;
+  }
+
+  .waLine {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waGo {
+    transition: none;
+  }
+}

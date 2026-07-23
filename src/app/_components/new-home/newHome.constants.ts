@@ -295,9 +295,107 @@ export const THEME_TOTAL = 4
  * Approved, verbatim. Do not edit.
  */
 export const STORY_PARAGRAPHS: readonly string[] = [
-  "למדתי עיצוב שלוש שנים באיטליה, וחזרתי ארצה עם רעב לבנות דברים שאנשים באמת משתמשים בהם. ניהלתי את מחלקת הדיגיטל ב‑Max (לשעבר לאומי קארד), ובהמשך עמדתי בראש אגף העיצוב בחברת פורקס בינלאומית במשך שמונה שנים. בעשור האחרון אני עצמאי, ועבדתי לצד חברות ומותגים כמו אלטשולר שחם, ישראכרט, הורייזון, אנקר, סאונדקור ו‑BuyMe.",
-  "כל התחנות האלה לימדו אותי דבר אחד. הפער בין רעיון טוב למוצר חי הוא כמעט אף פעם לא הרעיון עצמו, אלא כל מה שצריך לקרות סביבו כדי שהוא יעבוד. בדיוק את הפער הזה Uxellent באה לסגור.",
+  "שלוש שנים למדתי עיצוב באיטליה, וחזרתי עם רעב לבנות דברים שאנשים באמת משתמשים בהם. במשך שמונה שנים ניהלתי את מחלקת הדיגיטל ב-Max, לשעבר לאומי קארד, ואחר כך הובלתי במשך שנתיים צוות אפיון ופיתוח בחברת פורקס בינלאומית. בעשור האחרון אני עצמאי, ועובד לצד חברות ומותגים כמו אלטשולר שחם, ישראכרט, הורייזון, אנקר, סאונדקור, BuyMe ועוד.",
 ] as const
+
+/**
+ * The rest of the story section, split so the emphasised runs can be coloured
+ * without dangerouslySetInnerHTML. Approved, verbatim. Do not edit.
+ */
+export const STORY = {
+  kicker: "הסיפור מאחורי Uxellent",
+  /** Heading rendered as: lead + accent (brand colour) + tail. */
+  headingLead: "עשרים וחמש שנה של בנייה, ",
+  headingAccent: "מהתכנון הראשוני ועד השיווק",
+  headingTail: " למיליוני משתמשים.",
+  portraitSrc: "/1.webp",
+  portraitAlt: "איציק ברלב, מייסד Uxellent",
+  captionName: "איציק ברלב",
+  captionRole: " · מייסד Uxellent",
+  /** Pull quote: plain run, then the closing line in brand colour. */
+  quoteLead:
+    "כל התחנות האלה לימדו אותי דבר אחד. הפער בין רעיון טוב למוצר שמושך אליו לקוחות הוא כמעט אף פעם לא הרעיון עצמו, אלא כל מה שקורה סביבו: האפיון, הפיתוח והשיווק. ",
+  quoteAccent: "בדיוק את הפער הזה Uxellent באה לסגור.",
+} as const
+
+/* --------------------------------------------- direct WhatsApp field ------ */
+
+export const WHATSAPP_FIELD = {
+  placeholder: "כתבו לי הודעה קצרה בוואטסאפ...",
+  send: "שליחה בוואטסאפ",
+  hint: "מעדיפים לדבר? כותבים, לוחצים, וזה נפתח ישר בוואטסאפ שלי.",
+} as const
+
+/* ------------------------------------------------ testimonials pager ------ */
+
+export type NewHomeTestimonial = {
+  quote: string
+  name: string
+  company: string
+  imageSrc: string
+  imageAlt: string
+}
+
+/**
+ * Testimonials for this page only, in the one-at-a-time pager format. Quotes,
+ * names and images are the existing approved ones from TESTIMONIALS in
+ * home.constants.ts, with the wrapping quotation marks dropped because the card
+ * draws its own quote mark. The shared Testimonials component and its data are
+ * left untouched for the live pages.
+ */
+export const NEW_HOME_TESTIMONIALS: readonly NewHomeTestimonial[] = [
+  {
+    quote:
+      "עברנו מתחושת בטן לנתונים אמיתיים. Uxellent העניקה לנו בהירות מלאה על מצב העסק - תובנות שהפתיעו אותנו פעם אחר פעם וחשפו הזדמנויות שהיו תמיד שם. התוצאות: יותר מכירות, יותר לקוחות ושליטה אמיתית בעסק.",
+    name: "שנאי חולדה",
+    company: "לקוח Uxellent",
+    imageSrc: "/testimonials/שנאי חולדה.webp",
+    imageAlt: "שנאי חולדה — לקוח Uxellent",
+  },
+  {
+    quote:
+      "Uxellent היא חברת פיתוח ממבוססת AI איכותית, שמשלבת חדשנות יוצאת דופן עם מומחיות עמוקה בשיווק ופיתוח. מספקים פתרונות מדויקים, שמעלים את רמת הניהול ומובילים לתוצאות מדידות.",
+    name: "סלדט",
+    company: "לקוח Uxellent",
+    imageSrc: "/testimonials/סלדט.webp",
+    imageAlt: "סלדט — לקוח Uxellent",
+  },
+  {
+    quote:
+      "פנינו ל-Uxellent כדי לבנות פתרון שעובד בצורה חלקה, ובמהירות הצוות הראה הבנה מעמיקה של המוצר והלקוחות שלנו, פעמים רבות אף יותר מאשר אנחנו. צוות מחויב, מקצועי ונחוש להצלחה בכל שלב. שותפות אמיתית.",
+    name: "אלטשולר שחם פיננסים",
+    company: "לקוח Uxellent",
+    imageSrc: "/testimonials/אלטשולר שחם פיננסים סרביסס.webp",
+    imageAlt: "אלטשולר שחם פיננסים — לקוח Uxellent",
+  },
+  {
+    quote:
+      "גילינו שאנחנו לא באמת מכירים את העסק שלנו. Uxellent חשפה לנו תמונה ברורה - איפה אנחנו מרוויחים, איפה אנחנו מפסידים, ואיך לשפר. כל דוח הוביל לרגע של ״איך לא ידעתי את זה קודם״. התוצאות דיברו בעד עצמן: צמיחה משמעותית והגדלת הרווחיות.",
+    name: "Carrefour",
+    company: "לקוח Uxellent",
+    imageSrc: "/testimonials/Carrefoure.webp",
+    imageAlt: "Carrefour — לקוח Uxellent",
+  },
+  {
+    quote:
+      "השגנו צמיחה משמעותית בהכנסות בעזרת שיווק מדוייק ואתר שעובד מהר וחלק, הגדלנו את בסיס הלקוחות ורכשנו שליטה מלאה בנתונים העסקיים. Uxellent חשפה תובנות שלא ידענו שקיימות - רגעי ״איך פספסנו את זה״ שהובילו לשיפור מיידי בתהליכים השיווקיים.",
+    name: "Youa",
+    company: "לקוח Uxellent",
+    imageSrc: "/testimonials/youa.webp",
+    imageAlt: "Youa — לקוח Uxellent",
+  },
+  {
+    quote:
+      "ממליצה בחום! Uxellent עובדת באמינות מלאה, מבצעת הכל בזמן, באיכות גבוהה, ומעדכנת באופן שוטף על כל שלב בתהליך. כיום, נדיר מאוד למצוא בשוק פתרון ברמה כזו!",
+    name: "סבונלה",
+    company: "לקוח Uxellent",
+    imageSrc: "/testimonials/סבונלה.webp",
+    imageAlt: "סבונלה — לקוח Uxellent",
+  },
+]
+
+/** Heading above the testimonials pager. */
+export const TESTIMONIALS_HEADING = "לקוחות מספרים"
 
 export type ClientLogo = {
   src: string
@@ -397,9 +495,9 @@ export const CONTACT_INTRO =
 /**
  * Same number as the floating WhatsAppButton, so both entry points reach the
  * one inbox. "לתאם שיחה" is WhatsApp for now; it becomes a calendar link once
- * one is available.
+ * one is available. Also used by the direct WhatsApp field in the story section.
  */
-const WHATSAPP_NUMBER = "972545215193"
+export const WHATSAPP_NUMBER = "972545215193"
 
 const waLink = (text: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`
