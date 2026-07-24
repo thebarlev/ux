@@ -5,16 +5,20 @@ import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { DoubleHeadingCtaSection } from "@/app/_components/services/DoubleHeadingCtaSection"
 import { ServiceFaqSection } from "@/app/_components/services/ServiceFaqSection"
 import { ServiceHero } from "@/app/_components/services/ServiceHero"
+import { H2 } from "@/components/ui/Heading"
 
 export const metadata: Metadata = {
-  title: "שיווק אורגני SEO / AI | VOW",
+  title: "SEO אורגני ו-AI Search | Uxellent",
   description:
-    "בונים נוכחות אורגנית שמייצרת לידים לאורך זמן: SEO טכני, תוכן, מדידה והתאמה למנועי חיפוש בעידן ה‑AI.",
+    "SEO אורגני ו-AI Search לעסקים עם אופטימיזציה טכנית, תוכן ומדידה שמחזקים הופעות, תנועה ולידים.",
+  alternates: {
+    canonical: "/marketing/seo-ai",
+  },
   openGraph: {
-    title: "שיווק אורגני SEO / AI | VOW",
+    title: "שיווק אורגני SEO / AI | Uxellent",
     description:
       "בונים נוכחות אורגנית שמייצרת לידים לאורך זמן: SEO טכני, תוכן, מדידה והתאמה למנועי חיפוש בעידן ה‑AI.",
-    url: "/marketing/seo-ai",
+    url: "/seo-ai",
     type: "website",
   },
 }
@@ -30,14 +34,14 @@ const QA_SECTIONS = [
     bullets: [
       "מבנה אתר ותוכן שמאפשרים למנועי AI להבין הקשר (Entities + Intent).",
       "דפים שמייצרים אמון: הוכחות, מומחיות, ושפה ברורה ללקוח.",
-      "מדידה: לא רק טראפיק — אלא איכות ליד, יחס סגירה והכנסות.",
+      "מדידה: לא רק טראפיק - אלא איכות ליד, יחס סגירה והכנסות.",
     ],
   },
   {
     id: "seo-ai-90-days",
     question: "איך נראית תוכנית 90 יום?",
     answer: [
-      "אנחנו עובדים בספרינטים קצרים עם יעד ברור לכל שלב. לא \"נחכה לגוגל\" — נבנה תהליך שמייצר שיפור מצטבר ומדיד.",
+      "אנחנו עובדים בספרינטים קצרים עם יעד ברור לכל שלב. לא \"נחכה לגוגל\" - נבנה תהליך שמייצר שיפור מצטבר ומדיד.",
     ],
     bullets: [
       "ימים 1–15: מיפוי יעדים, מחקר כוונות חיפוש, בדיקת טכני + אינדוקס, ותעדוף.",
@@ -50,7 +54,7 @@ const QA_SECTIONS = [
     id: "seo-ai-measure",
     question: "מה מודדים?",
     answer: [
-      "כדי ש‑SEO יהיה מנוע צמיחה ולא תחביב — מודדים אותו כמו מוצר. המדדים צריכים להתחבר ללידים, מכירות ורווחיות.",
+      "כדי ש‑SEO יהיה מנוע צמיחה ולא תחביב - מודדים אותו כמו מוצר. המדדים צריכים להתחבר ללידים, מכירות ורווחיות.",
     ],
     bullets: [
       "נראות: אימפרשנים, מיקומים, CTR ודפים שמופיעים בתשובות.",
@@ -72,19 +76,19 @@ const FAQ_ITEMS = [
     id: "seo-ai-faq-2",
     question: "האם צריך בלוג כדי להצליח?",
     answer:
-      "לא תמיד. המטרה היא כיסוי כוונת חיפוש. לפעמים דפי שירות/מוצר חזקים + שאלות ותשובות יעשו עבודה מצוינת. בלוג הוא כלי — לא חובה.",
+      "לא תמיד. המטרה היא כיסוי כוונת חיפוש. לפעמים דפי שירות/מוצר חזקים + שאלות ותשובות יעשו עבודה מצוינת. בלוג הוא כלי - לא חובה.",
   },
   {
     id: "seo-ai-faq-3",
     question: "איך AI משפיע על התנועה לאתר?",
     answer:
-      "חלק מהחיפושים מקבלים תשובה ישירה ולכן פחות קליקים. מצד שני, מי שכן נכנס — מגיע עם יותר כוונה. לכן אנחנו מתמקדים גם בנראות וגם באיכות הליד.",
+      "חלק מהחיפושים מקבלים תשובה ישירה ולכן פחות קליקים. מצד שני, מי שכן נכנס - מגיע עם יותר כוונה. לכן אנחנו מתמקדים גם בנראות וגם באיכות הליד.",
   },
   {
     id: "seo-ai-faq-4",
     question: "אתם מטפלים גם ב‑SEO טכני וגם בתוכן?",
     answer:
-      "כן. טכני (אינדוקס, מבנה, סכמה, ביצועים), תוכן (מסרים, היררכיה, שאלות), ומדידה — כחבילה אחת שמחוברת לתוצאה.",
+      "כן. טכני (אינדוקס, מבנה, סכמה, ביצועים), תוכן (מסרים, היררכיה, שאלות), ומדידה - כחבילה אחת שמחוברת לתוצאה.",
   },
 ] as const
 
@@ -95,7 +99,7 @@ export default function MarketingSeoAiPage() {
       <main id="main" role="main">
         <ServiceHero
           title="שיווק אורגני SEO / AI"
-          subtitle="בונים נוכחות אורגנית שמייצרת לידים לאורך זמן — עם תשתית טכנית, תוכן שממיר, ומדידה שמחוברת לעסק."
+          subtitle="בונים נוכחות אורגנית שמייצרת לידים לאורך זמן - עם תשתית טכנית, תוכן שממיר, ומדידה שמחוברת לעסק."
           tags={["SEO טכני", "תוכן ותשובות", "AI Search", "אנליטיקס"]}
           ctaLabel="להשארת פרטים"
           ctaSource="digital_marketing"
@@ -113,9 +117,9 @@ export default function MarketingSeoAiPage() {
           >
             <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
               <div className="mx-auto w-full max-w-[900px] text-right">
-                <h2 className="text-balance text-[34px] font-semibold leading-[1.15] tracking-[-0.2px] text-black sm:text-[44px] lg:text-[52px]">
+                <H2 className="text-balance tracking-[-0.2px]">
                   {section.question}
-                </h2>
+                </H2>
 
                 <div className="mt-6 space-y-4 text-[18px] leading-[30px] text-black">
                   {section.answer.map((p) => (
@@ -140,7 +144,7 @@ export default function MarketingSeoAiPage() {
 
         <DoubleHeadingCtaSection
           title="רוצים לבנות מנוע צמיחה אורגני?"
-          subtitle="אם אתם רוצים תהליך מסודר שמחבר טכני, תוכן ומדידה ל‑ROI — נשמח לבדוק יחד מה הכי נכון לעסק שלכם."
+          subtitle="אם אתם רוצים תהליך מסודר שמחבר טכני, תוכן ומדידה ל‑ROI - נשמח לבדוק יחד מה הכי נכון לעסק שלכם."
           buttonLabel="להשארת פרטים"
           buttonSource="digital_marketing"
         />

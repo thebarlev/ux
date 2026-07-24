@@ -7,6 +7,7 @@ import { z } from "zod"
 import { Bot, CheckCircle, Sparkles, X } from "lucide-react"
 
 import type { PopupIconVariant } from "@/app/_components/products/productPopupOverrides"
+import { executeRecaptcha } from "@/lib/captcha/useRecaptcha"
 import { getAttribution } from "@/lib/tracking/attribution"
 import { pushDataLayer } from "@/lib/tracking/dataLayer"
 import { inferPageContext, mapLeadSourceToService } from "@/lib/tracking/pageContext"
@@ -77,12 +78,7 @@ export function Popup({
     setError(null)
 
     try {
-      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
-      if (!siteKey) throw new Error("reCAPTCHA not configured")
-
-      const token = await window.grecaptcha.execute(siteKey, {
-        action: "submit_lead",
-      })
+      const token = await executeRecaptcha("submit_lead")
 
       const leadId = generateLeadId()
 
@@ -200,13 +196,13 @@ export function Popup({
       className="fixed inset-0 z-[9999] overflow-y-auto bg-[#000000D6] px-4"
       onClick={onClose}
     >
-      {/* עטיפה פנימית עם מרווח — מאפשרת גלילה לכל הפופאפ */}
+      {/* עטיפה פנימית עם מרווח - מאפשרת גלילה לכל הפופאפ */}
       <div className="flex min-h-full items-start justify-center py-10 ">
         <div
           className="relative w-full max-w-[637px] rounded-xl bg-white p-5 text-right"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* כפתור X — פינה שמאלית עליונה */}
+          {/* כפתור X - פינה שמאלית עליונה */}
           <button
             type="button"
             onClick={onClose}
@@ -234,7 +230,7 @@ export function Popup({
                 </div>
               )}
 
-              <h2 className="mb-1 text-center text-[50px] font-bold">{title}</h2>
+              <h2 className="pt-4 mb-2 text-center text-[30px] font-bold">{title}</h2>
 
               <h6 className="mb-2 px-1 py-1 text-center text-[26px] font-semibold text-[#747474]">
                 {description}

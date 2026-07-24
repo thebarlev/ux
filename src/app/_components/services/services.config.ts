@@ -20,7 +20,8 @@ export type ServicePageConfig = {
   hero: {
     title: string
     subtitle?: string
-    tags: readonly string[]
+    heroSubheading?: string
+    tags?: readonly string[]
     ctaLabel: string
     ctaSource: LeadSource
     imageSrc?: string
@@ -30,6 +31,7 @@ export type ServicePageConfig = {
     title?: string
     subtitle?: string
     ctaLabel?: string
+    ctaHref?: string
     source?: LeadSource
     cards?: Array<{ id: string; src: string; alt: string; caption: string }>
   }
@@ -44,6 +46,7 @@ export type ServicePageConfig = {
     subtitle: string
     ctaLabel: string
     ctaSource: LeadSource
+    ctaHref?: string
     items: ServiceAboutItem[]
   }
   faq?: {
@@ -68,16 +71,16 @@ const SECTIONS_ORDER: readonly ServiceSectionType[] = [
 export const designConfig: ServicePageConfig = {
     slug: "design",
     metadata: {
-      title: "עיצוב ומיתוג לעסקים ויזים",
-      description: "מיתוג, UX/UI ואתרים שנראים מעולה וגם ממירים. שפה מותגית שמדברת לקהל הנכון.",
+      title: "עיצוב ומיתוג לעסקים | Uxellent",
+      description: "עיצוב ומיתוג לעסקים עם UX/UI, דפי נחיתה ואתרים שמחזקים מותג, משפרים חוויית משתמש ומגדילים המרות.",
     },
     hero: {
       title: "עיצוב ומיתוג לעסקים וליזמים",
-      tags: ["אתר", "אפליקציה", "SaaS ומערכות", "קריאייטיב", "לוגו"],
+      heroSubheading: "אתר, אפליקציה, SaaS ומערכות - קריאייטיב ולוגו שמדברים לקהל הנכון",
       ctaLabel: "להשארת פרטים",
       ctaSource: "design_development",
-      imageSrc: "/services/d-design.webp",
-      imageAlt: "עיצוב ומיתוג לעסקים",
+      imageSrc: "/services/d-design2.webp",
+      imageAlt: "Branding and UX design for business growth and digital presence",
     },
     doubleHeading: {
       title: "חבילת מיתוג והשקה מלאה לעסק",
@@ -140,21 +143,21 @@ export const designConfig: ServicePageConfig = {
 export const developConfig: ServicePageConfig = {
   slug: "develop",
   metadata: {
-    title: "VOW – פיתוח אתרים, מערכות AI ושיווק שממיר",
-    description: "אתרי תדמית, חנויות ומערכות – מהירים, נגישים ומוכנים לקידום. תהליך מדיד שמייצר המרות.",
+    title: "פיתוח אתרים לעסקים | Uxellent",
+    description: "פיתוח אתרים לעסקים עם SEO טכני, מהירות, נגישות וחוויית משתמש שמייצרים יותר פניות, מכירות וצמיחה.",
   },
   hero: {
     title: "פיתוח אתרים מבוסס AI לעסקים",
-    tags: ["אתרי תדמית / חנויות", "אפליקציות", "מערכות / SaaS", "אוטומציות"],
+    heroSubheading: "אתרי תדמית, חנויות אונליין, אפליקציות ומערכות - מהירים, נגישים ומוכנים לקידום",
     ctaLabel: "להשארת פרטים",
     ctaSource: "design_development",
     imageSrc: "/services/d-develop.webp",
-    imageAlt: "פיתוח מבוסס AI",
+    imageAlt: "AI-powered website development for business growth and digital presence",
 
   },
   doubleHeading: {
     title: "פיתוח אתרי וורדפרס וחנויות אונליין מבוססי AI עם 20 שנות ניסיון",
-    subtitle: "משלבים ניסיון עמוק בבניית אתרים, SEO וקידום עסקים במנועי AI, כדי לבנות לך נוכחות דיגיטלית שמייצרת תוצאות עסקיות אמיתיות.",
+    subtitle: "משלבים ניסיון עמוק בבניית אתרים, SEO וקידום עסקים בגוגל וב-AI, כדי לבנות לך נוכחות דיגיטלית שמייצרת תוצאות עסקיות אמיתיות.",
     buttonLabel: "להשארת פרטים",
     buttonSource: "design_development",
   },
@@ -228,23 +231,23 @@ export const developConfig: ServicePageConfig = {
 export const marketingPpcConfig: ServicePageConfig = {
   slug: "marketing",
   metadata: {
-    title: "שיווק PPC | VOW",
-    description: "קמפיינים בגוגל ובמטא שמבוססים מדידה, אופטימיזציה ו‑ROI. מפסיקים לנחש - מתחילים למדוד.",
+    title: "שיווק PPC לעסקים | Uxellent",
+    description: "ניהול קמפיינים בגוגל ובמטא עם PPC מבוסס נתונים, CRO ושיווק דיגיטלי שמטרתו לידים איכותיים ו-ROI טוב יותר.",
     openGraph: {
-      title: "שיווק PPC | VOW",
+      title: "שיווק PPC | Uxellent",
       description: "קמפיינים בגוגל ובמטא שמבוססים מדידה, אופטימיזציה ו‑ROI. מפסיקים לנחש - מתחילים למדוד.",
       url: "/marketing/ppc",
       type: "website",
     },
   },
   hero: {
-    title: "שיווק PPC",
-    subtitle: "Google Ads + Meta Ads עם תהליך מדיד: משפך, אנליטיקס ואופטימיזציה שמכוונת להכנסות - לא לניחושים.",
-    tags: ["Google Ads", "Meta Ads", "קריאייטיב", "אנליטיקס"],
+    title: "קידום ממומן PPC שמייצר לקוחות",
+    subtitle: "ניהול קמפיינים ב-Google Ads וב-Meta Ads עם תהליך מבוסס נתונים - מטרגוט ועד אופטימיזציה שמגדילה לידים ומכירות.",
+    heroSubheading: "",
     ctaLabel: "להשארת פרטים",
     ctaSource: "digital_marketing",
-    imageSrc: "/services/d-marketing.webp",
-    imageAlt: "שיווק PPC",
+    imageSrc: "/services/d-marketing3.webp",
+    imageAlt: "PPC digital marketing for business growth and lead generation",
   },
   doubleHeading: {
     title: "גם אתם יכולים לשחק בליגה של הגדולים.",
@@ -338,16 +341,16 @@ export const marketingPpcConfig: ServicePageConfig = {
 export const roiConfig: ServicePageConfig = {
   slug: "roi",
   metadata: {
-    title: "ROI פחות תנועה - יותר מכירות | VOW",
-    description: "עמוד שירות - ROI / CRO",
+    title: "שיפור ROI ו-CRO לאתרים | Uxellent",
+    description: "שיפור ROI ו-CRO לעסקים עם אופטימיזציית משפך, UX, קופי ומדידה שמגדילים המרות בלי להגדיל תקציב.",
   },
   hero: {
     title: "ROI: פחות תנועה - יותר מכירות",
-    tags: ["CRO", "משפכים", "A/B Testing", "מהירות", "אנליטיקס"],
+    heroSubheading: "CRO, משפכים, A/B Testing ומהירות - ניתוח מדויק שמעלה המרות בלי להגדיל תקציב",
     ctaLabel: "להשארת פרטים",
     ctaSource: "digital_marketing",
     imageSrc: "/m-woman-vow.webp",
-    imageAlt: "ROI פחות תנועה - יותר מכירות",
+    imageAlt: "ROI marketing strategy - less traffic, more sales for business growth",
   },
   doubleHeading: {
     title: "ממקסמים המרות בלי להגדיל תקציב",
@@ -412,13 +415,16 @@ export const roiConfig: ServicePageConfig = {
 export const seoAiConfig: ServicePageConfig = {
   slug: "seo-ai",
   metadata: {
-    title: "קידום עסקים במנועי AI",
+    title: "קידום אתרים בגוגל וב-AI לעסקים | Uxellent",
     description:
-      "אתר בלי SEO נשאר ללא מבקרים. אנחנו מחברים לכל אתר מערכת SEO + AI שעובדת באופן חודשי ומגדילה תנועה, תוכן ולידים.",
+      "קידום אתרים, קידום אורגני בגוגל ושיווק דיגיטלי לעסקים עם תוכן, מבנה ומדידה שמביאים יותר פניות ולידים.",
+    alternates: {
+      canonical: "/seo-ai",
+    },
     openGraph: {
-      title: "קידום עסקים במנועי AI",
+      title: "קידום אורגני בגוגל וב-AI לעסקים",
       description:
-      "אתר בלי SEO נשאר ללא מבקרים. אנחנו מחברים לכל אתר מערכת SEO + AI שעובדת באופן חודשי ומגדילה תנועה, תוכן ולידים.",
+        "קידום עסקים בגוגל עם SEO, תוכן, סכמות ומדידה חודשית שמחברים בין חשיפה אורגנית, לידים וצמיחה עסקית.",
       url: "/seo-ai",
       type: "website",
     },
@@ -427,23 +433,24 @@ export const seoAiConfig: ServicePageConfig = {
     title: "לקוחות כבר לא מחפשים בגוגל הם שואלים AI.",
     subtitle:
       "האם העסק שלך מופיע בתשובה?",
-    tags: ["אנחנו הופכים את האתר שלך לנכס שמביא לקוחות, גם מגוגל וגם ממנועי AI. בלי קמפיינים ממומנים. בלי תלות בתקציב פרסום."],
+    heroSubheading:
+      "אנחנו מחברים קידום אורגני בגוגל, תוכן, מבנה אתר ומדידה כדי להפוך את האתר שלך למנוע צמיחה בשיווק דיגיטלי לעסקים, גם בגוגל וגם במנועי AI.",
     ctaLabel: "קבל אבחון נוכחות - בחינם",
     ctaSource: "digital_marketing",
-    imageSrc: "/services/seo-ai/hero1.webp",
-    imageAlt: "קידום עסקים במנועי AI",
+    imageSrc: "/new-hero.webp",
+    imageAlt: "AI SEO strategy helping businesses appear in ChatGPT, Google and AI search results",
   },
   doubleHeading: {
-    title: "SEO זה לא רק מיקומים. זה איכות ליד.",
+    title: "קידום אתרים SEO הוא לא רק מיקומים. הוא צמיחה עסקית.",
     subtitle:
-    " אנחנו בונים אסטרטגיה שמודדת איכות, משפך והכנסות, לא רק תנועה.",
+      "אנחנו בונים אסטרטגיה שמחברת קידום עסקים בגוגל עם איכות לידים, משפך והכנסות, לא רק תנועה.",
     buttonLabel: "להצטרפות",
     buttonSource: "digital_marketing",
   },
   vision: {
-    title: "קידום שמביא תנועה וגם הופכת אותה ללידים",
+    title: "שיווק דיגיטלי לעסקים שמתחיל בקידום אורגני חכם",
     subtitle:
-      "רוב בעלי העסקים משלמים על פרסום כל חודש, ומקבלים לידים שנעצרים ברגע שהתקציב נגמר. זה לא אסטרטגיה. זה ברז שתמיד יכול להיסגר.",
+      "במקום להישען רק על קידום ממומן, אנחנו בונים תהליך שמחזק קידום אורגני בגוגל, משפר עמודי שירות ומקדם עסקים גם בתוצאות חיפוש וגם בהמרות.",
     ctaLabel: "להשארת פרטים",
     source: "digital_marketing",
     cards: [
@@ -474,76 +481,76 @@ export const seoAiConfig: ServicePageConfig = {
     ],
   },
   about: {
-    title: " האתר שלך קיים, אבל הוא לא מביא לקוחות. אנחנו מתקנים את זה.",
+    title: "קידום עסקים בגוגל דורש יותר מתוכן כללי",
     subtitle:
-    "SEO + נוכחות AI - ליווי חודשי שמביא תוצאות בלי לרדוף אחרי פרסום.",
+      "כדי לנצח בקידום אתרים SEO צריך אתר מהיר, מסר מדויק ותהליך עבודה שמחבר בין נראות אורגנית, חוויית משתמש ופניות איכותיות.",
     ctaLabel: "להשארת פרטים",
     ctaSource: "digital_marketing",
     items: [
       {
         id: "seo-ai-about-1",
-        title: "פחות כסף על פרסום, יותר לקוחות",
-        description: "המערכת מחליפה שעות עבודה ידניות, מפחיתה תלות בספקים חיצוניים ומאפשרת להפיק תוצרים שיווקיים, ניתוחים וחשיפה במהירות.",
+        title: "קידום אורגני שבונה נכס לאורך זמן",
+        description: "במקום לרדוף כל חודש אחרי תקציב פרסום חדש, אנחנו בונים נראות אורגנית שממשיכה לעבוד גם אחרי שהקמפיין נגמר.",
         icon: "/services/seo-ai/1.svg",
       },
       {
         id: "seo-ai-about-2",
-        title: "עוצרים קמפיין? הלידים לא נעצרים",
-        description: "עוצרים קמפיין, נעלמים. כל שקל שמשלמים לגוגל/פייסבוק נשרף ולא בונה כלום לעתיד.",
+        title: "קידום ממומן הוא האצה, לא כל האסטרטגיה",
+        description: "כשיש בסיס אורגני נכון, גם אם עוצרים קמפיין ממומן לא חוזרים לאפס. האתר, התוכן והסמכות נשארים שלך.",
         icon: "/services/seo-ai/2.svg",
       },
       {
         id: "seo-ai-about-3",
-        title: "חודש אחרי חודש, האתר חזק יותר",
-        description: "ב-VOW מזהים נקודות חולשה באתר, בתוכן ובתהליך המכירה, ומציעים פתרונות פרקטיים שמעלים את אחוזי ההמרה.",
+        title: "חודש אחרי חודש, האתר והלידים מתחזקים",
+        description: "אנחנו מזהים נקודות חולשה באתר, בתוכן ובתהליך המכירה, ומיישמים שיפורים שמקדמים קידום עסקים, המרות ואיכות לידים.",
         icon: "/services/seo-ai/3.svg",
       },
     ],
   },
   faq: {
-    title: "שאלות נפוצות על SEO / AI",
+    title: "שאלות נפוצות על קידום אתרים, SEO / AI ושיווק דיגיטלי",
     items: [
       {
         id: "seo-ai-faq-1",
-        question: "כמה זמן עד שרואים תוצאות?",
+        question: "כמה זמן לוקח לראות תוצאות מקידום אורגני בגוגל?",
         answer:
-          "רוב הלקוחות רואים שינוי מדיד - יותר הופעות, יותר קליקים - תוך 4–8 שבועות. פניות אורגניות ראשונות מגיעות לרוב בחודש 2–3. SEO הוא נכס שצומח, לא ברז שנפתח מיד - אבל בניגוד לפרסום, הוא לא נעצר כשמפסיקים לשלם.",
+          "ברוב המקרים רואים שיפור בחשיפה, הופעות וקליקים בתוך 4-8 שבועות. לידים ראשונים מקידום אורגני בגוגל מגיעים לרוב אחרי כמה חודשי עבודה עקבית.",
       },
       {
         id: "seo-ai-faq-2",
-        question: "מה בדיוק אתם עושים כל חודש?",
+        question: "מה ההבדל בין קידום אורגני בגוגל לקידום ממומן?",
         answer:
-          'בתחילת כל חודש תקבל תכנית עבודה מפורטת: אילו עמודים משדרגים, אילו תכנים כותבים, אילו שינויים טכניים מבוצעים. בסוף החודש, דו"ח עם נתוני אמת. לא "עשינו SEO" - עשינו X, Y, Z וזו התוצאה.',
+          "קידום ממומן מביא תנועה כל עוד משלמים על קליקים. קידום אורגני בונה נכס ארוך טווח דרך תוכן, עמודים, סמכות ומבנה אתר שממשיכים לעבוד גם בלי תקציב מדיה.",
       },
       {
         id: "seo-ai-faq-3",
-        question: "איך AI משנה את המשחק?",
+        question: "מה בדיוק אתם עושים כל חודש במסגרת קידום אתרים SEO?",
         answer:
-          "יותר תשובות בלי קליק, יותר חשיבות לאמינות ומבנה. לכן אנחנו מתמקדים גם בנראות וגם באיכות ליד והתקדמות במשפך.",
+          "בכל חודש אנחנו בונים תוכנית עבודה, משפרים עמודים קיימים, מוסיפים תוכן ושאלות נפוצות, מטפלים בטכני ובסכמות ומודדים את ההשפעה על חשיפה, פניות ולידים.",
       },
       {
         id: "seo-ai-faq-4",
-        question: "אתם מטפלים גם בטכני וגם בתוכן?",
+        question: "האם SEO AI מתאים גם לשיווק דיגיטלי לעסקים קטנים ובינוניים?",
         answer:
-          "כן. טכני, תוכן, וקישורים/סמכות, כחבילה אחת שמכוונת לתוצאה עסקית.",
+          "כן. עסקים קטנים ובינוניים נהנים במיוחד מקידום אתרים שמקטין תלות בקמפיינים ומייצר צמיחה יציבה יותר דרך האתר והנוכחות האורגנית.",
       },
       {
         id: "seo-ai-faq-5",
-        question: "האם זה במקום פרסום ממומן?",
+        question: "האם אתם מטפלים גם בתוכן וגם בצד הטכני?",
         answer:
-          "לא בהכרח - אבל בהחלט מוריד את התלות בו. עסקים שעובדים איתנו 3–6 חודשים מדווחים על ירידה של 30–60% בהוצאות פרסום תוך שמירה על אותו נפח לידים. הפרסום הממומן יכול להישאר כהאצה, לא כעמוד השדרה.",
+          "כן. אנחנו עובדים על תוכן, מבנה כותרות, סכמות, מהירות, קישורים פנימיים ושיפור עמודי שירות כדי לקדם קידום עסקים בגוגל בצורה מלאה יותר.",
       },
       {
         id: "seo-ai-faq-6",
-        question: "מה קורה אם מפסיקים לשלם?",
+        question: "צריך לבנות אתר חדש כדי להתקדם בקידום אתרים?",
         answer:
-          "ההבדל הגדול מפרסום: מה שבנינו, נשאר. האתר המשודרג, התוכן, העמודים - הם שלך לתמיד. כמובן שיש שיפור מתמשך עם ליווי, אבל לא חוזרים לאפס ברגע שעוצרים.",
+          "לא תמיד. הרבה פעמים אפשר לשפר אתר קיים. אם יש בעיות מהותיות במבנה או בביצועים, נמליץ גם על שדרוג או בניית אתרים שתתמוך טוב יותר ב-SEO ובהמרות.",
       },
       {
         id: "seo-ai-faq-7",
-        question: "צריך לתת גישה לאתר?",
+        question: "איך AI משנה היום את הדרך שבה עושים קידום אתרים?",
         answer:
-          "כן, לשינויים בפועל נצטרך גישה. אנחנו עובדים עם WordPress, Wix, Webflow וכמעט כל פלטפורמה. אם האתר שלך על פלטפורמה ייחודית - נעשה בדיקה ראשונית חינם לפני שמחויבים לכלום.",
+          "מנועי AI מחפשים תשובות ברורות, מבנה מסודר ואמינות. לכן אנחנו מתאימים את האתר גם לגוגל וגם למנועי AI עם עמודים ברורים, FAQ ותוכן שקל להבין ולצטט.",
       },
     ],
   },

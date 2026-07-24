@@ -1,0 +1,132 @@
+{
+  "site": "https://uxellent.com",
+  "brand": "VOW",
+  "description": "AI-powered accountant, digital invoicing and website development platform.",
+  "generated_at": "2026-04-03T15:08:28.841Z",
+  "priority_pages": [
+    {
+      "url": "https://uxellent.com",
+      "type": "homepage"
+    },
+    {
+      "url": "https://uxellent.com/en",
+      "type": "homepage_en"
+    },
+    {
+      "url": "https://uxellent.com/account-ai",
+      "type": "product"
+    },
+    {
+      "url": "https://uxellent.com/en/account-ai",
+      "type": "product"
+    },
+    {
+      "url": "https://uxellent.com/en/invoice",
+      "type": "product"
+    },
+    {
+      "url": "https://uxellent.com/invoice",
+      "type": "product"
+    },
+    {
+      "url": "https://uxellent.com/design",
+      "type": "development"
+    },
+    {
+      "url": "https://uxellent.com/develop",
+      "type": "development"
+    },
+    {
+      "url": "https://uxellent.com/develop-ai",
+      "type": "development"
+    },
+    {
+      "url": "https://uxellent.com/en/design",
+      "type": "development"
+    },
+    {
+      "url": "https://uxellent.com/en/develop",
+      "type": "development"
+    },
+    {
+      "url": "https://uxellent.com/en/develop-ai",
+      "type": "development"
+    },
+    {
+      "url": "https://uxellent.com/en/marketing/ppc",
+      "type": "services"
+    },
+    {
+      "url": "https://uxellent.com/en/portfolio",
+      "type": "services"
+    },
+    {
+      "url": "https://uxellent.com/en/pricing",
+      "type": "services"
+    },
+    {
+      "url": "https://uxellent.com/en/seo-ai",
+      "type": "seo"
+    },
+    {
+      "url": "https://uxellent.com/en/seo-ai/pricing",
+      "type": "seo"
+    },
+    {
+      "url": "https://uxellent.com/marketing/ppc",
+      "type": "services"
+    },
+    {
+      "url": "https://uxellent.com/marketing/seo-ai",
+      "type": "seo"
+    },
+    {
+      "url": "https://uxellent.com/portfolio",
+      "type": "services"
+    },
+    {
+      "url": "https://uxellent.com/pricing",
+      "type": "services"
+    },
+    {
+      "url": "https://uxellent.com/roi",
+      "type": "services"
+    },
+    {
+      "url": "https://uxellent.com/seo-ai",
+      "type": "seo"
+    },
+    {
+      "url": "https://uxellent.com/blog",
+      "type": "blog"
+    },
+    {
+      "url": "https://uxellent.com/en/blog",
+      "type": "blog"
+    },
+    {
+      "url": "https://uxellent.com/about",
+      "type": "page"
+    },
+    {
+      "url": "https://uxellent.com/contact",
+      "type": "page"
+    },
+    {
+      "url": "https://uxellent.com/en/about",
+      "type": "page"
+    },
+    {
+      "url": "https://uxellent.com/en/contact",
+      "type": "page"
+    },
+    {
+      "url": "https://uxellent.com/en/growth-guides",
+      "type": "page"
+    },
+    {
+      "url": "https://uxellent.com/growth-guides",
+      "type": "page"
+    }
+  ]
+}

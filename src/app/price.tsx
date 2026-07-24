@@ -31,7 +31,7 @@ export default function PricingPage() {
       <header className="border-b bg-background/80 backdrop-blur">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4">
           <Link href="/" className="text-lg font-semibold tracking-tight">
-            Vow
+            Uxellent
           </Link>
           <Button asChild variant="ghost">
             <Link href="/">חזרה</Link>

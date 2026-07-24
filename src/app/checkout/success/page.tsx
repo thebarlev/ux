@@ -1,7 +1,20 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
+export const metadata: Metadata = {
+  title: "התשלום הצליח | Uxellent",
+  description: "התשלום הושלם בהצלחה ב-Uxellent. מכאן אפשר לחזור לעמוד הבית או להמשיך לעמודי השירות הרלוונטיים.",
+  alternates: {
+    canonical: "/checkout/success",
+  },
+  robots: {
+    index: false,
+    follow: true,
+  },
+}
 
 export default function CheckoutSuccessPage() {
   return (

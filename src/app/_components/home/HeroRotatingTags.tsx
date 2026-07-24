@@ -6,7 +6,7 @@ function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false
 }
 
-export function HeroRotatingTags(props: { items: readonly string[] }) {
+export function HeroRotatingTags(props: { items: readonly string[]; dir?: "ltr" | "rtl" }) {
   const [activeIndex, setActiveIndex] = React.useState(0)
 
   React.useEffect(() => {
@@ -18,10 +18,15 @@ export function HeroRotatingTags(props: { items: readonly string[] }) {
     return () => window.clearInterval(id)
   }, [props.items.length])
 
+  const isLtr = props.dir === "ltr"
   return (
     <div
-      className="inline-flex flex-col lg:flex-row flex-wrap sm:items-center lg:items-center justify-start lg:justify-end gap-[20px] sm:gap-[30px] lg:gap-[30px] text-right text-[28px] lg:text-[22px] font-normal leading-[32px] text-black"
-      aria-label="תחומי פעילות"
+      className={
+        isLtr
+          ? "inline-flex flex-col lg:flex-row flex-wrap sm:items-center lg:items-center justify-start lg:justify-start gap-[20px] sm:gap-[30px] lg:gap-[30px] text-left text-[28px] lg:text-[22px] font-normal leading-[32px] text-black"
+          : "inline-flex flex-col lg:flex-row flex-wrap sm:items-center lg:items-center justify-start lg:justify-end gap-[20px] sm:gap-[30px] lg:gap-[30px] text-right text-[28px] lg:text-[22px] font-normal leading-[32px] text-black"
+      }
+      aria-label={isLtr ? "Areas of focus" : "תחומי פעילות"}
     >
       {props.items.map((t, idx) => (
         <span

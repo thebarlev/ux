@@ -4,6 +4,7 @@ import { ABOUT_US } from "./home.constants"
 import { useState } from "react"
 import { Popup, LeadSource } from "./Popup"
 import { POPUP_OVERRIDES_BY_PATH, type PopupIconVariant } from "@/app/_components/products/productPopupOverrides"
+import { H2, H3 } from "@/components/ui/Heading"
 
 export function AboutSection() {
 
@@ -52,12 +53,12 @@ export function AboutSection() {
 >
             <div className="w-full  py-[35px]">
               
-              <h2 className="mt-3 text-right">
-              מיתוג, אתרים ופיתוח מערכות AI שמקדמים את העסק קדימה
-
-</h2>
-              <p className="font-semibold text-[30px] pt-7 leading-[38px] text-[#747474] sm:max-w-[90%] lg:max-w-[90%]">
-              אנחנו משלבים AI בכל שלב,  מהאפיון ועד השיווק, כדי לבנות עסק מדויק, מהיר ורווחי יותר.              </p>
+              <H2 className="mt-3 text-right">
+                מיתוג, אתרים ופיתוח מערכות AI שמקדמים את העסק קדימה
+              </H2>
+              <H3 className="pt-7 sm:max-w-[90%] lg:max-w-[90%]">
+                אנחנו משלבים AI בכל שלב, מהאפיון ועד השיווק, כדי לבנות עסק מדויק, מהיר ורווחי יותר.
+              </H3>
             <button
   type="button"
   className="vow-btn-primary mt-8 w-full max-w-[323px] cursor-pointer"
@@ -97,9 +98,9 @@ export function AboutSection() {
           className="max-w-[39px] h-auto"
           priority
         />
-        <h3 className="h3-title sm:text-[30px] font-semibold">
+        <H3 className="text-black">
           {p.title}
-        </h3>
+        </H3>
       </div>
 
       {/* Description */}

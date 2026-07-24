@@ -3,21 +3,23 @@
 import * as React from "react"
 import Image from "next/image"
 import { openLeadPopup } from "./leadPopupEvent"
+import { H2, H3 } from "@/components/ui/Heading"
 
 export type VisionCard = {
   id: string
   src: string
   alt: string
-  caption: string
+  caption: React.ReactNode
 }
 
 type Props = {
-  title?: string
-  subtitle?: string
+  title?: React.ReactNode
+  subtitle?: React.ReactNode
   ctaLabel?: string
   source?: "design_development" | "digital_marketing" | "smart_accounting_ai"
   ctaHref?: string
   cards?: VisionCard[]
+  dir?: "ltr" | "rtl"
 }
 
 const DEFAULT_CARDS: VisionCard[] = [
@@ -34,6 +36,7 @@ export function VisionToExecutionSection({
   source = "design_development",
   ctaHref,
   cards = DEFAULT_CARDS,
+  dir = "rtl",
 }: Props) {
   const onCtaClick = () => {
     document.getElementById("lead-design-development")?.scrollIntoView({
@@ -43,18 +46,23 @@ export function VisionToExecutionSection({
     openLeadPopup({ source })
   }
 
+  const isLtr = dir === "ltr"
+  const sectionAriaLabel = typeof title === "string" ? title : "Vision"
   return (
     <section
-      aria-label={title}
+      aria-label={sectionAriaLabel}
       className="py-[var(--space-section)] bg-[#F4F1EC]"
+      dir={dir}
     >
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-        <div className="text-right md:text-center">
-          <h2 className="text-right md:text-center w-full pb-2">{title}</h2>
+        <div className={isLtr ? "text-left md:text-center" : "text-right md:text-center"}>
+          <H2 className={isLtr ? "w-full pb-2 text-left md:text-center" : "w-full pb-2 text-right md:text-center"}>
+            {title}
+          </H2>
 
-          <h3 className="mx-auto max-w-full sm:max-w-[85%] lg:max-w-[70%]">
+          <H3 className="mx-auto max-w-full sm:max-w-[85%] lg:max-w-[70%]">
             {subtitle}
-          </h3>
+          </H3>
 
           {ctaHref ? (
             <a
@@ -87,7 +95,7 @@ export function VisionToExecutionSection({
                 />
               </div>
 
-              <figcaption className="mt-1 mb-2 text-right text-[20px] lg:text-[24px] font-semibold leading-tight text-black">
+              <figcaption className={isLtr ? "mt-1 mb-2 text-left text-[18px] font-semibold leading-tight text-[#717171] leading-[1.2]" : "mt-1 mb-2 text-right text-[18px] lg:text-[18px] font-semibold leading-tight text-black  leading-[1.2]"}>
                 {card.caption}
               </figcaption>
             </figure>

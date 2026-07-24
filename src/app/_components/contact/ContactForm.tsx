@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
-const CATEGORY_OPTIONS = [
+const CATEGORY_OPTIONS_HE = [
   "התעניינות ברו״ח AI (אוטומציה פיננסית)",
   "בקשה לשיחת ייעוץ עם נציג (רו״ח לעסק)",
   "התעניינות בשיווק דיגיטלי לעסק",
@@ -15,18 +15,51 @@ const CATEGORY_OPTIONS = [
   "אחר",
 ] as const
 
-const formSchema = z.object({
-  fullName: z.string().trim().min(2, "שם מלא חובה"),
-  phone: z.string().trim().min(9, "מספר טלפון לא תקין"),
-  email: z.string().trim().email("כתובת אימייל לא תקינה"),
-  subject: z.string().trim().min(1, "נושא חובה"),
-  category: z.string().trim().min(1, "קטגוריה חובה"),
-  message: z.string().trim().min(10, "ההודעה קצרה מדי"),
-})
+const CATEGORY_OPTIONS_EN = [
+  "Interest in AI accountant (financial automation)",
+  "Request a consultation call (accountant for business)",
+  "Interest in digital marketing",
+  "Interest in design and branding",
+  "Interest in web / app / systems development",
+  "Interest in secure digital invoice (creation and signing)",
+  "Other",
+] as const
 
-type FormData = z.infer<typeof formSchema>
+function createFormSchema(locale: "he" | "en") {
+  const msgs =
+    locale === "en"
+      ? {
+          fullName: "Full name is required",
+          phone: "Invalid phone number",
+          email: "Invalid email address",
+          subject: "Subject is required",
+          category: "Category is required",
+          message: "Message is too short",
+        }
+      : {
+          fullName: "שם מלא חובה",
+          phone: "מספר טלפון לא תקין",
+          email: "כתובת אימייל לא תקינה",
+          subject: "נושא חובה",
+          category: "קטגוריה חובה",
+          message: "ההודעה קצרה מדי",
+        }
+  return z.object({
+    fullName: z.string().trim().min(2, msgs.fullName),
+    phone: z.string().trim().min(9, msgs.phone),
+    email: z.string().trim().email(msgs.email),
+    subject: z.string().trim().min(1, msgs.subject),
+    category: z.string().trim().min(1, msgs.category),
+    message: z.string().trim().min(10, msgs.message),
+  })
+}
 
-export function ContactForm() {
+type FormData = z.infer<ReturnType<typeof createFormSchema>>
+
+export function ContactForm({ locale = "he" }: { locale?: "he" | "en" }) {
+  const formSchema = createFormSchema(locale)
+  const isEn = locale === "en"
+  const categoryOptions = isEn ? CATEGORY_OPTIONS_EN : CATEGORY_OPTIONS_HE
   const [isSuccess, setIsSuccess] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -72,25 +105,32 @@ export function ContactForm() {
       if (!response.ok || !result?.ok) {
         const code = String(result?.error || "")
         if (code === "missing_fields") {
-          throw new Error("אנא מלא/י את כל השדות הנדרשים.")
+          throw new Error(isEn ? "Please fill in all required fields." : "אנא מלא/י את כל השדות הנדרשים.")
         }
-        throw new Error("שליחת הפנייה נכשלה. נסה/י שוב.")
+        throw new Error(isEn ? "Sending failed. Please try again." : "שליחת הפנייה נכשלה. נסה/י שוב.")
       }
 
       setIsSuccess(true)
       reset()
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "שגיאה לא צפויה")
+      setSubmitError(err instanceof Error ? err.message : isEn ? "Unexpected error" : "שגיאה לא צפויה")
     } finally {
       setIsSubmitting(false)
     }
   }
 
+  const successMsg = isEn ? "Message sent successfully" : "הפנייה נשלחה בהצלחה"
+  const labels = isEn
+    ? { fullName: "Full name", phone: "Phone", email: "Email", subject: "Subject", category: "Category", message: "Message" }
+    : { fullName: "שם מלא", phone: "נייד", email: 'דוא"ל', subject: "נושא", category: "קטגוריה", message: "הודעה" }
+  const selectPlaceholder = isEn ? "Select category" : "בחר/י קטגוריה"
+  const submitLabel = isSubmitting ? (isEn ? "Sending..." : "שולח...") : isEn ? "Send" : "שליחה"
+
   return (
-    <div dir="rtl" className="text-right">
+    <div dir={isEn ? "ltr" : "rtl"} className={isEn ? "text-left" : "text-right"}>
       {isSuccess && (
         <div className="mb-4 rounded bg-green-50 p-4 text-center text-[16px] font-semibold text-green-800">
-          הפנייה נשלחה בהצלחה
+          {successMsg}
         </div>
       )}
 
@@ -104,14 +144,14 @@ export function ContactForm() {
         <fieldset disabled={isSubmitting} className="space-y-4 disabled:opacity-70">
           <div>
             <label htmlFor="fullName" className="mb-1 block text-[20px] font-semibold">
-              שם מלא
+              {labels.fullName}
             </label>
             <input
               id="fullName"
               type="text"
               {...register("fullName")}
               className="w-full rounded border px-3 py-3 bg-white"
-              dir="rtl"
+              dir={isEn ? "ltr" : "rtl"}
               autoComplete="name"
             />
             {errors.fullName && (
@@ -122,7 +162,7 @@ export function ContactForm() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="phone" className="mb-1 block text-[20px] font-semibold">
-                נייד
+                {labels.phone}
               </label>
               <input
                 id="phone"
@@ -140,7 +180,7 @@ export function ContactForm() {
 
             <div>
               <label htmlFor="email" className="mb-1 block text-[20px] font-semibold">
-                דוא&quot;ל
+                {labels.email}
               </label>
               <input
                 id="email"
@@ -159,14 +199,14 @@ export function ContactForm() {
 
           <div>
             <label htmlFor="subject" className="mb-1 block text-[20px] font-semibold">
-              נושא
+              {labels.subject}
             </label>
             <input
               id="subject"
               type="text"
               {...register("subject")}
               className=" bg-white w-full rounded border px-3 py-3"
-              dir="rtl"
+              dir={isEn ? "ltr" : "rtl"}
             />
             {errors.subject && (
               <p className="mt-1 text-sm text-red-600">{errors.subject.message}</p>
@@ -175,19 +215,19 @@ export function ContactForm() {
 
           <div>
             <label htmlFor="category" className="mb-1 block text-[20px] font-semibold">
-              קטגוריה
+              {labels.category}
             </label>
             <select
               id="category"
               {...register("category")}
               className="w-full rounded border bg-white px-3 py-3"
-              dir="rtl"
+              dir={isEn ? "ltr" : "rtl"}
               defaultValue=""
             >
               <option value="" disabled>
-                בחר/י קטגוריה
+                {selectPlaceholder}
               </option>
-              {CATEGORY_OPTIONS.map((opt) => (
+              {categoryOptions.map((opt) => (
                 <option key={opt} value={opt}>
                   {opt}
                 </option>
@@ -200,13 +240,13 @@ export function ContactForm() {
 
           <div>
             <label htmlFor="message" className="mb-1 block text-[20px] font-semibold">
-              הודעה
+              {labels.message}
             </label>
             <textarea
               id="message"
               {...register("message")}
               className=" bg-white min-h-[140px] w-full resize-y rounded border px-3 py-3"
-              dir="rtl"
+              dir={isEn ? "ltr" : "rtl"}
             />
             {errors.message && (
               <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>
@@ -218,7 +258,7 @@ export function ContactForm() {
             disabled={isSubmitting}
             className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isSubmitting ? "שולח..." : "שליחה"}
+            {submitLabel}
           </button>
         </fieldset>
       </form>

@@ -21,7 +21,10 @@ export function LegalTemplate({
       className="py-[var(--space-section)] print:py-8"
     >
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-        <div dir={dir} className="mx-auto w-full max-w-3xl">
+        <div
+        dir={dir}
+        className={`mx-auto w-full max-w-3xl ${dir === "ltr" ? "text-left [&_ul]:!text-left [&_ul]:![direction:ltr] [&_li]:!text-left [&_li]:![direction:ltr]" : ""}`}
+      >
           {/* Header */}
           <header className="text-center">
             <h1 className="text-[34px] font-semibold leading-[1.15] tracking-[-0.2px] text-black sm:text-[44px] lg:text-[56px]">
@@ -33,8 +36,8 @@ export function LegalTemplate({
               </p>
             )}
             {lastUpdated && (
-              <time className="mt-2 block text-[14px] text-[color:var(--vow-muted)]">
-                עדכון אחרון: {lastUpdated}
+              <time className="mt-2 block text-[14px] text-[color:var(--vow-muted)]" dir={dir}>
+                {dir === "ltr" ? "Last updated: " : "עדכון אחרון: "}{lastUpdated}
               </time>
             )}
           </header>

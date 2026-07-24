@@ -6,6 +6,8 @@ module.exports = {
     theme: {
       extend: {
         fontSize: {
+          h2: ["40px", { lineHeight: "46px", fontWeight: "600" }],
+          h3: ["26px", { lineHeight: "32px", fontWeight: "600" }],
           "h2-mobile": "60px",
           "h2-desktop": "80px",
           "h3-mobile": "32px",
@@ -20,6 +22,7 @@ module.exports = {
           "h3-desktop": "48px",
         },
         colors: {
+          "heading-sub": "#747474",
           "vow-muted": "#747474",
         },
       },

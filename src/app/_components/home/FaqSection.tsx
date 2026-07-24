@@ -1,55 +1,8 @@
 "use client"
 
 import { useId, useMemo, useState } from "react"
-
-type FaqItem = {
-  id: string
-  question: string
-  answer: string
-}
-
-const FAQ_ITEMS: readonly FaqItem[] = [
-  {
-    id: "home-faq-1",
-    question: "מה זה VOW ומה אתם עושים?",
-    answer: "VOW היא סוכנות דיגיטלית מלאה. אנחנו מעצבים, מפתחים, משווקים ומנהלים את הנוכחות הדיגיטלית של עסקים - מאתרים ומערכות מורכבות ועד חשבוניות דיגיטליות ורואה חשבון AI.",
-  },
-  {
-    id: "home-faq-2",
-    question: "אילו שירותים VOW מציעה?",
-    answer: "אנחנו מציעים:\n• עיצוב ומיתוג, זהות ויזואלית, לוגו, UI/UX\n• פיתוח אתרים בסביבת AI - מהיר, מדויק ומותאם אישית\n• פיתוח מערכות מורכבות - פלטפורמות, CRM, אוטומציות\n• שיווק דיגיטלי - גוגל, מטא, תוכן ו-SEO\n• חשבונית דיגיטלית - הפקה מאובטחת עם חיבור לרשות המיסים\n• רואה חשבון AI - ניהול כספי חכם לעסקים קטנים",
-  },
-  {
-    id: "home-faq-3",
-    question: "כמה זמן לוקח לבנות אתר?",
-    answer: "אתר תדמית מוכן תוך 7–14 ימי עבודה. מערכות מורכבות יותר, בהתאם להיקף. אנחנו עובדים בסביבת AI שמאיצה משמעותית את תהליך הפיתוח מבלי לפגוע באיכות.",
-  },
-  {
-    id: "home-faq-4",
-    question: "האם אתם עובדים עם עסקים קטנים?",
-    answer: "כן - זה הלב של VOW. אנחנו מתמחים בעסקים קטנים ובינוניים שרוצים לקבל שירות ברמת סוכנות גדולה, במחיר שמתאים לגודל שלהם.",
-  },
-  {
-    id: "home-faq-5",
-    question: "מה זה חשבונית דיגיטלית של VOW?",
-    answer: "מערכת להפקת חשבוניות ו-12 סוגי מסמכים עסקיים, עם חתימה דיגיטלית מאובטחת וחיבור ישיר לרשות המיסים. ניתן להתחיל בחינם לשנה שלמה.",
-  },
-  {
-    id: "home-faq-6",
-    question: "מה זה רואה חשבון AI?",
-    answer: "שירות AI שמלווה את העסק שלך 24/7 - מסייע בניהול הוצאות, הכנסות, דוחות ושאלות חשבונאיות. עולה פחות מ-200₪ לחודש במקום אלפי שקלים לרואה חשבון רגיל.",
-  },
-  {
-    id: "home-faq-7",
-    question: "איך מתחילים לעבוד עם VOW?",
-    answer: "פשוט - משאירים פרטים באתר או כותבים לנו בוואטסאפ: 054-5215193. נחזור אליכם תוך שעות ספורות לשיחת היכרות קצרה ללא התחייבות.",
-  },
-  {
-    id: "home-faq-8",
-    question: "האם יש תמיכה לאחר השקת הפרויקט?",
-    answer: "כן. אנחנו לא נעלמים אחרי ההשקה. מציעים ליווי שוטף, תחזוקה, עדכונים ותמיכה טכנית, בטלפון, מייל וצ'אט.",
-  },
-] as const
+import { FAQ_ITEMS } from "./home.constants"
+import { H2 } from "@/components/ui/Heading"
 
 export function FaqSection() {
   const baseId = useId()
@@ -72,9 +25,9 @@ export function FaqSection() {
     <section aria-label="שאלות נפוצות" className="py-[var(--space-section)]  bg-[#F4F1EC]">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 ">
         <div dir="rtl" className="mx-auto max-w-[777px] w-full px-4 sm:px-0 text-right">
-          <h2 className="text-balance text-[44px] font-semibold leading-[1.1] tracking-[-0.2px] text-black sm:text-[56px] lg:text-[64px]">
-            שאלות נפוצות
-          </h2>
+          <H2 className="text-balance tracking-[-0.2px]">
+            שאלות נפוצות על SEO, צמיחה דיגיטלית ו-Uxellent
+          </H2>
 
           <div className="mt-10 border-t border-[color:var(--vow-border)]">
             {FAQ_ITEMS.map((item, idx) => {

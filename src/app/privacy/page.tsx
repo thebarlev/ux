@@ -1,40 +1,61 @@
 /* eslint-disable react/no-unescaped-entities */
+import type { Metadata } from "next"
+
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
+import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { LegalTemplate } from "@/app/_components/legal/LegalTemplate"
+import { JsonLd, webPageSchema } from "@/components/JsonLd"
+
+export const metadata: Metadata = {
+  title: "מדיניות פרטיות | Uxellent",
+  description: "מדיניות הפרטיות של Uxellent מסבירה כיצד אנו אוספים, שומרים ומשתמשים במידע אישי באתר ובשירותים הדיגיטליים.",
+  alternates: {
+    canonical: "/privacy",
+    languages: heEnAlternateLanguages("/privacy", "/en/privacy"),
+  },
+}
 
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-[#F4F1EC]">
+      <JsonLd
+        data={webPageSchema({
+          name: "מדיניות פרטיות | Uxellent",
+          description: "מדיניות הפרטיות של Uxellent - כיצד אנו שומרים על המידע האישי שלך",
+          url: "https://uxellent.com/privacy",
+          dateModified: "2026-02-01",
+        })}
+      />
       <SiteHeader />
 
       <main id="main" role="main">
         <LegalTemplate
           title="מדיניות פרטיות"
-          subtitle="מדיניות הפרטיות של VOW - כיצד אנו שומרים על המידע האישי שלך"
+          subtitle="מדיניות הפרטיות של Uxellent - כיצד אנו שומרים על המידע האישי שלך"
           lastUpdated="פברואר 2026"
         >
           <section>
             <p className="text-[18px] leading-relaxed mb-6">
-              חברת Bugo Media LTD, ח.פ. 515960508 (להלן: "VOW", "אנחנו" או "החברה") מתחייבת לשמור על פרטיותך ולאפשר לך שליטה על המידע האישי שלך.
+              חברת Bugo Media LTD, ח.פ. 515960508 (להלן: "Uxellent", "אנחנו" או "החברה") מתחייבת לשמור על פרטיותך ולאפשר לך שליטה על המידע האישי שלך.
             </p>
             <p className="text-[18px] leading-relaxed mb-6">
               מדיניות פרטיות זו מסבירה איזה מידע אנחנו אוספים, למה אנחנו משתמשים בו, עם מי אנחנו משתפים אותו, ואיך אתה יכול לשלוט בו.
             </p>
             <div className="bg-blue-50 p-6 rounded-lg my-6">
-              <p><strong>כתובת המערכת:</strong> <a href="https://app.vow.co.il" className="text-blue-600 underline">app.vow.co.il</a></p>
-              <p><strong>דוא"ל:</strong> <a href="mailto:support@vow.co.il" className="text-blue-600 underline">support@vow.co.il</a></p>
+              <p><strong>כתובת המערכת:</strong> <a href="https://app.uxellent.com" className="text-blue-600 underline">app.uxellent.com</a></p>
+              <p><strong>דוא"ל:</strong> <a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a></p>
             </div>
           </section>
 
           <section>
             <h2 className="text-[24px] font-bold mb-4 mt-8">1. למי מדיניות זו מיועדת</h2>
             
-            <p>מדיניות פרטיות זו חלה על כל מי שמשתמש בשירותי VOW, לרבות:</p>
+            <p>מדיניות פרטיות זו חלה על כל מי שמשתמש בשירותי Uxellent, לרבות:</p>
             <ul className="list-disc mr-6 my-4 space-y-2">
-              <li>האתר השיווקי שלנו (<a href="https://vow.co.il" className="text-blue-600 underline">vow.co.il</a>)</li>
-              <li>המערכת ליצירת מסמכים חשבונאיים (<a href="https://app.vow.co.il" className="text-blue-600 underline">app.vow.co.il</a>)</li>
-              <li>שירות החתימה הדיגיטלית (<a href="https://dsign.vow.co.il" className="text-blue-600 underline">dsign.vow.co.il</a>)</li>
+              <li>האתר השיווקי שלנו (<a href="https://uxellent.com" className="text-blue-600 underline">uxellent.com</a>)</li>
+              <li>המערכת ליצירת מסמכים חשבונאיים (<a href="https://app.uxellent.com" className="text-blue-600 underline">app.uxellent.com</a>)</li>
+              <li>שירות החתימה הדיגיטלית (<a href="https://dsign.uxellent.com" className="text-blue-600 underline">dsign.uxellent.com</a>)</li>
             </ul>
 
             <div className="bg-yellow-50 border-r-4 border-yellow-400 p-4 my-6">
@@ -162,7 +183,7 @@ export default function PrivacyPage() {
                 <li>• כל ספקי השירות מחויבים בהסכמי סודיות ואבטחת מידע</li>
                 <li>• חלק מספקי השירות ממוקמים מחוץ לישראל</li>
                 <li>• רמת ההגנה על מידע במדינות אלה עשויה להיות שונה מזו שבישראל</li>
-                <li>• בשימוש בשירותי VOW, אתה מסכים להעברת המידע האישי שלך לספקים אלה</li>
+                <li>• בשימוש בשירותי Uxellent, אתה מסכים להעברת המידע האישי שלך לספקים אלה</li>
               </ul>
             </div>
 
@@ -288,7 +309,7 @@ export default function PrivacyPage() {
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">6.3 איך לממש את הזכויות שלך</h3>
             <p>
-              שלח בקשה לכתובת: <a href="mailto:support@vow.co.il" className="text-blue-600 underline">support@vow.co.il</a>
+              שלח בקשה לכתובת: <a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a>
             </p>
             <p className="mt-2">נשיב תוך 21 יום ונעדכן אותך על הפעולות שננקטו.</p>
 
@@ -431,12 +452,12 @@ export default function PrivacyPage() {
             
             <div className="bg-red-50 border-r-4 border-red-400 p-4 my-6">
               <p className="font-semibold text-red-800">
-                אין להשתמש בשירותי VOW אם אתה מתחת לגיל 18.
+                אין להשתמש בשירותי Uxellent אם אתה מתחת לגיל 18.
               </p>
             </div>
 
             <p>
-              אם אתה הורה או אפוטרופוס וגילית שקטין השתמש בשירות בלי רשותך, צור איתנו קשר מיד ב-<a href="mailto:support@vow.co.il" className="text-blue-600 underline">support@vow.co.il</a> ונסגור את החשבון.
+              אם אתה הורה או אפוטרופוס וגילית שקטין השתמש בשירות בלי רשותך, צור איתנו קשר מיד ב-<a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a> ונסגור את החשבון.
             </p>
           </section>
 
@@ -457,7 +478,7 @@ export default function PrivacyPage() {
             <p>אם הסכמת לקבל דיוור שיווקי (ניוזלטר, טיפים, הצעות), תוכל לבטל בכל עת:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>לחץ על "הסר עצמי" בתחתית כל דוא"ל</li>
-              <li>פנה אלינו ב-<a href="mailto:support@vow.co.il" className="text-blue-600 underline">support@vow.co.il</a></li>
+              <li>פנה אלינו ב-<a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a></li>
             </ul>
           </section>
 
@@ -470,7 +491,7 @@ export default function PrivacyPage() {
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">איך נודיע לך:</h3>
             <ul className="list-disc mr-6 my-3 space-y-1">
-              <li>פרסום הודעה במערכת (<a href="https://app.vow.co.il" className="text-blue-600 underline">app.vow.co.il</a>)</li>
+              <li>פרסום הודעה במערכת (<a href="https://app.uxellent.com" className="text-blue-600 underline">app.uxellent.com</a>)</li>
               <li>שליחת דוא"ל למשתמשים רשומים (שינויים מהותיים בלבד)</li>
               <li>עדכון תאריך "עודכן לאחרונה" בראש המסמך</li>
             </ul>
@@ -492,7 +513,7 @@ export default function PrivacyPage() {
             </p>
 
             <div className="bg-white p-6 rounded-lg">
-              <p><strong>דוא"ל:</strong> <a href="mailto:support@vow.co.il" className="text-blue-600 underline">support@vow.co.il</a></p>
+              <p><strong>דוא"ל:</strong> <a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a></p>
               <p><strong>שם החברה:</strong> Bugo Media LTD</p>
               <p><strong>מספר חברה:</strong> 515960508</p>
               <p className="mt-4 text-sm text-gray-600">מאגר מידע רשום</p>

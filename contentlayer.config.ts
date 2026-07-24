@@ -12,11 +12,13 @@ export const Article = defineDocumentType(() => ({
     coverImage: { type: "string", required: true },
     category: { type: "string", required: true },
     tags: { type: "json", required: false },
+    locale: { type: "string", required: false },
+    slug: { type: "string", required: false },
   },
   computedFields: {
     slug: {
       type: "string",
-      resolve: (doc) => doc._raw.flattenedPath.split("/").pop()!,
+      resolve: (doc) => (doc.slug as string) ?? doc._raw.flattenedPath.split("/").pop()!,
     },
     readingTimeMinutes: {
       type: "number",

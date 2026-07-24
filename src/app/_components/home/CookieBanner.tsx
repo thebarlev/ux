@@ -6,7 +6,9 @@ const CONSENT_KEY = "vow_cookie_consent";
 const CONSENT_TIMESTAMP_KEY = "vow_cookie_consent_ts";
 type ConsentValue = "accepted" | "rejected";
 
-export function CookieBanner() {
+type CookieBannerProps = { locale?: "he" | "en" }
+
+export function CookieBanner({ locale }: CookieBannerProps = {}) {
   const [mounted, setMounted] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
 
@@ -53,7 +55,7 @@ export function CookieBanner() {
               </h3>
               <p className="text-[16px] text-gray-700 leading-snug">
                 אנחנו משתמשים בעוגיות (cookies) כדי לשפר את חווית הגלישה באתר. המשך גלישה באתר = הסכמה מצדך. רוצה לדעת יותר?{" "}
-                <a href="/privacy" className="link-orange">לחץ כאן</a>
+                <a href={locale === "en" ? "/en/privacy" : "/privacy"} className="link-orange">לחץ כאן</a>
               </p>
             </div>
           </div>
@@ -68,7 +70,7 @@ export function CookieBanner() {
             </div>
             <Image
               src="/cookies.svg"
-              alt="cookies"
+              alt="Cookie policy icon for website privacy and consent settings"
               width={68}
               height={68}
               className="flex-shrink-0"
@@ -80,7 +82,7 @@ export function CookieBanner() {
         <div className="hidden sm:flex items-start gap-4 flex-1">
           <Image
             src="/cookies.svg"
-            alt="cookies"
+            alt="Cookie policy icon for website privacy and consent settings"
             width={40}
             height={40}
             className="flex-shrink-0"
@@ -92,7 +94,7 @@ export function CookieBanner() {
               </h3>
               <p className="text-[16px] text-gray-700 leading-[1.4]">
                 אנחנו משתמשים בעוגיות (cookies) כדי לשפר את חווית הגלישה באתר. המשך גלישה באתר = הסכמה מצדך. רוצה לדעת יותר?{" "}
-                <a href="/privacy" className="link-orange">לחץ כאן</a>
+                <a href={locale === "en" ? "/en/privacy" : "/privacy"} className="link-orange">לחץ כאן</a>
               </p>
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">

@@ -1,6 +1,26 @@
+import type { Metadata } from "next"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 import { CheckoutForm } from "./CheckoutForm"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ packageId: string }>
+}): Promise<Metadata> {
+  const { packageId } = await params
+  return {
+    title: "תשלום מאובטח | Uxellent",
+    description: "עמוד תשלום מאובטח של Uxellent להשלמת רכישה עבור שירותים, מנויים או חבילות דיגיטליות.",
+    alternates: {
+      canonical: `/checkout/${packageId}`,
+    },
+    robots: {
+      index: false,
+      follow: true,
+    },
+  }
+}
 
 export default async function CheckoutPage({
   params,

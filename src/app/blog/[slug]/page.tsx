@@ -1,13 +1,32 @@
 import type { Metadata } from "next"
-import Image from "next/image"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { allArticles } from "contentlayer/generated"
 import { BlogShell } from "@/app/_components/blog/BlogShell"
+import { JsonLd, articleSchema, breadcrumbListSchema } from "@/components/JsonLd"
 import { BlogPostRow } from "@/app/_components/blog/BlogPostRow"
-import { MdxContent } from "@/app/_components/blog/MdxContent"
+import { BlogCoverIcon } from "@/app/_components/blog/BlogCoverIcon"
+
+const MdxContent = dynamic(
+  () => import("@/app/_components/blog/MdxContent").then((m) => m.MdxContent),
+  { ssr: true },
+)
 import { BlogEndCta } from "@/app/_components/blog/BlogEndCta"
 import { CopyLinkButton } from "@/app/_components/blog/CopyLinkButton"
+import { H2 } from "@/components/ui/Heading"
+import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+
+const SEO_DESCRIPTION_OVERRIDES_HE: Record<string, string> = {
+  "fast-slow-web":
+    "איך לשפר ביצועי אתר ולהגדיל המרות עם מהירות טעינה, UX ו-SEO טכני שמפחיתים נטישה ומחזקים תוצאות עסקיות.",
+  "wordpress-vs-other":
+    "השוואה בין וורדפרס לפלטפורמות אחרות עם יתרונות, חסרונות, SEO, גמישות עסקית ועלויות תחזוקה לאורך זמן.",
+}
+
+function findPostEn(slug: string) {
+  return allArticles.find((a) => a.slug === slug && (a.locale as string | undefined) === "en")
+}
 
 export async function generateMetadata({
   params,
@@ -15,17 +34,30 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const post = allArticles.find((a) => a.slug === slug)
-  if (!post) return { title: "בלוג | VOW" }
+  const post = allArticles.find(
+    (a) => a.slug === slug && ((a.locale as string | undefined) !== "en" || !(a.locale as string | undefined))
+  )
+  if (!post) return { title: "בלוג | Uxellent" }
+
+  const enPair = findPostEn(slug)
+  const postSlug = post.slug ?? slug
+  const seoDescription = SEO_DESCRIPTION_OVERRIDES_HE[postSlug] ?? post.description
 
   return {
-    title: `${post.title} | VOW`,
-    description: post.description ?? "מאמר בבלוג של VOW.",
-    alternates: { canonical: `/blog/${post.slug}` },
+    title: post.title,
+    description: seoDescription ?? "מאמר של Uxellent על SEO, פיתוח אתרים, אוטומציות וצמיחה דיגיטלית לעסקים.",
+    alternates: {
+      canonical: `/blog/${postSlug}`,
+      ...(enPair
+        ? {
+            languages: heEnAlternateLanguages(`/blog/${postSlug}`, `/en/blog/${postSlug}`),
+          }
+        : {}),
+    },
     openGraph: {
       title: post.title,
-      description: post.description ?? "מאמר בבלוג של VOW.",
-      url: `/blog/${post.slug}`,
+      description: post.description ?? "מאמר בבלוג של Uxellent.",
+      url: `/blog/${postSlug}`,
       type: "article",
       images: post.coverImage ? [{ url: post.coverImage }] : undefined,
     },
@@ -38,17 +70,28 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const post = allArticles.find((a) => a.slug === slug)
+  const post = allArticles.find(
+    (a) => a.slug === slug && ((a.locale as string | undefined) !== "en" || !(a.locale as string | undefined))
+  )
   if (!post) notFound()
 
   const related = allArticles
+    .filter((a) => (a.locale as string | undefined) !== "en")
     .filter((a) => a.slug !== post.slug)
     .filter((a) => a.category === post.category)
     .slice()
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 4)
 
-  const shareUrl = `https://vow.co.il/blog/${post.slug}`
+  const shareUrl = `https://uxellent.com/blog/${post.slug}`
+  const articleSchemaData = articleSchema({
+    headline: post.title,
+    description: post.description ?? undefined,
+    image: post.coverImage ? (post.coverImage.startsWith("http") ? post.coverImage : `https://uxellent.com${post.coverImage}`) : undefined,
+    url: shareUrl,
+    inLanguage: "he-IL",
+    datePublished: post.date,
+  })
 
   const formattedDate = new Date(post.date).toLocaleDateString("he-IL", {
     year: "numeric",
@@ -58,6 +101,13 @@ export default async function BlogPostPage({
 
   return (
     <BlogShell>
+      <JsonLd data={articleSchemaData} />
+      <JsonLd
+        data={breadcrumbListSchema([
+          { name: "בלוג", url: "https://uxellent.com/blog" },
+          { name: post.title, url: shareUrl },
+        ])}
+      />
       <section
         dir="rtl"
         aria-label="מאמר"
@@ -69,7 +119,7 @@ export default async function BlogPostPage({
           <div className="mx-auto max-w-[980px]">
             <nav
               aria-label="breadcrumb"
-              className="flex items-center gap-2 text-[12px] leading-5 text-[#747474]"
+              className="flex items-center gap-2 text-[18px] leading-5 text-[#747474]"
             >
               <Link href="/blog" className="hover:text-black transition-colors">
                 בלוג
@@ -84,18 +134,9 @@ export default async function BlogPostPage({
             <div className="max-w-[650px]">
 
               {/* Cover image */}
-              {post.coverImage ? (
-                <div className="relative aspect-[4/4] w-[300px] overflow-hidden rounded-3xl border border-black/10 bg-white/40">
-                  <Image
-                    src={post.coverImage}
-                    alt={post.title}
-                    fill
-                    priority={false}
-                    sizes="300px"
-                    className="object-cover"
-                  />
-                </div>
-              ) : null}
+              <div className="relative aspect-[4/4] w-[300px] overflow-hidden rounded-3xl border border-black/10 bg-white/40">
+                <BlogCoverIcon slug={post.slug} title={post.title} />
+              </div>
 
               {/* Title */}
               <h1 className="mt-8 text-balance text-[40px] font-semibold leading-[1.06] text-black sm:text-[52px] lg:text-[64px]">
@@ -110,7 +151,7 @@ export default async function BlogPostPage({
               ) : null}
 
               {/* ─── Desktop horizontal meta row (below title + description) ─── */}
-              <div className="hidden lg:flex items-center gap-6 text-[13px] text-[#747474] mt-6 flex-wrap">
+              <div className="hidden lg:flex items-center gap-6 text-[18px] text-[#747474] mt-6 flex-wrap">
 
                 {/* Category */}
                 <div className="flex items-center gap-1.5">
@@ -138,7 +179,7 @@ export default async function BlogPostPage({
                     <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
                   </svg>
                   <span>מוצר:</span>
-                  <span className="text-black">VOW</span>
+                  <span className="text-black">Uxellent</span>
                 </div>
 
                 {/* Date */}
@@ -176,7 +217,7 @@ export default async function BlogPostPage({
               </div>
 
               {/* ─── Mobile meta ─── */}
-              <div className="mt-8 flex flex-col gap-4 text-[13px] text-[#1a1a1a] lg:hidden">
+              <div className="mt-8 flex flex-col gap-4 text-[18px] text-[#1a1a1a] lg:hidden">
                 <div className="inline-flex items-center gap-2 text-[#747474]">
                   <span>קטגוריה</span>
                   <span className="text-black font-medium">
@@ -220,7 +261,7 @@ export default async function BlogPostPage({
         >
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-[980px]">
-              <h2 className="w-full">מאמרים נוספים באותה קטגוריה</h2>
+              <H2 className="w-full">מאמרים נוספים באותה קטגוריה</H2>
             </div>
           </div>
           <div className="mt-2">

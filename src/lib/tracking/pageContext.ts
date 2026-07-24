@@ -28,11 +28,17 @@ export function inferPageContext(pathname: string): PageContext {
   }
 
   // Service pages in this repo (not nested under /services/*)
-  if (pathname === "/design" || pathname === "/develop" || pathname === "/roi") {
+  if (
+    pathname === "/design" ||
+    pathname === "/develop" ||
+    pathname === "/roi" ||
+    pathname === "/idea-to-product" ||
+    pathname === "/en/idea-to-product"
+  ) {
     return { page_category: "service", page_slug, service: "web_development" }
   }
 
-  if (pathname === "/seo-ai") {
+  if (pathname === "/seo-ai" || pathname === "/en/seo-ai") {
     return { page_category: "service", page_slug, service: "marketing" }
   }
 

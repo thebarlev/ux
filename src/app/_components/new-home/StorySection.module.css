@@ -1,0 +1,228 @@
+/*
+ * Story / about section for /new-home, built 1:1 from the approved reference
+ * design-review/part2-preview.html. Scoped module — nothing leaks to globals
+ * or to the live pages.
+ */
+
+.section {
+  --cream: #f4f1ec;
+  --ink: #191512;
+  --muted: #6e655c;
+  --accent: #5389bb;
+  --accent-dark: #3e6e9c;
+  --line: rgba(25, 21, 18, 0.1);
+  --wa: #25a366;
+
+  background: var(--cream);
+  color: var(--ink);
+  padding: 88px 0;
+}
+
+.wrap {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+.kicker {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--accent-dark);
+  margin-bottom: 20px;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 64px;
+  align-items: center;
+}
+
+/* Text is first in the DOM (it leads the section); the portrait sits after it,
+   which in this RTL grid places the portrait on the left. */
+.figure {
+  order: 2;
+}
+
+.frame {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: #dfd6c7;
+  box-shadow: 0 26px 60px rgba(25, 21, 18, 0.16);
+}
+
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.caption {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.caption b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/*
+ * globals.css centres bare h2. The reference has this heading starting from the
+ * same edge as the kicker and body copy, so alignment is declared here — at both
+ * breakpoints, since the global applied to desktop too.
+ */
+.heading {
+  text-align: start;
+  margin-bottom: 0;
+  font-size: clamp(29px, 3.4vw, 43px);
+  line-height: 1.16;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.heading em {
+  font-style: normal;
+  color: var(--accent-dark);
+}
+
+.paragraph {
+  font-size: clamp(17.5px, 1.35vw, 19.5px);
+  line-height: 1.85;
+  color: #413a32;
+  margin-top: 22px;
+}
+
+/* ------------------------------------------------- slim WhatsApp line ----- */
+
+.waLine {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 26px;
+  max-width: 460px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 18px 6px 6px;
+  box-shadow: 0 4px 16px rgba(25, 21, 18, 0.05);
+}
+
+.waLine:focus-within {
+  border-color: var(--accent);
+}
+
+.waInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 15.5px;
+  color: var(--ink);
+}
+
+.waInput::placeholder {
+  color: #9a9187;
+}
+
+.waGo {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--wa);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.18s;
+}
+
+.waGo:hover {
+  filter: brightness(1.06);
+}
+
+.waGo:focus-visible {
+  outline: 2px solid var(--accent-dark);
+  outline-offset: 2px;
+}
+
+.waGo svg {
+  width: 20px;
+  height: 20px;
+}
+
+.waHint {
+  margin-top: 9px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+@media (max-width: 860px) {
+  .section {
+    padding: 56px 0;
+  }
+
+  .top {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  /*
+   * One alignment for the whole block. globals.css centres bare h2, which left
+   * a centred heading above right-aligned body copy; both are declared here so
+   * every line starts from the same edge.
+   */
+  .text,
+  .heading,
+  .paragraph,
+  .kicker {
+    text-align: right;
+  }
+
+  /* Portrait leads on mobile: full width, and shallower so it doesn't eat the
+     screen before the copy starts. Both orders are set — giving the figure
+     order:1 alone would still leave it behind the text block's default 0. */
+  .figure {
+    order: 1;
+    max-width: none;
+    width: 100%;
+    margin: 0;
+  }
+
+  .text {
+    order: 2;
+  }
+
+  .frame {
+    aspect-ratio: 3 / 2;
+  }
+
+  .frame img {
+    object-position: center 22%;
+  }
+
+  .caption {
+    text-align: right;
+  }
+
+  .waLine {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waGo {
+    transition: none;
+  }
+}

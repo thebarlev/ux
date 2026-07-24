@@ -57,3 +57,25 @@ export function getCategoryLabel(category: string): string {
   }
 }
 
+export function formatDateEn(dateLike: string | Date): string {
+  const d = typeof dateLike === "string" ? new Date(dateLike) : dateLike
+  if (!(d instanceof Date) || Number.isNaN(d.getTime())) return ""
+  return new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(d)
+}
+
+export function getCategoryLabelEn(category: string): string {
+  switch (category) {
+    case "web_development":
+      return "Web development"
+    case "automation":
+      return "Automation"
+    case "marketing":
+      return "Marketing"
+    case "ai_accountant":
+      return "AI Accountant"
+    case "other":
+    default:
+      return "Other"
+  }
+}
+

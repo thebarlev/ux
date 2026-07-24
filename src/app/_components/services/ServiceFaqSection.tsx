@@ -1,6 +1,7 @@
 "use client"
 
 import { useId, useMemo, useState } from "react"
+import { H2 } from "@/components/ui/Heading"
 
 export type ServiceFaqItem = {
   id: string
@@ -11,9 +12,10 @@ export type ServiceFaqItem = {
 export type ServiceFaqSectionProps = {
   title: string
   items: ServiceFaqItem[]
+  dir?: "ltr" | "rtl"
 }
 
-export function ServiceFaqSection({ title, items }: ServiceFaqSectionProps) {
+export function ServiceFaqSection({ title, items, dir = "rtl" }: ServiceFaqSectionProps) {
   const baseId = useId()
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
@@ -30,13 +32,14 @@ export function ServiceFaqSection({ title, items }: ServiceFaqSectionProps) {
     setOpenIndex((prev) => (prev === idx ? null : idx))
   }
 
+  const isLtr = dir === "ltr"
   return (
-    <section aria-label={title} className="py-[var(--space-section)] bg-[#F4F1EC]" dir="rtl">
+    <section aria-label={title} className="py-[var(--space-section)] bg-[#F4F1EC]" dir={dir}>
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto w-full max-w-[777px] px-4 sm:px-0 text-right">
-          <h2 className="text-balance text-[44px] font-semibold leading-[1.1] tracking-[-0.2px] text-black sm:text-[56px] lg:text-[64px]">
+        <div className={isLtr ? "mx-auto w-full max-w-[777px] px-4 sm:px-0 text-left" : "mx-auto w-full max-w-[777px] px-4 sm:px-0 text-right"}>
+          <H2 className="text-balance tracking-[-0.2px]">
             {title}
-          </h2>
+          </H2>
 
           <div className="mt-10 border-t border-[color:var(--vow-border)]">
             {items.map((item, idx) => {
@@ -48,7 +51,7 @@ export function ServiceFaqSection({ title, items }: ServiceFaqSectionProps) {
                   <button
                     id={ids.buttonId}
                     type="button"
-                    className="flex w-full cursor-pointer items-start justify-between gap-6 py-6 text-right focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black/15 rounded-sm"
+                    className={isLtr ? "flex w-full cursor-pointer items-start justify-between gap-6 py-6 text-left focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black/15 rounded-sm" : "flex w-full cursor-pointer items-start justify-between gap-6 py-6 text-right focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black/15 rounded-sm"}
                     aria-expanded={isOpen}
                     aria-controls={ids.regionId}
                     onClick={() => onToggle(idx)}

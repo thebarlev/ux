@@ -1,11 +1,32 @@
 /* eslint-disable react/no-unescaped-entities */
+import type { Metadata } from "next"
+
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
+import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { LegalTemplate } from "@/app/_components/legal/LegalTemplate"
+import { JsonLd, webPageSchema } from "@/components/JsonLd"
+
+export const metadata: Metadata = {
+  title: "תנאי שימוש | Uxellent",
+  description: "תנאי השימוש של Uxellent מסבירים את הכללים, הזכויות והאחריות בשימוש באתר, במערכת ובשירותים הדיגיטליים.",
+  alternates: {
+    canonical: "/terms",
+    languages: heEnAlternateLanguages("/terms", "/en/terms"),
+  },
+}
 
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-[#F4F1EC]">
+      <JsonLd
+        data={webPageSchema({
+          name: "תנאי שימוש | Uxellent",
+          description: "תנאי השימוש של Uxellent - עדכון אחרון פברואר 2026",
+          url: "https://uxellent.com/terms",
+          dateModified: "2026-02-16",
+        })}
+      />
       <SiteHeader />
 
       <main id="main" role="main">
@@ -16,23 +37,23 @@ export default function TermsPage() {
           <section>
             <h2 className="text-[24px] font-bold mb-4 mt-8">1. כללי</h2>
             
-            <h3 className="text-[20px] font-semibold mb-3 mt-6">1.1 אודות VOW והשירותים</h3>
+            <h3 className="text-[20px] font-semibold mb-3 mt-6">1.1 אודות Uxellent והשירותים</h3>
             <p>
-              חברת Bugo Media LTD, ח.פ. 515960508 ("VOW", "אנחנו" או "החברה") מפעילה מערכת מקוונת המאפשרת יצירה, ניהול ושליחה של מסמכים חשבונאיים דיגיטליים, לרבות חשבוניות מס, קבלות, חשבוניות עסקה ומסמכים עסקיים נוספים. המערכת זמינה דרך:
+              חברת Bugo Media LTD, ח.פ. 515960508 ("Uxellent", "אנחנו" או "החברה") מפעילה מערכת מקוונת המאפשרת יצירה, ניהול ושליחה של מסמכים חשבונאיים דיגיטליים, לרבות חשבוניות מס, קבלות, חשבוניות עסקה ומסמכים עסקיים נוספים. המערכת זמינה דרך:
             </p>
             <ul className="list-disc mr-6 my-3 space-y-1">
-              <li>אתר האינטרנט שלנו: vow.co.il</li>
-              <li>המערכת המקוונת: app.vow.co.il</li>
-              <li>שירות החתימה הדיגיטלית: dsign.vow.co.il</li>
+              <li>אתר האינטרנט שלנו: uxellent.com</li>
+              <li>המערכת המקוונת: app.uxellent.com</li>
+              <li>שירות החתימה הדיגיטלית: dsign.uxellent.com</li>
             </ul>
             <p>המערכת, האתר ושירות החתימה הדיגיטלית יכונו ביחד להלן: "השירותים" או "המערכת".</p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">1.2 הסכמה לתנאי השימוש</h3>
             <p>
-              תנאי שימוש אלה ("תנאי השימוש" או "ההסכם") מסדירים את היחסים בין VOW לבין כל מי שעושה שימוש בשירותים ("המשתמש", "אתה" או "הנך").
+              תנאי שימוש אלה ("תנאי השימוש" או "ההסכם") מסדירים את היחסים בין Uxellent לבין כל מי שעושה שימוש בשירותים ("המשתמש", "אתה" או "הנך").
             </p>
             <p>
-              על ידי שימוש בשירותים, אתה מסכים לתנאי שימוש אלה במלואם. אם אינך מסכים לתנאים אלה (כולם או חלקם) — אינך רשאי להשתמש בשירותים.
+              על ידי שימוש בשירותים, אתה מסכים לתנאי שימוש אלה במלואם. אם אינך מסכים לתנאים אלה (כולם או חלקם) - אינך רשאי להשתמש בשירותים.
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">1.3 תנאים פרטניים נוספים</h3>
@@ -45,13 +66,13 @@ export default function TermsPage() {
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">1.4 מדיניות הפרטיות</h3>
             <p>
-              מדיניות הפרטיות של VOW זמינה בכתובת <a href="https://vow.co.il/privacy" className="text-blue-600 underline">https://vow.co.il/privacy</a> ומהווה חלק בלתי נפרד מתנאי שימוש אלה.
+              מדיניות הפרטיות של Uxellent זמינה בכתובת <a href="https://uxellent.com/privacy" className="text-blue-600 underline">https://uxellent.com/privacy</a> ומהווה חלק בלתי נפרד מתנאי שימוש אלה.
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">1.5 שירותי תמיכה</h3>
             <p>אנחנו מספקים תמיכה טכנית בערוצים הבאים:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
-              <li>צ'אט במערכת (app.vow.co.il)</li>
+              <li>צ'אט במערכת (app.uxellent.com)</li>
               <li>WhatsApp: 0545215193</li>
             </ul>
             <p><strong>שעות פעילות:</strong> ימים א'–ה', 9:00–18:00</p>
@@ -59,7 +80,7 @@ export default function TermsPage() {
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">1.6 דיווח על תוכן בעייתי</h3>
             <p>
-              אם נתקלת במערכת בתוכן המפר כל דין, אנא הודע לנו בדוא"ל <a href="mailto:support@vow.co.il" className="text-blue-600 underline">support@vow.co.il</a> עם פירוט התוכן ומהות ההפרה.
+              אם נתקלת במערכת בתוכן המפר כל דין, אנא הודע לנו בדוא"ל <a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a> עם פירוט התוכן ומהות ההפרה.
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">1.7 הערות כלליות</h3>
@@ -73,7 +94,7 @@ export default function TermsPage() {
             <h2 className="text-[24px] font-bold mb-4 mt-8">2. השירותים ורישיון השימוש</h2>
             
             <h3 className="text-[20px] font-semibold mb-3 mt-6">2.1 מהם השירותים</h3>
-            <p>VOW מספקת רישיון שימוש לביצוע הפעולות הבאות ("הרישיון"):</p>
+            <p>Uxellent מספקת רישיון שימוש לביצוע הפעולות הבאות ("הרישיון"):</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>יצירת חשבוניות מס, חשבוניות עסקה וקבלות</li>
               <li>שליחת מסמכים בדוא"ל או ייצוא ל-PDF</li>
@@ -95,7 +116,7 @@ export default function TermsPage() {
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">2.3 בחינת התאמת השירותים</h3>
             <p>
-              חובתך לבדוק לפני השימוש כי השירותים מתאימים לצרכיך. לא תהיה לך טענה כלפי VOW בשל אי התאמת השירותים לצרכיך או לציפיותיך.
+              חובתך לבדוק לפני השימוש כי השירותים מתאימים לצרכיך. לא תהיה לך טענה כלפי Uxellent בשל אי התאמת השירותים לצרכיך או לציפיותיך.
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">2.4 אחריות המשתמש על השימוש</h3>
@@ -103,14 +124,14 @@ export default function TermsPage() {
               אתה אחראי באופן בלעדי ומלא לכל שימוש שאתה ו/או מי מטעמך עושים במערכת.
             </p>
             <p>
-              VOW אינה אחראית לשימוש שלך במערכת, לתוכן שאתה מייצר או למסמכים שאתה מפיק.
+              Uxellent אינה אחראית לשימוש שלך במערכת, לתוכן שאתה מייצר או למסמכים שאתה מפיק.
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">2.5 המערכת אינה ייעוץ חשבונאי</h3>
             <p><strong>חשוב להבין:</strong></p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>המידע והתוכן במערכת לא נועדו להחליף ייעוץ חשבונאי, מיסויי או משפטי</li>
-              <li>VOW אינה מספקת שירותי ייעוץ מכל סוג שהוא</li>
+              <li>Uxellent אינה מספקת שירותי ייעוץ מכל סוג שהוא</li>
               <li>המערכת היא כלי טכנולוגי לניהול מסמכים בלבד</li>
               <li>חובתך לפנות לייעוץ מקצועי לפי הצורך</li>
             </ul>
@@ -124,7 +145,7 @@ export default function TermsPage() {
             </p>
             <p><strong>חובתך לבחון ולבדוק בעצמך כל המלצה שמוצגת לך במערכת.</strong></p>
             <p>
-              VOW אינה נושאת באחריות לבחירות שביצעת או שיכולת לבצע במערכת. האחריות הבלעדית לדיוק המסמכים, לסיווגים ולתוכן היא שלך.
+              Uxellent אינה נושאת באחריות לבחירות שביצעת או שיכולת לבצע במערכת. האחריות הבלעדית לדיוק המסמכים, לסיווגים ולתוכן היא שלך.
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">2.7 זכותנו לשנות את השירותים</h3>
@@ -140,7 +161,7 @@ export default function TermsPage() {
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">2.8 זכותנו להגביל או להפסיק שימוש</h3>
-            <p>VOW תהיה רשאית:</p>
+            <p>Uxellent תהיה רשאית:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>להזהיר משתמשים על שימוש בלתי הולם או מפר</li>
               <li>להגביל גישה למערכת של משתמש המפר תנאי שימוש</li>
@@ -209,9 +230,9 @@ export default function TermsPage() {
               <li>ניוזלטר וחומרי שיווק (ניתן לבטל בכל עת)</li>
             </ul>
 
-            <h3 className="text-[20px] font-semibold mb-3 mt-6">3.6 גישה של נציגי VOW לחשבון</h3>
+            <h3 className="text-[20px] font-semibold mb-3 mt-6">3.6 גישה של נציגי Uxellent לחשבון</h3>
             <p>
-              אתה מסכים ומאשר שנציגי VOW יהיו רשאים להיכנס לחשבונך בכל עת, למטרות:
+              אתה מסכים ומאשר שנציגי Uxellent יהיו רשאים להיכנס לחשבונך בכל עת, למטרות:
             </p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>בדיקות טכניות</li>
@@ -223,7 +244,7 @@ export default function TermsPage() {
             <div className="bg-yellow-50 border-r-4 border-yellow-400 p-4 my-4">
               <p className="font-semibold text-yellow-800">חשוב לדעת:</p>
               <p className="text-yellow-800">
-                בחלוף 14 ימים ממועד סיום המנוי (מכל סיבה שהיא) — לא תוכל עוד לגשת למסמכים שיצרת במערכת.
+                בחלוף 14 ימים ממועד סיום המנוי (מכל סיבה שהיא) - לא תוכל עוד לגשת למסמכים שיצרת במערכת.
               </p>
               <p className="text-yellow-800 mt-2">
                 <strong>חובתך להוריד את כל המסמכים עד לא יאוחר ממועד זה.</strong>
@@ -236,7 +257,7 @@ export default function TermsPage() {
             
             <h3 className="text-[20px] font-semibold mb-3 mt-6">4.1 מהי תקופת השימוש החינמית</h3>
             <p>
-              VOW מציעה תקופת שימוש חינמית של עד שנה מיום פתיחת החשבון ("תקופת השימוש החינמית").
+              Uxellent מציעה תקופת שימוש חינמית של עד שנה מיום פתיחת החשבון ("תקופת השימוש החינמית").
             </p>
             <p>
               בתקופה זו, תוכל ליצור עד 10 מסמכים בכל חודש קלנדרי, ללא תשלום.
@@ -244,8 +265,8 @@ export default function TermsPage() {
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">4.2 תנאים וההגבלות</h3>
             <ul className="list-disc mr-6 my-3 space-y-1">
-              <li>תקופת השימוש החינמית ניתנת ללא כל התחייבות מצד VOW, לרבות התחייבות לזמינות המערכת או העדר תקלות</li>
-              <li>VOW רשאית לשנות את תנאי השימוש החינמי בכל עת (לרבות מספר המסמכים המותרים או משך התקופה)</li>
+              <li>תקופת השימוש החינמית ניתנת ללא כל התחייבות מצד Uxellent, לרבות התחייבות לזמינות המערכת או העדר תקלות</li>
+              <li>Uxellent רשאית לשנות את תנאי השימוש החינמי בכל עת (לרבות מספר המסמכים המותרים או משך התקופה)</li>
               <li>שינויים כאמור יכנסו לתוקף לגבי משתמשים חדשים; משתמשים קיימים ימשיכו בתנאים הקיימים עד תום תקופת השנה</li>
               <li>תקופת השימוש החינמית תינתן פעם אחת בלבד לכל משתמש/עסק</li>
             </ul>
@@ -255,7 +276,7 @@ export default function TermsPage() {
               בתום שנה מיום פתיחת החשבון, או בחריגה ממכסת 10 המסמכים החודשית, תידרש לרכוש מנוי בתשלום כדי להמשיך להשתמש במערכת.
             </p>
             <p>
-              אם לא תרכוש מנוי — לא תוכל ליצור מסמכים חדשים, אך תוכל לצפות במסמכים קיימים למשך 14 ימים נוספים.
+              אם לא תרכוש מנוי - לא תוכל ליצור מסמכים חדשים, אך תוכל לצפות במסמכים קיימים למשך 14 ימים נוספים.
             </p>
           </section>
 
@@ -289,7 +310,7 @@ export default function TermsPage() {
             </div>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">5.2 שינויים במחירים ובמבנה השירותים</h3>
-            <p>VOW רשאית לשנות מעת לעת:</p>
+            <p>Uxellent רשאית לשנות מעת לעת:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>מחירי השירותים</li>
               <li>סוגי המנויים והחבילות</li>
@@ -338,7 +359,7 @@ export default function TermsPage() {
             
             <p><strong>ביטול ביום הרכישה:</strong></p>
             <p>
-              אם תבטל את המנוי עד השעה 23:59 ביום בו רכשת אותו, ולא ביצעת שימוש במערכת — תזוכה במלוא עלות הרכישה.
+              אם תבטל את המנוי עד השעה 23:59 ביום בו רכשת אותו, ולא ביצעת שימוש במערכת - תזוכה במלוא עלות הרכישה.
             </p>
 
             <p className="mt-4"><strong>ביטול לאחר יום הרכישה:</strong></p>
@@ -391,7 +412,7 @@ export default function TermsPage() {
             <h3 className="text-[20px] font-semibold mb-3 mt-6">6.3 איך לבטל מנוי</h3>
             <p>ניתן לבטל מנוי באחד מהאופנים הבאים:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
-              <li>דוא"ל לכתובת: <a href="mailto:support@vow.co.il" className="text-blue-600 underline">support@vow.co.il</a></li>
+              <li>דוא"ל לכתובת: <a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a></li>
               <li>צ'אט עם נציג במערכת</li>
               <li>WhatsApp: 0545215193</li>
             </ul>
@@ -405,7 +426,7 @@ export default function TermsPage() {
             
             <h3 className="text-[20px] font-semibold mb-3 mt-6">7.1 בעלות על המערכת</h3>
             <p>
-              כל הזכויות במערכת, לרבות קוד המקור, עיצוב, תכנים, סימנים מסחריים ופטנטים, שייכים ל-VOW או למי שהעניק לה רישיון.
+              כל הזכויות במערכת, לרבות קוד המקור, עיצוב, תכנים, סימנים מסחריים ופטנטים, שייכים ל-Uxellent או למי שהעניק לה רישיון.
             </p>
             <p><strong>אסור לך:</strong></p>
             <ul className="list-disc mr-6 my-3 space-y-1">
@@ -418,7 +439,7 @@ export default function TermsPage() {
             <p>
               אתה שומר על הבעלות המלאה על כל התוכן והמסמכים שאתה יוצר במערכת.
             </p>
-            <p>אתה נותן ל-VOW רישיון להשתמש בתוכן שלך למטרות הבאות בלבד:</p>
+            <p>אתה נותן ל-Uxellent רישיון להשתמש בתוכן שלך למטרות הבאות בלבד:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>הפעלת השירותים עבורך</li>
               <li>שיפור המערכת ופיתוח תכונות חדשות (בצורה אנונימית)</li>
@@ -427,7 +448,7 @@ export default function TermsPage() {
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">7.3 שימוש במידע לשיפור השירותים</h3>
             <p>
-              אתה מאשר ל-VOW לעשות שימוש במידע שנאסף ממך (כמפורט במדיניות הפרטיות) ליצירת נתונים אנונימיים וסטטיסטיים, לרבות:
+              אתה מאשר ל-Uxellent לעשות שימוש במידע שנאסף ממך (כמפורט במדיניות הפרטיות) ליצירת נתונים אנונימיים וסטטיסטיים, לרבות:
             </p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>נתונים ממוצעים ומצטברים</li>
@@ -439,8 +460,8 @@ export default function TermsPage() {
             <p><strong>חשוב להבין:</strong></p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>הנתונים הסטטיסטיים אנונימיים לחלוטין ולא ניתן לזהות אותך באמצעותם</li>
-              <li>הנתונים הסטטיסטיים הם רכושה הבלעדי של VOW</li>
-              <li>VOW רשאית להשתמש, למכור, להשכיר או לשתף את הנתונים הסטטיסטיים ללא הגבלה</li>
+              <li>הנתונים הסטטיסטיים הם רכושה הבלעדי של Uxellent</li>
+              <li>Uxellent רשאית להשתמש, למכור, להשכיר או לשתף את הנתונים הסטטיסטיים ללא הגבלה</li>
               <li>אתה מוותר על כל זכות בנתונים הסטטיסטיים</li>
             </ul>
           </section>
@@ -450,7 +471,7 @@ export default function TermsPage() {
             
             <h3 className="text-[20px] font-semibold mb-3 mt-6">8.1 השירותים ניתנים "כמות שהם"</h3>
             <p>
-              VOW מספקת את השירותים "כמות שהם" (AS-IS) ו-"כפי שזמינים" (AS-AVAILABLE), ללא אחריות מכל סוג.
+              Uxellent מספקת את השירותים "כמות שהם" (AS-IS) ו-"כפי שזמינים" (AS-AVAILABLE), ללא אחריות מכל סוג.
             </p>
             <p><strong>אנחנו לא מתחייבים:</strong></p>
             <ul className="list-disc mr-6 my-3 space-y-1">
@@ -465,7 +486,7 @@ export default function TermsPage() {
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">8.2 הגבלת אחריות לנזקים</h3>
-            <p>VOW לא תהיה אחראית לכל נזק, ישיר או עקיף, לרבות:</p>
+            <p>Uxellent לא תהיה אחראית לכל נזק, ישיר או עקיף, לרבות:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>אובדן רווחים או הכנסות</li>
               <li>אובדן מידע או מסמכים</li>
@@ -474,9 +495,9 @@ export default function TermsPage() {
               <li>נזקים הנובעים משגיאות, באגים או אי דיוקים במערכת</li>
             </ul>
             <p>
-              בכל מקרה, אחריות VOW המצטברת לא תעלה על הסכום ששילמת בפועל עבור השירותים ב-3 החודשים שקדמו לאירוע שגרם לנזק.
+              בכל מקרה, אחריות Uxellent המצטברת לא תעלה על הסכום ששילמת בפועל עבור השירותים ב-3 החודשים שקדמו לאירוע שגרם לנזק.
             </p>
-            <p><strong>למעט במקרה של פעולה בזדון מצד VOW.</strong></p>
+            <p><strong>למעט במקרה של פעולה בזדון מצד Uxellent.</strong></p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">8.3 אחריותך הבלעדית</h3>
             <p>אתה מקבל על עצמך אחריות מלאה:</p>
@@ -488,7 +509,7 @@ export default function TermsPage() {
               <li>לשימוש הולם ומותר במערכת</li>
             </ul>
             <p>
-              VOW לא תהיה אחראית לתוכן שאתה מעלה, מעביר או מפרסם באמצעות המערכת.
+              Uxellent לא תהיה אחראית לתוכן שאתה מעלה, מעביר או מפרסם באמצעות המערכת.
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">8.4 חובת גיבוי מסמכים</h3>
@@ -498,7 +519,7 @@ export default function TermsPage() {
                 חובתך לגבות ולשמור באופן עצמאי (ולא באמצעות המערכת) את כל המסמכים והחומרים שאתה יוצר או מעלה למערכת.
               </p>
             </div>
-            <p><strong>VOW אינה אחראית:</strong></p>
+            <p><strong>Uxellent אינה אחראית:</strong></p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>לאובדן מסמכים או מידע</li>
               <li>למחיקת מסמכים (בכוונה או בטעות)</li>
@@ -509,31 +530,31 @@ export default function TermsPage() {
               המערכת אינה מיועדת לשמש ככלי למימוש חובת שמירת מידע כפי שחלה עליך או על רואה החשבון מטעמך לפי דין.
             </p>
 
-            <h3 className="text-[20px] font-semibold mb-3 mt-6">8.5 קישורים למסמכים — תוקף מוגבל</h3>
+            <h3 className="text-[20px] font-semibold mb-3 mt-6">8.5 קישורים למסמכים - תוקף מוגבל</h3>
             <p>
               ככל שהמערכת תאפשר משלוח קישור למסמך (במקום קובץ PDF), תוקף הקישור מוגבל לתקופה של <strong>3 חודשים</strong> ממועד יצירתו.
             </p>
             <p>
-              חובתך להודיע ללקוחותיך על מגבלה זו. VOW אינה אחראית לחוסר יכולת לגשת לקישור לאחר תום התקופה.
+              חובתך להודיע ללקוחותיך על מגבלה זו. Uxellent אינה אחראית לחוסר יכולת לגשת לקישור לאחר תום התקופה.
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">8.6 אחריות על שירותי צד שלישי</h3>
-            <p>VOW לא תהיה אחראית בשום מקרה לכל נזק, הפסד או הוצאה הנובעים מ:</p>
+            <p>Uxellent לא תהיה אחראית בשום מקרה לכל נזק, הפסד או הוצאה הנובעים מ:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>תקלה, שגיאה או הפרעה במערכת צד שלישי</li>
-              <li>שירותים שניתנו לך באמצעות מערכת צד שלישי (ולא ישירות דרך VOW)</li>
+              <li>שירותים שניתנו לך באמצעות מערכת צד שלישי (ולא ישירות דרך Uxellent)</li>
               <li>אי זמינות של שירותי צד שלישי</li>
               <li>שינויים או ביטול של שירותי צד שלישי</li>
             </ul>
             <p>
-              למשל: אם אתה משתמש באינטגרציה של צד שלישי והיא לא פועלת — זו אחריות הצד השלישי, לא של VOW.
+              למשל: אם אתה משתמש באינטגרציה של צד שלישי והיא לא פועלת - זו אחריות הצד השלישי, לא של Uxellent.
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">8.7 אחריותך לחיבור אינטרנט</h3>
             <p>
               חובתך לוודא שיש לך חיבור תקין ויציב לאינטרנט לפני השימוש במערכת.
             </p>
-            <p>VOW אינה אחראית לכל נזק הנובע מבעיות בחיבור שלך לאינטרנט, לרבות:</p>
+            <p>Uxellent אינה אחראית לכל נזק הנובע מבעיות בחיבור שלך לאינטרנט, לרבות:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>ניתוק</li>
               <li>איטיות</li>
@@ -555,13 +576,13 @@ export default function TermsPage() {
               <li>וירוסים, תוכנות זדוניות, סוסים טרויאנים</li>
               <li>פריצה או חדירה על ידי גורמים עוינים</li>
               <li>ציתות לקווי תקשורת</li>
-              <li>התחזות לאתר VOW</li>
+              <li>התחזות לאתר Uxellent</li>
               <li>הונאות מקוונות</li>
             </ul>
             <p>
               אנחנו משקיעים מאמצים רבים בהגנה מפני סיכונים אלה, אך לא ניתן לחסימה מוחלטת.
             </p>
-            <p>VOW לא תהיה אחראית לכל נזק הנובע מהתממשות סיכונים אלה, לרבות:</p>
+            <p>Uxellent לא תהיה אחראית לכל נזק הנובע מהתממשות סיכונים אלה, לרבות:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>גילוי או שיבוש מידע</li>
               <li>פעולות לא מורשות</li>
@@ -571,7 +592,7 @@ export default function TermsPage() {
             </ul>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">8.10 פטור מאחריות לגורמים שאינם בשליטתנו</h3>
-            <p>VOW תהא פטורה מאחריות לנזק, הפסד או הוצאה הנובעים מגורמים שאינם בשליטתנו, לרבות:</p>
+            <p>Uxellent תהא פטורה מאחריות לנזק, הפסד או הוצאה הנובעים מגורמים שאינם בשליטתנו, לרבות:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>שיבושים בקווי תקשורת</li>
               <li>תקלות אצל ספקי שירותי ענן או אחסון</li>
@@ -579,7 +600,7 @@ export default function TermsPage() {
               <li>חשיפת מידע עקב מסירת פרטים לא מדויקים על ידך</li>
               <li>העברת המכשיר שלך לאחר (לתיקון או צפייה)</li>
             </ul>
-            <p>בתנאי ש-VOW עשתה מאמץ סביר למנוע גורמים אלה.</p>
+            <p>בתנאי ש-Uxellent עשתה מאמץ סביר למנוע גורמים אלה.</p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">8.11 קישורים לאתרים חיצוניים</h3>
             <p>
@@ -588,19 +609,19 @@ export default function TermsPage() {
             <p><strong>חשוב לדעת:</strong></p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>הקישורים מוצגים לנוחיותך בלבד</li>
-              <li>VOW לא בחנה את האתרים הללו ואינה אחראית להם</li>
+              <li>Uxellent לא בחנה את האתרים הללו ואינה אחראית להם</li>
               <li>גלישה, שימוש או מסירת מידע לאתרים אלה היא באחריותך המלאה</li>
               <li>בדוק תמיד את כתובת ה-URL לפני לחיצה על קישור</li>
             </ul>
             <p>
-              אם מצאת באתר חיצוני תוכן בעייתי, אנא הודע לנו ב-<a href="mailto:support@vow.co.il" className="text-blue-600 underline">support@vow.co.il</a>.
+              אם מצאת באתר חיצוני תוכן בעייתי, אנא הודע לנו ב-<a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a>.
             </p>
           </section>
 
           <section>
             <h2 className="text-[24px] font-bold mb-4 mt-8">9. שיפוי</h2>
             <p>
-              אתה מתחייב לשפות את VOW, עובדיה, מנהליה ונושאי המשרה בה, מכל תביעה, דרישה, הפסד, נזק או הוצאה (לרבות שכר טרחת עורך דין) הנובעים מ:
+              אתה מתחייב לשפות את Uxellent, עובדיה, מנהליה ונושאי המשרה בה, מכל תביעה, דרישה, הפסד, נזק או הוצאה (לרבות שכר טרחת עורך דין) הנובעים מ:
             </p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>הפרת תנאי שימוש אלה על ידך</li>
@@ -608,16 +629,16 @@ export default function TermsPage() {
               <li>תוכן שהעלת או מסמכים שיצרת במערכת</li>
               <li>כל שימוש בלתי חוקי או בלתי מורשה שביצעת</li>
             </ul>
-            <p>תוך 30 יום ממועד קבלת דרישת VOW בכתב.</p>
+            <p>תוך 30 יום ממועד קבלת דרישת Uxellent בכתב.</p>
           </section>
 
           <section>
             <h2 className="text-[24px] font-bold mb-4 mt-8">10. ערוצי תוכן</h2>
             
             <h3 className="text-[20px] font-semibold mb-3 mt-6">10.1 מהם ערוצי התוכן</h3>
-            <p>VOW מפעילה ערוצי תוכן שונים, לרבות:</p>
+            <p>Uxellent מפעילה ערוצי תוכן שונים, לרבות:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
-              <li>בלוג ומאמרים באתר vow.co.il</li>
+              <li>בלוג ומאמרים באתר uxellent.com</li>
               <li>פוסטים ברשתות חברתיות (פייסבוק, אינסטגרם, לינקדאין, TikTok)</li>
               <li>סרטוני הדרכה וחומרי לימוד</li>
             </ul>
@@ -648,42 +669,42 @@ export default function TermsPage() {
               </p>
             </div>
             <p>
-              כל שימוש במידע מהתכנים הוא על אחריותך הבלעדית. VOW לא תהיה אחראית לכל הפסד או נזק הנובע מהסתמכות על התכנים.
+              כל שימוש במידע מהתכנים הוא על אחריותך הבלעדית. Uxellent לא תהיה אחראית לכל הפסד או נזק הנובע מהסתמכות על התכנים.
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">10.5 הצעות למשתמש לתכנים</h3>
             <p>
-              אתה מוזמן להציע נושאים ורעיונות לתכנים בדוא"ל <a href="mailto:support@vow.co.il" className="text-blue-600 underline">support@vow.co.il</a>.
+              אתה מוזמן להציע נושאים ורעיונות לתכנים בדוא"ל <a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a>.
             </p>
             <p>אם תשלח הצעה:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
-              <li>VOW רשאית להשתמש בהצעתך ללא תמורה</li>
-              <li>כל תוצר שייווצר מההצעה הוא קניינה הבלעדי של VOW</li>
+              <li>Uxellent רשאית להשתמש בהצעתך ללא תמורה</li>
+              <li>כל תוצר שייווצר מההצעה הוא קניינה הבלעדי של Uxellent</li>
               <li>לא תהיה לך זכות בקניין הרוחני או בתוצר</li>
             </ul>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">10.6 העלאת תכנים על ידי משתמשים</h3>
-            <p>ככל ש-VOW תאפשר למשתמשים להעלות תכנים לערוצי התוכן, אתה מצהיר ומתחייב:</p>
+            <p>ככל ש-Uxellent תאפשר למשתמשים להעלות תכנים לערוצי התוכן, אתה מצהיר ומתחייב:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>אתה היוצר והבעלים של התוכן</li>
               <li>אין לאחר זכויות בתוכן</li>
               <li>התוכן אינו מפר זכויות צד שלישי</li>
-              <li>אתה נותן ל-VOW רישיון בלתי מוגבל להשתמש בתוכן (זמן, מקום, אמצעים)</li>
+              <li>אתה נותן ל-Uxellent רישיון בלתי מוגבל להשתמש בתוכן (זמן, מקום, אמצעים)</li>
               <li>לא תהיה זכאי לתמורה כספית</li>
-              <li>לא תהיה לך טענה כלפי VOW בקשר לשימוש בתוכן</li>
-              <li>VOW לא תהיה אחראית לשימוש שיעשה בתוכן על ידי צדדים שלישיים</li>
+              <li>לא תהיה לך טענה כלפי Uxellent בקשר לשימוש בתוכן</li>
+              <li>Uxellent לא תהיה אחראית לשימוש שיעשה בתוכן על ידי צדדים שלישיים</li>
             </ul>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">10.7 זכותנו להסיר תכנים</h3>
             <p>
-              VOW רשאית להסיר כל תוכן שפורסם על ידך או להפסיק את גישתך לערוצי התוכן, לפי שיקול דעתה הבלעדי, ללא הודעה מוקדמת.
+              Uxellent רשאית להסיר כל תוכן שפורסם על ידך או להפסיק את גישתך לערוצי התוכן, לפי שיקול דעתה הבלעדי, ללא הודעה מוקדמת.
             </p>
           </section>
 
           <section>
             <h2 className="text-[24px] font-bold mb-4 mt-8">11. שינויים בתנאי השימוש</h2>
             <p>
-              VOW רשאית לשנות תנאי שימוש אלה בכל עת.
+              Uxellent רשאית לשנות תנאי שימוש אלה בכל עת.
             </p>
             <p>
               שינויים מהותיים יפורסמו במערכת ו/או בדוא"ל לפחות 30 יום מראש.
@@ -701,7 +722,7 @@ export default function TermsPage() {
             
             <h3 className="text-[20px] font-semibold mb-3 mt-6">12.1 הסכם שלם</h3>
             <p>
-              תנאי שימוש אלה (יחד עם מדיניות הפרטיות) מהווים את ההסכם השלם בינך לבין VOW.
+              תנאי שימוש אלה (יחד עם מדיניות הפרטיות) מהווים את ההסכם השלם בינך לבין Uxellent.
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">12.2 ויתור על זכות</h3>
@@ -719,11 +740,11 @@ export default function TermsPage() {
               אתה לא רשאי להעביר את זכויותיך או חובותיך לפי הסכם זה ללא הסכמתנו בכתב.
             </p>
             <p>
-              VOW רשאית להעביר זכויותיה וחובותיה לצד שלישי בכל עת, בכפוף לכך שהצד השלישי יקבל על עצמו את התחייבויות VOW כלפיך.
+              Uxellent רשאית להעביר זכויותיה וחובותיה לצד שלישי בכל עת, בכפוף לכך שהצד השלישי יקבל על עצמו את התחייבויות Uxellent כלפיך.
             </p>
 
             <h3 className="text-[20px] font-semibold mb-3 mt-6">12.5 סיום ההסכם</h3>
-            <p>VOW רשאית לסיים הסכם זה:</p>
+            <p>Uxellent רשאית לסיים הסכם זה:</p>
             <ul className="list-disc mr-6 my-3 space-y-1">
               <li>בכל עת, בהודעה של 30 יום מראש</li>
               <li>באופן מידי, עקב הפרת תנאי השימוש על ידך (ללא הודעה מוקדמת)</li>
@@ -750,7 +771,7 @@ export default function TermsPage() {
               יש לך שאלות על תנאי השימוש? רוצה לבטל מנוי או לקבל תמיכה?
             </p>
             <div className="bg-white p-6 rounded-lg">
-              <p><strong>דוא"ל:</strong> <a href="mailto:support@vow.co.il" className="text-blue-600 underline">support@vow.co.il</a></p>
+              <p><strong>דוא"ל:</strong> <a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a></p>
               <p><strong>WhatsApp:</strong> 0545215193</p>
               <p><strong>שם החברה:</strong> Bugo Media Ltd</p>
               <p><strong>מספר חברה:</strong> 515960508</p>

@@ -1,0 +1,91 @@
+---
+description: English pages – use EnLink/prefixEnPath for internal links
+globs: src/app/en/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Rule: English (`/en/`) pages – internal link localization
+
+## Goal
+
+Every file inside `src/app/en/` must use English-prefixed navigation. Plain `Link` from `next/link` and bare `<a href>` tags that point to internal paths must be replaced with the project's dedicated helpers.
+
+## Helpers available in this project
+
+| Helper | Import path | When to use |
+|--------|-------------|-------------|
+| `EnLink` | `@/app/en/_components/EnLink` | Drop-in replacement for `<Link href="...">` |
+| `prefixEnPath` | `@/app/en/_lib/prefixEnPath` | When you need the URL string (e.g. `router.push`, `<a href>`, `redirect()`) |
+
+## Rules
+
+### 1. Replace `<Link>` with `<EnLink>`
+
+**Before:**
+```tsx
+import Link from "next/link"
+<Link href="/about">About</Link>
+```
+
+**After:**
+```tsx
+import { EnLink } from "@/app/en/_components/EnLink"
+<EnLink href="/about">About</EnLink>
+```
+
+> `EnLink` already adds the `/en` prefix internally – do NOT pass `/en/about`.
+
+### 2. Replace bare `<a href="...">` with `<EnLink>` (internal paths only)
+
+**Before:**
+```html
+<a href="/contact">Contact</a>
+```
+
+**After:**
+```tsx
+<EnLink href="/contact">Contact</EnLink>
+```
+
+> Only for **internal** paths (starting with `/`). Leave external URLs (`https://...`) as `<a>`.
+
+### 3. Use `prefixEnPath()` for programmatic navigation
+
+**Before:**
+```ts
+router.push("/dashboard")
+redirect("/login")
+```
+
+**After:**
+```ts
+import { prefixEnPath } from "@/app/en/_lib/prefixEnPath"
+router.push(prefixEnPath("/dashboard"))
+redirect(prefixEnPath("/login"))
+```
+
+## What NOT to change
+
+- External links (`href="https://..."`, `href="mailto:..."`, `href="tel:..."`)
+- Anchor links (`href="#section"`)
+- The `EnLink` / `prefixEnPath` definitions themselves
+- Files **outside** the `src/app/en/` directory
+
+## Shared components with locale prop
+
+When using `SiteHeader`, `SiteFooter`, `CookieBanner`, or `BlogShell` inside `/en` pages, always pass `locale="en"` so they render English-prefixed links:
+
+```tsx
+<SiteHeader locale="en" />
+<SiteFooter locale="en" />
+<CookieBanner locale="en" />
+<BlogShell locale="en">...</BlogShell>
+```
+
+## Checklist when editing a file in `src/app/en/`
+
+1. [ ] No bare `import Link from "next/link"` for internal nav (use `<EnLink>` instead)
+2. [ ] No `<Link href="/...">` pointing to internal paths without `/en` prefix
+3. [ ] No `<a href="/...">` for internal navigation
+4. [ ] All `router.push` / `redirect` / `useRouter` calls use `prefixEnPath()`
+5. [ ] `SiteHeader`, `SiteFooter`, `CookieBanner`, `BlogShell` receive `locale="en"` when used in `/en`

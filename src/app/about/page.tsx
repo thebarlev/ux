@@ -1,11 +1,17 @@
 import type { Metadata } from "next"
 import Image from "next/image"
+import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { SiteHeader } from "@/app/_components/home/SiteHeader"
+import { H2, H3 } from "@/components/ui/Heading"
 
 export const metadata: Metadata = {
-  title: "אודות VOW",
-  description: "VOW - תשתית טכנולוגית לצמיחה עסקית.",
+  title: "אודות Uxellent | פיתוח, SEO ושיווק דיגיטלי",
+  description: "הכירו את Uxellent, חברה לפיתוח אתרים, אוטומציות, SEO ושיווק דיגיטלי לעסקים שרוצים לגדול עם תשתית טכנולוגית נכונה.",
+  alternates: {
+    canonical: "/about",
+    languages: heEnAlternateLanguages("/about", "/en/about"),
+  },
 }
 
 /* ─── קבועים ─── */
@@ -54,9 +60,9 @@ export default function AboutPage() {
         {/* ════ HERO - ממורכז ════ */}
         <section className="pt-10 pb-7 sm:pt-28 sm:pb-18 lg:pt-16 lg:pb-12 text-center">
           <div className={WRAP_NARROW}>
-            <span className={LABEL}>אודות VOW</span>
+            <span className={LABEL}>אודות Uxellent</span>
             <h1 className="text-[38px] font-semibold leading-[1.1] text-black sm:text-[52px] lg:text-[64px]">
-              בונים פתרונות<br />שמייצרות תוצאות.
+              אודות Uxellent - פיתוח ושיווק דיגיטלי
             </h1>
             <p className="mt-5 text-[24px] leading-[28px] text-[#000000] sm:text-[22px] sm:leading-[32px]">
               רוב העסקים לא נכשלים בגלל חוסר רעיון - הם נתקעים
@@ -67,8 +73,11 @@ export default function AboutPage() {
         </section>
 
         {/* ════ SERVICES ════ */}
-        <section className="pb-12">
+        <section className="pb-12" aria-labelledby="services-heading">
   <div className={WRAP_MID}>
+    <H2 id="services-heading" className="mb-6 text-right">
+      השירותים שלנו
+    </H2>
     <div className="rounded-2xl bg-white border border-black/[0.07] overflow-hidden">
       {SERVICES.map((s, i) => (
         <div key={s.num}>
@@ -79,9 +88,9 @@ export default function AboutPage() {
             </span>
             {/* תוכן */}
             <div className="flex-1 text-right">
-              <p className="text-[20px] sm:text-[24px] font-semibold text-black mb-1 leading-snug">
+              <H3 className="mb-1 text-[20px] leading-snug text-black sm:text-[24px]">
                 {s.title}
-              </p>
+              </H3>
               <p className="text-[18px] sm:text-[20px] leading-[26px] text-[#000000]">
                 {s.body}
               </p>
@@ -100,13 +109,13 @@ export default function AboutPage() {
         <section className="py-4 sm:py-5">
           <div className={WRAP_NARROW}>
             <div className="rounded-2xl bg-white border border-black/[0.07] px-8 py-4 sm:px-12 sm:py-14 text-center">
-              <h2 className="text-[28px] font-semibold text-black sm:text-[38px] leading-[1.15] mb-5">
+              <H2 className="mb-5">
                 עסקים צריכים פתרונות. לא עוד ספק.
-              </h2>
+              </H2>
               <p className="text-[17px] leading-[28px] text-[#000000] sm:text-[20px] sm:leading-[30px] mx-auto">
                 אחרי יותר מ־20 שנה בעולמות האפיון, הפיתוח וניהול המוצר - הצטברה תובנה אחת:
                 הטכנולוגיה התקדמה, AI שינה את חוקי המשחק, אבל רוב בעלי העסקים עדיין עובדים בשיטות
-                של עשור קודם. VOW הוקמה כדי לסגור את הפער - כבר עכשיו.
+                של עשור קודם. Uxellent הוקמה כדי לסגור את הפער - כבר עכשיו.
               </p>
             </div>
           </div>
@@ -123,7 +132,7 @@ export default function AboutPage() {
         <div className="relative h-full w-full">
           <Image
             src="/team/itzik.webp"
-            alt="איציק ברלב"
+            alt="Itzik Barlev - Uxellent founder, digital marketing and website development expert"
             fill
             sizes="160px"
             className="object-cover object-top"
@@ -131,9 +140,9 @@ export default function AboutPage() {
         </div>
       </div>
 
-      <h2 className=" text-[32px] pb-1 font-semibold text-black sm:text-[40px] mb-1 lg:py-0">
+      <H2 className="mb-1 pb-1 lg:py-0">
         איציק ברלב
-      </h2>
+      </H2>
       <p className="  text-[20px] text-black mb-6 leading-relaxed text-center mx-auto">
         למעלה מ־20 שנה באפיון, UX, פיתוח וניהול מוצר. ארבע שנים באיטליה, שמונה שנים ב־MAX (לאומי קארד).<br />
         <span className="font-medium">עסק שלא מחובר לטכנולוגיה חכמה - נשאר מאחור.</span>
@@ -159,11 +168,13 @@ export default function AboutPage() {
         <section className=" lg:py-1 py-0 sm:py-17 lg:pb-19">
           <div className={WRAP_NARROW}>
             <div className="rounded-2xl bg-white border border-black/[0.07] px-8 py-4 sm:px-14 sm:py-16 text-center">
-              <h2 className="text-[28px] font-semibold text-black sm:text-[38px] leading-[1.15] mb-4">
+              <H2 className="mb-4">
                 השאירו פרטים
-              </h2>
+              </H2>
               <p className="text-[18px] leading-[24px] text-[#000000] sm:text-[18px] sm:leading-[30px] max-w-[690px] mx-auto mb-8">
-                אם אתם בתחילת הדרך - אנחנו מציעים פתרון מלא הכולל מיתוג, אתר ונגישות דיגיטליים מוכנים להשקה. כך תוכלו לצאת לשוק מהר, נכון ועם ראות מקצועית.
+                אם אתם בתחילת הדרך - אנחנו מציעים פתרון מלא הכולל מיתוג, אתר ונגישות דיגיטליים מוכנים להשקה.{" "}
+                <a href="/portfolio" className="text-[#5389BB] underline hover:no-underline">דוגמאות מהעבודות</a>
+                {" "}- כך תוכלו לצאת לשוק מהר, נכון ועם ראות מקצועית.
               </p>
               <a
                 href="/contact"

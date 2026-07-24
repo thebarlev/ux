@@ -34,10 +34,10 @@ export async function createCardcomLowProfile(params: {
   }
 
   const webHookUrl =
-    process.env.CARDCOM_WEBHOOK_URL ?? "https://vow.co.il/api/cardcom/webhook"
+    process.env.CARDCOM_WEBHOOK_URL ?? "https://uxellent.com/api/cardcom/webhook"
 
-  const successRedirectUrl = "https://vow.co.il/checkout/success"
-  const failedRedirectUrl = "https://vow.co.il/checkout/failed"
+  const successRedirectUrl = "https://uxellent.com/checkout/success"
+  const failedRedirectUrl = "https://uxellent.com/checkout/failed"
 
   const body = {
     TerminalNumber: terminalNumber,

@@ -13,7 +13,7 @@ type Props = {
 
 export function BlogMetaGrid({
   category,
-  author = "VOW",
+  author = "Uxellent",
   date,
   readingTimeMinutes,
   shareUrl,
@@ -44,7 +44,7 @@ export function BlogMetaGrid({
         <div className="flex items-start justify-between gap-4">
           <p className="text-[13px] font-semibold text-black/60">זמן קריאה</p>
           <p className="text-[14px] font-semibold text-black">
-            {typeof readingTimeMinutes === "number" ? `${readingTimeMinutes} דק׳` : "—"}
+            {typeof readingTimeMinutes === "number" ? `${readingTimeMinutes} דק׳` : "-"}
           </p>
         </div>
 

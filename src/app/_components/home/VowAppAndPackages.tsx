@@ -2,6 +2,7 @@ import Image from "next/image"
 
 import { CheckIcon } from "./CheckIcon"
 import { PACKAGE_CARDS } from "./home.constants"
+import { H3 } from "@/components/ui/Heading"
 
 function PackageCard(props: {
   kicker: string
@@ -15,9 +16,9 @@ function PackageCard(props: {
         {props.kicker}
       </p>
 
-      <h3 className="mt-2 h3-title h3-title--narrow">
+      <H3 className="mt-2 max-w-full w-[var(--h3-width)] text-black">
         {props.headline}
-      </h3>
+      </H3>
 
       <button
         type="button"
@@ -56,7 +57,7 @@ export function VowAppAndPackages() {
               <div className="relative mx-auto w-full max-w-[420px]">
                 <Image
                   src="/vowapp.webp"
-                  alt="תצוגת אפליקציית VOW"
+                  alt="Uxellent digital invoicing app interface for business document management"
                   width={840}
                   height={1100}
                   className="h-auto w-full object-contain"

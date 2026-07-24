@@ -19,6 +19,8 @@ export type Article = {
   coverImage: string
   category: string
   tags?: any | undefined
+  locale?: string | undefined
+  slug?: string | undefined
   /** MDX file body */
   body: MDX
   slug: string

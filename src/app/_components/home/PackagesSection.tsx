@@ -1,11 +1,14 @@
 "use client";
 import { CheckIcon } from "./CheckIcon"
-import { OUR_PACKAGES } from "./home.constants"
+import { OUR_PACKAGES, OUR_PACKAGES_EN } from "./home.constants"
 import { useCallback, useState } from "react"
 import { Popup, LeadSource } from "./Popup"
 import { POPUP_OVERRIDES_BY_PATH, type PopupIconVariant } from "@/app/_components/products/productPopupOverrides"
+import { H2, H3 } from "@/components/ui/Heading"
 
-export function PackagesSection() {
+export function PackagesSection({ locale = "he" }: { locale?: "he" | "en" }) {
+  const packages = locale === "en" ? OUR_PACKAGES_EN : OUR_PACKAGES
+  const isLtr = locale === "en"
 
   const [open, setOpen] = useState(false);
   const [popupData, setPopupData] = useState<{ 
@@ -50,25 +53,25 @@ export function PackagesSection() {
   )
 
   return (
-    <section aria-label="החבילות שלנו" className="py-[var(--space-section)]  bg-[#F4F1EC]">
+    <section aria-label={isLtr ? "Our services" : "החבילות שלנו"} className="py-[var(--space-section)]  bg-[#F4F1EC]">
       <div id="lead-design-development" className="scroll-mt-24" />
       <div className="mx-auto max-w-[1440px] px-6 sm:px-8 lg:px-8">
-        <h2 className="text-center text-[44px] pb-0 font-semibold leading-[52px] text-black sm:text-[56px] sm:leading-[64px] lg:text-[70px] lg:leading-[80px]">
-          השירותים שלנו
-        </h2>
+        <H2 className="pb-0 text-center">
+          {isLtr ? "Our services" : "מסלול הבנייה של Uxellent"}
+        </H2>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-3 lg:gap-1 lg:place-items-stretch lg:justify-center">
-           {OUR_PACKAGES.map((p) => (
+           {packages.map((p) => (
     <article
   key={p.title}
   className="rounded-[10px] bg-white w-[98%] max-w-[386px] mx-auto lg:w-full lg:max-w-[350px] lg:mx-auto p-6 shadow-[0_0_24px_10px_rgba(0,0,0,0.07)] flex flex-col items-stretch"
 >
-              <p className="text-right text-[20px] font-semibold leading-[32px] text-[color:var(--vow-accent)]">
+              <p className={`text-[20px] font-semibold leading-[32px] text-[color:var(--vow-accent)] ${isLtr ? "text-left" : "text-right"}`}>
                  {p.kicker}
               </p>
-              <h3 className="h3-title text-[40px] py-2">
+              <H3 className={`py-2 text-black ${isLtr ? "text-left" : "text-right"}`}>
                 {p.title}
-              </h3>
+              </H3>
 
               <button
   type="button"

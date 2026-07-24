@@ -1,6 +1,7 @@
 import Link from "next/link"
 
-import { formatDateHe, getCategoryLabel } from "./blog.utils"
+import { formatDateEn, formatDateHe, getCategoryLabel, getCategoryLabelEn } from "./blog.utils"
+import { H3 } from "@/components/ui/Heading"
 
 type Props = {
   href: string
@@ -8,14 +9,22 @@ type Props = {
   date: string
   category: string
   readingTimeMinutes?: number
+  locale?: "he" | "en"
 }
 
-export function BlogPostRow({ href, title, date, category, readingTimeMinutes }: Props) {
-  const metaParts = [
-    formatDateHe(date),
-    getCategoryLabel(category),
-    typeof readingTimeMinutes === "number" ? `${readingTimeMinutes} דק׳ קריאה` : undefined,
-  ].filter(Boolean)
+export function BlogPostRow({ href, title, date, category, readingTimeMinutes, locale = "he" }: Props) {
+  const isEn = locale === "en"
+  const formatDate = isEn ? formatDateEn : formatDateHe
+  const getCategory = isEn ? getCategoryLabelEn : getCategoryLabel
+  const readMoreText = isEn ? "Read more" : "קרא עוד"
+  const readTimeText =
+    typeof readingTimeMinutes === "number"
+      ? isEn
+        ? `${readingTimeMinutes} min read`
+        : `${readingTimeMinutes} דק׳ קריאה`
+      : undefined
+
+  const metaParts = [formatDate(date), getCategory(category), readTimeText].filter(Boolean)
 
   return (
     <Link
@@ -25,23 +34,23 @@ export function BlogPostRow({ href, title, date, category, readingTimeMinutes }:
       <div className="mx-auto max-w-[980px] px-4 sm:px-6 lg:px-0">
         <div className="flex items-start justify-between gap-6">
           <div className="min-w-0">
-            <h3 className="text-balance text-[22px] font-semibold leading-[1.25] text-black sm:text-[26px] lg:text-[30px]">
+            <H3 className="text-balance text-black">
               <span className="underline-offset-4 group-hover:underline">{title}</span>
-            </h3>
-            <p className="mt-2 text-[14px] font-medium text-[#747474] sm:text-[15px]">
+            </H3>
+            <p className="mt-2 text-[18px] font-medium text-[#747474] sm:text-[20px]">
               {metaParts.join(" · ")}
             </p>
           </div>
 
-          <div className="hidden shrink-0 sm:flex items-center gap-2 pt-1 text-[15px] font-semibold text-black/80">
-            <span className="underline-offset-4 group-hover:underline">קרא עוד</span>
-            <span aria-hidden="true">←</span>
+          <div className="hidden shrink-0 sm:flex items-center gap-2 pt-1 text-[18px] font-semibold text-black/80">
+            <span className="underline-offset-4 group-hover:underline">{readMoreText}</span>
+            <span aria-hidden="true">{isEn ? "→" : "←"}</span>
           </div>
         </div>
 
-        <div className="mt-3 sm:hidden text-[15px] font-semibold text-black/80">
-          <span className="underline-offset-4 group-hover:underline">קרא עוד</span>{" "}
-          <span aria-hidden="true">←</span>
+        <div className="mt-3 sm:hidden text-[18px] font-semibold text-black/80">
+          <span className="underline-offset-4 group-hover:underline">{readMoreText}</span>{" "}
+          <span aria-hidden="true">{isEn ? "→" : "←"}</span>
         </div>
       </div>
     </Link>

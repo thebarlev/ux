@@ -1,53 +1,51 @@
 // src/app/page.tsx
 import type { Metadata } from "next"
 
-import { Hero } from "@/app/_components/home/Hero"
-import { LogoRow } from "@/app/_components/home/LogoRow"
-import { PackagesSection } from "@/app/_components/home/PackagesSection"
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
-import { SuccessSection } from "@/app/_components/home/SuccessSection"
-import { Testimonials } from "@/app/_components/home/Testimonials"
-import { CookieBanner } from "@/app/_components/home/CookieBanner"
-import { AboutSection } from "@/app/_components/home/AboutSection"
-import { VisionToExecutionSection } from "@/app/_components/home/VisionToExecutionSection"
-import { FaqSection } from "@/app/_components/home/FaqSection"
-import { GreenInvoiceSection } from "@/app/_components/home/GreenInvoiceSection"
+import { FounderBand } from "@/app/_components/new-home/FounderBand"
+import { NewHero } from "@/app/_components/new-home/NewHero"
+import { ServiceSection } from "@/app/_components/new-home/ServiceSection"
+import { StorySection } from "@/app/_components/new-home/StorySection"
+import { TestimonialsPager } from "@/app/_components/new-home/TestimonialsPager"
+import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
 export const metadata: Metadata = {
-  // ✅ זה האתר השיווקי (לא app)
-  metadataBase: new URL("https://vow.co.il"),
+  // The marketing site, not app.uxellent.com.
+  metadataBase: new URL("https://uxellent.com"),
+  alternates: {
+    canonical: "/",
+    // The Hebrew home has no visible language switch, but the English home
+    // still exists and stays paired with it for search engines.
+    languages: heEnAlternateLanguages("/", "/en"),
+  },
 
-  title: "VOW – רו״ח AI, חשבונית דיגיטלית ופיתוח אתרים ומערכות",
+  title: "Uxellent | מהאפיון והעיצוב ועד הפיתוח והשיווק",
   description:
-    "VOW מספקת שירותים מתקדמים לעסקים קטנים ובינוניים: רו״ח AI חכם, חשבונית דיגיטלית מאובטחת לשנה חינם, פתרונות שיווק, עיצוב ופיתוח אתרים ומערכות.",
+    "צוות קטן, חד ומנוסה שבונה מוצרי SaaS ואפליקציות AI מקצה לקצה. מעל 25 שנות ניסיון באפיון, עיצוב, פיתוח ושיווק דיגיטלי.",
 
   keywords: [
-    "רו״ח AI",
-    "חשבונית דיגיטלית",
-    "חשבוניות אונליין",
-    "מערכת חשבוניות",
-    "חתימה דיגיטלית",
-    "חיבור לשע״מ",
+    "פיתוח מוצרי SaaS",
+    "פיתוח אפליקציות AI",
+    "אפיון מוצר",
+    "עיצוב חוויית משתמש",
     "פיתוח אתרים",
-    "ניהול מוצר",
-    "שיווק מבוסס AI",
-    "מערכת ניהול עסקי",
+    "שיווק דיגיטלי",
+    "קידום אתרים",
     "עיצוב ומיתוג לעסקים",
   ],
 
   openGraph: {
-    title: "VOW – רו״ח AI, חשבונית דיגיטלית ופיתוח אתרים ומערכות",
+    title: "Uxellent | מהאפיון והעיצוב ועד הפיתוח והשיווק",
     description:
-      "VOW מספקת שירותים מתקדמים לעסקים קטנים ובינוניים: רו״ח AI חכם, חשבונית דיגיטלית מאובטחת לשנה חינם, פתרונות שיווק, עיצוב ופיתוח אתרים ומערכות.",
-    url: "https://vow.co.il",
-    siteName: "VOW",
+      "מבססים את הרעיון, בונים את המערכת, מביאים את הלקוחות. מעל 25 שנות ניסיון באפיון, עיצוב, פיתוח ושיווק דיגיטלי.",
+    url: "https://uxellent.com",
+    siteName: "Uxellent",
     images: [
       {
-        url: "https://vow.co.il/og-home.jpg",
+        url: "https://uxellent.com/og-home.jpg",
         width: 1200,
         height: 630,
-        alt: "VOW – AI Accountant & Digital Business Platform",
+        alt: "Uxellent — אפיון, עיצוב, פיתוח ושיווק מקצה לקצה",
       },
     ],
     locale: "he_IL",
@@ -56,10 +54,10 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "VOW – רו״ח AI, חשבונית דיגיטלית ופיתוח אתרים ומערכות",
+    title: "Uxellent | מהאפיון והעיצוב ועד הפיתוח והשיווק",
     description:
-      "שנה חינם לחשבונית דיגיטלית מאובטחת + רו״ח AI, שיווק, מיתוג ופיתוח מערכות לעסקים.",
-    images: ["https://vow.co.il/og-home.jpg"],
+      "צוות קטן, חד ומנוסה שבונה מוצרי SaaS ואפליקציות AI מקצה לקצה.",
+    images: ["https://uxellent.com/og-home.jpg"],
   },
 
   robots: {
@@ -68,57 +66,29 @@ export const metadata: Metadata = {
   },
 }
 
+/**
+ * Home page. The previous composition (Hero, VisionToExecution, Packages, FAQ,
+ * …) was replaced wholesale by the approved design; it remains in git history
+ * if it is ever needed back.
+ *
+ * Each section is self-contained, so reordering is a matter of moving one line.
+ */
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#F4F1EC]">
-      <SiteHeader />
-
       <main id="main" role="main">
-        <Hero />
-        <LogoRow />
-        <VisionToExecutionSection
-          title="אפיון, פיתוח, עיצוב ושיווק מבוסס AI שמייצר צמיחה"
-          subtitle="ב-VOW בונים אתרים ומוצרים דיגיטליים עם חשיבה שיווקית מהיום הראשון - מהאפיון ועד המשפך שמביא לקוחות חדשים."
-          ctaLabel="להשארת פרטים"
-          source="design_development"
-          cards={[
-            {
-              id: "home-vto-1",
-              src: "/1.webp",
-              alt: "פיתוח MVP ליזמים וסטארטאפים",
-              caption: "פיתוח MVP ליזמים וסטארטאפים",
-            },
-            {
-              id: "home-vto-2",
-              src: "/3.webp",
-              alt: "תכנון ופיתוח אתרים ואפליקציות ",
-              caption: "תכנון ופיתוח אתרים ואפליקציות ",
-            },
-            {
-              id: "home-vto-3",
-              src: "/2.webp",
-              alt: "שיווק ממומן ו-SEO ",
-              caption: "שיווק ממומן ו-SEO ",
-            },
-            {
-              id: "home-vto-4",
-              src: "/4.webp",
-              alt: "שיפור ביצועים, חוויית משתמש - ROI",
-              caption: "שיפור ביצועים, חוויית משתמש - ROI",
-            },
-          ]}
-        />
-        <SuccessSection />
-        <Testimonials />
-        <AboutSection />
-        <GreenInvoiceSection />
-
-        <PackagesSection />
-        <FaqSection />
+        {/* NewHero renders its own dedicated dark header (SiteHeader, which the
+            inner pages use, is deliberately left untouched). */}
+        <NewHero />
+        <StorySection />
+        <FounderBand />
+        <TestimonialsPager />
+        {/* Last section on the page: its WhatsApp call to action closes it. */}
+        <ServiceSection />
       </main>
-
-      <CookieBanner />
-      <SiteFooter />
+      {/* Ink tone so the footer continues the dark service section above it.
+          Inner pages keep the default black footer. */}
+      <SiteFooter tone="ink" />
     </div>
   )
 }

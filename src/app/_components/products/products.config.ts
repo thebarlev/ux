@@ -22,7 +22,8 @@ export type ProductPageConfig = {
   hero: {
     title: string
     subtitle?: string
-    tags: readonly string[]
+    heroSubheading?: string
+    tags?: readonly string[]
     ctaLabel: string
     ctaSource: LeadSource
     ctaHref?: string
@@ -73,16 +74,16 @@ const SECTIONS_ORDER: readonly ProductSectionType[] = [
 export const developAiConfig: ProductPageConfig = {
   slug: "develop-ai",
   metadata: {
-    title: "פיתוח תוכנה ומערכות AI בהתאמה אישית לעסקים וחברות",
-    description: "ארכיטקטורה, פיתוח Full-Stack ואוטומציות. מהר יותר עם AI, בלי להתפשר על איכות ואבטחה.",
+    title: "פיתוח מערכות AI לעסקים | Uxellent",
+    description: "פיתוח מערכות AI ותוכנה בהתאמה אישית לעסקים עם ארכיטקטורה נכונה, אוטומציות ופיתוח full-stack מאובטח.",
   },
   hero: {
     title: "פיתוח תוכנה/מערכות בסביבת AI",
     subtitle: "",
-    tags: ["Python", "React / Next.js", "Node.js / TypeScript", "REST / Webhooks"],
+    heroSubheading: "Python, React, Node.js - מערכות בהתאמה אישית עם AI בליבה",
     ctaLabel: "להשארת פרטים",
     ctaSource: "design_development",
-    imageSrc: "/services/developai/vow.webp",
+    imageSrc: "/services/developai/vow1.webp",
     imageAlt: "פיתוח מבוסס AI",
     
   },
@@ -161,24 +162,24 @@ export const developAiConfig: ProductPageConfig = {
 export const invoiceConfig: ProductPageConfig = {
   slug: "invoice",
   metadata: {
-    title: "חשבונית דיגיטלית מאובטחת שנה חינם",
-    description: "חשבונית דיגיטלית מאובטחת הפיקו חשבוניות דיגיטליות מאובטחות בקלות ובמהירות. עמידה מלאה בדרישות רשות המסים, עם חתימה דיגיטלית וסנכרון אוטומטי.",
+    title: "חשבונית דיגיטלית מאובטחת | Uxellent",
+    description: "מערכת לחשבונית דיגיטלית מאובטחת עם חתימה דיגיטלית, חיבור לרשות המסים וניהול מסמכים עסקיים לעסקים.",
   },
   hero: {
     title: "חשבונית דיגיטלית מאובטחת שנה חינם",
     subtitle: "",
-    tags: ["הפקת מסמכים", "ניהול לקוחות", "הפקת דוחות"],
+    heroSubheading: "הפקת מסמכים, ניהול לקוחות והפקת דוחות - חתימה דיגיטלית מאובטחת וחיבור לרשות המיסים",
     ctaLabel: "להצטרפות",
     ctaSource: "smart_accounting_ai",
-    ctaHref: "https://app.vow.co.il",
+    ctaHref: "https://app.uxellent.com",
     imageSrc: "/services/d-green-invocie.webp",
     imageAlt: "Invoice",
   },
   vision: {
     title: "חשבונית דיגיטלית מאובטחת",
-    subtitle: "VOW מאפשרת הפקת חשבוניות ו-12 סוגי מסמכים עסקיים, עם חתימה דיגיטלית מאובטחת.",
+    subtitle: "Uxellent מאפשרת הפקת חשבוניות ו-12 סוגי מסמכים עסקיים, עם חתימה דיגיטלית מאובטחת.",
     ctaLabel: "להצטרפות",
-    ctaHref: "https://app.vow.co.il",
+    ctaHref: "https://app.uxellent.com",
     source: "smart_accounting_ai",
     cards: [
       { id: "invoice-1", src: "/services/invoice/vow1.webp", alt: "הפקת 12 סוגי מסמכים לניהול העסק והפקת דוחות", caption: "הפקת 12 סוגי מסמכים לניהול העסק והפקת דוחות" },
@@ -198,7 +199,7 @@ export const invoiceConfig: ProductPageConfig = {
     subtitle: "חשבוניות, קבלות ומסמכים רגולטוריים עם חתימה דיגיטלית מאובטחת. בחינם לשנה הראשונה",
     ctaLabel: "להצטרפות",
     ctaSource: "smart_accounting_ai",
-    ctaHref: "https://app.vow.co.il",
+    ctaHref: "https://app.uxellent.com",
     items: [
       { id: "invoice-about-1", title: "הפקת קבלות / חשבוניות בקלות", description: "הפיקו חשבוניות מס, קבלות וחשבוניות עסקה בפורמט מקצועי - ישירות מהדשבורד, ללא ידע חשבונאי.", icon: "/services/invoice/invoice.svg" },
       { id: "invoice-about-2", title: "חתימה דיגיטלית מאובטחת", description: "כל מסמך נחתם דיגיטלית ומוגן מפני זיוף / שינוי, אמינות מקסימלית מול לקוחות ורשויות.", icon: "/services/invoice/safe.svg" },
@@ -213,7 +214,7 @@ export const invoiceConfig: ProductPageConfig = {
       { 
         id: "invoice-faq-3", 
         question: "האם יש תמיכה ושירות לקוחות?", 
-        answer: "כן. יש תמיכה אנושית מלאה:\n• צ'אט באתר\n• מייל: support@vow.co.il\n• טלפון / וואטסאפ: 054-5215193\n\nלכל שאלה – אנחנו זמינים." 
+        answer: "כן. יש תמיכה אנושית מלאה:\n• צ'אט באתר\n• מייל: support@uxellent.com\n• טלפון / וואטסאפ: 054-5215193\n\nלכל שאלה – אנחנו זמינים." 
       },
 
       
@@ -236,13 +237,13 @@ export const invoiceConfig: ProductPageConfig = {
 export const accountAiConfig: ProductPageConfig = {
   slug: "account-ai",
   metadata: {
-    title: "רואה חשבון AI לעוסק פטור ועוסק מורשה",
-    description: "רואה חשבון AI ראיית חשבון חכמה ב-200 ₪ בלבד. VOW מספקת ליווי עסקי 24/7 עם ידע של 1,000 רואי חשבון - ישירות לעסק הקטן שלכם.",
+    title: "רואה חשבון AI לעסקים קטנים | Uxellent",
+    description: "רואה חשבון AI לעוסק פטור ומורשה עם ליווי חשבונאי חכם, דיווחים מדויקים ותובנות עסקיות 24/7.",
   },
   hero: {
     title: "רואה חשבון AI ליגה אחרת",
-    subtitle: "ה-AI של VOW מזהה הזדמנויות רגולטוריות שאחרים מפספסים. הופך את הניהול הפיננסי שלך למדויק, אוטומטי ורווחי הרבה יותר.",
-    tags: ["הנהלת חשבונות", "דיווח מע״מ", "דוחות שנתיים", "הצהרת הון"],
+    subtitle: "ה-AI של Uxellent מזהה הזדמנויות רגולטוריות שאחרים מפספסים. הופך את הניהול הפיננסי שלך למדויק, אוטומטי ורווחי הרבה יותר.",
+    heroSubheading: "הנהלת חשבונות, דיווח מע״מ, דוחות שנתיים והצהרת הון - מקצועיות של 1,000 רואי חשבון ב־AI אחד",
     ctaLabel: "להשארת פרטים",
     ctaSource: "smart_accounting_ai",
     imageSrc: "/services/d-account-ai.webp",
@@ -272,7 +273,7 @@ export const accountAiConfig: ProductPageConfig = {
     ctaLabel: "להשארת פרטים",
     ctaSource: "smart_accounting_ai",
     items: [
-      { id: "account-ai-about-1", title: "חוסכים אלפי שקלים בשנה", description: "במקום לשלם הון עתק בחודש לרו״ח מסורתי - עם VOW רואה חשבון AI ישאר לך ההרבה יותר כסף בכיס.", icon: "/about/1.svg" },
+      { id: "account-ai-about-1", title: "חוסכים אלפי שקלים בשנה", description: "במקום לשלם הון עתק בחודש לרו״ח מסורתי - עם Uxellent רואה חשבון AI ישאר לך ההרבה יותר כסף בכיס.", icon: "/about/1.svg" },
       { id: "account-ai-about-2", title: "אפס טעויות, אפס פחדים", description: "ה-AI למד את כל הרגולציה של מס הכנסה, ביטוח לאומי ומע״מ + את הידע של למעלה מ-1,000 רואי חשבון. אתה מקבל מקצועיות של רמה אחרת.", icon: "/about/2.svg" },
       { id: "account-ai-about-3", title: "דוחות בזמן, בלי עיכובים", description: "דוחות חודשיים ודוחות שנתיים מוכנים בזמן, בלי המתנה, בלי \"אני עסוק\", בלי משחקים.",  icon: "/about/3.svg" },
     ],

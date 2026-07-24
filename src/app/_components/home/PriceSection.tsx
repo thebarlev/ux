@@ -5,8 +5,11 @@ import { CheckIcon } from "./CheckIcon";
 import { OUR_PRICE } from "./home.constants";
 import { useState } from "react";
 import { Popup, LeadSource } from "./Popup";
+import { inferFunnelPlan, pushEvent } from "@/lib/tracking/events";
+import { H2, H3 } from "@/components/ui/Heading"
 
 export type PricePlan = {
+  id?: string
   title: string
   toppopup?: string
   kicker: string
@@ -24,12 +27,13 @@ export type PriceSectionProps = {
   subtitle?: string
   plans?: readonly PricePlan[]
   variant?: "default" | "seo-ai"
+  locale?: "he" | "en"
 }
 
-export function PriceSection({ id, title, subtitle, plans, variant = "default" }: PriceSectionProps) {
+export function PriceSection({ id, title, subtitle, plans, variant = "default", locale = "he" }: PriceSectionProps) {
   // URL לאפליקציה – עובד בלוקאל ובפרודקשן
   const APP_BASE_URL =
-    process.env.NEXT_PUBLIC_APP_BASE_URL ?? "https://app.vow.co.il";
+    process.env.NEXT_PUBLIC_APP_BASE_URL ?? "https://app.uxellent.com";
 
   // נשאר בקובץ אבל לא בשימוש כרגע (אפשר למחוק לגמרי אם לא צריך)
   const [open, setOpen] = useState(false);
@@ -45,16 +49,25 @@ export function PriceSection({ id, title, subtitle, plans, variant = "default" }
     source: "smart_accounting_ai",
   });
 
+  const trackPackageClick = (plan: PricePlan) => {
+    const planName = inferFunnelPlan(plan.buttonHref ?? plan.id ?? plan.title)
+    if (!planName) return
+
+    pushEvent("package_click", {
+      plan: planName,
+    })
+  }
+
   return (
     <section id={id} aria-label="החבילות שלנו" className="py-[var(--space-section)]">
       <div className="mx-auto max-w-[1440px] px-6 sm:px-8 lg:px-8">
-        <h2 className="text-center text-[44px] font-semibold leading-[52px] text-black sm:text-[56px] sm:leading-[64px] lg:text-[70px] lg:leading-[80px]">
+        <H2 className="text-center">
           {title ?? "חשבונית ירוקה מאובטחת"}
-        </h2>
+        </H2>
 
-        <p className="text-center text-[26px] py-3 text-[#747474] font-semibold leading-[32px]">
+        <H3 className="py-3 text-center">
           {subtitle ?? "תמיכה במודל חשבונית ישראל"}
-        </p>
+        </H3>
 
         <div className="mt-8 grid gap-14 all-package lg:grid-cols-3">
           {(plans ?? OUR_PRICE).map((p) => {
@@ -64,25 +77,27 @@ export function PriceSection({ id, title, subtitle, plans, variant = "default" }
             return (
               <article
                 key={p.title}
+                id={'id' in p ? p.id : undefined}
+                dir={locale === "en" ? "ltr" : undefined}
                 className="rounded-[18px] relative inline-block border border-[color:var(--vow-border)] bg-white p-6 shadow-sm"
               >
                 {p.badge && (
-                  <span className="absolute top-2 left-2 bg-[#5389BB] text-white text-[20px] font-semibold px-4 py-2 rounded-[15px]">
+                  <span className={`absolute top-2 bg-[#5389BB] text-white text-[20px] font-semibold px-4 py-2 rounded-[15px] ${locale === "en" ? "right-2" : "left-2"}`}>
                     {p.badge}
                   </span>
                 )}
 
                 {isSeoAi ? (
                   <>
-                    <h3 className="text-[30px] font-bold leading-[1.15] text-black pt-2">
+                    <H3 className="pt-2 text-bold text-[20px] text-[#5389BB]">
                       {p.title}
-                    </h3>
-                    <div className="mt-2 text-[24px] font-semibold leading-[1.1] text-[#5389BB]">
+                    </H3>
+                    <div className="mt-2 text-[20px] font-semibold leading-none text-[#5389BB]">
                       {p.kicker}
                     </div>
                   </>
                 ) : (
-                  <h3 className="h3-title text-[40px] py-2">{p.title}</h3>
+                  <H3 className="py-2 text-black">{p.title}</H3>
                 )}
 
                 {isSeoAi ? (
@@ -113,6 +128,9 @@ export function PriceSection({ id, title, subtitle, plans, variant = "default" }
                   buttonHref.startsWith("/") ? (
                     <Link
                       href={buttonHref}
+                      onClick={() => {
+                        if (variant === "seo-ai") trackPackageClick(p)
+                      }}
                       className="vow-btn-primary text-[20px] mt-5 mb-8 w-full cursor-pointer justify-center text-center"
                     >
                       {p.buttonLabel}
@@ -122,30 +140,43 @@ export function PriceSection({ id, title, subtitle, plans, variant = "default" }
                       href={buttonHref}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="vow-btn-primary text-[20px] mt-5 mb-8 w-full cursor-pointer justify-center text-center"
+                      onClick={() => {
+                        if (variant === "seo-ai") trackPackageClick(p)
+                      }}
+                      className="vow-btn-primary text-[18px] mt-5 mb-8 w-full cursor-pointer justify-center text-center"
                     >
                       {p.buttonLabel}
                     </a>
                   )
                 ) : (
-                  <button
-                    type="button"
-                    className="vow-btn-primary text-[20px] mt-5 mb-8 w-full cursor-pointer"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      window.location.assign(APP_BASE_URL);
-                    }}
-                  >
+<button
+  type="button"
+  className="vow-btn-primary text-[18px] mt-5 mb-8 w-full cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-transform duration-200"
+  onClick={(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.location.assign(APP_BASE_URL);
+  }}
+>
                     {p.buttonLabel}
                   </button>
                 )}
 
                 <div className="mb-5 h-px w-full bg-[color:var(--vow-border)]" />
 
-                <ul className="mt-4 space-y-0 text-left text-[18px] font-normal leading-[30px] text-black sm:text-[20px] sm:leading-[56px]">
+                <ul
+                  className={`mt-4 space-y-0 text-[18px] font-normal leading-[30px] text-black sm:text-[18px] sm:leading-[56px] ${
+                    locale === "en"
+                      ? "text-left [&_li]:!text-left [&_li]:![direction:ltr]"
+                      : ""
+                  }`}
+                  dir={locale === "en" ? "ltr" : undefined}
+                >
                   {p.bullets.map((b, idx) => (
-                    <li key={`${p.title}-${idx}`} className="flex items-center gap-1 text-[20px]">
+                    <li
+                      key={`${p.title}-${idx}`}
+                      className={`flex items-center gap-1 text-[17px] ${locale === "en" ? "flex-row justify-start" : ""}`}
+                    >
                       <CheckIcon className="shrink-0" />
                       <span>{b}</span>
                     </li>

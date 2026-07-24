@@ -23,12 +23,14 @@ const font = "'Segoe UI','Arial Hebrew',Arial,sans-serif"
 
 const Box = ({
   children,
+  dir = "rtl",
   style = {},
 }: {
   children: React.ReactNode
+  dir?: "ltr" | "rtl"
   style?: React.CSSProperties
 }) => (
-  <div style={{ fontFamily: font, direction: "rtl", margin: "28px 0 36px", ...style }}>
+  <div style={{ fontFamily: font, direction: dir, margin: "28px 0 36px", ...style }}>
     {children}
   </div>
 )
@@ -36,7 +38,7 @@ const Box = ({
 /* ══════════════════════════════════════════════
    1) FirstStepsTimeline
    ══════════════════════════════════════════════ */
-const FIRST_STEPS = [
+const FIRST_STEPS_HE = [
   {
     n: "01",
     title: "פותחים חשבון בכלי חינמי",
@@ -79,15 +81,59 @@ const FIRST_STEPS = [
   },
 ] as const
 
-export function FirstStepsTimeline() {
+const FIRST_STEPS_EN = [
+  {
+    n: "01",
+    title: "Open a free account",
+    body: "Easiest to start: Make.com (formerly Integromat). For something even simpler - Zapier.",
+    tag: "5 min",
+    tagColor: c.greenSoft,
+    tagText: c.green,
+  },
+  {
+    n: "02",
+    title: "Watch a 10-minute video",
+    body: 'Search YouTube: "first automation in Make" or "n8n for beginners". Goal: understand what a basic flow looks like, not learn everything.',
+    tag: "10 min",
+    tagColor: c.blueSoft,
+    tagText: c.blue,
+  },
+  {
+    n: "03",
+    title: "Pick one recurring task",
+    body: "Take 3 tasks you do over and over. Write on paper: trigger (what starts it) → actions (what happens next).",
+    tag: "10 min",
+    tagColor: c.amberSoft,
+    tagText: c.amber,
+  },
+  {
+    n: "04",
+    title: "Build your first automation",
+    body: "In Make: choose Webhook as trigger → connect to form → add Google Sheets → Add Row. Run a test and see it update in real time.",
+    tag: "30 min",
+    tagColor: c.purpleSoft,
+    tagText: c.purple,
+  },
+  {
+    n: "05",
+    title: "Iterate and improve",
+    body: "That's part of it. Start small: 2–3 steps only. Most tools offer ready templates and help you find where the chain breaks.",
+    tag: "Ongoing",
+    tagColor: c.greenSoft,
+    tagText: c.green,
+  },
+] as const
+
+export function FirstStepsTimeline({ locale = "he" }: { locale?: "he" | "en" }) {
+  const steps = locale === "en" ? FIRST_STEPS_EN : FIRST_STEPS_HE
   const [done, setDone] = useState<number[]>([])
   const toggle = (i: number) =>
     setDone((p) => (p.includes(i) ? p.filter((x) => x !== i) : [...p, i]))
 
   return (
-    <Box>
+    <Box dir={locale === "en" ? "ltr" : "rtl"}>
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        {FIRST_STEPS.map((step, i) => {
+        {steps.map((step, i) => {
           const isDone = done.includes(i)
           return (
             <div
@@ -180,7 +226,7 @@ type ToolRow = {
   example: string
 }
 
-const TOOLS: readonly ToolRow[] = [
+const TOOLS_HE: readonly ToolRow[] = [
   {
     name: "Make.com",
     level: { label: "מתחיל", bg: "#dcfce7", color: "#15803d" },
@@ -204,6 +250,30 @@ const TOOLS: readonly ToolRow[] = [
   },
 ] as const
 
+const TOOLS_EN: readonly ToolRow[] = [
+  {
+    name: "Make.com",
+    level: { label: "Beginner", bg: "#dcfce7", color: "#15803d" },
+    free: "Generous",
+    when: "When you want flexibility + serious workflows",
+    example: "Lead → Sheets → Email",
+  },
+  {
+    name: "Zapier",
+    level: { label: "Very easy", bg: "#dbeafe", color: "#1e40af" },
+    free: "More limited",
+    when: "When you want the simplest and fastest",
+    example: "Form → Email",
+  },
+  {
+    name: "n8n",
+    level: { label: "Intermediate", bg: "#fef9c3", color: "#854d0e" },
+    free: "Free (self-host)",
+    when: "When you want full control and larger workflows",
+    example: "Webhook → DB",
+  },
+] as const
+
 const LevelTag = ({ label, bg, color }: { label: string; bg: string; color: string }) => (
   <span
     style={{
@@ -220,19 +290,24 @@ const LevelTag = ({ label, bg, color }: { label: string; bg: string; color: stri
   </span>
 )
 
-export function ToolsComparisonTable() {
+const TABLE_HEADERS_HE = ["כלי", "רמה", "חינמי?", "מתי מתאים", "דוגמה"] as const
+const TABLE_HEADERS_EN = ["Tool", "Level", "Free?", "When to use", "Example"] as const
+
+export function ToolsComparisonTable({ locale = "he" }: { locale?: "he" | "en" }) {
+  const tools = locale === "en" ? TOOLS_EN : TOOLS_HE
+  const headers = locale === "en" ? TABLE_HEADERS_EN : TABLE_HEADERS_HE
   return (
-    <Box>
+    <Box dir={locale === "en" ? "ltr" : "rtl"}>
       <div style={{ border: `1px solid ${c.border}`, borderRadius: radius, overflow: "hidden" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13.5px" }}>
           <thead>
             <tr style={{ background: "#18181b", color: "#fff" }}>
-              {["כלי", "רמה", "חינמי?", "מתי מתאים", "דוגמה"].map((h) => (
+              {headers.map((h) => (
                 <th
                   key={h}
                   style={{
                     padding: "11px 16px",
-                    textAlign: "right",
+                    textAlign: locale === "en" ? "left" : "right",
                     fontWeight: "600",
                     fontSize: "12px",
                     letterSpacing: "0.04em",
@@ -244,7 +319,7 @@ export function ToolsComparisonTable() {
             </tr>
           </thead>
           <tbody>
-            {TOOLS.map((t, i) => (
+            {tools.map((t, i) => (
               <tr
                 key={t.name}
                 style={{
@@ -282,7 +357,7 @@ export function ToolsComparisonTable() {
 /* ══════════════════════════════════════════════
    3) PracticalExamplesGrid
    ══════════════════════════════════════════════ */
-const EXAMPLES = [
+const EXAMPLES_HE = [
   { icon: "🎯", title: "לידים", flow: ["טופס באתר", "שורה בSheets", "מייל ברוך הבא", "ליד במערכת"], color: c.blueSoft, border: "#bfdbfe" },
   { icon: "💳", title: "תשלומים", flow: ["Webhook מסליקה", "חשבונית אוטומטית", "שמירה לארכיון", "התראה"], color: c.greenSoft, border: "#bbf7d0" },
   { icon: "📄", title: "מסמכים", flow: ["יצירת מסמך", "יצוא PDF", "שליחה במייל", "גיבוי"], color: c.amberSoft, border: "#fde68a" },
@@ -290,13 +365,26 @@ const EXAMPLES = [
   { icon: "🛎️", title: "תמיכה", flow: ["טופס תמיכה", "פתיחת טיקט", "הודעה לצוות", "Slack / Telegram"], color: "#fff1f2", border: "#fecdd3" },
 ] as const
 
+const EXAMPLES_EN = [
+  { icon: "🎯", title: "Leads", flow: ["Website form", "Row in Sheets", "Welcome email", "Lead in CRM"], color: c.blueSoft, border: "#bfdbfe" },
+  { icon: "💳", title: "Payments", flow: ["Webhook from gateway", "Auto invoice", "Archive", "Notification"], color: c.greenSoft, border: "#bbf7d0" },
+  { icon: "📄", title: "Documents", flow: ["Create doc", "Export PDF", "Send email", "Backup"], color: c.amberSoft, border: "#fde68a" },
+  { icon: "📣", title: "Marketing", flow: ["New user", "Segment assignment", "Email sequence", "Reminder"], color: c.purpleSoft, border: "#ddd6fe" },
+  { icon: "🛎️", title: "Support", flow: ["Support form", "Open ticket", "Notify team", "Slack / Telegram"], color: "#fff1f2", border: "#fecdd3" },
+] as const
+
+const RESULT_TEXT_HE = "התוצאה שאתה מרגיש מהר: פחות עבודה ידנית, פחות טעויות, ויותר זמן לדברים שבאמת מקדמים את העסק."
+const RESULT_TEXT_EN = "What you feel quickly: less manual work, fewer errors, and more time for what actually moves the business forward."
+
 const Arrow = () => <span style={{ color: c.muted, fontSize: "12px", flexShrink: 0, padding: "0 2px" }}>›</span>
 
-export function PracticalExamplesGrid() {
+export function PracticalExamplesGrid({ locale = "he" }: { locale?: "he" | "en" }) {
+  const examples = locale === "en" ? EXAMPLES_EN : EXAMPLES_HE
+  const resultText = locale === "en" ? RESULT_TEXT_EN : RESULT_TEXT_HE
   return (
-    <Box>
+    <Box dir={locale === "en" ? "ltr" : "rtl"}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "12px" }}>
-        {EXAMPLES.map((ex) => (
+        {examples.map((ex) => (
           <div
             key={ex.title}
             style={{
@@ -345,7 +433,7 @@ export function PracticalExamplesGrid() {
           lineHeight: "1.7",
         }}
       >
-        התוצאה שאתה מרגיש מהר: פחות עבודה ידנית, פחות טעויות, ויותר זמן לדברים שבאמת מקדמים את העסק.
+        {resultText}
       </div>
     </Box>
   )

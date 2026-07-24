@@ -72,7 +72,7 @@ export default function NotFoundPage() {
               <p className="mt-5 text-pretty text-[18px] font-semibold leading-[34px] text-[color:var(--vow-muted)] sm:text-[20px] sm:leading-[36px]">
                 יכול להיות שלחצתם על קישור ישן, או שהדף החליט לצאת להפסקת קפה בלי להודיע.
                 <br className="hidden sm:block" />
-                בכל מקרה — אנחנו כאן כדי להחזיר אתכם למסלול.
+                בכל מקרה - אנחנו כאן כדי להחזיר אתכם למסלול.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
@@ -80,10 +80,10 @@ export default function NotFoundPage() {
                   חזרה לעמוד הבית
                 </Link>
                 <a
-                  href="https://app.vow.co.il"
+                  href="https://app.uxellent.com"
                   className="vow-btn-primary w-full justify-center sm:w-auto"
                 >
-                  להצטרפות לחשבונית דיגיטלית מאובטחת — שנה חינם
+                  להצטרפות לחשבונית דיגיטלית מאובטחת - שנה חינם
                 </a>
               </div>
 
@@ -92,7 +92,7 @@ export default function NotFoundPage() {
                   טיפ קטן:
                 </p>
                 <p className="mt-2 text-[16px] leading-[28px] text-black/80">
-                  אם הגעתם לכאן מתוך האתר — כנראה מצאנו באג. זה בדיוק סוג הדברים שאנחנו מתקנים מהר.
+                  אם הגעתם לכאן מתוך האתר - כנראה מצאנו באג. זה בדיוק סוג הדברים שאנחנו מתקנים מהר.
                 </p>
                 <div className="mt-4">
                   <Link href="/contact" className="underline font-semibold text-black hover:text-[#5389BB] transition-colors">

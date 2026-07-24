@@ -22,19 +22,26 @@ export function TrackingProvider() {
     if (lastPushedKeyRef.current === routeKey) return
     lastPushedKeyRef.current = routeKey
 
-    const ctx = inferPageContext(pathname)
-    const attribution = getAttribution()
+    const push = () => {
+      const ctx = inferPageContext(pathname)
+      const attribution = getAttribution()
+      pushDataLayer("vow_page_view", {
+        ...ctx,
+        ...attribution,
+        source: attribution.utm_source,
+        medium: attribution.utm_medium,
+        campaign: attribution.utm_campaign,
+        term: attribution.utm_term,
+        content: attribution.utm_content,
+        referrer: typeof document !== "undefined" ? document.referrer : "",
+      })
+    }
 
-    pushDataLayer("vow_page_view", {
-      ...ctx,
-      ...attribution,
-      source: attribution.utm_source,
-      medium: attribution.utm_medium,
-      campaign: attribution.utm_campaign,
-      term: attribution.utm_term,
-      content: attribution.utm_content,
-      referrer: typeof document !== "undefined" ? document.referrer : "",
-    })
+    if (typeof requestIdleCallback !== "undefined") {
+      requestIdleCallback(push, { timeout: 1500 })
+    } else {
+      setTimeout(push, 100)
+    }
   }, [pathname, routeKey])
 
   return null

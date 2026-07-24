@@ -1,11 +1,19 @@
+"use client"
+
+import { usePathname } from "next/navigation"
+
 export function WhatsAppButton() {
-    return (
-      <a
-        href="https://wa.me/972545215193"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="צור קשר בוואטסאפ"
-        className="fixed bottom-6 left-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-110"
+  const pathname = usePathname()
+  const isEn = pathname?.startsWith("/en")
+  const positionClass = isEn ? "right-6" : "left-6"
+
+  return (
+    <a
+      href="https://wa.me/972545215193"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={isEn ? "Contact via WhatsApp" : "צור קשר בוואטסאפ"}
+      className={`fixed bottom-6 ${positionClass} z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-110`}
         style={{ backgroundColor: "#25D366" }}
       >
         <svg

@@ -22,3 +22,17 @@ export const BLOG_SORTS: ReadonlyArray<{ value: BlogSort; label: string }> = [
   { value: "oldest", label: "הכי ישן" },
 ]
 
+export const BLOG_CATEGORIES_EN: ReadonlyArray<{ value: BlogCategory; label: string }> = [
+  { value: "all", label: "All" },
+  { value: "web_development", label: "Web development" },
+  { value: "automation", label: "Automation" },
+  { value: "marketing", label: "Marketing" },
+  { value: "ai_accountant", label: "AI Accountant" },
+  { value: "other", label: "Other" },
+]
+
+export const BLOG_SORTS_EN: ReadonlyArray<{ value: BlogSort; label: string }> = [
+  { value: "newest", label: "Newest" },
+  { value: "oldest", label: "Oldest" },
+]
+

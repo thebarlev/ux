@@ -18,5 +18,12 @@ export const POPUP_OVERRIDES_BY_PATH: Record<string, PopupOverride> = {
     iconVariant: "develop-ai",
     pagePathOverride: "/develop-ai",
   },
+  "/en/develop-ai": {
+    title: "AI-Powered Custom Development",
+    description: "We spec, design and build internal systems tailored to your business.",
+    iconVariant: "develop-ai",
+    pagePathOverride: "/en/develop-ai",
+  },
 }
+
 
