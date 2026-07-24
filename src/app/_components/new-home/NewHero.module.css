@@ -290,6 +290,42 @@
   position: relative;
   width: min(560px, 100%);
 }
+/* Inner wrapper that carries the desktop fit-scale (set per theme by
+   useFitScale). Kept separate from .mockEnter so it never fights the enter
+   animation. --fit is 1 unless the mock is taller than the fixed stage box. */
+.fit {
+  position: relative;
+  width: 100%;
+  transform: scale(var(--fit, 1));
+  transform-origin: center center;
+}
+.stageEnd .fit {
+  /* auditor / mioshy sit low near the dots — scale from the bottom so they stay
+     anchored there rather than drifting up. */
+  transform-origin: center bottom;
+}
+/* Hidden measurer: one copy of every theme, all animation frozen, used only to
+   read the tallest mock (useTallestMock). Never painted, never interactive. */
+.measurer {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  pointer-events: none;
+  overflow: hidden;
+}
+.measurer * {
+  animation: none !important;
+  transition: none !important;
+}
+/* Desktop: the stage is a fixed box, so all four themes yield the exact same
+   ~770px hero height with no jump on switch. Taller mocks are scaled to fit. */
+@media (min-width: 901px) {
+  .stage,
+  .stageEnd {
+    min-height: 496px;
+    height: 496px;
+  }
+}
 .board {
   position: relative;
   width: 100%;
@@ -1321,9 +1357,18 @@
   .h1 {
     max-width: 100%;
   }
-  .stage {
-    min-height: 0;
-    padding-bottom: 38px;
+  .stage,
+  .stageEnd {
+    /* uniform height across all four themes = the tallest, measured at this
+       width (useTallestMock). No hardcoded number; 700px is only a pre-measure
+       fallback. Centred so shorter themes sit in the middle of the reserved box.
+       No bottom padding here: it would push the tallest theme past the measured
+       min-height and reintroduce a small jump. Spacing before the dots comes from
+       .themes' own top padding. */
+    min-height: var(--nh-mstage, 700px);
+    height: auto;
+    align-items: center;
+    padding-bottom: 0;
   }
   .board {
     width: 100%;
