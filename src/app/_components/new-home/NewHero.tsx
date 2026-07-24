@@ -58,6 +58,85 @@ function useReducedMotion() {
   return reduced
 }
 
+// Above this width the hero is a fixed-height box (see .stage in the CSS); below
+// it the stage grows to the tallest theme instead.
+const DESKTOP_MQ = "(min-width: 901px)"
+// The desktop stage box is 496px; a theme taller than this is scaled down to fit
+// so all four share one hero height. 486 leaves a hair of margin inside the box.
+const FIT_BUDGET = 486
+
+/**
+ * Desktop only: scales the active theme's mock down when it is taller than the
+ * fixed stage box, so no theme overflows and the hero height never changes.
+ * offsetHeight is the layout height — unaffected by the very transform we apply —
+ * so the measurement never feeds back on itself. On mobile nothing is scaled.
+ */
+function useFitScale(active: number) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(1)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const compute = () => {
+      if (!window.matchMedia(DESKTOP_MQ).matches) return setScale(1)
+      const h = el.offsetHeight
+      setScale(h > FIT_BUDGET ? Math.round((FIT_BUDGET / h) * 1000) / 1000 : 1)
+    }
+    compute()
+    const ro = new ResizeObserver(compute)
+    ro.observe(el)
+    window.addEventListener("resize", compute)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener("resize", compute)
+    }
+  }, [active])
+  return { ref, scale }
+}
+
+/**
+ * Measures every theme (in a hidden, animation-frozen copy) and reports the
+ * tallest, so the mobile stage can reserve exactly that height — uniform across
+ * all four with no hardcoded number and no page jump. The frozen animations keep
+ * the extra copies cheap. Re-runs on resize because wrap-driven heights shift.
+ */
+function useTallestMock() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [tallest, setTallest] = useState(0)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const compute = () => {
+      let max = 0
+      for (const child of Array.from(el.children)) {
+        max = Math.max(max, (child as HTMLElement).offsetHeight)
+      }
+      setTallest(Math.ceil(max))
+    }
+    compute()
+    const ro = new ResizeObserver(compute)
+    ro.observe(el)
+    window.addEventListener("resize", compute)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener("resize", compute)
+    }
+  }, [])
+  return { ref, tallest }
+}
+
+/** The mock for a theme, shared by the live stage and the hidden measurer. */
+function ThemeMock({ theme }: { theme: HeroTheme }) {
+  return (
+    <>
+      {theme.kind === "invoices" && <InvoiceMock theme={theme} />}
+      {theme.kind === "auditor" && <ScanMock theme={theme} />}
+      {theme.kind === "mioshy" && <WheelMock theme={theme} />}
+      {theme.kind === "meatbeat" && <MeatBeatMock theme={theme} />}
+    </>
+  )
+}
+
 export function NewHero() {
   const [active, setActive] = useState(0)
   const [cycle, setCycle] = useState(0)
@@ -82,6 +161,9 @@ export function NewHero() {
 
   const theme = HERO_THEMES[active]
   const stageLow = theme.kind === "auditor" || theme.kind === "mioshy"
+
+  const fit = useFitScale(active)
+  const measurer = useTallestMock()
 
   return (
     <section
@@ -120,17 +202,37 @@ export function NewHero() {
 
           <div
             className={`${styles.stage} ${stageLow ? styles.stageEnd : ""}`}
+            style={
+              measurer.tallest
+                ? { ["--nh-mstage" as string]: `${measurer.tallest}px` }
+                : undefined
+            }
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             onTouchStart={() => setPaused(true)}
           >
             {/* keyed by active → each theme entry re-mounts and replays its intro */}
             <div key={active} className={styles.mockEnter}>
-              <FloatTag text={theme.floatTag} kind={theme.kind} />
-              {theme.kind === "invoices" && <InvoiceMock theme={theme} />}
-              {theme.kind === "auditor" && <ScanMock theme={theme} />}
-              {theme.kind === "mioshy" && <WheelMock theme={theme} />}
-              {theme.kind === "meatbeat" && <MeatBeatMock theme={theme} />}
+              {/* inner wrapper carries the desktop fit-scale, so it never fights
+                  the enter animation that lives on .mockEnter */}
+              <div
+                ref={fit.ref}
+                className={styles.fit}
+                style={{ ["--fit" as string]: fit.scale }}
+              >
+                <FloatTag text={theme.floatTag} kind={theme.kind} />
+                <ThemeMock theme={theme} />
+              </div>
+            </div>
+
+            {/* Hidden, animation-frozen copy of every theme — measured to size the
+                mobile stage to the tallest (see useTallestMock). Not shown. */}
+            <div aria-hidden className={styles.measurer} ref={measurer.ref}>
+              {HERO_THEMES.map((t) => (
+                <div key={t.id} className={styles.mockEnter}>
+                  <ThemeMock theme={t} />
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -521,6 +623,19 @@ function WheelMock({ theme }: { theme: MioshyTheme }) {
 
   return (
     <div className={styles.mio}>
+      {/* Popup is a sibling of the wheel (not inside it): on desktop it is
+          absolutely positioned to overlap the wheel top; on mobile it sits in
+          flow above the wheel so the mock is tall enough to fill the stage. The
+          wheel wrapper stays wheel-only, keeping its ring and pointer circular. */}
+      <div className={styles.mioPop}>
+        <div className={styles.mioPopHead}>
+          <span className={styles.mioBadge}>✦ {popup.badge}</span>
+          <span className={styles.mioLive}>{popup.live}</span>
+        </div>
+        <p className={styles.mioQ}>{popup.question}</p>
+        <div className={styles.mioCta}>⟳ {popup.cta}</div>
+        <p className={styles.mioNote}>{popup.note}</p>
+      </div>
       <div className={styles.mioWrap}>
         <span aria-hidden="true" className={styles.mioRing} />
         <span aria-hidden="true" className={styles.mioPointer}>
@@ -563,16 +678,6 @@ function WheelMock({ theme }: { theme: MioshyTheme }) {
             </svg>
           </div>
           <span aria-hidden="true" className={styles.mioGloss} />
-        </div>
-
-        <div className={styles.mioPop}>
-          <div className={styles.mioPopHead}>
-            <span className={styles.mioBadge}>✦ {popup.badge}</span>
-            <span className={styles.mioLive}>{popup.live}</span>
-          </div>
-          <p className={styles.mioQ}>{popup.question}</p>
-          <div className={styles.mioCta}>⟳ {popup.cta}</div>
-          <p className={styles.mioNote}>{popup.note}</p>
         </div>
       </div>
     </div>
