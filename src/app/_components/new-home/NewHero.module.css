@@ -1065,7 +1065,7 @@
 }
 .mioPop {
   position: absolute;
-  top: -4%;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%);
   width: 88%;
@@ -1225,6 +1225,41 @@
   font-weight: 700;
   color: #fff;
   letter-spacing: 0.2px;
+}
+
+/* MeatBeat is the tallest mock (its board stacks a line chart AND bars, plus a
+   download row). Trim the chart and tighten spacing — content unchanged — so on
+   desktop it barely needs down-scaling (sits close in size to the other themes),
+   and on mobile it is a more compact card that lowers the shared stage height. */
+.mbBoard.board {
+  padding: 15px 16px 12px;
+}
+.mbBoard .kpi {
+  padding: 9px 13px;
+}
+.mbBoard .chart {
+  margin-top: 8px;
+  padding: 10px 12px 6px;
+}
+.mbBoard .mbChartH {
+  margin-bottom: 3px;
+}
+.mbBoard .chart svg {
+  height: 60px;
+}
+.mbBoard .bars {
+  height: 52px;
+  margin-top: 8px;
+}
+.mbBoard .feed {
+  margin-top: 8px;
+  gap: 6px;
+}
+.mbBoard .row {
+  padding: 7px 12px;
+}
+.mbBoard .mbDl {
+  margin-top: 8px;
 }
 
 /* -------------------------------------------------------- theme carousel --- */
@@ -1468,11 +1503,28 @@
     max-width: 88%;
   }
   .mioWrap {
-    width: min(300px, 86%);
-    margin-top: 30px;
+    /* Fill the mobile width — the wheel was capped small (300px), leaving the
+       stage empty. A circle is width-bound, so this is as big as it goes on a
+       phone; the popup now stacks above (in flow) to make up the height. */
+    width: min(390px, 98%);
+    margin-top: 8px;
   }
   .mioPop {
-    max-width: 280px;
+    /* Stacked above the wheel (in flow), not overlapping it — adds real height
+       so Mioshy fills the shared stage. The rise animation is dropped here
+       because its transform carries the desktop-only translateX(-50%). */
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: min(340px, 92%);
+    max-width: none;
+    margin: 0 auto 12px;
+    /* Both !important: the reduced-motion block sets the popup to opacity:0 and
+       relies on its rise animation to reveal it — but that animation is dropped
+       here, so the popup must be shown outright. */
+    animation: none !important;
+    opacity: 1 !important;
   }
   .mioQ {
     font-size: 17px;

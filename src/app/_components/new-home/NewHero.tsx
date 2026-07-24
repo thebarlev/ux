@@ -623,6 +623,19 @@ function WheelMock({ theme }: { theme: MioshyTheme }) {
 
   return (
     <div className={styles.mio}>
+      {/* Popup is a sibling of the wheel (not inside it): on desktop it is
+          absolutely positioned to overlap the wheel top; on mobile it sits in
+          flow above the wheel so the mock is tall enough to fill the stage. The
+          wheel wrapper stays wheel-only, keeping its ring and pointer circular. */}
+      <div className={styles.mioPop}>
+        <div className={styles.mioPopHead}>
+          <span className={styles.mioBadge}>✦ {popup.badge}</span>
+          <span className={styles.mioLive}>{popup.live}</span>
+        </div>
+        <p className={styles.mioQ}>{popup.question}</p>
+        <div className={styles.mioCta}>⟳ {popup.cta}</div>
+        <p className={styles.mioNote}>{popup.note}</p>
+      </div>
       <div className={styles.mioWrap}>
         <span aria-hidden="true" className={styles.mioRing} />
         <span aria-hidden="true" className={styles.mioPointer}>
@@ -665,16 +678,6 @@ function WheelMock({ theme }: { theme: MioshyTheme }) {
             </svg>
           </div>
           <span aria-hidden="true" className={styles.mioGloss} />
-        </div>
-
-        <div className={styles.mioPop}>
-          <div className={styles.mioPopHead}>
-            <span className={styles.mioBadge}>✦ {popup.badge}</span>
-            <span className={styles.mioLive}>{popup.live}</span>
-          </div>
-          <p className={styles.mioQ}>{popup.question}</p>
-          <div className={styles.mioCta}>⟳ {popup.cta}</div>
-          <p className={styles.mioNote}>{popup.note}</p>
         </div>
       </div>
     </div>
