@@ -3,6 +3,14 @@ import Link from "next/link"
 import Image from "next/image"
 import { useState, useRef, useEffect } from "react"
 
+/** Auditor "website scan" entry point, with campaign tracking. */
+const AUDITOR_SCAN_URL =
+  "https://app.uxellent.com/auditor?link_id=a_basic&utm_source=website&utm_medium=cta&utm_campaign=auditor_pricing"
+
+/** Auth pages go straight to the app root, not the auditor sub-paths. */
+const APP_LOGIN_URL = "https://app.uxellent.com/login"
+const APP_REGISTER_URL = "https://app.uxellent.com/register"
+
 const HEADER_DEV_DROPDOWN = [
   { href: "/develop", label: "פיתוח אתרים בסביבת AI" },
   { href: "/develop-ai", label: "פיתוח תוכנה בסביבת AI" },
@@ -17,6 +25,7 @@ const MOBILE_MENU_SECTIONS = [
   {
     title: "שירותים של Uxellent",
     items: [
+      { href: AUDITOR_SCAN_URL, label: "סריקת אתר" },
       { href: "/idea-to-product", label: "מאיפיון למוצר" },
       { href: "/design", label: "עיצוב ומיתוג" },
       { href: "/develop", label: "פיתוח אתרים מבוסס AI" },
@@ -110,8 +119,8 @@ export function SiteHeader() {
             <div className="hidden sm:flex items-center bg-white/90 backdrop-blur-sm shadow-[0_1px_6px_rgba(0,0,0,0.06)] border border-gray-100 rounded-2xl px-3 py-2 gap-2">
               <span className="text-right w-[85px] shrink-0 leading-[1.3]" style={{ fontSize: "16px" }}>קידום עסקים בגוגל וב-AI</span>
               <div className="flex items-center gap-2 shrink-0">
-                <a href="https://app.uxellent.com/auditor/register" className="vow-btn-primary !h-[44px]">הצטרפות</a>
-                <a href="https://app.uxellent.com/auditor/login" className="vow-btn-secondary !h-[44px]">התחברות</a>
+                <a href={APP_REGISTER_URL} className="vow-btn-primary !h-[44px]">הצטרפות</a>
+                <a href={APP_LOGIN_URL} className="vow-btn-secondary !h-[44px]">התחברות</a>
               </div>
             </div>
 
@@ -131,6 +140,9 @@ export function SiteHeader() {
                     </svg>
                   )}
                 </button>
+              </li>
+              <li className="hidden md:flex md:items-center">
+                <a href={AUDITOR_SCAN_URL} className="link-standard text-[18px] leading-normal px-3 py-2 hover:text-[#5389BB] transition-colors no-underline hover:underline">סריקת אתר</a>
               </li>
               <li className="hidden md:flex md:items-center">
                 <Link href="/idea-to-product" className="link-standard text-[18px] leading-normal px-3 py-2 hover:text-[#5389BB] transition-colors no-underline hover:underline">מאיפיון למוצר</Link>
@@ -216,8 +228,8 @@ export function SiteHeader() {
           <div className="px-4 py-4 bg-white border-t border-gray-100 shadow-[0_-2px_12px_rgba(0,0,0,0.08)]">
             <div className="flex flex-row-reverse items-center justify-end gap-2 bg-white/90 backdrop-blur-sm px-3 py-2">
               <div className="flex items-center gap-2">
-                <a href="https://app.uxellent.com/auditor/register" className="vow-btn-primary !h-[44px]">הצטרפות</a>
-                <a href="https://app.uxellent.com/auditor/login" className="vow-btn-secondary !h-[44px]">התחברות</a>
+                <a href={APP_REGISTER_URL} className="vow-btn-primary !h-[44px]">הצטרפות</a>
+                <a href={APP_LOGIN_URL} className="vow-btn-secondary !h-[44px]">התחברות</a>
               </div>
               <span className="text-right max-w-[120px]" style={{ fontSize: "16px", lineHeight: "20px" }}>
                 קידום עסקים בגוגל וב-AI

@@ -52,6 +52,12 @@ export const HERO: HeroCopy = {
  * header can be styled for the dark hero with a light logo.
  */
 export const NH_NAV_LINKS = [
+  {
+    // Auditor "website scan" entry point on the app, with campaign tracking.
+    // External absolute URL — Next's <Link> renders it as a plain anchor.
+    href: "https://app.uxellent.com/auditor?link_id=a_basic&utm_source=website&utm_medium=cta&utm_campaign=auditor_pricing",
+    label: "סריקת אתר",
+  },
   { href: "/idea-to-product", label: "מאיפיון למוצר" },
   { href: "/design", label: "עיצוב ומיתוג" },
   {
@@ -72,8 +78,9 @@ export const NH_NAV_LINKS = [
 ] as const
 
 export const NH_HEADER_CTA = {
-  register: { href: "https://app.uxellent.com/auditor/register", label: "הצטרפות" },
-  login: { href: "https://app.uxellent.com/auditor/login", label: "התחברות" },
+  // Auth pages go straight to the app root, not the auditor sub-paths.
+  register: { href: "https://app.uxellent.com/register", label: "הצטרפות" },
+  login: { href: "https://app.uxellent.com/login", label: "התחברות" },
 } as const
 
 /* ----------------------------------------------------- hero theme carousel - */
