@@ -1431,8 +1431,14 @@
     padding: 7px 14px;
     font-size: 13.5px;
   }
+  /* Mobile hero copy: larger, white (not muted) so it reads on the dark hero. */
+  .h1 {
+    font-size: 40px;
+  }
   .sub {
-    font-size: 16.5px;
+    font-size: 20px;
+    color: #fff;
+    line-height: 1.5;
   }
   .ctas {
     gap: 10px;
