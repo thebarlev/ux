@@ -1,0 +1,251 @@
+/*
+ * "הצלחות מוכחות": the proven-results band that closes the page, directly
+ * above the footer. Scoped module, so nothing leaks to globals or to the live
+ * pages, and no existing section is touched.
+ */
+
+.section {
+  --cream: #f4f1ec;
+  --ink: #191512;
+  --muted: #6e655c;
+  --accent: #5389bb;
+  --chip-bg: #eef2f7;
+  --chip-fg: #54617a;
+  --card-line: rgba(25, 21, 18, 0.08);
+
+  background: var(--cream);
+  color: var(--ink);
+  padding: 88px 0 96px;
+
+  /* Matches the rest of the site: iOS must not inflate this copy in landscape. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.wrap {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+/* ------------------------------------------------------------------ head -- */
+
+.head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 44px;
+}
+
+.kicker {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+/* globals.css centres a bare h2 but also sets its own sizing; both are declared
+   here so the head block owns its typography at every breakpoint. */
+.heading {
+  text-align: center;
+  margin: 0;
+  font-size: clamp(28px, 3.2vw, 40px);
+  line-height: 1.18;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.heading em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.subtitle {
+  margin-top: 16px;
+  font-size: clamp(16.5px, 1.3vw, 19px);
+  line-height: 1.7;
+  color: #4a423a;
+}
+
+/* ----------------------------------------------------------------- cards -- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  align-items: stretch;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--card-line);
+  border-radius: 20px;
+  padding: 28px 26px 26px;
+  box-shadow: 0 10px 30px rgba(25, 21, 18, 0.06);
+}
+
+.name {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.subName {
+  margin-top: 5px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #8b8279;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 16px;
+}
+
+.chip {
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--chip-fg);
+  background: var(--chip-bg);
+  border-radius: 999px;
+  padding: 7px 12px;
+  white-space: nowrap;
+}
+
+/* Pushes the figure block to the bottom of the card so all three line up even
+   when the chip rows wrap to different heights. */
+.spacer {
+  flex: 1 1 auto;
+  min-height: 22px;
+}
+
+.rule {
+  height: 1px;
+  background: var(--card-line);
+  margin-bottom: 18px;
+}
+
+/* --------------------------------------------------------------- figures -- */
+
+/*
+ * The headline figure sits against the card's right edge. Mioshy and Anker read
+ * left to right (+27%), Max reads right to left (עשרות%), so each direction gets
+ * the flex alignment that lands on the right in that direction.
+ */
+.metric {
+  display: flex;
+  align-items: baseline;
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.metricLtr {
+  justify-content: flex-end;
+}
+
+.metricRtl {
+  justify-content: flex-start;
+}
+
+.num {
+  background: linear-gradient(180deg, #5e97c9 0%, #2e567f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* Keeps descender-free digits from being clipped by the text-clip box. */
+  padding-bottom: 0.06em;
+}
+
+/* The + and % signs: smaller than the figure, brand blue, and lifted a touch
+   off the baseline so they read as annotations rather than as digits. */
+.sign {
+  font-size: 0.62em;
+  font-weight: 800;
+  color: var(--accent);
+  transform: translateY(-0.45em);
+}
+
+/* Small breathing gap between the sign and the figure it qualifies. */
+.signLead {
+  margin-inline-end: 0.06em;
+}
+
+/* Max's word is set at the same size as the other cards' digits, so the three
+   figures share one baseline and the label and summary below them line up. */
+.metricWord {
+  font-size: 1em;
+}
+
+/* Max's % is the enlarged, higher-lifted one the design calls for. */
+.signBig {
+  font-size: 0.72em;
+  margin-inline-start: 0.08em;
+  transform: translateY(-0.5em);
+}
+
+.label {
+  margin-top: 10px;
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #2f2a25;
+}
+
+.summary {
+  margin-top: 10px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--muted);
+  /* Two lines' worth, so a card whose summary wraps does not push its figure
+     and label out of line with the other two. */
+  min-height: 48px;
+}
+
+/* ------------------------------------------------------------- responsive - */
+
+@media (max-width: 860px) {
+  .section {
+    padding: 56px 0 60px;
+  }
+
+  /* Wide cards on a phone: the section keeps only a slim gutter. */
+  .wrap {
+    padding: 0 16px;
+  }
+
+  .head {
+    margin-bottom: 26px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .card {
+    padding: 24px 20px 22px;
+  }
+
+  .spacer {
+    min-height: 18px;
+  }
+
+  .metric {
+    font-size: 54px;
+  }
+
+  /* One card per row on a phone: nothing to line up, so the summary takes only
+     the height it needs. */
+  .summary {
+    min-height: 0;
+  }
+}

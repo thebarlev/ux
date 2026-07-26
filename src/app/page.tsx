@@ -4,6 +4,7 @@ import type { Metadata } from "next"
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { FounderBand } from "@/app/_components/new-home/FounderBand"
 import { NewHero } from "@/app/_components/new-home/NewHero"
+import { ProvenResultsSection } from "@/app/_components/new-home/ProvenResultsSection"
 import { ServiceSection } from "@/app/_components/new-home/ServiceSection"
 import { StorySection } from "@/app/_components/new-home/StorySection"
 import { TestimonialsPager } from "@/app/_components/new-home/TestimonialsPager"
@@ -83,8 +84,9 @@ export default function HomePage() {
         <StorySection />
         <FounderBand />
         <TestimonialsPager />
-        {/* Last section on the page: its WhatsApp call to action closes it. */}
         <ServiceSection />
+        {/* Last section before the footer: the client numbers close the page. */}
+        <ProvenResultsSection />
       </main>
       {/* Ink tone so the footer continues the dark service section above it.
           Inner pages keep the default black footer. */}
