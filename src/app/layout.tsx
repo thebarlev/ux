@@ -56,14 +56,6 @@ export default function RootLayout({
       <body className="antialiased font-sans">
         <JsonLd data={ORGANIZATION_SCHEMA} />
         <JsonLd data={WEBSITE_SCHEMA} />
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-WNGC226Q"
-            height={0}
-            width={0}
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
 
         <LanguageBar />
         {children}
