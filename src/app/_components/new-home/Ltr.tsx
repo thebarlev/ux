@@ -33,3 +33,21 @@ export function withLtr(text: string, token: string): ReactNode {
     </>
   )
 }
+
+/**
+ * Keeps a short mixed-script run together across a line break. Unlike withLtr
+ * this leaves direction alone — "ה-AI" is Hebrew plus Latin, and forcing LTR
+ * would render it "AI-ה".
+ */
+export function withNowrap(text: string, token: string): ReactNode {
+  const at = text.indexOf(token)
+  if (at === -1) return text
+
+  return (
+    <>
+      {text.slice(0, at)}
+      <span style={{ whiteSpace: "nowrap" }}>{token}</span>
+      {text.slice(at + token.length)}
+    </>
+  )
+}

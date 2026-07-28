@@ -17,6 +17,7 @@ import {
   type MeatBeatTheme,
   type MioshyTheme,
 } from "./newHome.constants"
+import { withNowrap } from "./Ltr"
 import styles from "./NewHero.module.css"
 
 /**
@@ -187,7 +188,7 @@ export function NewHero() {
                 </span>
               ))}
             </h1>
-            <p className={styles.sub}>{HERO.subtitle}</p>
+            <p className={styles.sub}>{withNowrap(HERO.subtitle, "ה-AI")}</p>
             <div className={styles.ctas}>
               <a
                 href={HERO.ctaPrimary.href}

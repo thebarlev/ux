@@ -234,12 +234,17 @@
   letter-spacing: -0.02em;
   color: var(--txt);
 }
+/*
+ * Same measure as the headline: no cap of its own, so it starts and ends on
+ * the same edges as the h1 and settles into two or three lines instead of a
+ * narrow four-line column. The old 44ch also used the unit the brief rules
+ * out for Hebrew. Colour matches the headline exactly.
+ */
 .sub {
   margin-top: 20px;
   font-size: 19px;
   line-height: 1.65;
-  color: var(--muted);
-  max-width: 44ch;
+  color: var(--txt);
 }
 .ctas {
   display: flex;
@@ -1436,13 +1441,13 @@
     padding: 7px 14px;
     font-size: 13.5px;
   }
-  /* Mobile hero copy: larger, white (not muted) so it reads on the dark hero. */
+  /* Mobile hero copy: larger so it reads on the dark hero. Colour is inherited
+     from the base rule, which already matches the headline. */
   .h1 {
     font-size: 40px;
   }
   .sub {
     font-size: 20px;
-    color: #fff;
     line-height: 1.5;
   }
   .ctas {
