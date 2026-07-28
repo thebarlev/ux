@@ -137,9 +137,22 @@ export function SiteFooter({ tone = "black" }: { tone?: SiteFooterTone } = {}) {
             </a>
           </div>
 
-          <p className="text-[13px] text-white/50 text-right sm:text-left">
-            © {new Date().getFullYear()} Uxellent
-          </p>
+          {/* The only language switch on the site now that the top bar is gone.
+              Hebrew leads, so this stays deliberately quiet. */}
+          <div className="flex items-center gap-4 text-[13px] text-white/50">
+            <Link
+              href="/en"
+              hrefLang="en"
+              lang="en"
+              dir="ltr"
+              className="hover:text-white transition-colors"
+            >
+              English
+            </Link>
+            <p className="text-right sm:text-left">
+              © {new Date().getFullYear()} Uxellent
+            </p>
+          </div>
 
         </div>
       </div>

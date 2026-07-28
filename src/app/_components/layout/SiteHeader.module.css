@@ -33,12 +33,23 @@
   --h-pill-ghost-line: rgba(10, 15, 26, 0.3);
   position: sticky;
   top: 0;
-  /* White, not the cream the package shipped with: inner pages move to a white
-     surface, so a cream bar would read as a seam against the page below. */
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  /*
+   * Fully opaque. At 92% the page showed through as a smudge once inner pages
+   * turned white, and the blur had nothing left to separate — so both are gone
+   * and the bottom border alone carries the edge.
+   */
+  background: #ffffff;
   border-bottom: 1px solid var(--h-line);
+}
+
+/*
+ * Breathing room between the header and whatever the page opens with. Rendered
+ * by SiteHeader itself for light routes, so the rule lives in one place instead
+ * of being sprinkled across every inner page and shared template. Normal flow,
+ * not padding on the sticky header, so it does not travel with it on scroll.
+ */
+.heroGap {
+  height: 70px;
 }
 
 .inner {

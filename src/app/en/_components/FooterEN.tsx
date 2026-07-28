@@ -119,9 +119,20 @@ export function FooterEN() {
             </a>
           </div>
 
-          <p className="text-[13px] text-white/50 text-left">
-            © {new Date().getFullYear()} Uxellent
-          </p>
+          {/* Counterpart to the English link in the Hebrew footer — the top
+              language bar is gone, so this is the only way back. */}
+          <div className="flex items-center gap-4 text-[13px] text-white/50">
+            <Link
+              href="/"
+              hrefLang="he"
+              lang="he"
+              dir="rtl"
+              className="hover:text-white transition-colors"
+            >
+              עברית
+            </Link>
+            <p className="text-left">© {new Date().getFullYear()} Uxellent</p>
+          </div>
         </div>
 
       </div>

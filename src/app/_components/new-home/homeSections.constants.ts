@@ -242,8 +242,9 @@ export const LEAD_INTEREST_FALLBACK = "לא צוין"
  * handled by the honeypot, not by hiding the key.
  */
 export const WEB3FORMS_ACCESS_KEY = "6748f44f-e449-4e3d-8529-a3c69c25f4c8"
-export const INVOICE_LP_URL = "[INVOICE_LP_URL]"
-export const GOOGLE_REVIEWS_URL = "[GOOGLE_REVIEWS_URL]"
+/** The live invoicing page. A dedicated LP at /invoices is planned to replace it. */
+export const INVOICE_LP_URL = "/invoice"
+export const GOOGLE_REVIEWS_URL = "https://share.google/O7QryMswPXvwsNCFh"
 
 /** Resolved: the PDF now lives in the repo under public/downloads. */
 export const STARTUP_KIT_URL = "/downloads/startup-kit.pdf"

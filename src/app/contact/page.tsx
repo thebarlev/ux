@@ -25,7 +25,7 @@ const CONTACT_FAQ = [
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[#FAF9F5]" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <JsonLd data={faqPageSchema(CONTACT_FAQ.map((i) => ({ question: i.question, answer: i.answer })))} />
 
       <main id="main" role="main">
