@@ -11,6 +11,7 @@ These files use `import "server-only"` - importing them in client code will fail
 
 ## Client-safe (safe to import in "use client" components)
 - `lib/tracking/*` - attribution, dataLayer, pageContext, events
+- `lib/analytics/meta-pixel.ts` - Meta Pixel wrapper (needs `NEXT_PUBLIC_META_PIXEL_ID`)
 - `lib/captcha/useRecaptcha.ts` - on-demand reCAPTCHA loader
 - `lib/utils.ts` - cn()
 - `lib/twMerge.ts` - tailwind merge

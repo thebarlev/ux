@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import Script from "next/script";
 import { Assistant } from "next/font/google";
 import { JsonLd, ORGANIZATION_SCHEMA, WEBSITE_SCHEMA } from "@/components/JsonLd";
 import { DeferredScripts } from "@/components/DeferredScripts";
 import { LanguageBar } from "@/app/_components/LanguageBar";
 import { TrackingProvider } from "@/app/_components/tracking/TrackingProvider";
+import { MetaPixelRouteTracker } from "@/app/_components/tracking/MetaPixelRouteTracker";
+import { getPixelId, metaPixelBootstrapScript } from "@/lib/analytics/meta-pixel";
 import { Suspense } from "react";
 import "./globals.css";
 
@@ -45,11 +48,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const metaPixelId = getPixelId();
+
   return (
     <html lang="he" dir="rtl" className={assistant.variable}>
       <head>
         <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        {/* Pixel now loads on arrival rather than on idle, so warm the connection. */}
+        <link rel="preconnect" href="https://connect.facebook.net" />
         <link rel="dns-prefetch" href="https://www.google.com" />
         <link rel="dns-prefetch" href="https://us-assets.i.posthog.com" />
       </head>
@@ -65,10 +71,26 @@ export default function RootLayout({
           />
         </noscript>
 
+        {/*
+          Meta Pixel bootstrap. Split out of DeferredScripts on purpose: that
+          loader waits for interaction or idle, so a visitor who landed from an
+          ad and bounced within a few seconds never fired PageView. Campaign
+          landing pages need the arrival recorded, so this runs afterInteractive
+          and the heavier tags (Ads, PostHog) stay deferred.
+        */}
+        {metaPixelId ? (
+          <Script id="meta-pixel" strategy="afterInteractive">
+            {metaPixelBootstrapScript(metaPixelId)}
+          </Script>
+        ) : null}
+
         <LanguageBar />
         {children}
         <Suspense fallback={null}>
           <TrackingProvider />
+        </Suspense>
+        <Suspense fallback={null}>
+          <MetaPixelRouteTracker />
         </Suspense>
         <LeadPopupHost />
         <WhatsAppButton />
