@@ -200,7 +200,11 @@ export const INTEREST_OPTIONS = [
 
 export const LEAD_FORM_MESSAGES = {
   missingFields: "חסר שם או טלפון, שנייה לפני ששולחים.",
-  missingEmailForKit: "כדי שנשלח לך את התוכנית גם למייל, צריך למלא אימייל.",
+  // Softened per brief §5א: the original wording promised an emailed copy,
+  // which nothing sends — there is no Autoresponder on the free plan. The
+  // field is still required, so the reason is stated without the promise.
+  // Revert to the promise only if a Web3Forms Pro Autoresponder is set up.
+  missingEmailForKit: "כדי להמשיך להורדה, צריך למלא אימייל.",
   successKit: "קיבלנו! מעבירים אותך לעמוד ההורדה...",
   success: "קיבלנו! חוזרים אליך תוך יום עסקים.",
   networkError: "משהו השתבש בשליחה. אפשר להתקשר: 054-5215193",
