@@ -65,13 +65,16 @@ export default function StartupKitThanksPage() {
             להורדת תוכנית העבודה (PDF)
           </a>
           <p className={styles.dlNote}>
+            {/* support@, not the itzik@ address the reference spec used: the
+                lead routing moved off Zoho, so that mailbox is no longer the
+                one being watched. */}
             משהו לא עבד? כתבו לנו ל-
-            <a href="mailto:itzik@uxellent.com">
+            <a href="mailto:support@uxellent.com">
               <span
                 dir="ltr"
                 style={{ unicodeBidi: "isolate", whiteSpace: "nowrap" }}
               >
-                itzik@uxellent.com
+                support@uxellent.com
               </span>
             </a>{" "}
             ונשלח לכם את הקובץ ישירות.
