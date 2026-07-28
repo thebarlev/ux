@@ -4,6 +4,8 @@ import Link from "next/link"
 import { Frank_Ruhl_Libre } from "next/font/google"
 import { useCallback, useEffect, useRef, useState } from "react"
 
+import { trackLead } from "@/lib/analytics/meta-pixel"
+
 import {
   CHART_BAR_HEIGHTS,
   CHART_MONTHS,
@@ -191,6 +193,7 @@ export function NewHero() {
                 className={`${styles.btn} ${styles.btnPrimary}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackLead({ source: "whatsapp", contentName: "hero_cta" })}
               >
                 {HERO.ctaPrimary.label}
               </a>

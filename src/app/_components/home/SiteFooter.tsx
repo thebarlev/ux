@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Facebook, Twitter, Instagram, Mail } from "lucide-react"
+import { ContactLeadLink } from "@/app/_components/tracking/ContactLeadLink"
 import { growthGuideFooterLinksHe } from "@/lib/growth-guides/topics"
 
 const LEGAL_LINKS = [
@@ -76,16 +77,27 @@ export function SiteFooter({ tone = "black" }: { tone?: SiteFooterTone } = {}) {
                 {col.title}
               </p>
               <ul className="space-y-2">
-                {col.items.map((item) => (
-                  <li key={`${item.href}-${item.label}`}>
-                    <Link
-                      href={item.href}
-                      className="leading-[1.2] text-[18px] font-normal text-white hover:text-white underline-offset-4 hover:underline transition-colors "
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
+                {col.items.map((item) => {
+                  const linkClass =
+                    "leading-[1.2] text-[18px] font-normal text-white hover:text-white underline-offset-4 hover:underline transition-colors "
+                  return (
+                    <li key={`${item.href}-${item.label}`}>
+                      {item.href === "/contact" ? (
+                        <ContactLeadLink
+                          href={item.href}
+                          contentName="footer_nav"
+                          className={linkClass}
+                        >
+                          {item.label}
+                        </ContactLeadLink>
+                      ) : (
+                        <Link href={item.href} className={linkClass}>
+                          {item.label}
+                        </Link>
+                      )}
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           ))}
@@ -107,13 +119,14 @@ export function SiteFooter({ tone = "black" }: { tone?: SiteFooterTone } = {}) {
         <div className="mt-10 border-t border-white/10 pt-6 flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
 
           <div className="flex items-center gap-5 justify-end sm:justify-start">
-            <Link
+            <ContactLeadLink
               href="/contact"
+              contentName="footer_mail_icon"
               className="text-white/60 hover:text-white transition-colors"
               aria-label="יצירת קשר"
             >
               <Mail className="h-4 w-4" />
-            </Link>
+            </ContactLeadLink>
             <a
               href="https://www.instagram.com/vow.for.success?igsh=MTRiMmRieTNlejlsNQ%3D%3D&utm_source=qr"
               className="text-white/60 hover:text-white transition-colors"

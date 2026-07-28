@@ -2,6 +2,8 @@
 
 import { usePathname } from "next/navigation"
 
+import { trackLead } from "@/lib/analytics/meta-pixel"
+
 export function WhatsAppButton() {
   const pathname = usePathname()
   const isEn = pathname?.startsWith("/en")
@@ -13,6 +15,7 @@ export function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={isEn ? "Contact via WhatsApp" : "צור קשר בוואטסאפ"}
+      onClick={() => trackLead({ source: "whatsapp", contentName: "floating_button" })}
       className={`fixed bottom-6 ${positionClass} z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-110`}
         style={{ backgroundColor: "#25D366" }}
       >

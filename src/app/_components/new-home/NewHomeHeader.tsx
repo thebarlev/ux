@@ -4,6 +4,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
 
+import { trackLead } from "@/lib/analytics/meta-pixel"
+
 import { NH_HEADER_CTA, NH_NAV_LINKS } from "./newHome.constants"
 import styles from "./NewHero.module.css"
 
@@ -47,7 +49,16 @@ export function NewHomeHeader() {
               </div>
             </div>
           ) : (
-            <Link key={item.href} href={item.href} className={styles.nhNavLink}>
+            <Link
+              key={item.href}
+              href={item.href}
+              className={styles.nhNavLink}
+              onClick={
+                item.href === "/contact"
+                  ? () => trackLead({ source: "contact", contentName: "header_nav" })
+                  : undefined
+              }
+            >
               {item.label}
             </Link>
           ),
@@ -104,7 +115,12 @@ export function NewHomeHeader() {
                 key={item.href}
                 href={item.href}
                 className={styles.nhMobileLink}
-                onClick={() => setMenuOpen(false)}
+                onClick={() => {
+                  if (item.href === "/contact") {
+                    trackLead({ source: "contact", contentName: "header_nav_mobile" })
+                  }
+                  setMenuOpen(false)
+                }}
               >
                 {item.label}
               </Link>

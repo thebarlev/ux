@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 
+import { trackLead } from "@/lib/analytics/meta-pixel"
+
 import { WHATSAPP_FIELD, WHATSAPP_NUMBER } from "./newHome.constants"
 import styles from "./StorySection.module.css"
 
@@ -17,6 +19,11 @@ export function WhatsAppField() {
     const text = message.trim()
     const base = `https://wa.me/${WHATSAPP_NUMBER}`
     const href = text ? `${base}?text=${encodeURIComponent(text)}` : base
+
+    // Before window.open, so the event is on the wire whether the visitor
+    // pressed the send button or hit Enter — both routes come through here.
+    trackLead({ source: "whatsapp", contentName: "story_whatsapp_field" })
+
     window.open(href, "_blank", "noopener,noreferrer")
   }
 

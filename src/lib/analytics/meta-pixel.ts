@@ -113,3 +113,25 @@ export function trackCustom(event: string, params?: FbqParams, eventId?: string)
 export function trackPageView(): void {
   callFbq(["track", "PageView"])
 }
+
+/** Where a lead came from. Campaigns optimise on the Lead event itself. */
+export type LeadSource = "contact" | "whatsapp"
+
+/**
+ * Someone reached out — the campaigns are lead-optimised, so this is the event
+ * Meta learns from.
+ *
+ * Fired on the click, before the browser leaves for WhatsApp. fbq sends the
+ * event as a fire-and-forget image request, so it is already on the wire by the
+ * time the new tab opens; there is nothing to await, and awaiting would only
+ * delay the thing the visitor actually asked for.
+ *
+ * `contentName` identifies which control was used, so several buttons pointing
+ * at the same destination stay distinguishable in reporting.
+ */
+export function trackLead(params: { source: LeadSource; contentName?: string }): void {
+  track("Lead", {
+    source: params.source,
+    ...(params.contentName ? { content_name: params.contentName } : {}),
+  })
+}
