@@ -4,23 +4,26 @@ import Image from "next/image"
 import { useRef, useState } from "react"
 
 import {
+  AUDITOR_APP_URL,
   AUDITOR_PANE,
   DAN_REVIEW,
   GOOGLE_REVIEWS_URL,
   INITIATIVE_TABS,
   INITIATIVES_HEAD,
+  INVOICE_APP_URL,
   INVOICE_PANE,
-  INVOICE_LP_URL,
 } from "./homeSections.constants"
 import styles from "./InitiativesSection.module.css"
 import { withLtr } from "./Ltr"
-import { dispatchPreselect } from "./preselectInterest"
 
 /**
  * #products — the two in-house initiatives, on the same tab pattern as
  * ServicesSection but on the dark band. Tab 01 (the Auditor scan) is the
  * default, because the Facebook scan campaign now points at #products rather
  * than the retired #scan anchor (brief §1).
+ *
+ * Both CTAs hand off to the app rather than the lead form, each carrying its
+ * own utm_campaign, so neither preselects an interest any more.
  *
  * Both panes stay in the DOM; the inactive one is `hidden`.
  */
@@ -113,11 +116,7 @@ export function InitiativesSection() {
                     </div>
                   ))}
                 </div>
-                <a
-                  className={styles.cta}
-                  href="#contact"
-                  onClick={() => dispatchPreselect(AUDITOR_PANE.ctaPreselect)}
-                >
+                <a className={styles.cta} href={AUDITOR_APP_URL}>
                   {AUDITOR_PANE.ctaLabel}
                 </a>
               </div>
@@ -160,7 +159,7 @@ export function InitiativesSection() {
                   </div>
                 ))}
               </div>
-              <a className={styles.cta} href={INVOICE_LP_URL}>
+              <a className={styles.cta} href={INVOICE_APP_URL}>
                 {INVOICE_PANE.ctaLabel}
               </a>
             </div>

@@ -28,7 +28,7 @@ export type ServicePane = {
 
 export const SERVICES_HEAD = {
   kicker: "מה אנחנו עושים",
-  heading: "ארבעה דברים שאנחנו עושים. עד הסוף.",
+  heading: "הופכים רעיון מורכב למוצר חי וכיף לשימוש",
   sub: "צוות אחד קטן ומנוסה שמלווה אותך מהרעיון ועד התוצאה, בלי לתאם בין ארבעה ספקים.",
   tablistLabel: "השירותים שלנו",
   fitLabel: "למי זה מתאים?",
@@ -127,7 +127,6 @@ export const AUDITOR_PANE = {
     },
   ],
   ctaLabel: "להריץ סריקה חינם",
-  ctaPreselect: "אבחון חינם לאתר ולנראות בגוגל וב-AI",
 } as const
 
 /**
@@ -240,8 +239,17 @@ export const LEAD_INTEREST_FALLBACK = "לא צוין"
  * handled by the honeypot, not by hiding the key.
  */
 export const WEB3FORMS_ACCESS_KEY = "6748f44f-e449-4e3d-8529-a3c69c25f4c8"
-/** The live invoicing page. A dedicated LP at /invoices is planned to replace it. */
-export const INVOICE_LP_URL = "/invoice"
+/**
+ * Both initiative CTAs hand off to the app. Campaign parameters follow the same
+ * shape the header nav already uses (utm_source=website&utm_medium=cta), with a
+ * campaign per button so the two entry points stay separable in reporting.
+ */
+const APP_CTA_UTM = "utm_source=website&utm_medium=cta"
+export const AUDITOR_APP_URL =
+  `https://app.uxellent.com/auditor?${APP_CTA_UTM}&utm_campaign=home_initiatives_auditor`
+export const INVOICE_APP_URL =
+  `https://app.uxellent.com/register?${APP_CTA_UTM}&utm_campaign=home_initiatives_invoice`
+
 export const GOOGLE_REVIEWS_URL = "https://share.google/O7QryMswPXvwsNCFh"
 
 /** Resolved: the PDF now lives in the repo under public/downloads. */

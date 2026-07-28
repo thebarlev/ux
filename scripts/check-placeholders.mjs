@@ -15,7 +15,6 @@ const SOURCE = "src/app/_components/new-home/homeSections.constants.ts"
 
 const PLACEHOLDERS = [
   { token: "WEB3FORMS_ACCESS_KEY", note: "Web3Forms access key (brief §3)" },
-  { token: "[INVOICE_LP_URL]", note: "invoicing landing page URL" },
   { token: "[GOOGLE_REVIEWS_URL]", note: "Google Business Profile reviews URL" },
 ]
 

@@ -17,7 +17,8 @@ export const WHATSAPP_NUMBER = "972545215193"
 export type HeroCta = { label: string; href: string }
 export type HeroCopy = {
   chips: readonly string[]
-  title: string
+  /** Rendered one per line; the break is intentional, not a wrap. */
+  titleLines: readonly string[]
   subtitle: string
   ctaPrimary: HeroCta
   ctaSecondary: HeroCta
@@ -34,9 +35,12 @@ export type HeroCopy = {
  */
 export const HERO: HeroCopy = {
   chips: ["מקצה לקצה", "SaaS & AI"],
-  title: "מבססים את הרעיון, בונים את המערכת, מביאים את הלקוחות.",
+  titleLines: [
+    "היום קל לבנות אתר או אפליקציה.",
+    "קשה לבנות מוצר שלקוחות רוצים.",
+  ],
   subtitle:
-    "צוות קטן, חד ומנוסה שבונה מוצרי SaaS ואפליקציות AI מקצה לקצה. מעל 25 שנות ניסיון באפיון, עיצוב, פיתוח ושיווק דיגיטלי.",
+    "אנחנו משרד בוטיק לאפיון, עיצוב ופיתוח. עובדים עם כלי ה-AI המתקדמים ביותר, ומוסיפים את מה שהם לא נותנים. עשרות מערכות ואפליקציות לימדו אותנו את הדבר החשוב באמת: לגרום למוצרים לעבוד.",
   ctaPrimary: {
     label: "בואו נדבר על הפרויקט שלכם",
     href: `https://wa.me/${WHATSAPP_NUMBER}`,

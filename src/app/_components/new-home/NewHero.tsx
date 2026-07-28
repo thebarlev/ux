@@ -180,7 +180,13 @@ export function NewHero() {
                 </span>
               ))}
             </div>
-            <h1 className={styles.h1}>{HERO.title}</h1>
+            <h1 className={styles.h1}>
+              {HERO.titleLines.map((line) => (
+                <span key={line} className={styles.h1Line}>
+                  {line}
+                </span>
+              ))}
+            </h1>
             <p className={styles.sub}>{HERO.subtitle}</p>
             <div className={styles.ctas}>
               <a
