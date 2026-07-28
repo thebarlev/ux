@@ -232,7 +232,12 @@ export const LEAD_INTEREST_FALLBACK = "לא צוין"
  * `PLACEHOLDERS_RESOLVED` is asserted by scripts/check-placeholders.mjs, which
  * runs in the production build only.
  */
-export const WEB3FORMS_ACCESS_KEY = "WEB3FORMS_ACCESS_KEY"
+/**
+ * Public by design: Web3Forms access keys are client-side credentials, and the
+ * brief (§3) confirms exposing this one in the bundle is intended. Spam is
+ * handled by the honeypot, not by hiding the key.
+ */
+export const WEB3FORMS_ACCESS_KEY = "6748f44f-e449-4e3d-8529-a3c69c25f4c8"
 export const INVOICE_LP_URL = "[INVOICE_LP_URL]"
 export const GOOGLE_REVIEWS_URL = "[GOOGLE_REVIEWS_URL]"
 
