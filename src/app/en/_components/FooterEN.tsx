@@ -79,8 +79,8 @@ export function FooterEN() {
               src="/footer-logo.svg"
               alt="Uxellent logo - digital marketing, SEO AI and website development"
               width={80}
-              height={46}
-              className="w-auto h-auto"
+              height={25}
+              className="h-auto w-[150px]"
             />
             <p className="text-[14px] text-white">For success</p>
           </div>
