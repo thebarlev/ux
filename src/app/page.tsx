@@ -3,9 +3,11 @@ import type { Metadata } from "next"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { FounderBand } from "@/app/_components/new-home/FounderBand"
+import { InitiativesSection } from "@/app/_components/new-home/InitiativesSection"
+import { LeadFormSection } from "@/app/_components/new-home/LeadFormSection"
 import { NewHero } from "@/app/_components/new-home/NewHero"
 import { ProvenResultsSection } from "@/app/_components/new-home/ProvenResultsSection"
-import { ServiceSection } from "@/app/_components/new-home/ServiceSection"
+import { ServicesSection } from "@/app/_components/new-home/ServicesSection"
 import { StorySection } from "@/app/_components/new-home/StorySection"
 import { TestimonialsPager } from "@/app/_components/new-home/TestimonialsPager"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
@@ -81,12 +83,18 @@ export default function HomePage() {
         {/* NewHero renders its own dedicated dark header (SiteHeader, which the
             inner pages use, is deliberately left untouched). */}
         <NewHero />
+        {/* What we do, then what we have built: both sit directly under the
+            hero so a visitor meets the offer before the story. ServicesSection
+            replaces the former ServiceSection, which covered the same ground —
+            the old component stays in the repo and in git history. */}
+        <ServicesSection />
+        <InitiativesSection />
         <StorySection />
         <FounderBand />
         <TestimonialsPager />
-        <ServiceSection />
-        {/* Last section before the footer: the client numbers close the page. */}
         <ProvenResultsSection />
+        {/* Last section before the footer: the page closes on the form. */}
+        <LeadFormSection />
       </main>
       {/* Ink tone so the footer continues the dark service section above it.
           Inner pages keep the default black footer. */}

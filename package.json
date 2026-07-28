@@ -17,7 +17,7 @@
   "scripts": {
     "generate:ai-sitemap": "node scripts/generate-ai-sitemap.mjs",
     "dev": "contentlayer2 dev & next dev",
-    "build": "node scripts/generate-ai-sitemap.mjs && rm -rf .contentlayer && contentlayer2 build && next build",
+    "build": "node scripts/check-placeholders.mjs && node scripts/generate-ai-sitemap.mjs && rm -rf .contentlayer && contentlayer2 build && next build",
     "build:analyze": "node scripts/generate-ai-sitemap.mjs && rm -rf .contentlayer && contentlayer2 build && ANALYZE=true next build --webpack",
     "start": "next start",
     "lint": "eslint"

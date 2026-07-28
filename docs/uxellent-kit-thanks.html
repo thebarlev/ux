@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>תוכנית העבודה ליזם · Uxellent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A0F1A; --ink-2:#0D1526; --cream:#F4F1EC;
+    --accent:#5389BB; --muted:#747474; --text-light:#F4F6FA;
+    --radius:16px; --radius-btn:12px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Assistant',-apple-system,'Segoe UI',Arial,sans-serif;
+    background:var(--cream);color:var(--ink);line-height:1.6;
+    min-height:100vh;display:flex;flex-direction:column;
+  }
+  .ltr{direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+  .top{padding:22px 24px}
+  .top a{color:var(--muted);font-size:15px;font-weight:600;text-decoration:none}
+  .top a:hover{color:var(--ink)}
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px 64px}
+  .card{
+    max-width:640px;width:100%;
+    background:#fff;border:1px solid rgba(10,15,26,.07);
+    border-radius:var(--radius);
+    padding:52px 44px;
+    text-align:center;
+  }
+  .check{
+    width:64px;height:64px;border-radius:50%;
+    background:rgba(76,160,106,.12);color:#2E7D4F;
+    display:flex;align-items:center;justify-content:center;
+    font-size:30px;font-weight:800;margin:0 auto 20px;
+  }
+  h1{font-size:clamp(26px,4vw,34px);font-weight:800;line-height:1.3;margin-bottom:10px}
+  .sub{font-size:18px;color:var(--muted);max-width:30rem;margin:0 auto}
+  .dl-btn{
+    display:inline-flex;align-items:center;gap:10px;
+    margin-top:28px;
+    background:var(--ink);color:var(--text-light);
+    padding:17px 34px;border-radius:var(--radius-btn);
+    font-size:18px;font-weight:700;text-decoration:none;
+    transition:background .15s ease;
+  }
+  .dl-btn:hover{background:#16233C}
+  .dl-btn svg{width:20px;height:20px}
+  .dl-note{margin-top:12px;font-size:14.5px;color:var(--muted)}
+  .dl-note a{color:var(--accent);font-weight:700;text-decoration:none}
+  .dl-note a:hover{text-decoration:underline}
+
+  .next{
+    margin-top:40px;padding-top:30px;
+    border-top:1px dashed rgba(83,137,187,.45);
+    text-align:right;
+  }
+  .next h2{
+    font-size:13px;font-weight:800;letter-spacing:.06em;
+    color:var(--accent);margin-bottom:14px;text-align:center;
+  }
+  .step{display:flex;gap:12px;align-items:flex-start;padding:8px 0;font-size:17px;line-height:1.55}
+  .step .n{
+    width:26px;height:26px;flex:0 0 auto;border-radius:50%;
+    border:1.5px solid var(--accent);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:13px;margin-top:2px;
+  }
+  .cta-line{margin-top:22px;text-align:center;font-size:17px}
+  .cta-line a{color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:4px}
+  .cta-line a:hover{color:#2E4E86}
+</style>
+</head>
+<body>
+
+<div class="top"><a href="/">→ חזרה לאתר Uxellent</a></div>
+
+<main>
+  <div class="card">
+    <div class="check">✓</div>
+    <h1>מעולה, תוכנית העבודה שלך מוכנה</h1>
+    <p class="sub">קיבלנו את הפרטים. אפשר להוריד את הקובץ עכשיו ולהתחיל לעבוד.</p>
+
+    <a class="dl-btn" href="[STARTUP_KIT_URL]" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      להורדת תוכנית העבודה (PDF)
+    </a>
+    <p class="dl-note">משהו לא עבד? כתבו לנו ל-<a href="mailto:itzik@uxellent.com"><span class="ltr">itzik@uxellent.com</span></a> ונשלח לכם את הקובץ ישירות.</p>
+
+    <div class="next">
+      <h2>מה עושים עם זה עכשיו</h2>
+      <div class="step"><span class="n ltr">1</span><span>עוברים על צ'קליסט 27 הנקודות ומסמנים רק מה שיש עליו תשובה כתובה.</span></div>
+      <div class="step"><span class="n ltr">2</span><span>ממלאים את תבנית האפיון בעמוד אחד. שדה שנשאר ריק הוא לא כישלון, הוא רשימת המשימות שלכם.</span></div>
+      <div class="step"><span class="n ltr">3</span><span>מילאתם ולא בטוחים? שלחו לנו את התבנית במייל ונחזיר תשובה כתובה, בלי עלות ובלי שיחת מכירה.</span></div>
+    </div>
+
+    <p class="cta-line">רוצים לעבור על זה יחד בשיחה? <a href="/#contact">קבעו שיחת היכרות קצרה</a></p>
+  </div>
+</main>
+
+</body>
+</html>
