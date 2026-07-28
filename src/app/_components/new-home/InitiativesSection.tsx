@@ -120,7 +120,6 @@ export function InitiativesSection() {
                 >
                   {AUDITOR_PANE.ctaLabel}
                 </a>
-                <p className={styles.note}>{AUDITOR_PANE.note}</p>
               </div>
 
               <div className={styles.review}>
@@ -167,8 +166,6 @@ export function InitiativesSection() {
             </div>
           </div>
         </div>
-
-        <p className={styles.soon}>{INITIATIVES_HEAD.soon}</p>
       </div>
     </section>
   )

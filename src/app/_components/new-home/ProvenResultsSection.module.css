@@ -13,7 +13,7 @@
   --chip-fg: #54617a;
   --card-line: rgba(25, 21, 18, 0.08);
 
-  background: var(--cream);
+  background: #fff;
   color: var(--ink);
   padding: 88px 0 96px;
 

@@ -4,10 +4,8 @@
  * SiteHeader — ההאדר המאוחד של uxellent.com. קומפוננטה אחת לכל העמודים.
  *
  * מבוסס מבנה-במבנה על NewHomeHeader הקנוני של עמוד הבית (main), עם שני שינויים:
- * 1. variant אוטומטי לפי המסלול: "dark" בעמוד הבית (רקע כהה אחיד שמתמזג עם ההירו),
- *    "light" בכל שאר העמודים (sticky על משטח קרם עם קו תחתון עדין).
- * 2. הלוגו — הקבצים המתוקנים בלבד: /white.svg על כהה, /black.svg על בהיר
- *    (הקבצים הישנים logo.svg / footer-logo.svg כתובים "UXellet" — לא להשתמש).
+ * 1. מצב אחד לכל האתר: פס כהה דביק בכל המסלולים, כולל עמוד הבית.
+ * 2. הלוגו — /white.svg בלבד (הקובץ הישן logo.svg כתוב "UXellet" — לא להשתמש).
  *
  * הניווט וה-CTA מגיעים אך ורק מ-nav.config.ts — מקור אמת אחד.
  * מיקום: src/app/_components/layout/SiteHeader.tsx (+ SiteHeader.module.css, nav.config.ts לצידו).
@@ -31,20 +29,21 @@ export function SiteHeader() {
   // עמודים בלי האדר גלובלי (קמפיינים, תשלום, עמודי הצלחה, אנגלית בשלב 1).
   if (HEADERLESS_PATTERNS.some((re) => re.test(pathname))) return null
 
-  const dark = pathname === "/"
-  const variant = dark ? styles.dark : styles.light
+  // One dark header for the whole site. The home page is the only route whose
+  // hero already opens dark, so it is also the only one that skips the spacer.
+  const isHome = pathname === "/"
 
   return (
     <>
-      <header className={`${styles.header} ${variant}`} dir="rtl">
+      <header className={`${styles.header} ${styles.dark}`} dir="rtl">
         <div className={styles.inner}>
           <Link href="/" className={styles.logo} aria-label="Uxellent - חזרה לעמוד הבית">
             <Image
-              src={dark ? "/white.svg" : "/black.svg"}
+              src="/white.svg"
               alt="Uxellent"
               width={LOGO.width}
               height={LOGO.height}
-              priority={dark}
+              priority
             />
           </Link>
 
@@ -148,7 +147,7 @@ export function SiteHeader() {
           )}
         </div>
       </header>
-      {!dark && <div className={styles.heroGap} aria-hidden="true" />}
+      {!isHome && <div className={styles.heroGap} aria-hidden="true" />}
     </>
   )
 }

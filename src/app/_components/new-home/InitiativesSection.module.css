@@ -64,7 +64,6 @@
   margin-top: 44px;
   flex-wrap: wrap;
   justify-content: center;
-  border-bottom: 1px solid rgba(244, 246, 250, 0.16);
 }
 
 .tab {
@@ -81,7 +80,6 @@
   font-weight: 700;
   color: rgba(244, 246, 250, 0.6);
   transition: color 0.15s ease, border-color 0.15s ease;
-  margin-bottom: -1px;
 }
 
 .tab .num {
@@ -198,12 +196,6 @@
   margin-top: 3px;
 }
 
-.note {
-  margin-top: 14px;
-  font-size: 15px;
-  color: rgba(244, 246, 250, 0.55);
-}
-
 .cta {
   display: inline-block;
   margin-top: 18px;
@@ -303,12 +295,6 @@
   border-radius: 999px;
   padding: 3px 12px;
   margin-bottom: 12px;
-}
-
-.soon {
-  margin-top: 16px;
-  font-size: 14.5px;
-  color: rgba(244, 246, 250, 0.55);
 }
 
 @media (max-width: 760px) {

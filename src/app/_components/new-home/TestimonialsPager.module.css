@@ -12,7 +12,7 @@
 
   /* Sits on the page's cream, with no card of its own — the dark band above
      already provides the separation a background and top rule used to. */
-  background: #f4f1ec;
+  background: #fff;
   color: var(--ink);
   padding: 84px 0;
 }

@@ -13,7 +13,7 @@
   --line: rgba(25, 21, 18, 0.1);
   --wa: #25a366;
 
-  background: var(--cream);
+  background: #fff;
   color: var(--ink);
   padding: 88px 0;
 }

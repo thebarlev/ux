@@ -1,8 +1,7 @@
 /*
  * SiteHeader.module.css — עיצוב ההאדר המאוחד.
  * הועבר מ-NewHero.module.css (מחלקות nh*) של ההאדר הקנוני, עם שני מצבים:
- * .dark  — עמוד הבית: פס כהה אחיד (--ink) שמתמזג עם ההירו הכהה, סטטי.
- * .light — שאר העמודים: sticky על לבן עם טשטוש וקו תחתון עדין.
+ * מצב אחד: פס כהה (#0A0F1A) דביק בכל המסלולים, כולל עמוד הבית.
  * הצבעים מוגדרים כמשתנים מקומיים כדי לא להיות תלויים ב-scope של ההירו.
  */
 
@@ -19,33 +18,16 @@
   --h-pill-solid-bg: #ffffff;
   --h-pill-solid-txt: #0a0f1a;
   --h-pill-ghost-line: rgba(244, 246, 250, 0.35);
-  position: relative;
-  background: #0a0f1a;
-}
-.header.light {
-  --h-txt: #0a0f1a;
-  --h-muted: #5b6472;
-  --h-line: rgba(10, 15, 26, 0.1);
-  --h-drop-bg: #ffffff;
-  --h-drop-hover: rgba(83, 137, 187, 0.1);
-  --h-pill-solid-bg: #0a0f1a;
-  --h-pill-solid-txt: #f4f6fa;
-  --h-pill-ghost-line: rgba(10, 15, 26, 0.3);
+  /* Sticky on every route now, the home page included. Opaque, so the hero
+     and the white pages below both scroll cleanly underneath it. */
   position: sticky;
   top: 0;
-  /*
-   * Fully opaque. At 92% the page showed through as a smudge once inner pages
-   * turned white, and the blur had nothing left to separate — so both are gone
-   * and the bottom border alone carries the edge.
-   */
-  background: #ffffff;
-  border-bottom: 1px solid var(--h-line);
+  background: #0a0f1a;
 }
-
 /*
  * Breathing room between the header and whatever the page opens with. Rendered
- * by SiteHeader itself for light routes, so the rule lives in one place instead
- * of being sprinkled across every inner page and shared template. Normal flow,
+ * by SiteHeader itself on the inner routes, so the rule lives in one place
+ * instead of being sprinkled across every page and shared template. Normal flow,
  * not padding on the sticky header, so it does not travel with it on scroll.
  */
 .heroGap {

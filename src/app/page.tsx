@@ -78,10 +78,9 @@ export const metadata: Metadata = {
  */
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#F4F1EC]">
+    <div className="min-h-screen bg-white">
       <main id="main" role="main">
-        {/* NewHero renders its own dedicated dark header (SiteHeader, which the
-            inner pages use, is deliberately left untouched). */}
+        {/* The header comes from the root layout now, for every route. */}
         <NewHero />
         {/* What we do, then what we have built: both sit directly under the
             hero so a visitor meets the offer before the story. ServicesSection
