@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { ServiceFaqSection } from "@/app/_components/services/ServiceFaqSection"
 import { JsonLd, faqPageSchema } from "@/components/JsonLd"
 import { PortfolioCtaSection } from "@/app/_components/portfolio/PortfolioCtaSection"
@@ -68,7 +67,6 @@ export default function PortfolioPage() {
       <JsonLd
         data={faqPageSchema(FAQ_ITEMS.map((i) => ({ question: i.question, answer: i.answer })))}
       />
-      <SiteHeader />
 
       <main id="main">
         <PortfolioHero />

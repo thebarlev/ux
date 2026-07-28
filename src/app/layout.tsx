@@ -4,6 +4,7 @@ import { Assistant } from "next/font/google";
 import { JsonLd, ORGANIZATION_SCHEMA, WEBSITE_SCHEMA } from "@/components/JsonLd";
 import { DeferredScripts } from "@/components/DeferredScripts";
 import { LanguageBar } from "@/app/_components/LanguageBar";
+import { SiteHeader } from "@/app/_components/layout/SiteHeader";
 import { TrackingProvider } from "@/app/_components/tracking/TrackingProvider";
 import { Suspense } from "react";
 import "./globals.css";
@@ -57,7 +58,11 @@ export default function RootLayout({
         <JsonLd data={ORGANIZATION_SCHEMA} />
         <JsonLd data={WEBSITE_SCHEMA} />
 
+        {/* LanguageBar stays above the header, keeping the row order inner
+            pages already had. SiteHeader returns null on its own for /lp,
+            /checkout, /thanks and /en, so no route conditions belong here. */}
         <LanguageBar />
+        <SiteHeader />
         {children}
         <Suspense fallback={null}>
           <TrackingProvider />

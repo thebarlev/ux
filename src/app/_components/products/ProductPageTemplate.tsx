@@ -1,5 +1,4 @@
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { LogoRow } from "@/app/_components/home/LogoRow"
 import { JsonLd, faqPageSchema } from "@/components/JsonLd"
 import { PriceSection } from "@/app/_components/home/PriceSection"
@@ -13,7 +12,9 @@ import { ServiceHero } from "@/app/_components/services/ServiceHero"
 import type { ProductPageConfig, ProductSectionType } from "./products.config"
 
 const SECTION_RENDERERS: Record<ProductSectionType, (config: ProductPageConfig) => React.ReactNode> = {
-  SiteHeader: () => <SiteHeader />,
+  // Supplied by the global SiteHeader in the root layout since the header
+  // unification; kept as a no-op so existing page configs stay valid.
+  SiteHeader: () => null,
   ServiceHero: (config) => <ServiceHero {...config.hero} />,
   LogoRow: () => <LogoRow />,
   VisionToExecutionSection: (config) => (

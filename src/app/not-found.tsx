@@ -1,7 +1,6 @@
 import Link from "next/link"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 
 function CuteLostIcon() {
   return (
@@ -54,7 +53,6 @@ function CuteLostIcon() {
 export default function NotFoundPage() {
   return (
     <div className="min-h-screen bg-[#F4F1EC]" dir="rtl">
-      <SiteHeader />
       <main id="main" role="main">
         <section aria-label="404" className="py-[var(--space-section)]">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">

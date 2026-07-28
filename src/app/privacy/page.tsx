@@ -3,7 +3,6 @@ import type { Metadata } from "next"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { LegalTemplate } from "@/app/_components/legal/LegalTemplate"
 import { JsonLd, webPageSchema } from "@/components/JsonLd"
 
@@ -27,7 +26,6 @@ export default function PrivacyPage() {
           dateModified: "2026-02-01",
         })}
       />
-      <SiteHeader />
 
       <main id="main" role="main">
         <LegalTemplate

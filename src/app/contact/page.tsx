@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { ContactForm } from "@/app/_components/contact/ContactForm"
 import { ServiceFaqSection } from "@/app/_components/services/ServiceFaqSection"
 import { JsonLd, faqPageSchema } from "@/components/JsonLd"
@@ -28,7 +27,6 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-[#FAF9F5]" dir="rtl">
       <JsonLd data={faqPageSchema(CONTACT_FAQ.map((i) => ({ question: i.question, answer: i.answer })))} />
-      <SiteHeader />
 
       <main id="main" role="main">
         <div className="mx-auto max-w-[1440px] px-4 py-[var(--space-section)] sm:px-6 lg:px-8">

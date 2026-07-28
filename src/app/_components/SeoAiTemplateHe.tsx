@@ -1,7 +1,6 @@
 import type { ComponentProps, ReactNode } from "react"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { LogoRow } from "@/app/_components/home/LogoRow"
 import type { PricePlan } from "@/app/_components/home/PriceSection"
 import { PriceSection } from "@/app/_components/home/PriceSection"
@@ -63,7 +62,6 @@ export function SeoAiTemplateHe({
 }: SeoAiTemplateHeProps) {
   return (
     <div className="min-h-screen bg-[#F4F1EC]" dir="rtl" data-keyword={dataKeyword}>
-      <SiteHeader />
       <main id="main" role="main" data-keyword={dataKeyword}>
         <ServiceHero
           {...hero}

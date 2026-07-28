@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { LogoRow } from "@/app/_components/home/LogoRow"
 import { PackagesSection } from "@/app/_components/home/PackagesSection"
 import type { PricePlan } from "@/app/_components/home/PriceSection"
@@ -102,7 +101,6 @@ export default function SeoAiServicePage() {
           data={faqPageSchema(faqItems.map((item) => ({ question: item.question, answer: item.answer })))}
         />
       ) : null}
-      <SiteHeader />
       <main id="main" role="main">
         <ServiceHero
           {...seoAiConfig.hero}

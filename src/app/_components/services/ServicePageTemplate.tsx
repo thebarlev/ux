@@ -1,5 +1,4 @@
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { LogoRow } from "@/app/_components/home/LogoRow"
 import { PackagesSection } from "@/app/_components/home/PackagesSection"
 import { VisionToExecutionSection } from "@/app/_components/home/VisionToExecutionSection"
@@ -12,7 +11,9 @@ import { ServiceHero } from "./ServiceHero"
 import type { ServicePageConfig, ServiceSectionType } from "./services.config"
 
 const SECTION_RENDERERS: Record<ServiceSectionType, (config: ServicePageConfig) => React.ReactNode> = {
-  SiteHeader: () => <SiteHeader />,
+  // Supplied by the global SiteHeader in the root layout since the header
+  // unification; kept as a no-op so existing page configs stay valid.
+  SiteHeader: () => null,
   ServiceHero: (config) => <ServiceHero {...config.hero} />,
   LogoRow: () => <LogoRow />,
   VisionToExecutionSection: (config) => (

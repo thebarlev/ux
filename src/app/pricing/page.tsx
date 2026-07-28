@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteHeader } from "@/app/_components/home/SiteHeader";
 import { JsonLd, faqPageSchema } from "@/components/JsonLd";
 import { SiteFooter } from "@/app/_components/home/SiteFooter";
 import { AboutSection } from "@/app/_components/home/AboutSection";
@@ -44,7 +43,6 @@ export default function PricePage() {
   return (
     <div className="min-h-screen bg-[#F4F1EC]" dir="rtl">
       <JsonLd data={faqPageSchema(PRICING_FAQ.map((i) => ({ question: i.question, answer: i.answer })))} />
-      <SiteHeader />
 
       <main id="main" role="main">
         <section className="py-[var(--space-section)]">

@@ -203,3 +203,8 @@
     transition: none;
   }
 }
+
+/* Clears the sticky light header on anchor jumps (INTEGRATION step 6). */
+.section {
+  scroll-margin-top: 84px;
+}

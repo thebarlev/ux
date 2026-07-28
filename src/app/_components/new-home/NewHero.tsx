@@ -17,7 +17,6 @@ import {
   type MeatBeatTheme,
   type MioshyTheme,
 } from "./newHome.constants"
-import { NewHomeHeader } from "./NewHomeHeader"
 import styles from "./NewHero.module.css"
 
 /**
@@ -172,8 +171,6 @@ export function NewHero() {
       aria-label="Uxellent"
     >
       <div className={styles.wrap}>
-        <NewHomeHeader />
-
         <div className={styles.grid}>
           <div className={styles.copy}>
             <div className={styles.chips}>

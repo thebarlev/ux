@@ -3,7 +3,6 @@ import Link from "next/link"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { DoubleHeadingCtaSection } from "@/app/_components/services/DoubleHeadingCtaSection"
 import { ServiceHero } from "@/app/_components/services/ServiceHero"
 import { JsonLd, itemListSchema, webPageSchema } from "@/components/JsonLd"
@@ -51,7 +50,6 @@ export default function GrowthGuidesIndexPageHe() {
           })),
         })}
       />
-      <SiteHeader />
       <main id="main" role="main">
         <ServiceHero
           title="מדריכי צמיחה של Uxellent"
