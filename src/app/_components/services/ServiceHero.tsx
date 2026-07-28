@@ -65,7 +65,7 @@ export function ServiceHero({
 
   const isLtr = dir === "ltr"
   return (
-    <section aria-label={sectionAriaLabel} className="w-full bg-[#F4F1EC]" dir={dir}>
+    <section aria-label={sectionAriaLabel} className="w-full bg-white" dir={dir}>
       <div className="mx-auto max-w-[1440px]">
         <div className={HERO_GRID_CLASS}>
           {/* Text */}

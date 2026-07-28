@@ -44,9 +44,9 @@ export function ServiceAboutSection({
 
   const isLtr = dir === "ltr"
   return (
-    <section aria-label={title} className="py-[var(--space-section)] mobile-margin-top bg-[#F4F1EC]" dir={dir}>
+    <section aria-label={title} className="py-[var(--space-section)] mobile-margin-top bg-white" dir={dir}>
       <div className="mx-auto max-w-[1440px] w-full px-4 sm:px-4 lg:px-4 relative">
-        <div className="relative rounded-[10px] grid bg-white p-1 px-3 main-row gap-4 lg:grid-cols-2">
+        <div className="relative rounded-[10px] grid bg-white border border-black/[0.07] p-1 px-3 main-row gap-4 lg:grid-cols-2">
 
           {/* Card */}
           <div className="relative z-10 min-w-0 max-w-full overflow-hidden flex justify-start items-center w-full">

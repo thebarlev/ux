@@ -53,7 +53,7 @@ export function PackagesSection({ locale = "he" }: { locale?: "he" | "en" }) {
   )
 
   return (
-    <section aria-label={isLtr ? "Our services" : "החבילות שלנו"} className="py-[var(--space-section)]  bg-[#F4F1EC]">
+    <section aria-label={isLtr ? "Our services" : "החבילות שלנו"} className="py-[var(--space-section)]  bg-white">
       <div id="lead-design-development" className="scroll-mt-24" />
       <div className="mx-auto max-w-[1440px] px-6 sm:px-8 lg:px-8">
         <H2 className="pb-0 text-center">
@@ -64,7 +64,7 @@ export function PackagesSection({ locale = "he" }: { locale?: "he" | "en" }) {
            {packages.map((p) => (
     <article
   key={p.title}
-  className="rounded-[10px] bg-white w-[98%] max-w-[386px] mx-auto lg:w-full lg:max-w-[350px] lg:mx-auto p-6 shadow-[0_0_24px_10px_rgba(0,0,0,0.07)] flex flex-col items-stretch"
+  className="rounded-[10px] bg-white border border-black/[0.07] w-[98%] max-w-[386px] mx-auto lg:w-full lg:max-w-[350px] lg:mx-auto p-6 shadow-[0_0_24px_10px_rgba(0,0,0,0.07)] flex flex-col items-stretch"
 >
               <p className={`text-[20px] font-semibold leading-[32px] text-[color:var(--vow-accent)] ${isLtr ? "text-left" : "text-right"}`}>
                  {p.kicker}

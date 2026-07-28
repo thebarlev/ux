@@ -93,7 +93,7 @@ const FAQ_ITEMS = [
 
 export default function MarketingSeoAiPage() {
   return (
-    <div className="min-h-screen bg-[#F4F1EC]" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <main id="main" role="main">
         <ServiceHero
           title="שיווק אורגני SEO / AI"
@@ -110,7 +110,7 @@ export default function MarketingSeoAiPage() {
           <section
             key={section.id}
             aria-label={section.question}
-            className="py-[var(--space-section)] bg-[#F4F1EC]"
+            className="py-[var(--space-section)] bg-white"
             dir="rtl"
           >
             <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">

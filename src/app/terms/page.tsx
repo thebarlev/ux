@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-[#F4F1EC]">
+    <div className="min-h-screen bg-white">
       <JsonLd
         data={webPageSchema({
           name: "תנאי שימוש | Uxellent",
@@ -283,7 +283,7 @@ export default function TermsPage() {
             
             <h3 className="text-[20px] font-semibold mb-3 mt-6">5.1 מחירון השירותים</h3>
             
-            <div className="bg-white p-4 rounded-lg my-4">
+            <div className="bg-white border border-black/[0.07] p-4 rounded-lg my-4">
               <h4 className="font-semibold mb-2">מנוי חודשי:</h4>
               <ul className="list-disc mr-6 space-y-1">
                 <li>עלות: 27 ₪ לחודש</li>
@@ -291,7 +291,7 @@ export default function TermsPage() {
               </ul>
             </div>
 
-            <div className="bg-white p-4 rounded-lg my-4">
+            <div className="bg-white border border-black/[0.07] p-4 rounded-lg my-4">
               <h4 className="font-semibold mb-2">חריגה ממכסת המסמכים:</h4>
               <ul className="list-disc mr-6 space-y-1">
                 <li>כל מסמך נוסף מעבר ל-50: 1 ₪ למסמך</li>
@@ -299,7 +299,7 @@ export default function TermsPage() {
               </ul>
             </div>
 
-            <div className="bg-white p-4 rounded-lg my-4">
+            <div className="bg-white border border-black/[0.07] p-4 rounded-lg my-4">
               <h4 className="font-semibold mb-2">מנוי שנתי:</h4>
               <ul className="list-disc mr-6 space-y-1">
                 <li>עלות: 290 ₪ לשנה (תשלום מראש)</li>
@@ -377,7 +377,7 @@ export default function TermsPage() {
               <p className="mr-8">פחות: דמי ביטול (5% מערך המנוי או 100₪, לפי הנמוך)</p>
             </div>
             
-            <div className="bg-white p-4 rounded-lg my-4">
+            <div className="bg-white border border-black/[0.07] p-4 rounded-lg my-4">
               <p className="font-semibold mb-2">דוגמה:</p>
               <ul className="space-y-1">
                 <li>רכשת מנוי שנתי ב-290₪</li>
@@ -396,7 +396,7 @@ export default function TermsPage() {
               <p className="mr-8">פחות: דמי ביטול (5% מערך החיוב השנתי או 100₪, לפי הנמוך)</p>
             </div>
 
-            <div className="bg-white p-4 rounded-lg my-4">
+            <div className="bg-white border border-black/[0.07] p-4 rounded-lg my-4">
               <p className="font-semibold mb-2">דוגמה:</p>
               <ul className="space-y-1">
                 <li>רכשת מנוי שנתי ב-290₪</li>
@@ -768,7 +768,7 @@ export default function TermsPage() {
             <p className="mb-4">
               יש לך שאלות על תנאי השימוש? רוצה לבטל מנוי או לקבל תמיכה?
             </p>
-            <div className="bg-white p-6 rounded-lg">
+            <div className="bg-white border border-black/[0.07] p-6 rounded-lg">
               <p><strong>דוא"ל:</strong> <a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a></p>
               <p><strong>WhatsApp:</strong> 0545215193</p>
               <p><strong>שם החברה:</strong> Bugo Media Ltd</p>

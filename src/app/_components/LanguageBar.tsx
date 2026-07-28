@@ -26,7 +26,7 @@ export function LanguageBar() {
     <div
       role="navigation"
       aria-label="בחירת שפה"
-      className="flex items-center justify-center gap-2 py-2 text-sm bg-[#F4F1EC] border-b border-black/5"
+      className="flex items-center justify-center gap-2 py-2 text-sm bg-white border-b border-black/5"
       dir="ltr"
     >
       {isEn ? (

@@ -41,7 +41,7 @@ export function DoubleHeadingCtaSection({
 
   const isLtr = dir === "ltr"
   return (
-    <section aria-label={title} className="py-[var(--space-section)] bg-[#F4F1EC]" dir={dir}>
+    <section aria-label={title} className="py-[var(--space-section)] bg-white" dir={dir}>
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
         <div className={isLtr ? "mx-auto w-full max-w-[900px] text-left md:text-center" : "mx-auto w-full max-w-[900px] text-right md:text-center"}>
           <H2 className="pb-2">{title}</H2>

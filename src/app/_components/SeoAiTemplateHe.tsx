@@ -61,7 +61,7 @@ export function SeoAiTemplateHe({
   dataKeyword,
 }: SeoAiTemplateHeProps) {
   return (
-    <div className="min-h-screen bg-[#F4F1EC]" dir="rtl" data-keyword={dataKeyword}>
+    <div className="min-h-screen bg-white" dir="rtl" data-keyword={dataKeyword}>
       <main id="main" role="main" data-keyword={dataKeyword}>
         <ServiceHero
           {...hero}

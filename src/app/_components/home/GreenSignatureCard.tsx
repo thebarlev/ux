@@ -5,7 +5,7 @@ export function LogoRow() {
   return (
     <section
       aria-label="לוגואים"
-      className="bg-[#F4F1EC] py-[var(--space-section)]"
+      className="bg-white py-[var(--space-section)]"
     >
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
         <div className="grid grid-cols-3 gap-x-8 gap-y-6 py-2 sm:grid-cols-3 md:grid-cols-6 md:gap-x-10 md:gap-y-8">

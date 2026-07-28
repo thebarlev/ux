@@ -8,7 +8,7 @@ import { openLeadPopup } from "@/app/_components/home/leadPopupEvent"
 export function PortfolioHero({ locale = "he" }: { locale?: "he" | "en" }) {
   const isEn = locale === "en"
   return (
-    <section aria-label={isEn ? "Portfolio" : "כותרת עמוד פורטפוליו"} className="w-full bg-[#F4F1EC]" dir={isEn ? "ltr" : "rtl"}>
+    <section aria-label={isEn ? "Portfolio" : "כותרת עמוד פורטפוליו"} className="w-full bg-white" dir={isEn ? "ltr" : "rtl"}>
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4 py-[var(--space-section)]">
         <div className="mx-auto max-w-[980px] text-center">
           <h1 className="text-balance text-[44px] font-semibold leading-[1.05] text-black sm:text-[56px] lg:text-[70px]">

@@ -51,7 +51,7 @@ export function SeoAiStatsBar({
   const resolvedTitle = title ?? DEFAULT_HEADINGS[isEn ? "en" : "he"].title
   const resolvedSubtitle = subtitle ?? DEFAULT_HEADINGS[isEn ? "en" : "he"].subtitle
   return (
-    <section aria-label={ariaLabel ?? (isEn ? "SEO AI metrics" : "מדדים על SEO AI")} className="bg-[#F4F1EC]" dir={isEn ? "ltr" : "rtl"}>
+    <section aria-label={ariaLabel ?? (isEn ? "SEO AI metrics" : "מדדים על SEO AI")} className="bg-white" dir={isEn ? "ltr" : "rtl"}>
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
         <div className="rounded-[18px] bg-black px-6 py-10 shadow-lg sm:px-10 sm:py-12">
           <div className="mx-auto mb-10 max-w-[860px] text-center">

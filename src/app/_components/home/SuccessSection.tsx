@@ -3,7 +3,7 @@ import { H2, H3 } from "@/components/ui/Heading"
 export function SuccessSection({ locale = "he" }: { locale?: "he" | "en" }) {
   const isEn = locale === "en"
   return (
-    <section aria-label={isEn ? "Success" : "הצלחה"} className="py-[var(--space-section)] bg-[#F4F1EC]">
+    <section aria-label={isEn ? "Success" : "הצלחה"} className="py-[var(--space-section)] bg-white">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4 ">
         <div className="space-y-3">
           <H2 className={isEn ? "text-left sm:text-center" : "text-right sm:text-center"}>

@@ -34,7 +34,7 @@ export function ServiceFaqSection({ title, items, dir = "rtl" }: ServiceFaqSecti
 
   const isLtr = dir === "ltr"
   return (
-    <section aria-label={title} className="py-[var(--space-section)] bg-[#F4F1EC]" dir={dir}>
+    <section aria-label={title} className="py-[var(--space-section)] bg-white" dir={dir}>
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         <div className={isLtr ? "mx-auto w-full max-w-[777px] px-4 sm:px-0 text-left" : "mx-auto w-full max-w-[777px] px-4 sm:px-0 text-right"}>
           <H2 className="text-balance tracking-[-0.2px]">

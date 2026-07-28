@@ -52,7 +52,7 @@ const CLIENTS = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#F4F1EC]" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <main id="main" role="main">
 
         {/* ════ HERO - ממורכז ════ */}

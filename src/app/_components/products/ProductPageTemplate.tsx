@@ -47,7 +47,7 @@ const SECTION_RENDERERS: Record<ProductSectionType, (config: ProductPageConfig) 
 
 export function ProductPageTemplate({ config }: { config: ProductPageConfig }) {
   return (
-    <div className="min-h-screen bg-[#F4F1EC]" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       {config.faq ? (
         <JsonLd
           data={faqPageSchema(config.faq.items.map((i) => ({ question: i.question, answer: i.answer })))}

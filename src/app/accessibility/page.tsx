@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function AccessibilityPage() {
   return (
-    <div className="min-h-screen bg-[#F4F1EC]">
+    <div className="min-h-screen bg-white">
       <JsonLd
         data={webPageSchema({
           name: "נגישות | Uxellent",

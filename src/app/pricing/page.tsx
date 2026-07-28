@@ -41,7 +41,7 @@ const PRICING_FAQ = [
 
 export default function PricePage() {
   return (
-    <div className="min-h-screen bg-[#F4F1EC]" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <JsonLd data={faqPageSchema(PRICING_FAQ.map((i) => ({ question: i.question, answer: i.answer })))} />
 
       <main id="main" role="main">
