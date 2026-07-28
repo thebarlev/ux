@@ -150,7 +150,7 @@ export function ContactForm({ locale = "he" }: { locale?: "he" | "en" }) {
               id="fullName"
               type="text"
               {...register("fullName")}
-              className="w-full rounded border px-3 py-3 bg-white"
+              className="h-12 w-full rounded border px-3 py-3 bg-white"
               dir={isEn ? "ltr" : "rtl"}
               autoComplete="name"
             />
@@ -168,7 +168,7 @@ export function ContactForm({ locale = "he" }: { locale?: "he" | "en" }) {
                 id="phone"
                 type="tel"
                 {...register("phone")}
-                className="w-full rounded border px-3 py-3 bg-white"
+                className="h-12 w-full rounded border px-3 py-3 bg-white"
                 dir="ltr"
                 autoComplete="tel"
                 inputMode="tel"
@@ -186,7 +186,7 @@ export function ContactForm({ locale = "he" }: { locale?: "he" | "en" }) {
                 id="email"
                 type="email"
                 {...register("email")}
-                className="w-full rounded border px-3 py-3 bg-white"
+                className="h-12 w-full rounded border px-3 py-3 bg-white"
                 dir="ltr"
                 autoComplete="email"
                 inputMode="email"
@@ -205,7 +205,7 @@ export function ContactForm({ locale = "he" }: { locale?: "he" | "en" }) {
               id="subject"
               type="text"
               {...register("subject")}
-              className=" bg-white w-full rounded border px-3 py-3"
+              className="h-12 bg-white w-full rounded border px-3 py-3"
               dir={isEn ? "ltr" : "rtl"}
             />
             {errors.subject && (
@@ -220,7 +220,7 @@ export function ContactForm({ locale = "he" }: { locale?: "he" | "en" }) {
             <select
               id="category"
               {...register("category")}
-              className="w-full rounded border bg-white px-3 py-3"
+              className="h-12 w-full rounded border bg-white px-3 py-3"
               dir={isEn ? "ltr" : "rtl"}
               defaultValue=""
             >

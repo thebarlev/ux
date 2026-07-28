@@ -113,7 +113,7 @@ export const ORGANIZATION_SCHEMA = {
   sameAs: [
     "https://www.linkedin.com/company/vow",
     "https://www.facebook.com/profile.php?id=61587713103366",
-    "https://www.instagram.com/vow.for.success",
+    "https://www.instagram.com/uxellent.il",
     "https://x.com/Vowsuccess",
   ],
   contactPoint: {

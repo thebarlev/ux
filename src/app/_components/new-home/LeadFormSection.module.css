@@ -81,12 +81,24 @@
   width: 100%;
   font-family: inherit;
   font-size: 16px;
+  line-height: 1.25;
   color: var(--ink);
   background: #fbfaf8;
   border: 1px solid rgba(10, 15, 26, 0.14);
   border-radius: 10px;
   padding: 13px 14px;
   transition: border-color 0.15s ease;
+}
+
+/*
+ * A native select resolves to its own intrinsic height, which left the
+ * interest field a couple of pixels shorter than "שם מלא". Pinning the same
+ * height on both makes them identical regardless of the UA default; the
+ * textarea is excluded because it has to keep growing.
+ */
+.field input,
+.field select {
+  height: 48px;
 }
 
 .field input:focus,

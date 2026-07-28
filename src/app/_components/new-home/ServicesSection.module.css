@@ -191,13 +191,14 @@
 
 /* -------------------------------------------------------------- actions --- */
 
+/* Stacked and centred: the CTA leads, the workbook link sits under it. */
 .actions {
   display: flex;
-  gap: 26px;
+  flex-direction: column;
+  gap: 18px;
   justify-content: center;
   align-items: center;
   margin-top: 28px;
-  flex-wrap: wrap;
 }
 
 .cta {

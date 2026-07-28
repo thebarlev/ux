@@ -33,6 +33,14 @@ export function SiteHeader() {
   // hero already opens dark, so it is also the only one that skips the spacer.
   const isHome = pathname === "/"
 
+  /**
+   * Current-page test. External entries (the Auditor scan is an absolute URL)
+   * never match, and a nested route counts as being on its parent's page.
+   */
+  const isCurrent = (href: string) =>
+    !href.startsWith("http") &&
+    (pathname === href || pathname.startsWith(`${href}/`))
+
   return (
     <>
       <header className={`${styles.header} ${styles.dark}`} dir="rtl">
@@ -51,7 +59,15 @@ export function SiteHeader() {
             {NAV_LINKS.map((item) =>
               "children" in item ? (
                 <div key={item.label} className={styles.navGroup}>
-                  <button type="button" className={styles.navLink} aria-haspopup="menu">
+                  <button
+                    type="button"
+                    className={`${styles.navLink} ${
+                      item.children.some((c) => isCurrent(c.href))
+                        ? styles.navLinkCurrent
+                        : ""
+                    }`}
+                    aria-haspopup="menu"
+                  >
                     {item.label}
                     <svg width="13" height="13" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                       <path
@@ -65,14 +81,26 @@ export function SiteHeader() {
                   </button>
                   <div className={styles.dropdown}>
                     {item.children.map((child) => (
-                      <Link key={child.href} href={child.href} className={styles.dropItem}>
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        className={styles.dropItem}
+                        aria-current={isCurrent(child.href) ? "page" : undefined}
+                      >
                         {child.label}
                       </Link>
                     ))}
                   </div>
                 </div>
               ) : (
-                <Link key={item.href} href={item.href} className={styles.navLink}>
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`${styles.navLink} ${
+                    isCurrent(item.href) ? styles.navLinkCurrent : ""
+                  }`}
+                  aria-current={isCurrent(item.href) ? "page" : undefined}
+                >
                   {item.label}
                 </Link>
               ),
@@ -119,6 +147,7 @@ export function SiteHeader() {
                       key={child.href}
                       href={child.href}
                       className={styles.mobileLink}
+                      aria-current={isCurrent(child.href) ? "page" : undefined}
                       onClick={() => setMenuOpen(false)}
                     >
                       {child.label}
@@ -129,6 +158,7 @@ export function SiteHeader() {
                     key={item.href}
                     href={item.href}
                     className={styles.mobileLink}
+                    aria-current={isCurrent(item.href) ? "page" : undefined}
                     onClick={() => setMenuOpen(false)}
                   >
                     {item.label}

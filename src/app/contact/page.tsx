@@ -35,7 +35,15 @@ export default function ContactPage() {
               צור קשר עם Uxellent
             </h1>
             <p className="mt-2 text-[20px] font-semibold leading-[32px] text-[color:var(--vow-muted)]">
-              נשמח לשמוע ממך. מלאו את הפרטים ונחזור תוך שעות ספורות. אפשר גם בוואטסאפ: 054-5215193. ימי א׳–ה׳, 9:00–18:00.
+              נשמח לשמוע ממך. מלאו את הפרטים ונחזור תוך שעות ספורות. אפשר גם בוואטסאפ:{" "}
+              <span dir="ltr" className="whitespace-nowrap [unicode-bidi:isolate]">
+                054-5215193
+              </span>
+              . ימי א׳–ה׳,{" "}
+              <span dir="ltr" className="whitespace-nowrap [unicode-bidi:isolate]">
+                9:00–18:00
+              </span>
+              .
             </p>
 
             <H2 className="mt-10">השאירו פרטים</H2>

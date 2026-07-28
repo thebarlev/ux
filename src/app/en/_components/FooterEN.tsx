@@ -97,9 +97,11 @@ export function FooterEN() {
               <Mail className="h-4 w-4" />
             </EnLink>
             <a
-              href="https://www.instagram.com/vow.for.success?igsh=MTRiMmRieTNlejlsNQ%3D%3D&utm_source=qr"
+              href="https://www.instagram.com/uxellent.il"
               className="text-white/60 hover:text-white transition-colors"
               aria-label="Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Instagram className="h-4 w-4" />
             </a>
@@ -107,6 +109,8 @@ export function FooterEN() {
               href="https://x.com/Vowsuccess"
               className="text-white/60 hover:text-white transition-colors"
               aria-label="Twitter"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Twitter className="h-4 w-4" />
             </a>
@@ -114,6 +118,8 @@ export function FooterEN() {
               href="https://www.facebook.com/profile.php?id=61587713103366"
               className="text-white/60 hover:text-white transition-colors "
               aria-label="Facebook"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Facebook className="h-4 w-4" />
             </a>
