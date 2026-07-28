@@ -3,7 +3,16 @@
 import { useEffect, useRef } from "react"
 
 const GTM_ID = "GTM-WNGC226Q"
-const FB_PIXEL_ID = "4291258411191239"
+
+/**
+ * The Meta Pixel is deliberately not loaded here any more.
+ *
+ * Everything in this file waits for the first interaction or for idle (up to a
+ * 4s timeout), so a visitor who landed from an ad and bounced within a few
+ * seconds never fired PageView — exactly the traffic campaigns are measured on.
+ * The pixel now bootstraps from the root layout; see lib/analytics/meta-pixel.ts.
+ * The heavier tags below stay deferred.
+ */
 
 /** Safe env access - process.env can be undefined in some bundling contexts. */
 const env = typeof process !== "undefined" ? process.env : ({} as NodeJS.ProcessEnv)
@@ -72,14 +81,6 @@ function loadGA() {
   )
 }
 
-function loadFBPixel() {
-  const id = JSON.stringify(FB_PIXEL_ID)
-  injectInline(
-    `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init',${id});fbq('track','PageView');`,
-    "fb-pixel",
-  )
-}
-
 function loadPostHog() {
   if (!POSTHOG_KEY) return
   const assetsHost = POSTHOG_HOST.replace(".i.posthog.com", "-assets.i.posthog.com")
@@ -97,27 +98,21 @@ function loadPostHog() {
   })
 }
 
-/** Phase 1: GTM (orchestrates GA/Ads). Phase 2: FB. Phase 3: PostHog (heaviest, last). */
+/** Phase 1: GTM (orchestrates GA/Ads). Phase 2: PostHog (heaviest, last). */
 function runDeferredLoad() {
   loadGTM()
   loadGA()
 
   if (typeof requestAnimationFrame !== "undefined") {
     requestAnimationFrame(() => {
-      loadFBPixel()
-      requestAnimationFrame(() => {
-        if (typeof requestIdleCallback !== "undefined") {
-          requestIdleCallback(() => loadPostHog(), { timeout: 2000 })
-        } else {
-          setTimeout(loadPostHog, 500)
-        }
-      })
+      if (typeof requestIdleCallback !== "undefined") {
+        requestIdleCallback(() => loadPostHog(), { timeout: 2000 })
+      } else {
+        setTimeout(loadPostHog, 500)
+      }
     })
   } else {
-    setTimeout(() => {
-      loadFBPixel()
-      setTimeout(loadPostHog, 500)
-    }, 0)
+    setTimeout(loadPostHog, 500)
   }
 }
 
