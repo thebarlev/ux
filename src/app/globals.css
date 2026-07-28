@@ -37,8 +37,16 @@
 html,
 body {
   max-width: 100%;
-  background-color: #F4F1EC;
-  overflow-x: hidden;
+  /* Inner pages sit on white. The home page sets its own cream on its wrapper,
+     so it is unaffected; /blog inherits this value rather than declaring one. */
+  background-color: #ffffff;
+  /*
+   * clip, not hidden. `overflow-x: hidden` turns html/body into a scroll
+   * container, which stops `position: sticky` working for their children — it
+   * left the sticky light header scrolling away with the page. `clip` blocks
+   * horizontal overflow just the same without creating that container.
+   */
+  overflow-x: clip;
 }
 
 :root {

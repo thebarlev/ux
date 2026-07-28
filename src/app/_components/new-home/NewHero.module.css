@@ -222,19 +222,29 @@
 }
 .h1 {
   margin: 0;
-  font-size: clamp(30px, 4.6vw, 60px);
-  line-height: 1.14;
+  /*
+   * Scale and width are set so each of the two sentences holds one line across
+   * desktop. The old 18ch cap was tuned for the previous three-line headline
+   * and, per the brief, ch is the wrong unit for Hebrew anyway — the column
+   * itself is the constraint now.
+   */
+  font-size: clamp(28px, 3.4vw, 46px);
+  line-height: 1.16;
   font-weight: 800;
   letter-spacing: -0.02em;
-  max-width: 18ch;
   color: var(--txt);
 }
+/*
+ * Same measure as the headline: no cap of its own, so it starts and ends on
+ * the same edges as the h1 and settles into two or three lines instead of a
+ * narrow four-line column. The old 44ch also used the unit the brief rules
+ * out for Hebrew. Colour matches the headline exactly.
+ */
 .sub {
   margin-top: 20px;
   font-size: 19px;
   line-height: 1.65;
-  color: var(--muted);
-  max-width: 44ch;
+  color: var(--txt);
 }
 .ctas {
   display: flex;
@@ -1431,13 +1441,13 @@
     padding: 7px 14px;
     font-size: 13.5px;
   }
-  /* Mobile hero copy: larger, white (not muted) so it reads on the dark hero. */
+  /* Mobile hero copy: larger so it reads on the dark hero. Colour is inherited
+     from the base rule, which already matches the headline. */
   .h1 {
     font-size: 40px;
   }
   .sub {
     font-size: 20px;
-    color: #fff;
     line-height: 1.5;
   }
   .ctas {
@@ -1754,4 +1764,14 @@
 }
 @keyframes nhPrise {
   to { transform: scaleY(1); }
+}
+
+/*
+ * Each hero sentence is its own block, so the two-line break holds at every
+ * width. On narrow screens a sentence still wraps inside itself; balance keeps
+ * that split even instead of stranding a single word on the second line.
+ */
+.h1Line {
+  display: block;
+  text-wrap: balance;
 }

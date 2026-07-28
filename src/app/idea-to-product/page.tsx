@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { LogoRow } from "@/app/_components/home/LogoRow"
 import { PackagesSection } from "@/app/_components/home/PackagesSection"
 import type { PricePlan } from "@/app/_components/home/PriceSection"
@@ -205,9 +204,8 @@ export default function IdeaToProductPage() {
   const faqItems = IDEA_PRODUCT_FAQ.items
 
   return (
-    <div className="min-h-screen bg-[#F4F1EC]" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <JsonLd data={faqPageSchema(faqItems.map((item) => ({ question: item.question, answer: item.answer })))} />
-      <SiteHeader />
       <main id="main" role="main">
         <ServiceHero
           ariaLabel="יש לך רעיון? נהפוך אותו למוצר דיגיטלי אמיתי"
@@ -326,7 +324,7 @@ export default function IdeaToProductPage() {
           title="עבודות שמחברות בין אפיון, עיצוב ופיתוח"
           subtitle="מבחר אתרים, אפליקציות ומערכות - מהדגמה איך UI/UX, פיתוח ומוצר שלם נראים בפועל אחרי תהליך מסודר."
         />
-        <section aria-label="שירותים משלימים" className="bg-[#F4F1EC] pb-[var(--space-section)]">
+        <section aria-label="שירותים משלימים" className="bg-white pb-[var(--space-section)]">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-[900px] rounded-[10px] border border-[color:var(--vow-border)] bg-white px-6 py-8 text-right sm:px-10">
               <H2 className="text-right">מוצר טוב נולד מהרחבה נכונה - לא רק מקוד</H2>
@@ -360,7 +358,7 @@ export default function IdeaToProductPage() {
           title="מדריכי צמיחה אחרי שהמוצר באוויר"
           description="הרחבה על תנועה, לידים וצמיחה עסקית - משלבים עם מוצר שכבר הוגדר ונבנה נכון."
           dir="rtl"
-          sectionClassName="bg-[#F4F1EC] py-[var(--space-section)]"
+          sectionClassName="bg-white py-[var(--space-section)]"
           containerClassName="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4"
           links={[
             { href: "/growth-guides/how-to-grow-small-business-online", label: "איך לגדול אונליין כעסק קטן" },

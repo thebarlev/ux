@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { ServiceFaqSection } from "@/app/_components/services/ServiceFaqSection"
 import { JsonLd, faqPageSchema } from "@/components/JsonLd"
 import { PortfolioCtaSection } from "@/app/_components/portfolio/PortfolioCtaSection"
@@ -64,16 +63,15 @@ export default function PortfolioPage() {
   const images = getPortfolioImages("he")
 
   return (
-    <div className="min-h-screen bg-[#F4F1EC]" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <JsonLd
         data={faqPageSchema(FAQ_ITEMS.map((i) => ({ question: i.question, answer: i.answer })))}
       />
-      <SiteHeader />
 
       <main id="main">
         <PortfolioHero />
 
-        <section aria-label="פרויקטים" className=" bg-[#F4F1EC] py-[var(--space-section)]">
+        <section aria-label="פרויקטים" className=" bg-white py-[var(--space-section)]">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
             <PortfolioGrid images={images} />
           </div>

@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { H2, H3 } from "@/components/ui/Heading"
 
 export const metadata: Metadata = {
@@ -53,8 +52,7 @@ const CLIENTS = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#F4F1EC]" dir="rtl">
-      <SiteHeader />
+    <div className="min-h-screen bg-white" dir="rtl">
       <main id="main" role="main">
 
         {/* ════ HERO - ממורכז ════ */}

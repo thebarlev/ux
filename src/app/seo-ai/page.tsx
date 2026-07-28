@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { LogoRow } from "@/app/_components/home/LogoRow"
 import { PackagesSection } from "@/app/_components/home/PackagesSection"
 import type { PricePlan } from "@/app/_components/home/PriceSection"
@@ -96,13 +95,12 @@ export default function SeoAiServicePage() {
   const portfolioImages = getPortfolioImages("he")
 
   return (
-    <div className="min-h-screen bg-[#F4F1EC]" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       {faqItems.length ? (
         <JsonLd
           data={faqPageSchema(faqItems.map((item) => ({ question: item.question, answer: item.answer })))}
         />
       ) : null}
-      <SiteHeader />
       <main id="main" role="main">
         <ServiceHero
           {...seoAiConfig.hero}
@@ -156,7 +154,7 @@ export default function SeoAiServicePage() {
           title="עבודות שממחישות איך SEO, פיתוח ו-AI נראים בפועל"
           subtitle="מבחר אתרים, דפי נחיתה ומערכות שבנינו כדי לחבר בין קידום אורגני, חוויית משתמש ותוצאות עסקיות אמיתיות."
         />
-        <section aria-label="שירותים משלימים" className="bg-[#F4F1EC] pb-[var(--space-section)]">
+        <section aria-label="שירותים משלימים" className="bg-white pb-[var(--space-section)]">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-[900px] rounded-[10px] border border-[color:var(--vow-border)] bg-white px-6 py-8 text-right sm:px-10">
               <H2 className="text-right">שיווק דיגיטלי לעסקים צריך גם מעטפת משלימה</H2>
@@ -186,7 +184,7 @@ export default function SeoAiServicePage() {
           title="מדריכי קידום אתרים וצמיחה"
           description="המשיכו למדריכים שמרחיבים על קידום אורגני בגוגל, SEO וצמיחה עסקית."
           dir="rtl"
-          sectionClassName="bg-[#F4F1EC] py-[var(--space-section)]"
+          sectionClassName="bg-white py-[var(--space-section)]"
           containerClassName="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4"
           links={[
             { href: "/growth-guides/how-to-improve-website-seo", label: "איך לשפר SEO לאתר" },

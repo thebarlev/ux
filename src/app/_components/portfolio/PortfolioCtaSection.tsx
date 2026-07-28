@@ -6,7 +6,7 @@ import { H2 } from "@/components/ui/Heading"
 export function PortfolioCtaSection({ locale = "he" }: { locale?: "he" | "en" }) {
   const isEn = locale === "en"
   return (
-    <section aria-label={isEn ? "Call to action" : "קריאה לפעולה"} className="py-[var(--space-section)] bg-[#F4F1EC]" dir={isEn ? "ltr" : "rtl"}>
+    <section aria-label={isEn ? "Call to action" : "קריאה לפעולה"} className="py-[var(--space-section)] bg-white" dir={isEn ? "ltr" : "rtl"}>
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
         <div className="mx-auto max-w-[980px] text-center">
           <H2 className="text-balance tracking-[-0.2px]">

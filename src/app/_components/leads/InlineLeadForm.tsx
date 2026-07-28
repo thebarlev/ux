@@ -214,7 +214,7 @@ export function InlineLeadForm({
   return (
     <section
       aria-label={title}
-      className="bg-[#F4F1EC] py-[var(--space-section)]"
+      className="bg-white py-[var(--space-section)]"
       dir={isEn ? "ltr" : "rtl"}
     >
       <div id={anchorId} className="scroll-mt-24" />

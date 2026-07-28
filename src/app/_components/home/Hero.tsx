@@ -7,7 +7,7 @@ const HERO_SUBHEADING =
 
 export function Hero() {
   return (
-    <section className="w-full bg-[#F4F1EC]" dir="rtl">
+    <section className="w-full bg-white" dir="rtl">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4 pt-0 pb-[var(--space-section)] md:py-[var(--space-section)]">
 
         <div className="flex flex-col gap-8 md:grid md:grid-cols-[1fr_1fr] md:items-center">

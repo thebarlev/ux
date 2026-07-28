@@ -2,27 +2,34 @@
 
 import { useEffect, useRef } from "react"
 
-const GTM_ID = "GTM-WNGC226Q"
-
 /**
- * The Meta Pixel is deliberately not loaded here any more.
+ * The Meta Pixel is deliberately not loaded here.
  *
  * Everything in this file waits for the first interaction or for idle (up to a
  * 4s timeout), so a visitor who landed from an ad and bounced within a few
  * seconds never fired PageView — exactly the traffic campaigns are measured on.
- * The pixel now bootstraps from the root layout; see lib/analytics/meta-pixel.ts.
- * The heavier tags below stay deferred.
+ * The pixel bootstraps from the root layout instead; see
+ * lib/analytics/meta-pixel.ts, which also carries the consent gate. The tags
+ * below stay deferred.
  */
+
+/**
+ * Google tags load directly, with no container in front of them.
+ *
+ * GTM-WNGC226Q is unrecoverable: it was registered under itzik@uxellent.com,
+ * which went away with the Workspace, and it is not visible from either
+ * remaining account. Its public gtm.js was taken apart and held exactly two
+ * tags — the GA4 and Google Ads IDs below — so loading them directly loses
+ * nothing and puts both back under an account we can actually administer.
+ *
+ * The IDs are literals rather than env vars on purpose: a flag left unset in
+ * one environment must not be able to silence measurement.
+ */
+const GA_MEASUREMENT_ID = "G-HEXONQF4WM"
+const GOOGLE_ADS_ID = "AW-17972291188"
 
 /** Safe env access - process.env can be undefined in some bundling contexts. */
 const env = typeof process !== "undefined" ? process.env : ({} as NodeJS.ProcessEnv)
-
-/**
- * Only load standalone gtag.js when GTM does NOT manage GA (e.g. GTM container has no GA4 tag).
- * Set NEXT_PUBLIC_GA_STANDALONE=true to force standalone GA. Default: GTM handles GA/Ads.
- */
-const GA_MEASUREMENT_ID =
-  env.NEXT_PUBLIC_GA_STANDALONE === "true" ? env.NEXT_PUBLIC_GA_MEASUREMENT_ID : undefined
 
 const POSTHOG_KEY = env.NEXT_PUBLIC_POSTHOG_KEY
 const POSTHOG_HOST = env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com"
@@ -51,33 +58,22 @@ function injectInline(code: string, id: string) {
   document.head.appendChild(s)
 }
 
-let gtmLoadFailed = false
-
-function loadGTM() {
-  if (gtmLoadFailed) return
-  window.dataLayer = window.dataLayer ?? []
-  window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" })
-  injectScript(
-    `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`,
-    "gtm-script",
-    undefined,
-    () => {
-      gtmLoadFailed = true
-    },
-  )
-}
-
-/** Standalone GA - only when GTM does not manage GA. Avoids ~100KB duplicate. */
-function loadGA() {
-  if (!GA_MEASUREMENT_ID) return
-  const id = JSON.stringify(GA_MEASUREMENT_ID)
+/**
+ * One gtag.js load serves both GA4 and Google Ads — they share the library, so
+ * this is a single request with two config calls. It also defines window.gtag,
+ * which is what the lead form's generate_lead event calls.
+ */
+function loadGoogleTags() {
+  const ga = JSON.stringify(GA_MEASUREMENT_ID)
+  const ads = JSON.stringify(GOOGLE_ADS_ID)
   injectScript(
     `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`,
-    "ga-script",
+    "gtag-script",
   )
   injectInline(
-    `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config',${id});`,
-    "ga-inline",
+    `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}` +
+      `gtag('js',new Date());gtag('config',${ga});gtag('config',${ads});`,
+    "gtag-inline",
   )
 }
 
@@ -98,10 +94,9 @@ function loadPostHog() {
   })
 }
 
-/** Phase 1: GTM (orchestrates GA/Ads). Phase 2: PostHog (heaviest, last). */
+/** Phase 1: GA4 + Google Ads. Phase 2: PostHog (heaviest, last). */
 function runDeferredLoad() {
-  loadGTM()
-  loadGA()
+  loadGoogleTags()
 
   if (typeof requestAnimationFrame !== "undefined") {
     requestAnimationFrame(() => {

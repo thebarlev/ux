@@ -2,7 +2,6 @@
 import type { Metadata } from "next"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { LegalTemplate } from "@/app/_components/legal/LegalTemplate"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
@@ -17,8 +16,7 @@ export const metadata: Metadata = {
 
 export default function AccountDeletionPage() {
   return (
-    <div className="min-h-screen bg-[#F4F1EC]">
-      <SiteHeader />
+    <div className="min-h-screen bg-white">
 
       <main id="main" role="main">
         <LegalTemplate
@@ -67,7 +65,7 @@ export default function AccountDeletionPage() {
 
           <section className="mt-8">
             <h2 className="text-[24px] font-bold mb-4">צור קשר</h2>
-            <div className="bg-white p-6 rounded-lg">
+            <div className="bg-white border border-black/[0.07] p-6 rounded-lg">
               <p><strong>דוא"ל:</strong> <a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a></p>
               <p><strong>WhatsApp:</strong> 0545215193</p>
               <p className="mt-4 text-sm text-gray-600">

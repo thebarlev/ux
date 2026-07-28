@@ -17,7 +17,8 @@ export const WHATSAPP_NUMBER = "972545215193"
 export type HeroCta = { label: string; href: string }
 export type HeroCopy = {
   chips: readonly string[]
-  title: string
+  /** Rendered one per line; the break is intentional, not a wrap. */
+  titleLines: readonly string[]
   subtitle: string
   ctaPrimary: HeroCta
   ctaSecondary: HeroCta
@@ -34,9 +35,12 @@ export type HeroCopy = {
  */
 export const HERO: HeroCopy = {
   chips: ["מקצה לקצה", "SaaS & AI"],
-  title: "מבססים את הרעיון, בונים את המערכת, מביאים את הלקוחות.",
+  titleLines: [
+    "היום קל לבנות אתר או אפליקציה.",
+    "קשה לבנות מוצר שלקוחות רוצים.",
+  ],
   subtitle:
-    "צוות קטן, חד ומנוסה שבונה מוצרי SaaS ואפליקציות AI מקצה לקצה. מעל 25 שנות ניסיון באפיון, עיצוב, פיתוח ושיווק דיגיטלי.",
+    "אנחנו משרד בוטיק לאפיון, עיצוב ופיתוח. עובדים עם כלי ה-AI המתקדמים ביותר, ומוסיפים את מה שהם לא נותנים. עשרות מערכות ואפליקציות לימדו אותנו את הדבר החשוב באמת: לגרום למוצרים לעבוד.",
   ctaPrimary: {
     label: "בואו נדבר על הפרויקט שלכם",
     href: `https://wa.me/${WHATSAPP_NUMBER}`,
@@ -420,6 +424,68 @@ export const NEW_HOME_TESTIMONIALS: readonly NewHomeTestimonial[] = [
 
 /** Heading above the testimonials pager. */
 export const TESTIMONIALS_HEADING = "לקוחות מספרים"
+
+/* --------------------------------------------- "הצלחות מוכחות" section ----- */
+
+/** Head copy for the proven-results band. Approved, verbatim. */
+export const PROVEN_RESULTS_HEAD = {
+  kicker: "הצלחות מוכחות",
+  headingLead: "מה שהשגנו ",
+  headingAccent: "ללקוחות שלנו",
+  subtitle: "לא הבטחות, אלא מספרים אמיתיים של לקוחות שגדלו איתנו.",
+} as const
+
+/**
+ * A card's headline figure. "count" runs up from zero once the section scrolls
+ * into view; "static" is copy that never animates.
+ */
+export type ResultMetric =
+  | { kind: "count"; to: number }
+  | { kind: "static"; text: string }
+
+export type ProvenResult = {
+  id: string
+  name: string
+  subtitle: string
+  chips: readonly string[]
+  metric: ResultMetric
+  label: string
+  summary: string
+}
+
+/**
+ * Three client results. The page is RTL, so the first entry renders rightmost:
+ * Mioshy, Anker, Max.
+ */
+export const PROVEN_RESULTS: readonly ProvenResult[] = [
+  {
+    id: "mioshy",
+    name: "Mioshy",
+    subtitle: "פלטפורמה לייעוץ זוגי אונליין",
+    chips: ["אתר", "אפליקציה", "שיווק גוגל + פייסבוק", "פיתוח"],
+    metric: { kind: "count", to: 27 },
+    label: "מנויים חדשים בשנה",
+    summary: "ושיפור של מאות אחוזים במכירות השונות באתר.",
+  },
+  {
+    id: "anker",
+    name: "Anker",
+    subtitle: "מותג אלקטרוניקה בינלאומי",
+    chips: ["שיווק גוגל + פייסבוק"],
+    metric: { kind: "count", to: 20 },
+    label: "גידול במכירות בשנה",
+    summary: "צמיחה עקבית במכירות לאורך השנה.",
+  },
+  {
+    id: "max",
+    name: "Max",
+    subtitle: "חברת האשראי הגדולה בישראל",
+    chips: ["אתר", "פתרונות טכנולוגיים"],
+    metric: { kind: "static", text: "עשרות" },
+    label: "שיפור בהמרות באתר",
+    summary: "כלים טכנולוגיים מתקדמים, חוויית משתמש ושיפור ROAS דרך אנליטיקה.",
+  },
+]
 
 /* ------------------------------------------------- "השירות שלנו" section --- */
 

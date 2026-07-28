@@ -4,7 +4,7 @@ import { TESTIMONIALS, TESTIMONIALS_EN } from "./home.constants"
 export function Testimonials({ locale = "he" }: { locale?: "he" | "en" }) {
   const items = locale === "en" ? TESTIMONIALS_EN : TESTIMONIALS
   return (
-    <section aria-label={locale === "en" ? "Testimonials" : "המלצות"} className="py-3 bg-[#F4F1EC]">
+    <section aria-label={locale === "en" ? "Testimonials" : "המלצות"} className="py-3 bg-white">
       <div className="mx-auto max-w-[1440px] px-1 sm:px-6 lg:px-4 ">
         <div className="grid gap-6 md:gap-[5.5rem] md:grid-cols-2 lg:grid-cols-3">
           {items.map((t) => {
@@ -12,7 +12,7 @@ export function Testimonials({ locale = "he" }: { locale?: "he" | "en" }) {
             return (
               <article
                 key={t.imageSrc}
-                className="rounded-[18px]  px-4 md:px-6 py-8 md:py-6  bg-white mx-auto w-[95%] md:w-full"
+                className="rounded-[18px] border border-black/[0.07] px-4 md:px-6 py-8 md:py-6  bg-white mx-auto w-[95%] md:w-full"
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="relative size-[86px] overflow-hidden rounded-full bg-[color:var(--vow-bg)]">

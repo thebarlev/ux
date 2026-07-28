@@ -79,8 +79,8 @@ export function FooterEN() {
               src="/footer-logo.svg"
               alt="Uxellent logo - digital marketing, SEO AI and website development"
               width={80}
-              height={46}
-              className="w-auto h-auto"
+              height={25}
+              className="h-auto w-[150px]"
             />
             <p className="text-[14px] text-white">For success</p>
           </div>
@@ -97,9 +97,11 @@ export function FooterEN() {
               <Mail className="h-4 w-4" />
             </EnLink>
             <a
-              href="https://www.instagram.com/vow.for.success?igsh=MTRiMmRieTNlejlsNQ%3D%3D&utm_source=qr"
+              href="https://www.instagram.com/uxellent.il"
               className="text-white/60 hover:text-white transition-colors"
               aria-label="Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Instagram className="h-4 w-4" />
             </a>
@@ -107,6 +109,8 @@ export function FooterEN() {
               href="https://x.com/Vowsuccess"
               className="text-white/60 hover:text-white transition-colors"
               aria-label="Twitter"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Twitter className="h-4 w-4" />
             </a>
@@ -114,14 +118,27 @@ export function FooterEN() {
               href="https://www.facebook.com/profile.php?id=61587713103366"
               className="text-white/60 hover:text-white transition-colors "
               aria-label="Facebook"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Facebook className="h-4 w-4" />
             </a>
           </div>
 
-          <p className="text-[13px] text-white/50 text-left">
-            © {new Date().getFullYear()} Uxellent
-          </p>
+          {/* Counterpart to the English link in the Hebrew footer — the top
+              language bar is gone, so this is the only way back. */}
+          <div className="flex items-center gap-4 text-[13px] text-white/50">
+            <Link
+              href="/"
+              hrefLang="he"
+              lang="he"
+              dir="rtl"
+              className="hover:text-white transition-colors"
+            >
+              עברית
+            </Link>
+            <p className="text-left">© {new Date().getFullYear()} Uxellent</p>
+          </div>
         </div>
 
       </div>

@@ -19,7 +19,9 @@ export function NewHomeHeader() {
   return (
     <header className={styles.nhHeader} dir="rtl">
       <Link href="/" className={styles.nhLogo} aria-label="Uxellent - חזרה לעמוד הבית">
-        <Image src="/footer-logo.svg" alt="Uxellent" width={135} height={36} priority />
+        {/* 135x42 keeps the new logo's 1100:342 ratio; the previous mark was
+            135x36 and a mismatch here would letterbox it inside the box. */}
+        <Image src="/footer-logo.svg" alt="Uxellent" width={135} height={42} priority />
       </Link>
 
       <nav className={styles.nhNav} aria-label="ניווט ראשי">

@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { ContactForm } from "@/app/_components/contact/ContactForm"
 import { ServiceFaqSection } from "@/app/_components/services/ServiceFaqSection"
 import { JsonLd, faqPageSchema } from "@/components/JsonLd"
@@ -26,9 +25,8 @@ const CONTACT_FAQ = [
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[#FAF9F5]" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <JsonLd data={faqPageSchema(CONTACT_FAQ.map((i) => ({ question: i.question, answer: i.answer })))} />
-      <SiteHeader />
 
       <main id="main" role="main">
         <div className="mx-auto max-w-[1440px] px-4 py-[var(--space-section)] sm:px-6 lg:px-8">
@@ -37,7 +35,15 @@ export default function ContactPage() {
               צור קשר עם Uxellent
             </h1>
             <p className="mt-2 text-[20px] font-semibold leading-[32px] text-[color:var(--vow-muted)]">
-              נשמח לשמוע ממך. מלאו את הפרטים ונחזור תוך שעות ספורות. אפשר גם בוואטסאפ: 054-5215193. ימי א׳–ה׳, 9:00–18:00.
+              נשמח לשמוע ממך. מלאו את הפרטים ונחזור תוך שעות ספורות. אפשר גם בוואטסאפ:{" "}
+              <span dir="ltr" className="whitespace-nowrap [unicode-bidi:isolate]">
+                054-5215193
+              </span>
+              . ימי א׳–ה׳,{" "}
+              <span dir="ltr" className="whitespace-nowrap [unicode-bidi:isolate]">
+                9:00–18:00
+              </span>
+              .
             </p>
 
             <H2 className="mt-10">השאירו פרטים</H2>

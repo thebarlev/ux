@@ -4,7 +4,7 @@ import Script from "next/script";
 import { Assistant } from "next/font/google";
 import { JsonLd, ORGANIZATION_SCHEMA, WEBSITE_SCHEMA } from "@/components/JsonLd";
 import { DeferredScripts } from "@/components/DeferredScripts";
-import { LanguageBar } from "@/app/_components/LanguageBar";
+import { SiteHeader } from "@/app/_components/layout/SiteHeader";
 import { TrackingProvider } from "@/app/_components/tracking/TrackingProvider";
 import { MetaPixelRouteTracker } from "@/app/_components/tracking/MetaPixelRouteTracker";
 import { getPixelId, metaPixelBootstrapScript } from "@/lib/analytics/meta-pixel";
@@ -62,14 +62,6 @@ export default function RootLayout({
       <body className="antialiased font-sans">
         <JsonLd data={ORGANIZATION_SCHEMA} />
         <JsonLd data={WEBSITE_SCHEMA} />
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-WNGC226Q"
-            height={0}
-            width={0}
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
 
         {/*
           Meta Pixel bootstrap. Split out of DeferredScripts on purpose: that
@@ -84,7 +76,11 @@ export default function RootLayout({
           </Script>
         ) : null}
 
-        <LanguageBar />
+        {/* The language row above the header is gone: Hebrew is the focus, and
+            the switch now lives quietly in the footer. SiteHeader returns null
+            on its own for /lp, /checkout, /thanks and /en, so no route
+            conditions belong here. */}
+        <SiteHeader />
         {children}
         <Suspense fallback={null}>
           <TrackingProvider />

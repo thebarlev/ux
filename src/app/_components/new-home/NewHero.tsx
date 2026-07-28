@@ -17,7 +17,7 @@ import {
   type MeatBeatTheme,
   type MioshyTheme,
 } from "./newHome.constants"
-import { NewHomeHeader } from "./NewHomeHeader"
+import { withNowrap } from "./Ltr"
 import styles from "./NewHero.module.css"
 
 /**
@@ -172,8 +172,6 @@ export function NewHero() {
       aria-label="Uxellent"
     >
       <div className={styles.wrap}>
-        <NewHomeHeader />
-
         <div className={styles.grid}>
           <div className={styles.copy}>
             <div className={styles.chips}>
@@ -183,8 +181,14 @@ export function NewHero() {
                 </span>
               ))}
             </div>
-            <h1 className={styles.h1}>{HERO.title}</h1>
-            <p className={styles.sub}>{HERO.subtitle}</p>
+            <h1 className={styles.h1}>
+              {HERO.titleLines.map((line) => (
+                <span key={line} className={styles.h1Line}>
+                  {line}
+                </span>
+              ))}
+            </h1>
+            <p className={styles.sub}>{withNowrap(HERO.subtitle, "ה-AI")}</p>
             <div className={styles.ctas}>
               <a
                 href={HERO.ctaPrimary.href}

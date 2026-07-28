@@ -37,14 +37,14 @@ export function AboutSection() {
   };
 
   return (
-    <section aria-label="חתימה ירוקה" className="py-[var(--space-section)] mobile-margin-top bg-[#F4F1EC]">
+    <section aria-label="חתימה ירוקה" className="py-[var(--space-section)] mobile-margin-top bg-white">
       <div
         data-gs-root
         className="mx-auto max-w-[1440px] rounded-[10px] mx-auto w-full px-4 sm:px-4 lg:px-4 relative"
       >
         <div
   data-gs-grid
-  className="relative rounded-[10px] grid bg-white p-4 px-4 main-row gap-4 lg:grid-cols-2"
+  className="relative rounded-[10px] grid bg-white border border-black/[0.07] p-4 px-4 main-row gap-4 lg:grid-cols-2"
 >
           {/* Card - ימין */}
           <div

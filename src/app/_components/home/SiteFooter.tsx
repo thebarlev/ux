@@ -96,8 +96,8 @@ export function SiteFooter({ tone = "black" }: { tone?: SiteFooterTone } = {}) {
               src="/footer-logo.svg"
               alt="Uxellent logo - digital marketing, SEO AI and website development"
               width={80}
-              height={46}
-              className="w-auto h-auto"
+              height={25}
+              className="h-auto w-[150px]"
             />
             <p className="text-[14px] text-white pl-6">For success</p>
           </div>
@@ -115,9 +115,11 @@ export function SiteFooter({ tone = "black" }: { tone?: SiteFooterTone } = {}) {
               <Mail className="h-4 w-4" />
             </Link>
             <a
-              href="https://www.instagram.com/vow.for.success?igsh=MTRiMmRieTNlejlsNQ%3D%3D&utm_source=qr"
+              href="https://www.instagram.com/uxellent.il"
               className="text-white/60 hover:text-white transition-colors"
               aria-label="Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Instagram className="h-4 w-4" />
             </a>
@@ -125,6 +127,8 @@ export function SiteFooter({ tone = "black" }: { tone?: SiteFooterTone } = {}) {
               href="https://x.com/Vowsuccess"
               className="text-white/60 hover:text-white transition-colors"
               aria-label="Twitter"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Twitter className="h-4 w-4" />
             </a>
@@ -132,14 +136,29 @@ export function SiteFooter({ tone = "black" }: { tone?: SiteFooterTone } = {}) {
               href="https://www.facebook.com/profile.php?id=61587713103366"
               className="text-white/60 hover:text-white transition-colors"
               aria-label="Facebook"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Facebook className="h-4 w-4" />
             </a>
           </div>
 
-          <p className="text-[13px] text-white/50 text-right sm:text-left">
-            © {new Date().getFullYear()} Uxellent
-          </p>
+          {/* The only language switch on the site now that the top bar is gone.
+              Hebrew leads, so this stays deliberately quiet. */}
+          <div className="flex items-center gap-4 text-[13px] text-white/50">
+            <Link
+              href="/en"
+              hrefLang="en"
+              lang="en"
+              dir="ltr"
+              className="hover:text-white transition-colors"
+            >
+              English
+            </Link>
+            <p className="text-right sm:text-left">
+              © {new Date().getFullYear()} Uxellent
+            </p>
+          </div>
 
         </div>
       </div>

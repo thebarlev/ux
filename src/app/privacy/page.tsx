@@ -3,7 +3,6 @@ import type { Metadata } from "next"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { LegalTemplate } from "@/app/_components/legal/LegalTemplate"
 import { JsonLd, webPageSchema } from "@/components/JsonLd"
 
@@ -18,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-[#F4F1EC]">
+    <div className="min-h-screen bg-white">
       <JsonLd
         data={webPageSchema({
           name: "מדיניות פרטיות | Uxellent",
@@ -27,7 +26,6 @@ export default function PrivacyPage() {
           dateModified: "2026-02-01",
         })}
       />
-      <SiteHeader />
 
       <main id="main" role="main">
         <LegalTemplate
@@ -350,7 +348,7 @@ export default function PrivacyPage() {
             <h3 className="text-[20px] font-semibold mb-3 mt-6">8.2 סוגי העוגיות שאנחנו משתמשים</h3>
             
             <div className="space-y-4 my-4">
-              <div className="bg-white p-4 rounded-lg">
+              <div className="bg-white border border-black/[0.07] p-4 rounded-lg">
                 <h4 className="font-semibold mb-2">עוגיות חיוניות:</h4>
                 <ul className="list-disc mr-6 space-y-1">
                   <li>תפעול בסיסי - התחברות, ניווט, זיכרון העדפות</li>
@@ -358,7 +356,7 @@ export default function PrivacyPage() {
                 </ul>
               </div>
 
-              <div className="bg-white p-4 rounded-lg">
+              <div className="bg-white border border-black/[0.07] p-4 rounded-lg">
                 <h4 className="font-semibold mb-2">עוגיות אבטחה:</h4>
                 <ul className="list-disc mr-6 space-y-1">
                   <li>זיהוי משתמש, מניעת התחזות, הגנה מפני התקפות</li>
@@ -366,7 +364,7 @@ export default function PrivacyPage() {
                 </ul>
               </div>
 
-              <div className="bg-white p-4 rounded-lg">
+              <div className="bg-white border border-black/[0.07] p-4 rounded-lg">
                 <h4 className="font-semibold mb-2">עוגיות תפעוליות:</h4>
                 <ul className="list-disc mr-6 space-y-1">
                   <li>זיכרון העדפות שלך (שפה, תצוגה)</li>
@@ -374,7 +372,7 @@ export default function PrivacyPage() {
                 </ul>
               </div>
 
-              <div className="bg-white p-4 rounded-lg">
+              <div className="bg-white border border-black/[0.07] p-4 rounded-lg">
                 <h4 className="font-semibold mb-2">עוגיות אנליטיות:</h4>
                 <ul className="list-disc mr-6 space-y-1">
                   <li>הבנת דפוסי שימוש (Google Analytics)</li>
@@ -382,7 +380,7 @@ export default function PrivacyPage() {
                 </ul>
               </div>
 
-              <div className="bg-white p-4 rounded-lg">
+              <div className="bg-white border border-black/[0.07] p-4 rounded-lg">
                 <h4 className="font-semibold mb-2">עוגיות פרסומיות:</h4>
                 <ul className="list-disc mr-6 space-y-1">
                   <li>הצגת פרסום ממוקד</li>
@@ -512,7 +510,7 @@ export default function PrivacyPage() {
               יש לך שאלות על מדיניות הפרטיות? רוצה לממש את זכויותיך?
             </p>
 
-            <div className="bg-white p-6 rounded-lg">
+            <div className="bg-white border border-black/[0.07] p-6 rounded-lg">
               <p><strong>דוא"ל:</strong> <a href="mailto:support@uxellent.com" className="text-blue-600 underline">support@uxellent.com</a></p>
               <p><strong>שם החברה:</strong> Bugo Media LTD</p>
               <p><strong>מספר חברה:</strong> 515960508</p>

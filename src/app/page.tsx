@@ -3,8 +3,11 @@ import type { Metadata } from "next"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { FounderBand } from "@/app/_components/new-home/FounderBand"
+import { InitiativesSection } from "@/app/_components/new-home/InitiativesSection"
+import { LeadFormSection } from "@/app/_components/new-home/LeadFormSection"
 import { NewHero } from "@/app/_components/new-home/NewHero"
-import { ServiceSection } from "@/app/_components/new-home/ServiceSection"
+import { ProvenResultsSection } from "@/app/_components/new-home/ProvenResultsSection"
+import { ServicesSection } from "@/app/_components/new-home/ServicesSection"
 import { StorySection } from "@/app/_components/new-home/StorySection"
 import { TestimonialsPager } from "@/app/_components/new-home/TestimonialsPager"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
@@ -19,9 +22,9 @@ export const metadata: Metadata = {
     languages: heEnAlternateLanguages("/", "/en"),
   },
 
-  title: "Uxellent | מהאפיון והעיצוב ועד הפיתוח והשיווק",
+  title: "Uxellent | מרעיון למוצר שעובד: אפיון, עיצוב ופיתוח",
   description:
-    "צוות קטן, חד ומנוסה שבונה מוצרי SaaS ואפליקציות AI מקצה לקצה. מעל 25 שנות ניסיון באפיון, עיצוב, פיתוח ושיווק דיגיטלי.",
+    "היום קל לבנות אתר או אפליקציה. קשה לבנות מוצר שלקוחות רוצים. Uxellent — משרד בוטיק לאפיון, עיצוב ופיתוח, מהרעיון ועד מוצר שעובד.",
 
   keywords: [
     "פיתוח מוצרי SaaS",
@@ -35,9 +38,9 @@ export const metadata: Metadata = {
   ],
 
   openGraph: {
-    title: "Uxellent | מהאפיון והעיצוב ועד הפיתוח והשיווק",
+    title: "Uxellent | מרעיון למוצר שעובד: אפיון, עיצוב ופיתוח",
     description:
-      "מבססים את הרעיון, בונים את המערכת, מביאים את הלקוחות. מעל 25 שנות ניסיון באפיון, עיצוב, פיתוח ושיווק דיגיטלי.",
+      "היום קל לבנות אתר או אפליקציה. קשה לבנות מוצר שלקוחות רוצים. Uxellent — משרד בוטיק לאפיון, עיצוב ופיתוח, מהרעיון ועד מוצר שעובד.",
     url: "https://uxellent.com",
     siteName: "Uxellent",
     images: [
@@ -54,9 +57,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Uxellent | מהאפיון והעיצוב ועד הפיתוח והשיווק",
+    title: "Uxellent | מרעיון למוצר שעובד: אפיון, עיצוב ופיתוח",
     description:
-      "צוות קטן, חד ומנוסה שבונה מוצרי SaaS ואפליקציות AI מקצה לקצה.",
+      "היום קל לבנות אתר או אפליקציה. קשה לבנות מוצר שלקוחות רוצים. Uxellent — משרד בוטיק לאפיון, עיצוב ופיתוח, מהרעיון ועד מוצר שעובד.",
     images: ["https://uxellent.com/og-home.jpg"],
   },
 
@@ -75,16 +78,22 @@ export const metadata: Metadata = {
  */
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#F4F1EC]">
+    <div className="min-h-screen bg-white">
       <main id="main" role="main">
-        {/* NewHero renders its own dedicated dark header (SiteHeader, which the
-            inner pages use, is deliberately left untouched). */}
+        {/* The header comes from the root layout now, for every route. */}
         <NewHero />
+        {/* What we do, then what we have built: both sit directly under the
+            hero so a visitor meets the offer before the story. ServicesSection
+            replaces the former ServiceSection, which covered the same ground —
+            the old component stays in the repo and in git history. */}
+        <ServicesSection />
+        <InitiativesSection />
         <StorySection />
         <FounderBand />
         <TestimonialsPager />
-        {/* Last section on the page: its WhatsApp call to action closes it. */}
-        <ServiceSection />
+        <ProvenResultsSection />
+        {/* Last section before the footer: the page closes on the form. */}
+        <LeadFormSection />
       </main>
       {/* Ink tone so the footer continues the dark service section above it.
           Inner pages keep the default black footer. */}

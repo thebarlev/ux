@@ -1,0 +1,342 @@
+/*
+ * #products — "היוזמות שלנו". Built 1:1 from docs/uxellent-home-sections.html
+ * (v14). Dark counterpart to ServicesSection: same tab language, inverted.
+ *
+ * The standalone #scan section was folded into tab 01 here at v11 (brief §1),
+ * which is why the Auditor copy and Dan's review live in this file.
+ */
+
+.section {
+  --ink: #0a0f1a;
+  --ink-2: #0d1526;
+  --accent: #5389bb;
+  --text-light: #f4f6fa;
+  --radius-btn: 12px;
+
+  background: linear-gradient(
+    135deg,
+    var(--ink) 0%,
+    var(--ink-2) 60%,
+    #122036 100%
+  );
+  color: var(--text-light);
+  padding: 72px 20px;
+  line-height: 1.6;
+}
+
+.wrap {
+  max-width: 1440px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.kicker {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+/* Overrides the global bare-h2 rule (centred black 30px) in full. */
+.heading {
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.sub {
+  font-size: 18px;
+  color: rgba(244, 246, 250, 0.72);
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
+/* ----------------------------------------------------------------- tabs --- */
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin-top: 44px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 18px 14px;
+  background: none;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(244, 246, 250, 0.6);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.tab .num {
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(156, 195, 232, 0.15);
+  color: #9cc3e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.tab:hover {
+  color: #fff;
+}
+
+.tab[aria-selected="true"] {
+  color: #fff;
+  border-bottom-color: #6fa5d8;
+}
+
+.tab:focus-visible {
+  outline: 2px solid #9cc3e8;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------------------------------------------------------------- stage --- */
+
+.stage {
+  max-width: 1160px;
+  margin: 44px auto 0;
+  text-align: right;
+}
+
+.pane {
+  animation: fadeIn 0.25s ease;
+}
+
+.pane[hidden] {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* globals.css sets bare h3 grey/22px; the reference values are restored here. */
+.paneHeading {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.25;
+  margin-bottom: 12px;
+  color: #f4f6fa;
+}
+
+.desc {
+  font-size: 20px;
+  line-height: 1.65;
+  color: rgba(244, 246, 250, 0.88);
+}
+
+/* Auditor tab: copy leads, the review sits beside it behind a hairline. */
+.grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 0;
+  align-items: stretch;
+}
+
+.main {
+  padding-left: 48px;
+}
+
+.caps {
+  margin: 22px 0 26px;
+}
+
+.cap {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 8px 0;
+  font-size: 18px;
+  line-height: 1.55;
+  color: rgba(244, 246, 250, 0.88);
+}
+
+.cap .check {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 1.5px solid rgba(111, 165, 216, 0.8);
+  color: #9cc3e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.cta {
+  display: inline-block;
+  margin-top: 18px;
+  background: var(--accent);
+  color: #fff;
+  padding: 15px 26px;
+  border-radius: var(--radius-btn);
+  font-size: 17px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: filter 0.15s ease;
+}
+
+.cta:hover {
+  filter: brightness(1.08);
+}
+
+.cta:focus-visible {
+  outline: 2px solid #9cc3e8;
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------- review --- */
+
+.review {
+  border-right: 1px solid rgba(244, 246, 250, 0.16);
+  padding-right: 48px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 10px;
+  box-shadow: 0 6px 18px rgba(10, 15, 26, 0.12);
+}
+
+.stars {
+  color: #f4b400;
+  font-size: 19px;
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+}
+
+.reviewQuote {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #f4f6fa;
+}
+
+.reviewName {
+  margin-top: 12px;
+  font-weight: 800;
+  font-size: 16px;
+  color: #f4f6fa;
+}
+
+.reviewCta {
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(244, 246, 250, 0.6);
+}
+
+.reviewCta a {
+  color: #9cc3e8;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ------------------------------------------------------- invoicing tab --- */
+
+/* Right-aligned rather than centred, per Itzik's feedback recorded in §1. */
+.center {
+  max-width: 46rem;
+  text-align: right;
+}
+
+.center .caps {
+  margin: 24px 0 28px;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #9be3b4;
+  background: rgba(155, 227, 180, 0.12);
+  border: 1px solid rgba(155, 227, 180, 0.35);
+  border-radius: 999px;
+  padding: 3px 12px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 760px) {
+  .section {
+    padding: 56px 16px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main {
+    padding-left: 0;
+  }
+
+  /* Stacked, the vertical rule becomes the divider above the review. */
+  .review {
+    border-right: none;
+    padding-right: 0;
+    border-top: 1px solid rgba(244, 246, 250, 0.16);
+    padding-top: 26px;
+    margin-top: 26px;
+  }
+
+  .tab {
+    font-size: 16px;
+    padding: 10px 12px 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pane {
+    animation: none;
+  }
+
+  .tab,
+  .cta {
+    transition: none;
+  }
+}
+
+/* Clears the sticky light header on anchor jumps (INTEGRATION step 6). */
+.section {
+  scroll-margin-top: 84px;
+}

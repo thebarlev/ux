@@ -1,0 +1,201 @@
+/*
+ * /thanks/startup-kit — built 1:1 from docs/uxellent-kit-thanks.html.
+ * The only place on the site that links to the workbook PDF (brief §5א).
+ */
+
+.page {
+  --ink: #0a0f1a;
+  --cream: #f4f1ec;
+  --accent: #5389bb;
+  --muted: #747474;
+  --text-light: #f4f6fa;
+  --radius: 16px;
+  --radius-btn: 12px;
+
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  padding: 22px 24px;
+}
+
+.top a {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.top a:hover {
+  color: var(--ink);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px 64px;
+}
+
+.card {
+  max-width: 640px;
+  width: 100%;
+  background: #fff;
+  border: 1px solid rgba(10, 15, 26, 0.07);
+  border-radius: var(--radius);
+  padding: 52px 44px;
+  text-align: center;
+}
+
+.check {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(76, 160, 106, 0.12);
+  color: #2e7d4f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 800;
+  margin: 0 auto 20px;
+}
+
+.heading {
+  font-size: clamp(26px, 4vw, 34px);
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+
+.sub {
+  font-size: 18px;
+  color: var(--muted);
+  max-width: 30rem;
+  margin: 0 auto;
+}
+
+.dlBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  background: var(--ink);
+  color: var(--text-light);
+  padding: 17px 34px;
+  border-radius: var(--radius-btn);
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.dlBtn:hover {
+  background: #16233c;
+}
+
+.dlBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.dlBtn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.dlNote {
+  margin-top: 12px;
+  font-size: 14.5px;
+  color: var(--muted);
+}
+
+.dlNote a {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.dlNote a:hover {
+  text-decoration: underline;
+}
+
+.next {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px dashed rgba(83, 137, 187, 0.45);
+  text-align: right;
+}
+
+/* globals.css centres bare h2 in black at 30px; overridden in full. */
+.nextHeading {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 14px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 8px 0;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.step .n {
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.ctaLine {
+  margin-top: 22px;
+  text-align: center;
+  font-size: 17px;
+}
+
+.ctaLine a {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ctaLine a:hover {
+  color: #2e4e86;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 36px 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dlBtn {
+    transition: none;
+  }
+}

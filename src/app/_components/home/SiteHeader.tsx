@@ -107,7 +107,7 @@ export function SiteHeader() {
                 src="/logo.svg"
                 alt="Uxellent logo - digital marketing, SEO AI and website development"
                 width={150}
-                height={46}
+                height={47}
                 priority
                 className={[
                   "h-auto w-[149px] transition-transform duration-300 ease-in-out origin-right",

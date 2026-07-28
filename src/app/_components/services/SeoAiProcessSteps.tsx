@@ -95,9 +95,9 @@ export function SeoAiProcessSteps({
   const isLtr = locale === "en"
   const resolvedSteps = steps ?? (isLtr ? STEPS_EN : STEPS_HE)
   return (
-    <section aria-label={isLtr ? "Process" : "התהליך"} className="py-[var(--space-section)] bg-[#F4F1EC]" dir={isLtr ? "ltr" : "rtl"}>
+    <section aria-label={isLtr ? "Process" : "התהליך"} className="py-[var(--space-section)] bg-white" dir={isLtr ? "ltr" : "rtl"}>
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
-        <div className="mx-auto w-full max-w-[620px] rounded-3xl bg-white px-6 py-10 shadow-sm sm:px-10 sm:py-12">
+        <div className="mx-auto w-full max-w-[620px] rounded-3xl bg-white border border-black/[0.07] px-6 py-10 shadow-sm sm:px-10 sm:py-12">
           <div className={isLtr ? "text-left" : "text-right"}>
             <div className="text-[#5389BB] text-[14px] font-semibold">{label ?? (isLtr ? "Process" : "התהליך")}</div>
             <H2 className={`mt-2 ${isLtr ? "text-left" : "text-right"}`}>

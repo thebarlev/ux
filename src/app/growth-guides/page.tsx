@@ -3,7 +3,6 @@ import Link from "next/link"
 
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
-import { SiteHeader } from "@/app/_components/home/SiteHeader"
 import { DoubleHeadingCtaSection } from "@/app/_components/services/DoubleHeadingCtaSection"
 import { ServiceHero } from "@/app/_components/services/ServiceHero"
 import { JsonLd, itemListSchema, webPageSchema } from "@/components/JsonLd"
@@ -32,7 +31,7 @@ export default function GrowthGuidesIndexPageHe() {
   const pageUrl = "https://uxellent.com/growth-guides"
 
   return (
-    <div className="min-h-screen bg-[#F4F1EC]" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <JsonLd
         data={webPageSchema({
           name: "מדריכי צמיחה של Uxellent",
@@ -51,7 +50,6 @@ export default function GrowthGuidesIndexPageHe() {
           })),
         })}
       />
-      <SiteHeader />
       <main id="main" role="main">
         <ServiceHero
           title="מדריכי צמיחה של Uxellent"
@@ -67,7 +65,7 @@ export default function GrowthGuidesIndexPageHe() {
         <section
           id="guide-grid-he"
           aria-label="רשימת מדריכי צמיחה"
-          className="py-[var(--space-section)] bg-[#F4F1EC]"
+          className="py-[var(--space-section)] bg-white"
           dir="rtl"
         >
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
