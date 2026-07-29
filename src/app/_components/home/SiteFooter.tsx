@@ -99,7 +99,11 @@ export function SiteFooter({ tone = "black" }: { tone?: SiteFooterTone } = {}) {
               height={25}
               className="h-auto w-[150px]"
             />
-            <p className="text-[14px] text-white pl-6">For success</p>
+            {/* One line, never two: pl-6 used to squeeze it and force a wrap.
+                Width matches the logo above so both start on the same edge. */}
+            <p className="w-[150px] whitespace-nowrap text-[13px] text-white">
+              מרעיון למוצר שעובד.
+            </p>
           </div>
 
         </div>

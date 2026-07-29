@@ -1,6 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+
+import {
+  LEAD_SUBJECT_PREFIX,
+  WEB3FORMS_ACCESS_KEY,
+  WEB3FORMS_ENDPOINT,
+  WEB3FORMS_FROM_NAME,
+} from "@/app/_components/new-home/homeSections.constants"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -81,32 +88,53 @@ export function ContactForm({ locale = "he" }: { locale?: "he" | "en" }) {
     },
   })
 
+  // Campaign parameters ride along into the notification email, matching the
+  // home form. Read once on mount; empty strings when the visit carried none.
+  const [utm, setUtm] = useState<Record<string, string>>({})
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const found: Record<string, string> = {}
+    for (const key of ["utm_source", "utm_medium", "utm_campaign"]) {
+      const value = params.get(key)
+      if (value) found[key] = value
+    }
+    setUtm(found)
+  }, [])
+
   const onSubmit = async (values: FormData) => {
     setIsSubmitting(true)
     setSubmitError(null)
     setIsSuccess(false)
 
     try {
-      const response = await fetch("/api/contact", {
+      // Same Web3Forms endpoint, key and subject prefix as the home form, so
+      // both land in the inbox Itzik actually reads. The previous /api/contact
+      // route mailed CONTACT_TO_EMAIL, which still points at the retired
+      // support@vow.co.il, so nothing from here ever reached him.
+      const response = await fetch(WEB3FORMS_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify({
-          fullName: values.fullName,
+          access_key: WEB3FORMS_ACCESS_KEY,
+          from_name: WEB3FORMS_FROM_NAME,
+          subject: `${LEAD_SUBJECT_PREFIX}: ${values.fullName} | ${values.category}`,
+          name: values.fullName,
           phone: values.phone,
           email: values.email,
-          subject: values.subject,
-          category: values.category,
+          interest: values.category,
+          topic: values.subject,
           message: values.message,
+          botcheck: "",
+          ...utm,
         }),
       })
 
       const result = await response.json().catch(() => null)
 
-      if (!response.ok || !result?.ok) {
-        const code = String(result?.error || "")
-        if (code === "missing_fields") {
-          throw new Error(isEn ? "Please fill in all required fields." : "אנא מלא/י את כל השדות הנדרשים.")
-        }
+      if (!response.ok || !result?.success) {
         throw new Error(isEn ? "Sending failed. Please try again." : "שליחת הפנייה נכשלה. נסה/י שוב.")
       }
 
@@ -141,6 +169,12 @@ export function ContactForm({ locale = "he" }: { locale?: "he" | "en" }) {
       )}
 
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
+        {/* Honeypot. Off the screen reader tree and out of the tab order; a bot
+            that fills it tells Web3Forms to drop the submission. */}
+        <div aria-hidden="true" style={{ position: "absolute", width: 1, height: 1, padding: 0, margin: -1, overflow: "hidden", clipPath: "inset(50%)", whiteSpace: "nowrap", border: 0 }}>
+          <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" />
+        </div>
+
         <fieldset disabled={isSubmitting} className="space-y-4 disabled:opacity-70">
           <div>
             <label htmlFor="fullName" className="mb-1 block text-[20px] font-semibold">
