@@ -138,6 +138,12 @@ export function ContactForm({ locale = "he" }: { locale?: "he" | "en" }) {
         throw new Error(isEn ? "Sending failed. Please try again." : "שליחת הפנייה נכשלה. נסה/י שוב.")
       }
 
+      // Same conversion events as the home form, fired on success only and
+      // guarded, so a blocked or not-yet-loaded tag cannot break the flow.
+      // This component also serves /en/contact, so both pages report.
+      window.gtag?.("event", "generate_lead", { form_id: "contact_page_form" })
+      window.fbq?.("track", "Lead")
+
       setIsSuccess(true)
       reset()
     } catch (err) {

@@ -82,7 +82,11 @@ export function FooterEN() {
               height={25}
               className="h-auto w-[150px]"
             />
-            <p className="text-[14px] text-white">For success</p>
+            {/* One line, width matched to the logo above so both share an edge —
+                the Hebrew footer follows the same pattern. */}
+            <p className="whitespace-nowrap text-[12px] text-white">
+              From idea to a product that works.
+            </p>
           </div>
         </div>
 
