@@ -25,7 +25,7 @@ import { useEffect, useRef } from "react"
  * The IDs are literals rather than env vars on purpose: a flag left unset in
  * one environment must not be able to silence measurement.
  */
-const GA_MEASUREMENT_ID = "G-HEXONQF4WM"
+const GA_MEASUREMENT_ID = "G-HEX0NQF4WM"
 const GOOGLE_ADS_ID = "AW-17972291188"
 
 /** Safe env access - process.env can be undefined in some bundling contexts. */
