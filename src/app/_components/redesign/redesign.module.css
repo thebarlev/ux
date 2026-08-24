@@ -45,6 +45,24 @@
 .root input { font: inherit; }
 .root a { color: inherit; }
 
+/* Isolation from the site-wide globals.css @layer base typography: that
+ * layer sets real px font-sizes on bare h2/h3/li (not just a reset), and
+ * since nothing in this file ever set li's font-size, globals.css "won" by
+ * default — not a specificity fight, just an uncontested property. li was
+ * the confirmed leak (22-24px instead of inherited ~17px); h1-h6 are NOT
+ * reset here because every heading in this file already gets its size from
+ * a same-or-higher-specificity rule below (.sec, .heroH1, .featTx h2, ...),
+ * and a bare `.root h2` selector here would outrank those by specificity
+ * and break them (confirmed — first attempt at this rule did exactly that). */
+.root li {
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  text-align: inherit;
+  color: inherit;
+  margin: 0;
+}
+
 .wrap { max-width: 1140px; margin: 0 auto; padding-inline: 24px; }
 @media (max-width: 600px) { .wrap { padding-inline: 18px; } }
 
@@ -106,8 +124,7 @@
 .dockIn input::placeholder { color: #8F9AA3; }
 .dockCnt { font-size: 12px; color: #6A757F; font-variant-numeric: tabular-nums; flex: 0 0 auto; }
 @media (max-width: 520px) { .dock { padding: 10px 10px 12px; } .dockCnt { display: none; } }
-.heroWrapH1 { margin-inline: calc((100% - 94vw) / 2); }
-.heroH1 { margin: 0 auto; font-size: 64px; max-width: none; width: 94vw; white-space: nowrap; }
+.heroH1 { margin: 0 auto; margin-inline: calc((100% - 94vw) / 2); font-size: 64px; max-width: none; width: 94vw; white-space: nowrap; }
 .em { background: linear-gradient(100deg, var(--accent) 5%, var(--sky) 42%, var(--aqua) 92%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .heroH1Wrap2 { white-space: normal; width: auto; max-width: none; }
 .heroH1Wrap2 .l1, .heroH1Wrap2 .em { display: block; width: fit-content; margin-inline: auto; white-space: nowrap; }

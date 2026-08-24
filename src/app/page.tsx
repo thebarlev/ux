@@ -3,6 +3,7 @@ import { Suspense } from "react"
 import { RedesignShell } from "@/app/_components/redesign/RedesignShell"
 import { ReceivedBanner } from "@/app/_components/redesign/ReceivedBanner"
 import { HomeInteractive } from "@/app/_components/redesign/HomeInteractive"
+import { HomeHeroHeading } from "@/app/_components/redesign/HomeHeroHeading"
 import { HomeTalk } from "@/app/_components/redesign/HomeTalk"
 import styles from "@/app/_components/redesign/redesign.module.css"
 import {
@@ -49,10 +50,7 @@ export default function HomePage() {
         <section className={styles.hero} id="top">
           <div className={styles.wrap}>
             <span className={styles.eyebrow}>{HOME_HERO.eyebrow}</span>
-            <h1 className={`${styles.display} ${styles.heroH1Wrap2}`}>
-              <span className={styles.l1}>{HOME_HERO.line1}</span>{" "}
-              <span className={styles.em}>{HOME_HERO.emphasis}</span>
-            </h1>
+            <HomeHeroHeading line1={HOME_HERO.line1} emphasis={HOME_HERO.emphasis} />
             <p className={styles.lede}>{HOME_HERO.lede}</p>
 
             <HomeInteractive />
@@ -96,7 +94,7 @@ export default function HomePage() {
         </section>
 
         {/* What we build */}
-        <section className={styles.bandPaper2} id="build">
+        <section className={`${styles.band} ${styles.bandPaper2}`} id="build">
           <div className={styles.wrap}>
             <div className={styles.secTop}>
               <span className={styles.eyebrow}>מה בונים כאן</span>
@@ -203,7 +201,7 @@ export default function HomePage() {
         </section>
 
         {/* FAQ */}
-        <section className={styles.bandPaper2} id="faq">
+        <section className={`${styles.band} ${styles.bandPaper2}`} id="faq">
           <div className={styles.wrap}>
             <div className={styles.faqGrid}>
               <div className={styles.faqHead}>
