@@ -1,72 +1,75 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { JsonLd, faqPageSchema } from "@/components/JsonLd";
-import { SiteFooter } from "@/app/_components/home/SiteFooter";
-import { AboutSection } from "@/app/_components/home/AboutSection";
-import { PriceSection } from "@/app/_components/home/PriceSection";
-import { ServiceFaqSection } from "@/app/_components/services/ServiceFaqSection";
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang";
+import type { Metadata } from "next"
+import { RedesignShell } from "@/app/_components/redesign/RedesignShell"
+import { PricingPlans } from "@/app/_components/redesign/PricingPlans"
+import { VALUE_CARD_ICONS } from "@/app/_components/redesign/pricingIcons"
+import styles from "@/app/_components/redesign/redesign.module.css"
+import { PRICING_HERO, VALUE_CARDS, PRICING_EXTRA } from "@/app/_content/redesign/pricing"
 
 export const metadata: Metadata = {
-  title: "מחירון חשבונית דיגיטלית | Uxellent",
-  description: "מחירון חשבונית דיגיטלית מאובטחת עם חיבור לרשות המסים, חתימה דיגיטלית ושנה ראשונה חינם לעסקים.",
-  alternates: {
-    canonical: "/pricing",
-    languages: heEnAlternateLanguages("/pricing", "/en/pricing"),
+  metadataBase: new URL("https://uxellent.com"),
+  alternates: { canonical: "/pricing" },
+  title: "מחירים | Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
+  description: PRICING_HERO.lede,
+  openGraph: {
+    title: "מחירים | Uxellent",
+    description: PRICING_HERO.lede,
+    url: "https://uxellent.com/pricing",
+    siteName: "Uxellent",
+    locale: "he_IL",
+    type: "website",
   },
-};
+  robots: { index: true, follow: true },
+}
 
-const PRICING_FAQ = [
-  {
-    id: "pricing-faq-1",
-    question: "כמה עולה חשבונית דיגיטלית?",
-    answer: "שנה ראשונה חינם. אחר כך מנוי חודשי או שנתי - פרטים בעמוד.",
-  },
-  {
-    id: "pricing-faq-2",
-    question: "מה כולל השנה החינמית?",
-    answer: "הפקת עד 10 מסמכים בחודש, חתימה דיגיטלית, חיבור לרשות המיסים.",
-  },
-  {
-    id: "pricing-faq-3",
-    question: "האם אפשר לבטל?",
-    answer: "כן. ביטול מנוי חודשי בתום החודש. מנוי שנתי - לפי מדיניות ההחזרים.",
-  },
-  {
-    id: "pricing-faq-4",
-    question: "אילו מסמכים אפשר להפיק?",
-    answer: "חשבוניות מס, קבלות, חשבוניות עסקה ועוד - 12 סוגי מסמכים.",
-  },
-] as const;
-
-export default function PricePage() {
+export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
-      <JsonLd data={faqPageSchema(PRICING_FAQ.map((i) => ({ question: i.question, answer: i.answer })))} />
+    <RedesignShell>
+      <main id="main" className={styles.pricingMain}>
+        <section className={`${styles.band} ${styles.bandPaper2}`} id="pricing">
+          <div className={styles.wrap}>
+            <div className={`${styles.secTop} ${styles.secTopMid} ${styles.pricingSecTop}`}>
+              <span className={styles.eyebrow}>{PRICING_HERO.eyebrow}</span>
+              <h2 className={styles.sec}>{PRICING_HERO.title}</h2>
+              <p className={styles.lede}>{PRICING_HERO.lede}</p>
+            </div>
 
-      <main id="main" role="main">
-        <section className="py-[var(--space-section)]">
-          <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-[720px] text-center">
-              <h1 className="text-[44px] font-semibold leading-[1.1] text-black sm:text-[56px] lg:text-[64px]">
-                מחירון חשבונית דיגיטלית
-              </h1>
-              <p className="mt-4 text-[20px] font-semibold leading-[32px] text-[color:var(--vow-muted)]">
-                חשבונית דיגיטלית מאובטחת עם חיבור לרשות המיסים. שנה ראשונה חינם לכל עסק.{" "}
-                <Link href="/invoice" className="text-[#5389BB] underline hover:no-underline">
-                  פרטים על החשבונית הדיגיטלית
-                </Link>
-              </p>
+            <PricingPlans />
+
+            <h2 className={styles.valH}>מה מקבלים בכל חבילה, כולל בחינמית</h2>
+            <p className={styles.valSub}>משלמים על ההיקף (עריכות, אחסון, דומיין), לא על הבסיס. הבסיס מלא מהיום הראשון.</p>
+            <div className={styles.val}>
+              {VALUE_CARDS.map((card, i) => (
+                <div key={card.title} className={styles.vcard}>
+                  <span className={styles.vi}>{VALUE_CARD_ICONS[i]}</span>
+                  <b>{card.title}</b>
+                  <p>{card.body}</p>
+                </div>
+              ))}
+            </div>
+            <p className={styles.valLine}>וכל הדרך פשוטה ובעברית: מתארים במשפט, רואים אתר, מקליקים ומפרסמים.</p>
+
+            <p className={styles.prDom}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" /><path d="M12 8v5M12 16.2v.1" />
+              </svg>
+              <span>
+                <b>על הדומיין, בלי ערפול:</b> כתובת מהמערכת (yourname.uxellent.site) כלולה בחינם בכל החבילות
+                וזה מספיק כדי להיות באוויר. רוצים דומיין משלכם? אתם רוכשים אותו אצל רשם דומיינים
+                (כ-₪82 לשנה) ואנחנו מחברים אותו לאתר. <b>אנחנו לא רוכשים דומיין עבורכם.</b>
+              </span>
+            </p>
+
+            <div className={styles.prExtra}>
+              {PRICING_EXTRA.map((item) => (
+                <div key={item.title}>
+                  <b>{item.title}</b>
+                  <span>{item.body}</span>
+                </div>
+              ))}
             </div>
           </div>
         </section>
-
-        <PriceSection />
-        <ServiceFaqSection title="שאלות נפוצות על התמחור" items={[...PRICING_FAQ]} />
-        <AboutSection />
       </main>
-
-      <SiteFooter />
-    </div>
-  );
+    </RedesignShell>
+  )
 }

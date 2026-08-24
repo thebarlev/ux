@@ -23,20 +23,25 @@ export const NAV_LINKS = [
     href: AUDITOR_SCAN_URL,
     label: "סריקת אתר",
   },
-  { href: "/idea-to-product", label: "מאיפיון למוצר" },
-  { href: "/design", label: "עיצוב ומיתוג" },
+  // The five links below used to point at dedicated agency-service pages.
+  // Those pages now 301 away (redesign/marketing-2026-08, redirect-map.html),
+  // so each href here points straight at the final destination — never at a
+  // redirected URL. "קידום עסקים בגוגל וב-AI" is the one exception: its page
+  // redirects to /growth-guides (a content hub), not to the home page.
+  { href: "/", label: "מאיפיון למוצר" },
+  { href: "/", label: "עיצוב ומיתוג" },
   {
     label: "פיתוח AI",
     children: [
-      { href: "/develop", label: "פיתוח אתרים בסביבת AI" },
-      { href: "/develop-ai", label: "פיתוח תוכנה בסביבת AI" },
+      { href: "/", label: "פיתוח אתרים בסביבת AI" },
+      { href: "/", label: "פיתוח תוכנה בסביבת AI" },
     ],
   },
   {
     label: "שיווק",
     children: [
-      { href: "/marketing/ppc", label: "שיווק PPC" },
-      { href: "/seo-ai", label: "קידום עסקים בגוגל וב-AI" },
+      { href: "/", label: "שיווק PPC" },
+      { href: "/growth-guides", label: "קידום עסקים בגוגל וב-AI" },
     ],
   },
   { href: "/contact", label: "יצירת קשר" },
@@ -54,5 +59,18 @@ export const HEADER_CTA = {
  * - /checkout — מסך תשלום מינימלי (הכרעת ברירת מחדל 28.7).
  * - /thanks — לעמודי ההצלחה יש שורת "חזרה לאתר" משלהם.
  * - /en — בשלב 1 האנגלית נשארת עם HeaderEN דרך en/layout (שלב 2 יאחד).
+ * - /, /pricing, /products, /how-it-works, /included, /blog — עיצוב 2026-08
+ *   (redesign/marketing-2026-08): לעמודים האלה יש RedesignHeader משלהם.
  */
-export const HEADERLESS_PATTERNS = [/^\/lp(\/|$)/, /^\/checkout(\/|$)/, /^\/thanks(\/|$)/, /^\/en(\/|$)/] as const
+export const HEADERLESS_PATTERNS = [
+  /^\/lp(\/|$)/,
+  /^\/checkout(\/|$)/,
+  /^\/thanks(\/|$)/,
+  /^\/en(\/|$)/,
+  /^\/$/,
+  /^\/pricing(\/|$)/,
+  /^\/products(\/|$)/,
+  /^\/how-it-works(\/|$)/,
+  /^\/included(\/|$)/,
+  /^\/blog(\/|$)/,
+] as const

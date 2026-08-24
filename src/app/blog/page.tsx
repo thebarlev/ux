@@ -1,125 +1,83 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Suspense } from "react"
-
-import { allArticles } from "contentlayer/generated"
-
-import { BlogShell } from "@/app/_components/blog/BlogShell"
-import { BlogIndexControls } from "@/app/_components/blog/BlogIndexControls"
-import { BlogPostRow } from "@/app/_components/blog/BlogPostRow"
-import { coerceBlogCategory, coerceBlogSort, parseTagsParam } from "@/app/_components/blog/blog.utils"
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+import Image from "next/image"
+import { RedesignShell } from "@/app/_components/redesign/RedesignShell"
+import { InnerHero } from "@/app/_components/redesign/InnerHero"
+import { PCloseCta } from "@/app/_components/redesign/PCloseCta"
+import styles from "@/app/_components/redesign/redesign.module.css"
+import { BLOG_HERO, BLOG_FEATURED, BLOG_ROWS, BLOG_CLOSER } from "@/app/_content/redesign/blog"
 
 export const metadata: Metadata = {
-  title: "בלוג Uxellent | SEO, פיתוח אתרים ושיווק דיגיטלי",
-  description: "מדריכים ותובנות של Uxellent על SEO, פיתוח אתרים, אוטומציות, שיווק דיגיטלי ו-AI לעסקים שרוצים לצמוח נכון.",
-  alternates: {
-    canonical: "/blog",
-    languages: heEnAlternateLanguages("/blog", "/en/blog"),
+  metadataBase: new URL("https://uxellent.com"),
+  alternates: { canonical: "/blog" },
+  title: "מדריכי צמיחה | Uxellent",
+  description: BLOG_HERO.lede,
+  openGraph: {
+    title: "מדריכי צמיחה | Uxellent",
+    description: BLOG_HERO.lede,
+    url: "https://uxellent.com/blog",
+    siteName: "Uxellent",
+    locale: "he_IL",
+    type: "website",
   },
+  robots: { index: true, follow: true },
 }
 
-type SearchParams = Record<string, string | string[] | undefined>
+const ARROW = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M19 12H5M12 5l-7 7 7 7" />
+  </svg>
+)
 
-export default async function BlogIndexPage({
-  searchParams,
-}: {
-  searchParams?: Promise<SearchParams>
-}) {
-  const sp = (await searchParams) ?? {}
-  const category = coerceBlogCategory(sp.category)
-  const sort = coerceBlogSort(sp.sort)
-  const tags = parseTagsParam(sp.tags)
-
-  const heArticles = allArticles.filter((a) => (a.locale as string | undefined) !== "en")
-  const availableTags = Array.from(
-    new Set(
-      heArticles
-        .flatMap((a) => (Array.isArray(a.tags) ? (a.tags as unknown[]) : []))
-        .map((t) => (typeof t === "string" ? t : ""))
-        .filter(Boolean)
-    )
-  ).sort((a, b) => a.localeCompare(b, "he"))
-
-  const filtered = heArticles
-    .filter((a) => (category === "all" ? true : a.category === category))
-    .filter((a) => {
-      if (!tags.length) return true
-      const articleTags = Array.isArray(a.tags) ? (a.tags as unknown[]) : []
-      const set = new Set(articleTags.filter((t): t is string => typeof t === "string"))
-      return tags.every((t) => set.has(t))
-    })
-    .slice()
-    .sort((a, b) => {
-      const ta = new Date(a.date).getTime()
-      const tb = new Date(b.date).getTime()
-      return sort === "oldest" ? ta - tb : tb - ta
-    })
-
+export default function BlogIndexPage() {
   return (
-    <BlogShell>
-      <section aria-label="כותרת בלוג" className="pt-10 pb-8 sm:pt-14">
-        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
-          <div className="mx-auto max-w-[980px]">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <h1 className="text-balance text-[44px] font-semibold leading-[1.05] text-black sm:text-[56px] lg:text-[70px]">
-                  בלוג Uxellent - פיתוח, שיווק ו-AI
-                </h1>
-                <p className="mt-4 text-pretty text-[18px] leading-[30px] text-[#747474] sm:text-[20px] sm:leading-[34px]">
-                  תובנות קצרות ומעשיות על פיתוח אתרים, אוטומציות, שיווק ו‑AI - כדי לבנות תהליך דיגיטלי שמייצר תוצאה.
-                </p>
-                <p className="mt-3 text-[16px] text-[#747474]">
-                  <Link href="/seo-ai" className="text-[#5389BB] underline hover:no-underline">קידום AI</Link>
-                  {" · "}
-                  <Link href="/develop" className="text-[#5389BB] underline hover:no-underline">פיתוח אתרים</Link>
-                  {" · "}
-                  <Link href="/contact" className="text-[#5389BB] underline hover:no-underline">לקבלת ייעוץ</Link>
-                </p>
+    <RedesignShell>
+      <main id="main">
+        <InnerHero eyebrow={BLOG_HERO.eyebrow} title={BLOG_HERO.title} lede={BLOG_HERO.lede} stats={BLOG_HERO.stats} />
+        <section className={styles.band}>
+          <div className={styles.wrap}>
+            <Link className={styles.afeat} href={`/blog/${BLOG_FEATURED.slug}`}>
+              <div>
+                <span className={styles.fno}>01 · המאמר המרכזי · {BLOG_FEATURED.categoryLabel}</span>
+                <h2>{BLOG_FEATURED.title}</h2>
+                <p>{BLOG_FEATURED.excerpt}</p>
+                <span className={styles.ameta}>
+                  <i>קריאה של {BLOG_FEATURED.readingTime}</i>
+                  <span className={styles.ametaDot} />
+                  <i>AI · SEO · אורגני</i>
+                </span>
+                <span className={styles.afeatGo}>לקריאת המאמר ←</span>
               </div>
+              <div className={styles.afeatIm}>
+                <Image src={BLOG_FEATURED.image} alt="" width={520} height={520} />
+              </div>
+            </Link>
 
-              <div className="hidden sm:flex shrink-0 pt-2">
-                <Link href="/contact" className="vow-btn-secondary">
-                  דברו איתנו
+            <div className={styles.alist}>
+              {BLOG_ROWS.map((row, i) => (
+                <Link key={row.slug} className={styles.arow} href={`/blog/${row.slug}`}>
+                  <span className={styles.arowNo}>{String(i + 2).padStart(2, "0")}</span>
+                  <span>
+                    <span className={styles.arowCat}>{row.categoryLabel}</span>
+                    <h3>{row.title}</h3>
+                    <p>{row.excerpt}</p>
+                    <span className={styles.ameta}>
+                      <i>קריאה של {row.readingTime}</i>
+                    </span>
+                  </span>
+                  <span className={styles.arowSide}>
+                    <span className={styles.arowThumb}>
+                      <Image src={row.image} alt="" width={74} height={74} />
+                    </span>
+                    <span className={styles.arowArr}>{ARROW}</span>
+                  </span>
                 </Link>
-              </div>
-            </div>
-
-            <div className="mt-6 sm:hidden">
-              <Link href="/contact" className="vow-btn-secondary w-full justify-center">
-                דברו איתנו
-              </Link>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
-
-      <Suspense fallback={null}>
-        <BlogIndexControls availableTags={availableTags} />
-      </Suspense>
-
-      <section aria-label="רשימת מאמרים" className="pb-[var(--space-section)]">
-        <div className="mx-auto max-w-[1440px] px-0 sm:px-0 lg:px-0">
-          {filtered.length ? (
-            filtered.map((a) => (
-              <BlogPostRow
-                key={a.slug}
-                href={`/blog/${a.slug}`}
-                title={a.title}
-                date={a.date}
-                category={a.category}
-                readingTimeMinutes={a.readingTimeMinutes}
-              />
-            ))
-          ) : (
-            <div className="mx-auto max-w-[980px] px-4 sm:px-6 lg:px-0 py-10">
-              <p className="text-[18px] font-semibold text-black">לא נמצאו מאמרים.</p>
-              <p className="mt-2 text-[18px] text-[#747474]">נסו לשנות את הסינון או לאפס.</p>
-            </div>
-          )}
-        </div>
-      </section>
-    </BlogShell>
+        </section>
+        <PCloseCta title={BLOG_CLOSER.title} lede={BLOG_CLOSER.lede} cta={BLOG_CLOSER.cta} />
+      </main>
+    </RedesignShell>
   )
 }
-

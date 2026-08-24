@@ -59,6 +59,25 @@ const nextConfig: NextConfig = {
       destination: "/en/seo-ai",
       permanent: true,
     },
+    // ── redesign/marketing-2026-08 (design-review/approved-2026-08/redirect-map.html) ──
+    // Old agency-service pages, folded into the new site. 301, not `permanent: true`
+    // (which Next emits as 308) — see the /new-home entry above for why.
+    // /pricing is deliberately absent: it keeps its URL with new content, like /.
+    // /lp/ecommerce and /lp/services are deliberately absent too — pending Itzik's
+    // call on whether their ad campaigns are still live (agent5-brief.md).
+    { source: "/design", destination: "/", statusCode: 301 },
+    { source: "/develop", destination: "/", statusCode: 301 },
+    { source: "/develop-ai", destination: "/", statusCode: 301 },
+    { source: "/idea-to-product", destination: "/", statusCode: 301 },
+    { source: "/marketing", destination: "/", statusCode: 301 },
+    { source: "/marketing/ppc", destination: "/", statusCode: 301 },
+    { source: "/marketing/seo-ai", destination: "/seo-ai", statusCode: 301 },
+    { source: "/seo-ai", destination: "/growth-guides", statusCode: 301 },
+    { source: "/roi", destination: "/", statusCode: 301 },
+    { source: "/checkout/success", destination: "/", statusCode: 301 },
+    { source: "/checkout/failed", destination: "/", statusCode: 301 },
+    { source: "/checkout/:packageId", destination: "/", statusCode: 301 },
+    { source: "/thanks/startup-kit", destination: "/", statusCode: 301 },
   ],
   headers: async () => [
     {

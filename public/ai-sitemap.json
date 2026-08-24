@@ -2,7 +2,7 @@
   "site": "https://uxellent.com",
   "brand": "VOW",
   "description": "AI-powered accountant, digital invoicing and website development platform.",
-  "generated_at": "2026-04-03T15:08:28.841Z",
+  "generated_at": "2026-08-24T14:32:10.453Z",
   "priority_pages": [
     {
       "url": "https://uxellent.com",
@@ -27,18 +27,6 @@
     {
       "url": "https://uxellent.com/invoice",
       "type": "product"
-    },
-    {
-      "url": "https://uxellent.com/design",
-      "type": "development"
-    },
-    {
-      "url": "https://uxellent.com/develop",
-      "type": "development"
-    },
-    {
-      "url": "https://uxellent.com/develop-ai",
-      "type": "development"
     },
     {
       "url": "https://uxellent.com/en/design",
@@ -73,28 +61,12 @@
       "type": "seo"
     },
     {
-      "url": "https://uxellent.com/marketing/ppc",
-      "type": "services"
-    },
-    {
-      "url": "https://uxellent.com/marketing/seo-ai",
-      "type": "seo"
-    },
-    {
       "url": "https://uxellent.com/portfolio",
       "type": "services"
     },
     {
       "url": "https://uxellent.com/pricing",
       "type": "services"
-    },
-    {
-      "url": "https://uxellent.com/roi",
-      "type": "services"
-    },
-    {
-      "url": "https://uxellent.com/seo-ai",
-      "type": "seo"
     },
     {
       "url": "https://uxellent.com/blog",
@@ -125,7 +97,23 @@
       "type": "page"
     },
     {
+      "url": "https://uxellent.com/en/idea-to-product",
+      "type": "page"
+    },
+    {
       "url": "https://uxellent.com/growth-guides",
+      "type": "page"
+    },
+    {
+      "url": "https://uxellent.com/how-it-works",
+      "type": "page"
+    },
+    {
+      "url": "https://uxellent.com/included",
+      "type": "page"
+    },
+    {
+      "url": "https://uxellent.com/products",
       "type": "page"
     }
   ]
