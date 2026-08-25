@@ -41,19 +41,32 @@
 .root *, .root *::before, .root *::after { box-sizing: border-box; }
 .root { scroll-behavior: smooth; }
 .root img { max-width: 100%; display: block; }
-.root button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+/* NOT color/background here: Tailwind's own preflight already sets button/a
+ * color:inherit and button background:transparent, at @layer base (lower
+ * priority than ANY unlayered rule, including this file, regardless of
+ * specificity). Scoping those same properties under .root bumps them to
+ * (0,1,1) — higher than a single-class component rule like .btnPrimary
+ * {color:#fff} at (0,1,0) — so .root would win and force every <a>/<button>
+ * using one class (buttons, .billTabOn, ...) back to inherited/transparent.
+ * Confirmed live: primary-button text was rendering in the inherited dark
+ * ink color instead of white before this was narrowed down to just these
+ * two harmless properties. */
+.root button { font: inherit; cursor: pointer; border: 0; }
 .root input { font: inherit; }
-.root a { color: inherit; }
 
 /* Isolation from the site-wide globals.css @layer base typography: that
  * layer sets real px font-sizes on bare h2/h3/li (not just a reset), and
  * since nothing in this file ever set li's font-size, globals.css "won" by
  * default — not a specificity fight, just an uncontested property. li was
- * the confirmed leak (22-24px instead of inherited ~17px); h1-h6 are NOT
- * reset here because every heading in this file already gets its size from
- * a same-or-higher-specificity rule below (.sec, .heroH1, .featTx h2, ...),
- * and a bare `.root h2` selector here would outrank those by specificity
- * and break them (confirmed — first attempt at this rule did exactly that). */
+ * the confirmed leak (22-24px instead of inherited ~17px); h1-h6 font-size
+ * is NOT reset here because every heading in this file already gets its
+ * size from a same-or-higher-specificity rule below (.sec, .heroH1,
+ * .featTx h2, ...), and a bare `.root h2` selector here would outrank those
+ * by specificity and break them (confirmed — a broader first attempt did
+ * exactly that). text-align IS reset (see below): nothing else in this file
+ * sets it on a bare heading, so unlike font-size there is no rule to break —
+ * globals.css centers h2 (Tailwind text-center) and that leak is real too. */
+.root h1, .root h2, .root h3, .root h4 { text-align: inherit; }
 .root li {
   font-size: inherit;
   line-height: inherit;
