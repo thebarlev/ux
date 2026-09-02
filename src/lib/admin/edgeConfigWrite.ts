@@ -1,15 +1,19 @@
 import "server-only"
 import { EDGE_CONFIG_KEY, readOverrides } from "@/lib/i18n/edgeOverrides"
 
-/** Writes go through the Vercel REST API — the read-only @vercel/edge-config
- *  SDK has no write path. Requires VERCEL_API_TOKEN (an Edge Config-scoped
- *  token, server-only env) and EDGE_CONFIG_ID; VERCEL_TEAM_ID is added to
- *  the query string when the Edge Config lives under a team. */
+/** Writes go through the Vercel REST API — the read-only @vercel/global-config
+ *  SDK has no write path. Requires VERCEL_API_TOKEN (a Global Config-scoped
+ *  token, server-only env) and EDGE_CONFIG_ID (the store's id — still that
+ *  name in this project's env, the id value itself didn't change with the
+ *  Edge Config -> Global Config rename); VERCEL_TEAM_ID is added to the
+ *  query string when the store lives under a team. Endpoint path is
+ *  /v1/global-config/{id}/items — the old /v1/edge-config/{id}/items path
+ *  from before the rename. */
 export async function writeOverride(locale: "he" | "en", path: string, value: string): Promise<void> {
   const token = process.env.VERCEL_API_TOKEN
   const configId = process.env.EDGE_CONFIG_ID
   if (!token || !configId) {
-    throw new Error("Edge Config is not provisioned: set VERCEL_API_TOKEN and EDGE_CONFIG_ID.")
+    throw new Error("Global Config is not provisioned: set VERCEL_API_TOKEN and EDGE_CONFIG_ID.")
   }
 
   const current = await readOverrides()
@@ -18,7 +22,7 @@ export async function writeOverride(locale: "he" | "en", path: string, value: st
   const nextOverrides = { ...current, [locale]: nextLocaleOverrides }
 
   const teamQuery = process.env.VERCEL_TEAM_ID ? `?teamId=${encodeURIComponent(process.env.VERCEL_TEAM_ID)}` : ""
-  const res = await fetch(`https://api.vercel.com/v1/edge-config/${configId}/items${teamQuery}`, {
+  const res = await fetch(`https://api.vercel.com/v1/global-config/${configId}/items${teamQuery}`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -30,7 +34,7 @@ export async function writeOverride(locale: "he" | "en", path: string, value: st
   })
   if (!res.ok) {
     const body = await res.text().catch(() => "")
-    throw new Error(`Edge Config write failed (${res.status}): ${body.slice(0, 300)}`)
+    throw new Error(`Global Config write failed (${res.status}): ${body.slice(0, 300)}`)
   }
 }
 
