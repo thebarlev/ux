@@ -1,8 +1,9 @@
 /**
- * Copy for /products (products.html). Kept as a typed data module — not
- * inline JSX — so a future /en/products can reuse this page's structure with
- * translated strings instead of a rebuild (see agent5-brief.md).
+ * Copy for /products (products.html) and /en/products (en/products.html).
+ * Text lives in src/content/i18n/{he,en}.json; this file holds the
+ * locale-agnostic structure (hrefs, viz configuration, image/URL strings).
  */
+import { getDictionary, type Locale } from "@/content/i18n/dictionary"
 
 export type FeatureViz =
   | { kind: "composer"; typingText: string }
@@ -22,87 +23,84 @@ export type Feature = {
   viz: FeatureViz
 }
 
-export const PRODUCTS_HERO = {
-  eyebrow: "מוצרים",
-  title: ["מנוע AI אחד.", "כל העסק באוויר."],
-  lede: "כותבים בעברית והמערכת עושה את השאר: בונה, מפרסמת ומעדכנת כשצריך. בלי עורך מסובך ובלי מילה באנגלית.",
-  stats: [
-    { value: "1", label: "משפט כדי להתחיל" },
-    { value: "₪0", label: "חבילת חינם אמיתית" },
-    { value: "RTL", label: "עברית מהשורש" },
-    { value: "24/7", label: "עורכים מתי שרוצים" },
-  ],
-}
+export function getProductsContent(locale: Locale = "he") {
+  const t = getDictionary(locale).products
+  const prefix = locale === "en" ? "/en" : ""
+  const [f1, f2, f3, f4, f5, f6] = t.features
 
-export const PRODUCTS_FEATURES: Feature[] = [
-  {
-    no: "01 · המוצר המרכזי",
-    title: "בניית אתרים ב-AI",
-    body: 'מתארים את העיסוק במשפט אחד, נגיד "שיננית בפתח תקווה, מקבלת בתיאום", ומקבלים אתר תדמית שלם: עיצוב, תוכן כתוב בעברית, עמוד נפרד לכל שירות וטופס פניות שמגיע ישירות למייל שלכם.',
-    chips: ["תוכן נכתב עבורכם", "עמוד לכל שירות", "כתובת חינם באוויר"],
-    cta: { label: "להתחיל בחינם >", href: "https://uxellent.site" },
-    viz: { kind: "composer", typingText: "עורך דין בתל אביב, דיני משפחה והסכמי ממון" },
-  },
-  {
-    no: "02 · לבעלי אתר ישן",
-    title: "חידוש אתר קיים",
-    body: "האתר הישן שלכם נשאר בגוגל עם כל הוותק שצבר. אנחנו מושכים ממנו את הפרטים (שירותים, טלפון, אזורי פעילות) ובונים סביבם אתר חדש באותה כתובת. המיקום נשמר, המראה מתחלף.",
-    chips: ["אותה כתובת בגוגל", "הפרטים נשמרים", "עיצוב עדכני"],
-    cta: { label: "לחדש את האתר >", href: "https://uxellent.site" },
-    flip: true,
-    viz: { kind: "before-after" },
-  },
-  {
-    no: "03 · למי שמפרסם",
-    title: "עמוד נחיתה לקמפיין",
-    body: "מטרה אחת ושום הסחה. כל קליק מהמודעה מגיע לעמוד שמוביל לפעולה אחת: שיחה, וואטסאפ או השארת פרטים. מחליפים מסר בקמפיין? כותבים למערכת והעמוד מתעדכן.",
-    chips: ["פעולה אחת במרכז", "בלי תפריט מסיח", "מתעדכן בהוראה"],
-    cta: { label: "לבנות עמוד קמפיין >", href: "https://uxellent.site" },
-    viz: { kind: "landing" },
-  },
-  {
-    no: "04 · העריכה",
-    title: "עריכה בשיחה, בעברית",
-    body: "אין עורך שצריך ללמוד. כותבים מה רוצים, והמערכת משנה את האתר בפועל. גם חצי שנה אחרי הפרסום, בלי להיזכר איך עובד שום כלי.",
-    chips: ["בלי עקומת למידה", "שינויי עיצוב בלי הגבלה", "גם אחרי הפרסום"],
-    cta: { label: "איך זה עובד >", href: "/how-it-works" },
-    flip: true,
-    viz: {
-      kind: "chat",
-      messages: [
-        { from: "me", text: "תגדיל את הכותרת ותוסיף כפתור וואטסאפ" },
-        { from: "ai", bold: "בוצע.", text: "הכותרת הוגדלה ונוסף כפתור וואטסאפ ליד כפתור החיוג." },
-        { from: "me", text: "מעולה. תפרסם" },
-        { from: "ai", bold: "האתר באוויר.", text: "אפשר לחזור ולעדכן מתי שתרצו." },
-      ],
+  const features: Feature[] = [
+    {
+      no: f1.no,
+      title: f1.title,
+      body: f1.body,
+      chips: f1.chips,
+      cta: { label: `${f1.ctaLabel} >`, href: "https://uxellent.site" },
+      viz: { kind: "composer", typingText: f1.vizComposerText! },
     },
-  },
-  {
-    no: "05 · הבסיס הטכני",
-    title: "בנוי נכון לגוגל",
-    body: "כל אתר יוצא עם מבנה כותרות תקין, כתובות נקיות, תיאורי עמוד וטעינה מהירה. זה הבסיס שגוגל ומנועי חיפוש מבוססי AI צריכים, והוא כלול במחיר. דירוג אנחנו לא מבטיחים; מי שמבטיח, מוכר משהו אחר.",
-    chips: ["מבנה סמנטי תקין", "טעינה מהירה", "מוכן לחיפוש AI"],
-    cta: { label: "מה עוד כלול >", href: "/included" },
-    viz: {
-      kind: "serp",
-      url: "yourname.uxellent.site",
-      title: "עורך דין לדיני משפחה בתל אביב | ליבוביץ׳ ושות׳",
-      description: "משרד בוטיק לדיני משפחה, הסכמי ממון וצוואות. פגישת היכרות ראשונה ללא עלות…",
-      badges: ["מבנה תקין ✓", "מהירות ✓", "תיאור עמוד ✓"],
+    {
+      no: f2.no,
+      title: f2.title,
+      body: f2.body,
+      chips: f2.chips,
+      cta: { label: `${f2.ctaLabel} >`, href: "https://uxellent.site" },
+      flip: true,
+      viz: { kind: "before-after" },
     },
-  },
-  {
-    no: "06 · אזור הניהול",
-    title: "סטודיו ניהול, למי שרוצה ידיים על ההגה",
-    body: "בנוסף לצ׳אט יש אזור ניהול אישי. לוחצים על חלק באתר ועורכים אותו ישירות, מסדרים את חלקי העמוד, מחליפים צבע וגופן, ומפרסמים בלחיצה. שינוי קטן ומהיר? לא חייבים אפילו לכתוב משפט.",
-    chips: ["עריכה בקליק על החלק", "סידור חלקי העמוד", "צבע וגופן בהחלפה", "פרסום בלחיצה"],
-    cta: { label: "להתחיל בחינם >", href: "https://uxellent.site" },
-    flip: true,
-    viz: { kind: "studio", url: "ronel.uxellent.site", navItems: ["הכותרת", "השירותים", "גלריה", "יצירת קשר"], activeIndex: 1, zoneLabel: "עריכת השירותים" },
-  },
-]
+    {
+      no: f3.no,
+      title: f3.title,
+      body: f3.body,
+      chips: f3.chips,
+      cta: { label: `${f3.ctaLabel} >`, href: "https://uxellent.site" },
+      viz: { kind: "landing" },
+    },
+    {
+      no: f4.no,
+      title: f4.title,
+      body: f4.body,
+      chips: f4.chips,
+      cta: { label: `${f4.ctaLabel} >`, href: `${prefix}/how-it-works` },
+      flip: true,
+      viz: {
+        kind: "chat",
+        messages: [
+          { from: "me", text: f4.vizChatMe1! },
+          { from: "ai", bold: f4.vizChatAiBold1!, text: f4.vizChatAi1! },
+          { from: "me", text: f4.vizChatMe2! },
+          { from: "ai", bold: f4.vizChatAiBold2!, text: f4.vizChatAi2! },
+        ],
+      },
+    },
+    {
+      no: f5.no,
+      title: f5.title,
+      body: f5.body,
+      chips: f5.chips,
+      cta: { label: `${f5.ctaLabel} >`, href: `${prefix}/included` },
+      viz: {
+        kind: "serp",
+        url: "yourname.uxellent.site",
+        title: f5.vizTitle!,
+        description: f5.vizDescription!,
+        badges: f5.vizBadges!,
+      },
+    },
+    {
+      no: f6.no,
+      title: f6.title,
+      body: f6.body,
+      chips: f6.chips,
+      cta: { label: `${f6.ctaLabel} >`, href: "https://uxellent.site" },
+      flip: true,
+      viz: {
+        kind: "studio",
+        url: "ronel.uxellent.site",
+        navItems: f6.vizNavItems!,
+        activeIndex: 1,
+        zoneLabel: f6.vizZoneLabel!,
+      },
+    },
+  ]
 
-export const PRODUCTS_CLOSER = {
-  title: "הדרך הכי מהירה להבין היא פשוט לנסות.",
-  lede: "חבילת החינם לא דורשת כרטיס אשראי.",
+  return { hero: t.hero, features, closer: t.closer }
 }

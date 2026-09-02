@@ -1,125 +1,87 @@
 import type { Metadata } from "next"
-import { Suspense } from "react"
-
-import { allArticles } from "contentlayer/generated"
-
-import { BlogShell } from "@/app/_components/blog/BlogShell"
-import { BlogIndexControls } from "@/app/_components/blog/BlogIndexControls"
-import { BlogPostRow } from "@/app/_components/blog/BlogPostRow"
-import { coerceBlogCategory, coerceBlogSort, parseTagsParam } from "@/app/_components/blog/blog.utils"
-import { EnLink } from "../_components/EnLink"
-import { prefixEnPath } from "../_lib/prefixEnPath"
+import Link from "next/link"
+import Image from "next/image"
+import { RedesignShell } from "@/app/_components/redesign/RedesignShell"
+import { InnerHero } from "@/app/_components/redesign/InnerHero"
+import { PCloseCta } from "@/app/_components/redesign/PCloseCta"
+import styles from "@/app/_components/redesign/redesign.module.css"
+import { getBlogContent } from "@/app/_content/redesign/blog"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
+const blog = getBlogContent("en")
+
 export const metadata: Metadata = {
-  title: "Uxellent Blog | SEO, Web Development & AI",
-  description: "Read Uxellent insights on SEO, web development, automation, AI search, and digital marketing services for growing businesses.",
-  alternates: {
-    canonical: "/en/blog",
-    languages: heEnAlternateLanguages("/blog", "/en/blog"),
+  metadataBase: new URL("https://uxellent.com"),
+  alternates: { canonical: "/en/blog", languages: heEnAlternateLanguages("/blog", "/en/blog") },
+  title: "Growth Guides | Uxellent",
+  description: blog.hero.lede,
+  openGraph: {
+    title: "Growth Guides | Uxellent",
+    description: blog.hero.lede,
+    url: "https://uxellent.com/en/blog",
+    siteName: "Uxellent",
+    locale: "en_US",
+    type: "website",
   },
+  robots: { index: true, follow: true },
 }
 
-type SearchParams = Record<string, string | string[] | undefined>
+const ARROW = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M19 12H5M12 5l-7 7 7 7" />
+  </svg>
+)
 
-export default async function BlogIndexPageEn({
-  searchParams,
-}: {
-  searchParams?: Promise<SearchParams>
-}) {
-  const sp = (await searchParams) ?? {}
-  const category = coerceBlogCategory(sp.category)
-  const sort = coerceBlogSort(sp.sort)
-  const tags = parseTagsParam(sp.tags)
-
-  const enArticles = allArticles.filter((a) => (a.locale as string | undefined) === "en")
-  const enSlugs = new Set(enArticles.map((a) => a.slug))
-  const heOnlyArticles = allArticles.filter(
-    (a) => (a.locale as string | undefined) !== "en" && !enSlugs.has(a.slug)
-  )
-  const allForEnBlog = [...enArticles, ...heOnlyArticles]
-
-  const availableTags = Array.from(
-    new Set(
-      allForEnBlog
-        .flatMap((a) => (Array.isArray(a.tags) ? (a.tags as unknown[]) : []))
-        .map((t) => (typeof t === "string" ? t : ""))
-        .filter(Boolean)
-    )
-  ).sort((a, b) => a.localeCompare(b, "en"))
-
-  const filtered = allForEnBlog
-    .filter((a) => (category === "all" ? true : a.category === category))
-    .filter((a) => {
-      if (!tags.length) return true
-      const articleTags = Array.isArray(a.tags) ? (a.tags as unknown[]) : []
-      const set = new Set(articleTags.filter((t): t is string => typeof t === "string"))
-      return tags.every((t) => set.has(t))
-    })
-    .slice()
-    .sort((a, b) => {
-      const ta = new Date(a.date).getTime()
-      const tb = new Date(b.date).getTime()
-      return sort === "oldest" ? ta - tb : tb - ta
-    })
-
+export default function BlogIndexPageEn() {
+  const { hero, featured, rows, closer, featuredNo } = getBlogContent("en")
   return (
-    <BlogShell locale="en">
-      <section aria-label="Blog" className="pt-10 pb-8 sm:pt-14" dir="ltr">
-        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-4">
-          <div className="mx-auto max-w-[980px]">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <h1 className="text-balance text-[44px] font-semibold leading-[1.05] text-black sm:text-[56px] lg:text-[70px]">
-                  Blog
-                </h1>
-                <p className="mt-4 text-pretty text-[18px] leading-[30px] text-[#747474] sm:text-[20px] sm:leading-[34px]">
-                  Short, practical insights on web development, automation, marketing, and AI - to build a digital process that delivers results.
-                </p>
+    <RedesignShell locale="en">
+      <main id="main">
+        <InnerHero eyebrow={hero.eyebrow} title={hero.title} lede={hero.lede} stats={hero.stats} />
+        <section className={styles.band}>
+          <div className={styles.wrap}>
+            <Link className={styles.afeat} href={`/en/blog/${featured.slug}`}>
+              <div>
+                <span className={styles.fno}>{featuredNo} · {featured.categoryLabel}</span>
+                <h2>{featured.title}</h2>
+                <p>{featured.excerpt}</p>
+                <span className={styles.ameta}>
+                  <i>{featured.readingTime}</i>
+                  <span className={styles.ametaDot} />
+                  <i>{blog.metaTags}</i>
+                </span>
+                <span className={styles.afeatGo}>{blog.readMore} &gt;</span>
               </div>
-
-              <div className="hidden sm:flex shrink-0 pt-2">
-                <EnLink href="/contact" className="vow-btn-secondary">
-                  Get in touch
-                </EnLink>
+              <div className={styles.afeatIm}>
+                <Image src={featured.image} alt="" width={520} height={520} />
               </div>
-            </div>
+            </Link>
 
-            <div className="mt-6 sm:hidden">
-              <EnLink href="/contact" className="vow-btn-secondary w-full justify-center">
-                Get in touch
-              </EnLink>
+            <div className={styles.alist}>
+              {rows.map((row, i) => (
+                <Link key={row.slug} className={styles.arow} href={`/en/blog/${row.slug}`}>
+                  <span className={styles.arowNo}>{String(i + 2).padStart(2, "0")}</span>
+                  <span>
+                    <span className={styles.arowCat}>{row.categoryLabel}</span>
+                    <h3>{row.title}</h3>
+                    <p>{row.excerpt}</p>
+                    <span className={styles.ameta}>
+                      <i>{row.readingTime}</i>
+                    </span>
+                  </span>
+                  <span className={styles.arowSide}>
+                    <span className={styles.arowThumb}>
+                      <Image src={row.image} alt="" width={74} height={74} />
+                    </span>
+                    <span className={styles.arowArr}>{ARROW}</span>
+                  </span>
+                </Link>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
-
-      <Suspense fallback={null}>
-        <BlogIndexControls availableTags={availableTags} locale="en" />
-      </Suspense>
-
-      <section aria-label="Article list" className="pb-[var(--space-section)]" dir="ltr">
-        <div className="mx-auto max-w-[1440px] px-0 sm:px-0 lg:px-0">
-          {filtered.length ? (
-            filtered.map((a) => (
-              <BlogPostRow
-                key={a.slug}
-                href={(a.locale as string | undefined) === "en" ? prefixEnPath(`/blog/${a.slug}`) : `/blog/${a.slug}`}
-                title={a.title}
-                date={a.date}
-                category={a.category}
-                readingTimeMinutes={a.readingTimeMinutes}
-                locale="en"
-              />
-            ))
-          ) : (
-            <div className="mx-auto max-w-[980px] px-4 sm:px-6 lg:px-0 py-10">
-              <p className="text-[18px] font-semibold text-black">No articles found.</p>
-              <p className="mt-2 text-[18px] text-[#747474]">Try changing filters or reset.</p>
-            </div>
-          )}
-        </div>
-      </section>
-    </BlogShell>
+        </section>
+        <PCloseCta title={closer.title} lede={closer.lede} locale="en" />
+      </main>
+    </RedesignShell>
   )
 }

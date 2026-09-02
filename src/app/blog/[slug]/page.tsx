@@ -9,9 +9,13 @@ import { PCloseCta } from "@/app/_components/redesign/PCloseCta"
 import styles from "@/app/_components/redesign/redesign.module.css"
 import { JsonLd, articleSchema, breadcrumbListSchema } from "@/components/JsonLd"
 import { extractH2Headings } from "@/lib/redesign/extractHeadings"
-import { BLOG_FEATURED, BLOG_ROWS, ARTICLE_CLOSER, type BlogCard } from "@/app/_content/redesign/blog"
+import { getBlogContent, formatReadingTime, type BlogCard } from "@/app/_content/redesign/blog"
+import { getDictionary } from "@/content/i18n/dictionary"
+import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-const ORDER: BlogCard[] = [BLOG_FEATURED, ...BLOG_ROWS]
+const blog = getBlogContent("he")
+const blogNavLabel = getDictionary("he").nav.blog
+const ORDER: BlogCard[] = [blog.featured, ...blog.rows]
 
 function findPost(slug: string) {
   return allArticles.find(
@@ -27,7 +31,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     metadataBase: new URL("https://uxellent.com"),
     title: post.title,
     description: post.description ?? "מאמר של Uxellent על SEO, פיתוח אתרים, אוטומציות וצמיחה דיגיטלית לעסקים.",
-    alternates: { canonical: `/blog/${post.slug}` },
+    alternates: {
+      canonical: `/blog/${post.slug}`,
+      languages: heEnAlternateLanguages(`/blog/${post.slug}`, `/en/blog/${post.slug}`),
+    },
     openGraph: {
       title: post.title,
       description: post.description ?? "מאמר בבלוג של Uxellent.",
@@ -65,7 +72,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
       />
       <JsonLd
         data={breadcrumbListSchema([
-          { name: "מאמרים", url: "https://uxellent.com/blog" },
+          { name: blogNavLabel, url: "https://uxellent.com/blog" },
           { name: post.title, url: shareUrl },
         ])}
       />
@@ -73,12 +80,12 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
         <section className={`${styles.phero} ${styles.ahero}`}>
           <div className={styles.wrap}>
             <span className={styles.crumb}>
-              <Link href="/blog">מאמרים</Link> ← {card?.categoryLabel ?? "מאמר"}
+              <Link href="/blog">{blogNavLabel}</Link> {blog.crumbSeparator} {card?.categoryLabel ?? "מאמר"}
             </span>
             <h1>{post.title}</h1>
             {post.description ? <p className={styles.lede}>{post.description}</p> : null}
             <div className={styles.tags}>
-              <span className={styles.tagRt}>קריאה של {post.readingTimeMinutes} דק׳</span>
+              <span className={styles.tagRt}>{formatReadingTime(post.readingTimeMinutes, "he")}</span>
               {(post.tags as string[] | undefined)?.map((tag) => (
                 <span key={tag}>{tag}</span>
               ))}
@@ -89,8 +96,8 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
         <article className={styles.band}>
           <div className={`${styles.wrap} ${styles.artWrap}`}>
             {headings.length > 0 ? (
-              <aside className={styles.toc} aria-label="תוכן העמוד">
-                <p className={styles.tocTt}>בעמוד הזה</p>
+              <aside className={styles.toc} aria-label={blog.tocLabel}>
+                <p className={styles.tocTt}>{blog.tocLabel}</p>
                 {headings.map((h) => (
                   <a key={h.id} href={`#${h.id}`}>
                     {h.text}
@@ -105,8 +112,8 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
         <section className={styles.band} style={{ paddingBlockStart: 0 }}>
           <div className={styles.wrap}>
             <div className={styles.moreH}>
-              <h2>עוד מדריכים</h2>
-              <Link href="/blog">לכל המאמרים ←</Link>
+              <h2>{blog.moreGuides}</h2>
+              <Link href="/blog">{blog.allArticles} {blog.crumbSeparator}</Link>
             </div>
             <div className={styles.mgrid}>
               {related.map((r) => (
@@ -124,7 +131,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
           </div>
         </section>
 
-        <PCloseCta title={ARTICLE_CLOSER.title} lede={ARTICLE_CLOSER.lede} />
+        <PCloseCta title={blog.articleCloser.title} lede={blog.articleCloser.lede} />
       </main>
     </RedesignShell>
   )

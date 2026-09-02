@@ -1,51 +1,57 @@
 import type { Feature } from "@/app/_content/redesign/products"
+import { getDictionary, type Locale } from "@/content/i18n/dictionary"
 
-export const WHY_US_HERO = {
-  eyebrow: "למה אנחנו",
-  title: ["לימדנו מערכת לעצב אתרים.", "כדי שאתם לא תצטרכו."],
-  lede: "אנחנו מגיעים מעולם העיצוב והפיתוח. השקענו חודשים ואלפי דולרים כדי ללמד את המערכת לעצב, לכתוב ולבנות כמו מקצוענים, ולהישאר פשוטה לשימוש בעברית.",
-  stats: [
-    { value: "חודשים", label: "של אימון המערכת" },
-    { value: "אלפי $", label: "הושקעו בלמידה" },
-    { value: "1", label: "משפט כדי להתחיל" },
-  ],
-}
+export function getWhyUsContent(locale: Locale = "he") {
+  const t = getDictionary(locale).whyUs
+  const prefix = locale === "en" ? "/en" : ""
+  const [f1, f2, f3] = t.features
 
-export const WHY_US_FEATURES: Feature[] = [
-  {
-    no: "01 · הפקודה הפשוטה",
-    title: "משפט אחד, אתר שלם",
-    body: 'כותבים בעברית, למשל "עורך דין מירושלים בתחום הפלילי", ומקבלים אתר מלא: עיצוב מקצועי, תוכן כתוב, עמוד לכל שירות וטופס פניות. לא צריך לדעת לנסח ולא צריך להבין בטכנולוגיה, המערכת מבינה עברית של בעלי עסקים.',
-    chips: ["תוכן מלא, לא שלד", "עיצוב ברמה של מעצב", "מוכן לפרסום"],
-    cta: { label: "איך זה עובד >", href: "/how-it-works" },
-    viz: { kind: "composer", typingText: "עורך דין מירושלים בתחום הפלילי" },
-  },
-  {
-    no: "02 · חוסך שעות עבודה",
-    title: "מחליפים תמונה וטקסט בדקות, לא בשעות",
-    body: "הניווט באזור הניהול בנוי כך שהחלפת תמונה או תיקון טקסט לא דורשים איש מקצוע: לוחצים על החלק, מחליפים, מפרסמים. מה שהיה לוקח שעות מול ספק חיצוני נסגר לבד בכמה דקות, והתוצאה באוויר מיד.",
-    chips: ["החלפת תמונות בקליק", "עריכת טקסטים מהירה", "תוצאה באוויר מיד"],
-    cta: { label: "לכל המוצרים >", href: "/products" },
-    flip: true,
-    viz: { kind: "studio", url: "yourname.uxellent.site", navItems: ["הכותרת", "גלריה", "אודות", "יצירת קשר"], activeIndex: 1, zoneLabel: "החלפת תמונה" },
-  },
-  {
-    no: "03 · בנוי נכון מהיסוד",
-    title: "קידום ונגישות, כבר מהבסיס",
-    body: "כל אתר יוצא עם מבנה כותרות תקין, כתובות נקיות, תיאורי עמוד וטעינה מהירה, הבסיס שגוגל ומנועי חיפוש מבוססי AI צריכים. גם עבודה על נגישות מובנית: ניגודיות תקינה ומבנה סמנטי נכון. זה כלול, לא תוספת.",
-    chips: ["מבנה טכני לקידום", "עבודה על נגישות", "טעינה מהירה"],
-    cta: { label: "מה עוד כלול >", href: "/included" },
-    viz: {
-      kind: "serp",
-      url: "yourname.uxellent.site",
-      title: "עורך דין פלילי בירושלים | ייצוג ומעצרים",
-      description: "משרד עורכי דין בתחום הפלילי בירושלים. ליווי בחקירות, מעצרים וייצוג בבתי משפט...",
-      badges: ["✓ מבנה תקין", "✓ מהירות", "✓ נגישות"],
+  const hero = {
+    eyebrow: t.hero.eyebrow,
+    title: t.hero.title,
+    lede: t.hero.lede,
+    stats: t.hero.stats,
+  }
+
+  const features: Feature[] = [
+    {
+      no: f1.no,
+      title: f1.title,
+      body: f1.body,
+      chips: f1.chips,
+      cta: { label: `${f1.ctaLabel} >`, href: `${prefix}/how-it-works` },
+      viz: { kind: "composer", typingText: f1.vizComposerText! },
     },
-  },
-]
+    {
+      no: f2.no,
+      title: f2.title,
+      body: f2.body,
+      chips: f2.chips,
+      cta: { label: `${f2.ctaLabel} >`, href: `${prefix}/products` },
+      flip: true,
+      viz: {
+        kind: "studio",
+        url: "yourname.uxellent.site",
+        navItems: f2.vizNavItems!,
+        activeIndex: 1,
+        zoneLabel: f2.vizZoneLabel!,
+      },
+    },
+    {
+      no: f3.no,
+      title: f3.title,
+      body: f3.body,
+      chips: f3.chips,
+      cta: { label: `${f3.ctaLabel} >`, href: `${prefix}/included` },
+      viz: {
+        kind: "serp",
+        url: "yourname.uxellent.site",
+        title: f3.vizTitle!,
+        description: f3.vizDescription!,
+        badges: f3.vizBadges!,
+      },
+    },
+  ]
 
-export const WHY_US_CLOSER = {
-  title: "נסו את זה על העסק שלכם.",
-  lede: "משפט אחד בעברית, וחבילת החינם לא דורשת כרטיס אשראי.",
+  return { hero, features, closer: t.closer }
 }

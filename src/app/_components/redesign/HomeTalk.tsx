@@ -2,18 +2,20 @@
 
 import { useEffect, useState } from "react"
 import styles from "./redesign.module.css"
-import { TALK_SCRIPT } from "@/app/_content/redesign/home"
+import { getDictionary, type Locale } from "@/content/i18n/dictionary"
 
 type Bubble = { from: "me" | "ai"; text: string; key: number }
 
-export function HomeTalk() {
+export function HomeTalk({ locale = "he" }: { locale?: Locale }) {
+  const t = getDictionary(locale).home.help
+  const script = t.talkScript as { from: "me" | "ai"; text: string }[]
   const [bubbles, setBubbles] = useState<Bubble[]>([])
   const [typing, setTyping] = useState(false)
 
   useEffect(() => {
     const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
     if (reduce) {
-      setBubbles(TALK_SCRIPT.slice(0, 4).map((m, i) => ({ ...m, key: i })))
+      setBubbles(script.slice(0, 4).map((m, i) => ({ ...m, key: i })))
       return
     }
     let cancelled = false
@@ -28,7 +30,7 @@ export function HomeTalk() {
     let i = 0
     let key = 0
     const step = () => {
-      if (i >= TALK_SCRIPT.length) {
+      if (i >= script.length) {
         later(() => {
           i = 0
           setBubbles([])
@@ -36,7 +38,7 @@ export function HomeTalk() {
         }, 4200)
         return
       }
-      const m = TALK_SCRIPT[i]
+      const m = script[i]
       if (m.from === "ai") {
         setTyping(true)
         later(() => {
@@ -63,7 +65,7 @@ export function HomeTalk() {
       cancelled = true
       timers.forEach(clearTimeout)
     }
-  }, [])
+  }, [script])
 
   return (
     <div className={styles.talk}>
@@ -76,7 +78,7 @@ export function HomeTalk() {
         <b>Uxellent</b>
         <span className={styles.talkSt}>
           <i />
-          מקוון
+          {t.talkOnline}
         </span>
       </div>
       <div>

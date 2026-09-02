@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import styles from "./redesign.module.css"
 import type { FeatureViz as FeatureVizData } from "@/app/_content/redesign/products"
+import { getDictionary, type Locale } from "@/content/i18n/dictionary"
 
 function TypingLine({ text }: { text: string }) {
   const [shown, setShown] = useState("")
@@ -35,7 +36,8 @@ function TypingLine({ text }: { text: string }) {
   return <div className={styles.vzLn}>{shown}</div>
 }
 
-export function FeatureViz({ viz }: { viz: FeatureVizData }) {
+export function FeatureViz({ viz, locale = "he" }: { viz: FeatureVizData; locale?: Locale }) {
+  const t = getDictionary(locale).featureViz
   if (viz.kind === "composer") {
     return (
       <div className={styles.featViz}>
@@ -68,7 +70,7 @@ export function FeatureViz({ viz }: { viz: FeatureVizData }) {
           <div className={styles.vzBa}>
             <div className={styles.vzBaOld}>
               <SiteMock />
-              <span className={styles.vzBaTag}>האתר הישן</span>
+              <span className={styles.vzBaTag}>{t.oldSite}</span>
             </div>
             <span className={styles.vzBaArr}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -77,7 +79,7 @@ export function FeatureViz({ viz }: { viz: FeatureVizData }) {
             </span>
             <div>
               <SiteMock />
-              <span className={`${styles.vzBaTag} ${styles.vzBaNewTag}`}>האתר החדש · אותה כתובת</span>
+              <span className={`${styles.vzBaTag} ${styles.vzBaNewTag}`}>{t.newSite}</span>
             </div>
           </div>
         </div>
@@ -120,7 +122,7 @@ export function FeatureViz({ viz }: { viz: FeatureVizData }) {
             <div className={styles.vzStudioTb}>
               <i /><i />
               <span className={styles.vzStudioTbUrl}>{viz.url}</span>
-              <span className={styles.vzStudioTbPub}>פרסום</span>
+              <span className={styles.vzStudioTbPub}>{t.publish}</span>
             </div>
             <div className={styles.vzStudioSp}>
               <div className={styles.vzStudioRl}>

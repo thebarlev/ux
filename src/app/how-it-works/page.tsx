@@ -4,16 +4,19 @@ import { InnerHero } from "@/app/_components/redesign/InnerHero"
 import { FeatureBlock } from "@/app/_components/redesign/FeatureBlock"
 import { PCloseCta } from "@/app/_components/redesign/PCloseCta"
 import styles from "@/app/_components/redesign/redesign.module.css"
-import { HOW_HERO, HOW_STEPS, HOW_CLOSER } from "@/app/_content/redesign/how-it-works"
+import { getHowItWorksContent } from "@/app/_content/redesign/how-it-works"
+import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+
+const { hero } = getHowItWorksContent("he")
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/how-it-works" },
+  alternates: { canonical: "/how-it-works", languages: heEnAlternateLanguages("/how-it-works", "/en/how-it-works") },
   title: "איך זה עובד | Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
-  description: HOW_HERO.lede,
+  description: hero.lede,
   openGraph: {
     title: "איך זה עובד | Uxellent",
-    description: HOW_HERO.lede,
+    description: hero.lede,
     url: "https://uxellent.com/how-it-works",
     siteName: "Uxellent",
     locale: "he_IL",
@@ -23,18 +26,19 @@ export const metadata: Metadata = {
 }
 
 export default function HowItWorksPage() {
+  const { hero, steps, closer } = getHowItWorksContent("he")
   return (
     <RedesignShell>
       <main id="main">
-        <InnerHero eyebrow={HOW_HERO.eyebrow} title={HOW_HERO.title} lede={HOW_HERO.lede} stats={HOW_HERO.stats} />
+        <InnerHero eyebrow={hero.eyebrow} title={hero.title} lede={hero.lede} stats={hero.stats} />
         <section className={styles.band}>
           <div className={styles.wrap}>
-            {HOW_STEPS.map((step) => (
+            {steps.map((step) => (
               <FeatureBlock key={step.title} feature={step} />
             ))}
           </div>
         </section>
-        <PCloseCta title={HOW_CLOSER.title} lede={HOW_CLOSER.lede} />
+        <PCloseCta title={closer.title} lede={closer.lede} />
       </main>
     </RedesignShell>
   )

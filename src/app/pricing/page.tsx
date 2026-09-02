@@ -5,16 +5,19 @@ import { InnerHero } from "@/app/_components/redesign/InnerHero"
 import { PricingPlans } from "@/app/_components/redesign/PricingPlans"
 import { BrandMark } from "@/app/_components/redesign/BrandMark"
 import styles from "@/app/_components/redesign/redesign.module.css"
-import { PRICING_HERO, PRICING_NOTES } from "@/app/_content/redesign/pricing"
+import { getPricingContent } from "@/app/_content/redesign/pricing"
+import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+
+const { hero } = getPricingContent("he")
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/pricing" },
+  alternates: { canonical: "/pricing", languages: heEnAlternateLanguages("/pricing", "/en/pricing") },
   title: "מחירים | Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
-  description: PRICING_HERO.lede,
+  description: hero.lede,
   openGraph: {
     title: "מחירים | Uxellent",
-    description: PRICING_HERO.lede,
+    description: hero.lede,
     url: "https://uxellent.com/pricing",
     siteName: "Uxellent",
     locale: "he_IL",
@@ -24,16 +27,17 @@ export const metadata: Metadata = {
 }
 
 export default function PricingPage() {
+  const { hero, notes } = getPricingContent("he")
   return (
     <RedesignShell>
       <main id="main" className={styles.pricingMain}>
-        <InnerHero eyebrow={PRICING_HERO.eyebrow} title={PRICING_HERO.title} lede={PRICING_HERO.lede} />
+        <InnerHero eyebrow={hero.eyebrow} title={hero.title} lede={hero.lede} />
         <section className={`${styles.band} ${styles.bandPaper2}`} id="pricing">
           <div className={styles.wrap}>
             <PricingPlans />
 
             <div className={styles.prNote}>
-              {PRICING_NOTES.map((note, i) => (
+              {notes.map((note, i) => (
                 <Fragment key={note.title}>
                   {i > 0 ? (
                     <div className={styles.pnSep}>

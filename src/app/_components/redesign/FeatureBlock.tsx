@@ -2,8 +2,9 @@ import Link from "next/link"
 import styles from "./redesign.module.css"
 import { FeatureViz } from "./FeatureViz"
 import type { Feature } from "@/app/_content/redesign/products"
+import type { Locale } from "@/content/i18n/dictionary"
 
-export function FeatureBlock({ feature }: { feature: Feature }) {
+export function FeatureBlock({ feature, locale = "he" }: { feature: Feature; locale?: Locale }) {
   const isExternal = feature.cta?.href.startsWith("http")
   return (
     <div className={`${styles.feat} ${feature.flip ? styles.featFlip : ""}`}>
@@ -29,7 +30,7 @@ export function FeatureBlock({ feature }: { feature: Feature }) {
           )
         ) : null}
       </div>
-      <FeatureViz viz={feature.viz} />
+      <FeatureViz viz={feature.viz} locale={locale} />
     </div>
   )
 }

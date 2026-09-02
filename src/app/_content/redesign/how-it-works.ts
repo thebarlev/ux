@@ -1,50 +1,42 @@
 import type { Feature } from "./products"
+import { getDictionary, type Locale } from "@/content/i18n/dictionary"
 
-export const HOW_HERO = {
-  eyebrow: "התהליך",
-  title: ["כל התהליך,", "בשלושה שלבים."],
-  lede: "בלי אפיון וסקיצות, בלי חודש של תכתובות. ככה זה עובד בפועל, מהמשפט הראשון ועד שהאתר באוויר.",
-  stats: [
-    { value: "1", label: "משפט בעברית" },
-    { value: "0", label: "ידע טכני נדרש" },
-    { value: "∞", label: "סיבובי עריכה" },
-  ],
-}
+export function getHowItWorksContent(locale: Locale = "he") {
+  const t = getDictionary(locale).howItWorks
+  const [s1, s2, s3] = t.steps
 
-export const HOW_STEPS: Feature[] = [
-  {
-    no: "שלב 01",
-    title: "מתארים את העיסוק",
-    body: "משפט אחד על מה אתם עושים ולמי. לא צריך לנסח יפה ולא צריך מונחים, המערכת מבינה עברית של בעלי עסקים. אפשר גם בשלוש מילים, ואפשר לפרט.",
-    chips: ['"אינסטלטור, שירות 24 שעות במרכז"', '"מטפלת זוגית בחיפה"'],
-    viz: { kind: "composer", typingText: "שיננית בפתח תקווה, מקבלת בתיאום מראש" },
-  },
-  {
-    no: "שלב 02",
-    title: "המערכת בונה",
-    body: "עיצוב, תוכן, מבנה עמודים וטופס פניות נוצרים עבורכם, עם עמוד נפרד לכל שירות, כי כל עמוד עונה לחיפוש אחר. האתר עולה מיד לכתובת חינם: yourname.uxellent.site.",
-    chips: ["תוכן בעברית, לא תרגום", "מותאם לנייד מהרגע הראשון"],
-    flip: true,
-    viz: { kind: "before-after" },
-  },
-  {
-    no: "שלב 03",
-    title: "עורכים בשיחה ומפרסמים",
-    body: "רואים את האתר ומבקשים שינויים במילים שלכם. כשזה מרגיש נכון, מפרסמים. אין הגבלה על מספר הסיבובים לפני הפרסום, וגם אחריו חוזרים ומעדכנים מתי שרוצים.",
-    chips: ['"הגדל את הכותרת"', '"הוסף כפתור וואטסאפ"', '"תחליף את התמונה"'],
-    viz: {
-      kind: "chat",
-      messages: [
-        { from: "me", text: "תוסיף עמוד על טיפולי הלבנה" },
-        { from: "ai", bold: "נוסף.", text: 'עמוד "הלבנת שיניים" עם הסבר, שאלות נפוצות וכפתור קביעת תור.' },
-        { from: "me", text: "מושלם, תפרסם" },
-        { from: "ai", bold: "באוויר.", text: "העמוד החדש כבר מופיע בתפריט האתר." },
-      ],
+  const steps: Feature[] = [
+    {
+      no: s1.no,
+      title: s1.title,
+      body: s1.body,
+      chips: s1.chips,
+      viz: { kind: "composer", typingText: s1.vizComposerText! },
     },
-  },
-]
+    {
+      no: s2.no,
+      title: s2.title,
+      body: s2.body,
+      chips: s2.chips,
+      flip: true,
+      viz: { kind: "before-after" },
+    },
+    {
+      no: s3.no,
+      title: s3.title,
+      body: s3.body,
+      chips: s3.chips,
+      viz: {
+        kind: "chat",
+        messages: [
+          { from: "me", text: s3.vizChatMe1! },
+          { from: "ai", bold: s3.vizChatAiBold1!, text: s3.vizChatAi1! },
+          { from: "me", text: s3.vizChatMe2! },
+          { from: "ai", bold: s3.vizChatAiBold2!, text: s3.vizChatAi2! },
+        ],
+      },
+    },
+  ]
 
-export const HOW_CLOSER = {
-  title: "הכול מתחיל בשורה אחת בעברית.",
-  lede: "בלי כרטיס אשראי · אפשר להפסיק מתי שרוצים",
+  return { hero: t.hero, steps, closer: t.closer }
 }

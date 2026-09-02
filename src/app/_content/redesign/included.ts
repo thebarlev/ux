@@ -1,57 +1,58 @@
 import type { Feature } from "@/app/_content/redesign/products"
+import { getDictionary, type Locale } from "@/content/i18n/dictionary"
 
-export const INCLUDED_HERO = {
-  eyebrow: "מה כלול",
-  title: ["כל מה שכלול,", "שחור על גבי לבן."],
-  lede: "בלי כוכביות ואותיות קטנות. זה ההסכם בינינו, כולל מה שאנחנו לא עושים.",
-}
+export function getIncludedContent(locale: Locale = "he") {
+  const t = getDictionary(locale).included
+  const prefix = locale === "en" ? "/en" : ""
+  const [f1, f2, f3] = t.features
 
-export const INCLUDED_FEATURES: Feature[] = [
-  {
-    no: "01 · האתר עצמו",
-    title: "אתר שלם, לא שלד להשלמה",
-    body: "מהרגע הראשון יש לכם אתר תדמית מלא: עמוד נפרד לכל שירות, כי כל עמוד עונה לחיפוש אחר בגוגל, תוכן שנכתב בעברית לעסק שלכם ולא תבנית גנרית, וטופס פניות שמגיע ישירות למייל שלכם. אותו אתר עובד בנייד, בטאבלט ובמחשב, בלי גרסאות נפרדות לתחזק.",
-    chips: ["עמוד נפרד לכל שירות", "תוכן שנכתב עבורכם", "טופס פניות למייל שלכם", "מותאם לכל מסך"],
-    cta: { label: "מה עוד המנוע יודע לבנות >", href: "/products" },
-    viz: { kind: "composer", typingText: "שיננית בפתח תקווה, מקבלת בתיאום" },
-  },
-  {
-    no: "02 · מסביב לאתר",
-    title: "התשתית עלינו, כלולה במחיר",
-    body: "אחסון, תעודת SSL וגיבויים באחריותנו, עם עדכוני מערכת ואבטחה שרצים מאחורי הקלעים. אתם לא מתקינים כלום ולא פותחים חשבון נפרד. כתובת חינם (yourname.uxellent.site) כלולה בכל החבילות, והבסיס הטכני לגוגל, מבנה כותרות תקין וטעינה מהירה, מובנה בכל אתר. דירוג אנחנו לא מבטיחים; מי שמבטיח, מוכר משהו אחר.",
-    chips: ["אחסון, SSL וגיבויים", "כתובת חינם באוויר", "עדכונים שוטפים", "בנוי נכון לגוגל"],
-    cta: { label: "מה בדיוק בכל חבילה >", href: "/pricing" },
-    flip: true,
-    viz: {
-      kind: "serp",
-      url: "yourname.uxellent.site",
-      title: "שיננית בפתח תקווה | טיפולי שיניים בתיאום",
-      description: "קליניקה לשיננות בפתח תקווה. ניקוי אבנית, הלבנה והדרכה. קביעת תור אונליין...",
-      badges: ["✓ מבנה תקין", "✓ מהירות", "✓ SSL"],
+  const features: Feature[] = [
+    {
+      no: f1.no,
+      title: f1.title,
+      body: f1.body,
+      chips: f1.chips,
+      cta: { label: `${f1.ctaLabel} >`, href: `${prefix}/products` },
+      viz: { kind: "composer", typingText: f1.vizComposerText! },
     },
-  },
-  {
-    no: "03 · הדרך שעובדים איתנו",
-    title: "עריכה בשיחה, בעברית",
-    body: "כותבים מה לשנות והמערכת משנה, או לוחצים על חלק באתר ועורכים אותו ישירות באזור הניהול. שינויי עיצוב בלי הגבלה בכל החבילות, גם חצי שנה אחרי הפרסום. הטקסטים, התמונות והאתר שנבנה שייכים לכם, גם אם תבטלו. ואין דמי הקמה ואין קנס יציאה: ₪0 להתחיל, ואפשר להפסיק מתי שרוצים.",
-    chips: ["שינויי עיצוב בלי הגבלה", "התוכן שלכם נשאר שלכם", "בלי דמי הקמה", "בלי קנס יציאה"],
-    cta: { label: "איך התהליך עובד >", href: "/how-it-works" },
-    viz: {
-      kind: "chat",
-      messages: [
-        { from: "me", text: "תגדיל את הכותרת ותוסיף כפתור וואטסאפ" },
-        { from: "ai", bold: "בוצע.", text: "הכותרת הוגדלה ונוסף כפתור וואטסאפ ליד כפתור החיוג." },
-        { from: "me", text: "מעולה. תפרסם" },
-        { from: "ai", bold: "האתר באוויר.", text: "אפשר לחזור ולעדכן מתי שתרצו." },
-      ],
+    {
+      no: f2.no,
+      title: f2.title,
+      body: f2.body,
+      chips: f2.chips,
+      cta: { label: `${f2.ctaLabel} >`, href: `${prefix}/pricing` },
+      flip: true,
+      viz: {
+        kind: "serp",
+        url: "yourname.uxellent.site",
+        title: f2.vizTitle!,
+        description: f2.vizDescription!,
+        badges: f2.vizBadges!,
+      },
     },
-  },
-]
+    {
+      no: f3.no,
+      title: f3.title,
+      body: f3.body,
+      chips: f3.chips,
+      cta: { label: `${f3.ctaLabel} >`, href: `${prefix}/how-it-works` },
+      viz: {
+        kind: "chat",
+        messages: [
+          { from: "me", text: f3.vizChatMe1! },
+          { from: "ai", bold: f3.vizChatAiBold1!, text: f3.vizChatAi1! },
+          { from: "me", text: f3.vizChatMe2! },
+          { from: "ai", bold: f3.vizChatAiBold2!, text: f3.vizChatAi2! },
+        ],
+      },
+    },
+  ]
 
-export const INCLUDED_NOT_INCLUDED =
-  "חנות אונליין, מערכת הזמנות, ורכישת דומיין עבורכם. אנחנו מתמחים באתרי תדמית לבעלי מקצוע, לא בחנויות ולא במערכות. המיקוד הזה הוא מה שמאפשר לנו להיות טובים בזה."
-
-export const INCLUDED_CLOSER = {
-  title: "עכשיו תראו איך זה נראה בפועל.",
-  lede: "חבילת החינם לא דורשת כרטיס אשראי.",
+  return {
+    hero: t.hero,
+    features,
+    notIncludedLabel: t.notIncludedLabel,
+    notIncluded: t.notIncluded,
+    closer: t.closer,
+  }
 }

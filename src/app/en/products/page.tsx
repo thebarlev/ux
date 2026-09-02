@@ -4,41 +4,41 @@ import { InnerHero } from "@/app/_components/redesign/InnerHero"
 import { FeatureBlock } from "@/app/_components/redesign/FeatureBlock"
 import { PCloseCta } from "@/app/_components/redesign/PCloseCta"
 import styles from "@/app/_components/redesign/redesign.module.css"
-import { getWhyUsContent } from "@/app/_content/redesign/whyUs"
+import { getProductsContent } from "@/app/_content/redesign/products"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-const { hero } = getWhyUsContent("he")
+const { hero } = getProductsContent("en")
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/why-us", languages: heEnAlternateLanguages("/why-us", "/en/why-us") },
-  title: "למה אנחנו | אתרי תדמית בעברית לבעלי מקצוע חופשי",
+  alternates: { canonical: "/en/products", languages: heEnAlternateLanguages("/products", "/en/products") },
+  title: "Products | Uxellent | AI-built business websites in Hebrew",
   description: hero.lede,
   openGraph: {
-    title: "למה אנחנו | Uxellent",
+    title: "Products | Uxellent",
     description: hero.lede,
-    url: "https://uxellent.com/why-us",
+    url: "https://uxellent.com/en/products",
     siteName: "Uxellent",
-    locale: "he_IL",
+    locale: "en_US",
     type: "website",
   },
   robots: { index: true, follow: true },
 }
 
-export default function WhyUsPage() {
-  const { hero, features, closer } = getWhyUsContent("he")
+export default function ProductsPageEn() {
+  const { hero, features, closer } = getProductsContent("en")
   return (
-    <RedesignShell>
+    <RedesignShell locale="en">
       <main id="main">
         <InnerHero eyebrow={hero.eyebrow} title={hero.title} lede={hero.lede} stats={hero.stats} />
-        <section className={`${styles.band} ${styles.whyUsWarm}`}>
+        <section className={styles.band}>
           <div className={styles.wrap}>
             {features.map((feature) => (
-              <FeatureBlock key={feature.title} feature={feature} />
+              <FeatureBlock key={feature.title} feature={feature} locale="en" />
             ))}
           </div>
         </section>
-        <PCloseCta title={closer.title} lede={closer.lede} />
+        <PCloseCta title={closer.title} lede={closer.lede} locale="en" />
       </main>
     </RedesignShell>
   )

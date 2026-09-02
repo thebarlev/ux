@@ -1,0 +1,763 @@
+{
+  "nav": {
+    "whyUs": "Why us",
+    "pricing": "Pricing",
+    "howItWorks": "How it works",
+    "blog": "Blog",
+    "faq": "FAQ",
+    "products": "Products",
+    "included": "What's included",
+    "faqMobile": "FAQ",
+    "startFree": "Start for free",
+    "langSwitch": "עברית"
+  },
+  "whyUs": {
+    "hero": {
+      "eyebrow": "Why us",
+      "title": [
+        "We taught a system to design websites.",
+        "So you don't have to."
+      ],
+      "lede": "We come from design and development. We spent months and thousands of dollars teaching the system to design, write and build like professionals, and to stay simple to use.",
+      "stats": [
+        {
+          "value": "Months",
+          "label": "of training the system"
+        },
+        {
+          "value": "$1000s",
+          "label": "invested in its learning"
+        },
+        {
+          "value": "1",
+          "label": "sentence to start"
+        }
+      ]
+    },
+    "features": [
+      {
+        "no": "01 · The simple command",
+        "title": "One sentence, a whole site",
+        "body": "Write, say, \"a criminal defense lawyer in Jerusalem\", and get a complete site: professional design, written content, a page for every service and an inquiry form. No need to phrase it well and no need to understand technology. The system speaks business-owner.",
+        "chips": [
+          "Full content, not a skeleton",
+          "Designer-level design",
+          "Ready to publish"
+        ],
+        "ctaLabel": "How it works",
+        "vizComposerText": "A criminal defense lawyer in Jerusalem"
+      },
+      {
+        "no": "02 · Hours of work, saved",
+        "title": "Swap a photo or a text in minutes, not hours",
+        "body": "The studio is built so that swapping a photo or fixing a text takes no professional: click the section, swap, publish. What used to take hours with an outside vendor closes on its own in a few minutes, and the result is live immediately.",
+        "chips": [
+          "Swap photos with a click",
+          "Quick text edits",
+          "Results live right away"
+        ],
+        "ctaLabel": "All the products",
+        "vizNavItems": [
+          "Header",
+          "Gallery",
+          "About",
+          "Contact"
+        ],
+        "vizZoneLabel": "Swapping the photo"
+      },
+      {
+        "no": "03 · Built right from the ground up",
+        "title": "Search and accessibility, from the base",
+        "body": "Every site ships with clean heading structure, tidy URLs, page descriptions and fast loading, the foundation Google and AI-based search engines need. Accessibility groundwork is built in too: proper contrast and sound semantic structure. It's included, not an add-on.",
+        "chips": [
+          "A technical base for search",
+          "Accessibility groundwork",
+          "Fast loading"
+        ],
+        "ctaLabel": "What else is included",
+        "vizTitle": "Criminal Defense Lawyer in Jerusalem | Representation",
+        "vizDescription": "A criminal defense law office in Jerusalem. Interrogations, arrests and court representation...",
+        "vizBadges": [
+          "✓ Structure",
+          "✓ Speed",
+          "✓ Accessibility"
+        ]
+      }
+    ],
+    "closer": {
+      "title": "Try it on your own business.",
+      "lede": "One sentence, and the free plan takes no credit card."
+    }
+  },
+  "howItWorks": {
+    "hero": {
+      "eyebrow": "The process",
+      "title": [
+        "The whole process,",
+        "in three steps."
+      ],
+      "lede": "No discovery calls, no wireframes, no month of email threads. This is how it actually works, from the first sentence until your site is live.",
+      "stats": [
+        {
+          "value": "1",
+          "label": "sentence to start"
+        },
+        {
+          "value": "0",
+          "label": "technical skills needed"
+        },
+        {
+          "value": "∞",
+          "label": "editing rounds"
+        }
+      ]
+    },
+    "steps": [
+      {
+        "no": "Step 01",
+        "title": "Describe what you do",
+        "body": "One sentence about what you do and who it's for. No need to polish it and no jargon required. Three words will do, and more detail helps.",
+        "chips": [
+          "\"A plumber, 24-hour service in central Israel\"",
+          "\"A couples therapist in Haifa\""
+        ],
+        "vizComposerText": "A dental hygienist in Petah Tikva, by appointment"
+      },
+      {
+        "no": "Step 02",
+        "title": "The system builds",
+        "body": "Design, copy, page structure and an inquiry form are created for you, with a dedicated page for every service, because every page answers a different search. Your site goes live right away at a free address: yourname.uxellent.site.",
+        "chips": [
+          "Hebrew content, not a translation",
+          "Mobile-ready from the first second"
+        ]
+      },
+      {
+        "no": "Step 03",
+        "title": "Edit by chat, then publish",
+        "body": "Look at your site and ask for changes in your own words. When it feels right, publish. No cap on revisions before you go live, and afterward you can come back and update anytime.",
+        "chips": [
+          "\"Make the headline bigger\"",
+          "\"Add a WhatsApp button\"",
+          "\"Swap the photo\""
+        ],
+        "vizChatMe1": "Add a page for teeth whitening",
+        "vizChatAiBold1": "Done.",
+        "vizChatAi1": "A \"Teeth Whitening\" page with an intro, an FAQ and a booking button.",
+        "vizChatMe2": "Perfect, publish it",
+        "vizChatAiBold2": "Live.",
+        "vizChatAi2": "The new page is already in your site menu."
+      }
+    ],
+    "closer": {
+      "title": "It all starts with one line.",
+      "lede": "No credit card · Cancel anytime"
+    }
+  },
+  "included": {
+    "hero": {
+      "eyebrow": "What's included",
+      "title": [
+        "Everything included,",
+        "in black and white."
+      ],
+      "lede": "No asterisks, no fine print. This is the deal, including what we don't do."
+    },
+    "features": [
+      {
+        "no": "01 · The site itself",
+        "title": "A complete site, not a skeleton to finish",
+        "body": "From the first moment you have a full business website: a dedicated page for every service, because every page answers a different Google search, copy written for your business rather than a generic template, and an inquiry form that lands straight in your inbox. The same site works on phone, tablet and desktop, with no separate versions to maintain.",
+        "chips": [
+          "A separate page for every service",
+          "Copy written for you",
+          "An inquiry form to your inbox",
+          "Fits every screen"
+        ],
+        "ctaLabel": "What else the engine can build",
+        "vizComposerText": "A dental hygienist in Petah Tikva, by appointment"
+      },
+      {
+        "no": "02 · Around the site",
+        "title": "The infrastructure is on us, included in the price",
+        "body": "Hosting, an SSL certificate and backups are our responsibility, with system and security updates running behind the scenes. You install nothing and open no separate account. A free address (yourname.uxellent.site) is included in every plan, and the technical foundation for Google, clean heading structure and fast loading, is built into every site. We do not promise rankings; anyone who does is selling something else.",
+        "chips": [
+          "Hosting, SSL and backups",
+          "A free address, live",
+          "Ongoing updates",
+          "Built right for Google"
+        ],
+        "ctaLabel": "Exactly what's in each plan",
+        "vizTitle": "Dental Hygienist in Petah Tikva | By Appointment",
+        "vizDescription": "A dental hygiene clinic in Petah Tikva. Cleaning, whitening and guidance. Book online...",
+        "vizBadges": [
+          "✓ Structure",
+          "✓ Speed",
+          "✓ SSL"
+        ]
+      },
+      {
+        "no": "03 · How working with us feels",
+        "title": "Editing by chat",
+        "body": "Write what to change and the system changes it, or click a section and edit it directly in the studio. Unlimited design changes on every plan, even six months after launch. The text, the photos and the finished site belong to you, even if you cancel. And there is no setup fee and no exit penalty: ₪0 to start, stop whenever you like.",
+        "chips": [
+          "Unlimited design changes",
+          "Your content stays yours",
+          "No setup fee",
+          "No exit penalty"
+        ],
+        "ctaLabel": "How the process works",
+        "vizChatMe1": "Make the headline bigger and add a WhatsApp button",
+        "vizChatAiBold1": "Done.",
+        "vizChatAi1": "The headline is bigger and a WhatsApp button now sits next to the call button.",
+        "vizChatMe2": "Perfect. Publish it",
+        "vizChatAiBold2": "Your site is live.",
+        "vizChatAi2": "Come back and update whenever you want."
+      }
+    ],
+    "notIncludedLabel": "And what's not included, on purpose:",
+    "notIncluded": "an online store, a booking system, and buying a domain for you. We specialize in business websites for professionals, not in stores and not in platforms. That focus is what lets us be good at this.",
+    "closer": {
+      "title": "Now see what it actually looks like.",
+      "lede": "The free plan takes no credit card."
+    }
+  },
+  "pricing": {
+    "hero": {
+      "eyebrow": "Pricing",
+      "title": [
+        "Start free.",
+        "Upgrade when you need to."
+      ],
+      "lede": "Prices are monthly, before VAT. Cancel anytime."
+    },
+    "billing": {
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "yearlyBadge": "-20%"
+    },
+    "plans": [
+      {
+        "slug": "free",
+        "name": "Free",
+        "forWhom": "Build it, try it, take it live",
+        "features": [
+          "**150** AI requests a month · up to 15 a day",
+          "A free address: yourname.uxellent.site",
+          "50MB for images",
+          "No credit card"
+        ],
+        "ctaLabel": "Start free"
+      },
+      {
+        "slug": "start",
+        "name": "Starter",
+        "forWhom": "For a serious first presence",
+        "features": [
+          "**300** AI requests a month · up to 30 a day",
+          "100MB for images",
+          "One email destination for inquiries"
+        ],
+        "ctaLabel": "Get started"
+      },
+      {
+        "slug": "business",
+        "name": "Business",
+        "forWhom": "For a business that gets inquiries from its site",
+        "tag": "Most popular",
+        "features": [
+          "**900** AI requests a month · up to 90 a day",
+          "Connect your own domain",
+          "500MB for images"
+        ],
+        "ctaLabel": "Get started"
+      },
+      {
+        "slug": "pro",
+        "name": "Pro",
+        "forWhom": "For anyone updating every week",
+        "features": [
+          "**3,000** AI requests a month · up to 300 a day",
+          "Connect your own domain",
+          "2GB for images",
+          "Uxellent credit removal: included"
+        ],
+        "ctaLabel": "Get started"
+      }
+    ],
+    "notes": [
+      {
+        "title": "Included in every plan, the free one too",
+        "body": "A complete business website · Designer-level AI design · One-click management, in Hebrew · Publish with a click · Hosting, SSL and backups · Fast on every device · Accessibility groundwork · A technical foundation for search"
+      },
+      {
+        "title": "About domains",
+        "body": "A system address (yourname.uxellent.site) is included free, and it's enough to be live. Want your own domain? Buy it from a domain registrar (about ₪82 a year) and we'll connect it. We don't buy domains for you."
+      },
+      {
+        "title": "About the quota",
+        "body": "It's monthly. A request is counted each time you tell the system what to build or change, and a generous daily cap keeps the month from running out in one day. Click edits, rearranging sections, colors, fonts and publishing are never counted."
+      },
+      {
+        "title": "And more",
+        "body": "Yearly billing saves 20% · ₪0 setup fee and no exit penalty · Uxellent credit removal is included in Pro, and costs ₪19 a month on Starter and Business"
+      }
+    ]
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Business websites · Hebrew · Independent professionals",
+      "line1": "Your site, live",
+      "emphasis": "in one click",
+      "lede": "No storefronts, no bloated platforms. One thing done well: a Hebrew business website for the independent professional.",
+      "askLabel": "Start typing. That's all it takes",
+      "basePlaceholder": "What do you do?",
+      "examplePrefix": "e.g.",
+      "cfChip": "Hebrew",
+      "noCreditCard": "No credit card",
+      "ssTag": "Type what you want",
+      "promptExamples": [
+        "A service that comes to the client's home",
+        "An office that sees clients by appointment",
+        "A studio with a portfolio of work",
+        "A service with defined coverage areas",
+        "One-on-one consulting by appointment",
+        "A service with transparent pricing"
+      ],
+      "demoSteps": [
+        {
+          "question": "Make the headline bigger",
+          "cls": "hmVBig",
+          "done": "Headline enlarged"
+        },
+        {
+          "question": "Add a background photo",
+          "cls": "hmVBg",
+          "done": "Photo added to the background"
+        },
+        {
+          "question": "Add a contact button and a WhatsApp button",
+          "cls": "hmVBtn",
+          "done": "Both buttons added"
+        }
+      ],
+      "demoFirm": "Leibowitz & Co.",
+      "demoNavLinks": [
+        "Practice areas",
+        "The firm",
+        "Publications"
+      ],
+      "demoCta": "Book a meeting",
+      "demoHeadline": "Legal counsel",
+      "demoHeadlineEm": "that starts with listening",
+      "demoBody": "Family law · Prenuptial agreements · Wills · Free intro meeting",
+      "demoWhatsapp": "WhatsApp",
+      "demoContact": "Contact us",
+      "dockPlaceholder": "What do you do? I'll build you a website"
+    },
+    "receivedBanner": {
+      "title": "Your text made it to the other side"
+    },
+    "il": {
+      "eyebrow": "Built in Israel",
+      "title": "Built here, for Hebrew, on the world's most advanced AI models.",
+      "lede": "Most website builders were made for English, with Hebrew bolted on afterward. We started from the opposite end: a system designed from day one to write correct Hebrew, right to left, and to understand how an Israeli business talks about itself.",
+      "chips": [
+        "Hebrew RTL",
+        "Advanced AI models",
+        "Built locally"
+      ],
+      "list": [
+        "Hebrew RTL is the default, not an add-on",
+        "Content written for an Israeli audience, not translated",
+        "Support from people who know this market"
+      ]
+    },
+    "build": {
+      "eyebrow": "What we build",
+      "title": "One engine, several doors.",
+      "lede": "A business website, a campaign landing page and a digital card all come from the same system. What changes is which sections go in, based on what you need.",
+      "uses": [
+        {
+          "n": "01",
+          "title": "A complete business website",
+          "body": "A homepage and inner pages, with a dedicated page for every service and an inquiry form that lands straight in your inbox. This is the core."
+        },
+        {
+          "n": "02",
+          "title": "A campaign landing page",
+          "body": "One goal, no menu, no distractions. For anyone running ads who wants everything to lead to a single action."
+        },
+        {
+          "n": "03",
+          "title": "Already have a website? We'll renew it.",
+          "body": "Your old site sits in Google with everything it has earned. We pull your details from it and build a new site around them, at the same address."
+        }
+      ]
+    },
+    "how": {
+      "eyebrow": "The process",
+      "title": [
+        "Three steps.",
+        "There is no step four."
+      ],
+      "lede": "No discovery calls, no wireframes, no month of email threads.",
+      "steps": [
+        {
+          "n": "01",
+          "title": "Describe what you do",
+          "body": "One sentence: what you do and who it's for. Three words will also do."
+        },
+        {
+          "n": "02",
+          "title": "The system builds",
+          "body": "Design, copy, page structure and an inquiry form. Proper Hebrew, laid out right to left."
+        },
+        {
+          "n": "03",
+          "title": "Edit by chat, then publish",
+          "body": "Want something changed? Tell the system. When it feels right, hit publish."
+        }
+      ]
+    },
+    "help": {
+      "eyebrow": "You're not on your own",
+      "title": "We stay with you until your site is live.",
+      "lede": "The system builds, you decide. At any point you can ask a question, request a change, or just say something feels off.",
+      "list": [
+        {
+          "title": "Ask a question, get a straight answer",
+          "body": "No jargon required. Say what's bothering you and the system fixes it."
+        },
+        {
+          "title": "Change as much as you need",
+          "body": "Text, order, color. No cap on revisions before you publish."
+        },
+        {
+          "title": "We don't vanish after launch",
+          "body": "Once your site is live you can come back to change and update it whenever you like."
+        }
+      ],
+      "talkOnline": "Online",
+      "talkScript": [
+        {
+          "from": "me",
+          "text": "Can we swap the headline? It sounds generic to me"
+        },
+        {
+          "from": "ai",
+          "text": "Sure. I drafted three alternatives that lead with your experience. Which one fits?"
+        },
+        {
+          "from": "me",
+          "text": "The second one. And the photo up top is a bit dark"
+        },
+        {
+          "from": "ai",
+          "text": "Brightened it and enlarged the headline above it. See how it sits now."
+        },
+        {
+          "from": "me",
+          "text": "Perfect. Let's publish"
+        },
+        {
+          "from": "ai",
+          "text": "Your site is live. Come back and update it whenever you want."
+        }
+      ]
+    },
+    "included": {
+      "eyebrow": "What's included",
+      "title": [
+        "The full list.",
+        "If it isn't written here, it isn't included."
+      ],
+      "lede": "No asterisks, no fine print. Plain and simple.",
+      "list": [
+        {
+          "title": "A separate page for every service",
+          "body": "A business with several services gets a focused page for each one. Every page answers a different search."
+        },
+        {
+          "title": "An inquiry form to your inbox",
+          "body": "Inquiries from the site go straight to your email. We never email the people who fill it in."
+        },
+        {
+          "title": "Editing by chat",
+          "body": "No dragging boxes around. Write what to change and the system changes it."
+        },
+        {
+          "title": "Hosting included",
+          "body": "Your site is live. No server to manage and no separate account."
+        },
+        {
+          "title": "Built right for Google",
+          "body": "Clean heading structure, tidy URLs and fast loading. That's a foundation, not a ranking promise."
+        },
+        {
+          "title": "Built to proper standards",
+          "body": "Semantic structure, keyboard navigation and measured contrast. That's the baseline every site ships with."
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "Answers",
+      "title": "The questions worth asking before, not after.",
+      "lede": "Anything missing here? Ask us directly.",
+      "items": [
+        {
+          "q": "Will my email break if I connect my own domain?",
+          "a": "Not if it's done right. Connecting a site only changes the A and CNAME records. **The MX records, the ones that run your email, are never touched.** If you have email on the same domain, tell us before connecting and we'll double-check."
+        },
+        {
+          "q": "What about ranking on Google?",
+          "a": "Your site ships with clean heading structure, tidy URLs, page descriptions and fast loading. That's the foundation Google needs. **We do not promise a position.** Anyone promising you first place is selling you something else."
+        },
+        {
+          "q": "Do I own the content and photos?",
+          "a": "Yes. The content you upload stays yours, and so does the finished site. **In return, you confirm the photos and text are yours or that you have permission to use them.** That clause protects both of us."
+        },
+        {
+          "q": "Can I cancel?",
+          "a": "Yes, at any point, in line with Israel's Consumer Protection Law. The full terms are in the Terms of Use. **Your content stays yours even after you cancel.**"
+        },
+        {
+          "q": "What about the site's accessibility?",
+          "a": "The system produces a site with a sound technical baseline: semantic structure, keyboard navigation, form labels and measured contrast. **After publishing, though, the site is in your hands:** any content, image or change you add affects the result. **That's why we make no commitment about the accessibility of the site you publish; responsibility for it is yours.** We recommend consulting an accessibility professional before going live."
+        }
+      ]
+    },
+    "closer": {
+      "title": "Your website starts with one sentence.",
+      "cta": "Start building",
+      "fine": "No credit card · Cancel anytime"
+    }
+  },
+  "blog": {
+    "hero": {
+      "eyebrow": "Growth guides",
+      "title": [
+        "Things we learned",
+        "on the job."
+      ],
+      "lede": "Short guides on search, performance and automation. Plain talk, no big words.",
+      "stats": [
+        {
+          "value": "4",
+          "label": "guides"
+        },
+        {
+          "value": "2 min",
+          "label": "average read"
+        }
+      ]
+    },
+    "featured": {
+      "no": "01 · The lead article",
+      "categoryLabel": "Search",
+      "title": "SEO isn't enough anymore: getting your business found in AI search",
+      "excerpt": "Search is moving to ChatGPT and its friends. What that means for your site, and what to do now to be the source that gets cited, not another result on a list.",
+      "readingTime": 2,
+      "metaTags": "AI · SEO · Organic",
+      "readMore": "Read the article"
+    },
+    "rows": [
+      {
+        "categoryLabel": "Performance",
+        "title": "A slow site costs you sales: here's how to make it fast",
+        "excerpt": "Every second of load time costs you inquiries. The common causes of a slow site and what you can fix today.",
+        "readingTime": 2
+      },
+      {
+        "categoryLabel": "Platforms",
+        "title": "WordPress vs. the other platforms: which fits your business",
+        "excerpt": "Pros, cons and when each option makes sense. A plain comparison with no vested interests.",
+        "readingTime": 2
+      },
+      {
+        "categoryLabel": "Automation",
+        "title": "Automation for your business: save hours of work every week",
+        "excerpt": "Repetitive tasks are the biggest thief of your time. How to connect tools that work for you.",
+        "readingTime": 1
+      }
+    ],
+    "closer": {
+      "title": "After the reading, the simplest move is to try.",
+      "lede": "One sentence, and a complete site is live. The free plan takes no credit card."
+    },
+    "crumbSeparator": ">",
+    "moreGuides": "More guides",
+    "allArticles": "All the articles",
+    "tocLabel": "On this page",
+    "articleCloser": {
+      "title": "Your site can be the source that gets cited.",
+      "lede": "The system builds pages in a structure both search engines and AI engines understand."
+    }
+  },
+  "featureViz": {
+    "oldSite": "The old site",
+    "newSite": "The new site · same address",
+    "publish": "Publish"
+  },
+  "closeComposer": {
+    "placeholder": "What do you do? I'll build you a website",
+    "ariaLabel": "What do you do",
+    "hint": "Build your site in one click",
+    "sendAriaLabel": "Build my site"
+  },
+  "products": {
+    "hero": {
+      "eyebrow": "Products",
+      "title": [
+        "One AI engine.",
+        "Your whole business, live."
+      ],
+      "lede": "You describe, the system does the rest: builds, publishes and updates when needed. No complicated editor to learn.",
+      "stats": [
+        {
+          "value": "1",
+          "label": "sentence to start"
+        },
+        {
+          "value": "₪0",
+          "label": "a real free plan"
+        },
+        {
+          "value": "RTL",
+          "label": "Hebrew from the ground up"
+        },
+        {
+          "value": "24/7",
+          "label": "edit whenever you want"
+        }
+      ]
+    },
+    "features": [
+      {
+        "no": "01 · The core product",
+        "title": "AI website building",
+        "body": "Describe what you do in one sentence, say \"a dental hygienist in Petah Tikva, by appointment\", and get a complete business website: design, Hebrew copy written for you, a dedicated page for every service and an inquiry form that lands straight in your inbox.",
+        "chips": [
+          "Copy written for you",
+          "A page for every service",
+          "A free address, live"
+        ],
+        "ctaLabel": "Start free",
+        "vizComposerText": "A family law attorney in Tel Aviv"
+      },
+      {
+        "no": "02 · For owners of an old site",
+        "title": "Renewing an existing site",
+        "body": "Your old site sits in Google with all the standing it has earned. We pull your details from it (services, phone, coverage areas) and build a new site around them at the same address. The standing stays, the look changes.",
+        "chips": [
+          "Same address in Google",
+          "Your details are kept",
+          "An up-to-date design"
+        ],
+        "ctaLabel": "Renew my site"
+      },
+      {
+        "no": "03 · For anyone running ads",
+        "title": "A campaign landing page",
+        "body": "One goal, zero distractions. Every click from your ad lands on a page that leads to a single action: a call, WhatsApp or leaving details. Changing the campaign message? Tell the system and the page updates.",
+        "chips": [
+          "One action, front and center",
+          "No distracting menu",
+          "Updates on command"
+        ],
+        "ctaLabel": "Build a campaign page"
+      },
+      {
+        "no": "04 · Editing",
+        "title": "Editing by chat",
+        "body": "There is no editor to learn. Write what you want and the system actually changes the site. Even six months after launch, without relearning any tool.",
+        "chips": [
+          "No learning curve",
+          "Unlimited design changes",
+          "After launch too"
+        ],
+        "ctaLabel": "How it works",
+        "vizChatMe1": "Make the headline bigger and add a WhatsApp button",
+        "vizChatAiBold1": "Done.",
+        "vizChatAi1": "The headline is bigger and a WhatsApp button now sits next to the call button.",
+        "vizChatMe2": "Perfect. Publish it",
+        "vizChatAiBold2": "Your site is live.",
+        "vizChatAi2": "Come back and update whenever you want."
+      },
+      {
+        "no": "05 · The technical foundation",
+        "title": "Built right for Google",
+        "body": "Every site ships with clean heading structure, tidy URLs, page descriptions and fast loading. That is the foundation Google and AI-based search engines need, and it is included in the price. We do not promise rankings; anyone who does is selling something else.",
+        "chips": [
+          "Sound semantic structure",
+          "Fast loading",
+          "Ready for AI search"
+        ],
+        "ctaLabel": "What else is included",
+        "vizTitle": "Family Law Attorney in Tel Aviv | Leibowitz & Co.",
+        "vizDescription": "A boutique family law firm. Prenuptial agreements and wills. Free first meeting…",
+        "vizBadges": [
+          "Structure ✓",
+          "Speed ✓",
+          "Page description ✓"
+        ]
+      },
+      {
+        "no": "06 · The studio",
+        "title": "A management studio, for hands on the wheel",
+        "body": "Alongside the chat there is a personal studio. Click any part of your site and edit it directly, rearrange page sections, swap colors and fonts, and publish with a click. A small, quick change? You don't even have to write a sentence.",
+        "chips": [
+          "Click a section to edit it",
+          "Rearrange page sections",
+          "Swap colors and fonts",
+          "Publish with a click"
+        ],
+        "ctaLabel": "Start free",
+        "vizNavItems": [
+          "Header",
+          "Services",
+          "Gallery",
+          "Contact"
+        ],
+        "vizZoneLabel": "Editing: Services"
+      }
+    ],
+    "closer": {
+      "title": "The fastest way to get it is to try it.",
+      "lede": "The free plan takes no credit card."
+    }
+  },
+  "footer": {
+    "blurb": "Hebrew business websites for independent professionals. One description, and a complete site is live.",
+    "startBuilding": "Start building",
+    "colProduct": "Product",
+    "colCompany": "Company",
+    "colLegal": "Legal",
+    "product": {
+      "products": "Products",
+      "howItWorks": "How it works",
+      "included": "What's included",
+      "pricing": "Pricing",
+      "platform": "Platform"
+    },
+    "company": {
+      "about": "About",
+      "contact": "Contact us",
+      "growthGuides": "Growth guides",
+      "blog": "Blog",
+      "seoAi": "SEO & AI ranking"
+    },
+    "legal": {
+      "terms": "Terms of Use",
+      "privacy": "Privacy Policy",
+      "accessibility": "Accessibility Statement",
+      "accountDeletion": "Account Deletion"
+    },
+    "a11yStrip": "This statement applies to **this website only**. Ran into an accessibility issue here? Write to us and we'll take care of it. Sites built on the platform and published by customers are the responsibility of their owners.",
+    "a11yLabel": "Accessibility",
+    "copyright": "All rights reserved.",
+    "quickTerms": "Terms of Use",
+    "quickPrivacy": "Privacy",
+    "quickAccessibility": "Accessibility"
+  }
+}

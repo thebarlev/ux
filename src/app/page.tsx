@@ -6,25 +6,20 @@ import { HomeInteractive } from "@/app/_components/redesign/HomeInteractive"
 import { HomeHeroHeading } from "@/app/_components/redesign/HomeHeroHeading"
 import { HomeTalk } from "@/app/_components/redesign/HomeTalk"
 import styles from "@/app/_components/redesign/redesign.module.css"
-import {
-  HOME_HERO,
-  IL_LIST,
-  USES,
-  HOW_STEPS_HOME,
-  HELP_LIST,
-  GETS_LIST,
-  HOME_FAQ,
-} from "@/app/_content/redesign/home"
+import { getHomeContent } from "@/app/_content/redesign/home"
 import { BoldText } from "@/app/_components/redesign/BoldText"
+import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+
+const home = getHomeContent("he")
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/", languages: heEnAlternateLanguages("/", "/en") },
   title: "Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
-  description: HOME_HERO.lede,
+  description: home.hero.lede,
   openGraph: {
     title: "Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
-    description: HOME_HERO.lede,
+    description: home.hero.lede,
     url: "https://uxellent.com",
     siteName: "Uxellent",
     locale: "he_IL",
@@ -49,6 +44,7 @@ const HELP_ICONS = [
 ]
 
 export default function HomePage() {
+  const { hero, il, build, how, help, included, faq, closer } = getHomeContent("he")
   return (
     <RedesignShell>
       <Suspense fallback={null}>
@@ -58,9 +54,9 @@ export default function HomePage() {
       <main id="main">
         <section className={styles.hero} id="top">
           <div className={styles.wrap}>
-            <span className={styles.eyebrow}>{HOME_HERO.eyebrow}</span>
-            <HomeHeroHeading line1={HOME_HERO.line1} emphasis={HOME_HERO.emphasis} />
-            <p className={styles.lede}>{HOME_HERO.lede}</p>
+            <span className={styles.eyebrow}>{hero.eyebrow}</span>
+            <HomeHeroHeading line1={hero.line1} emphasis={hero.emphasis} />
+            <p className={styles.lede}>{hero.lede}</p>
 
             <HomeInteractive />
           </div>
@@ -78,19 +74,16 @@ export default function HomePage() {
                     <path d="M12 2l1.9 5.6L19.5 9.5l-5.6 1.9L12 17l-1.9-5.6L4.5 9.5l5.6-1.9L12 2z" />
                   </svg>
                 </span>
-                <span className={`${styles.ilChip} ${styles.c1}`}>עברית RTL</span>
-                <span className={`${styles.ilChip} ${styles.c2}`}>מודלים מתקדמים</span>
-                <span className={`${styles.ilChip} ${styles.c3}`}>פיתוח מקומי</span>
+                <span className={`${styles.ilChip} ${styles.c1}`}>{il.chips[0]}</span>
+                <span className={`${styles.ilChip} ${styles.c2}`}>{il.chips[1]}</span>
+                <span className={`${styles.ilChip} ${styles.c3}`}>{il.chips[2]}</span>
               </div>
               <div>
-                <span className={styles.eyebrow}>פיתוח ישראלי</span>
-                <h2 className={styles.sec}>נבנה כאן, לעברית, על מודלי ה-AI המתקדמים בעולם.</h2>
-                <p className={styles.lede}>
-                  רוב הכלים בשוק נבנו לאנגלית, והעברית הודבקה עליהם אחר כך. אצלנו הכיוון הפוך: המערכת תוכננה
-                  מההתחלה לכתוב עברית נכונה, מימין לשמאל, ולהבין איך עסק ישראלי מדבר על עצמו.
-                </p>
+                <span className={styles.eyebrow}>{il.eyebrow}</span>
+                <h2 className={styles.sec}>{il.title}</h2>
+                <p className={styles.lede}>{il.lede}</p>
                 <ul className={styles.ilList}>
-                  {IL_LIST.map((item) => (
+                  {il.list.map((item) => (
                     <li key={item}>
                       {CHECK}
                       {item}
@@ -106,15 +99,12 @@ export default function HomePage() {
         <section className={`${styles.band} ${styles.bandPaper2}`} id="build">
           <div className={styles.wrap}>
             <div className={styles.secTop}>
-              <span className={styles.eyebrow}>מה בונים כאן</span>
-              <h2 className={styles.sec}>מנוע אחד, כמה דלתות.</h2>
-              <p className={styles.lede}>
-                אתר תדמית, עמוד נחיתה וכרטיס דיגיטלי יוצאים מאותה מערכת. מה שמשתנה הוא אילו מקטעים נכנסים, לפי
-                מה שאתם צריכים.
-              </p>
+              <span className={styles.eyebrow}>{build.eyebrow}</span>
+              <h2 className={styles.sec}>{build.title}</h2>
+              <p className={styles.lede}>{build.lede}</p>
             </div>
             <div className={styles.uses}>
-              {USES.map((u) => (
+              {build.uses.map((u) => (
                 <div key={u.n} className={styles.use}>
                   <span className={styles.n}>{u.n}</span>
                   <h3>{u.title}</h3>
@@ -130,16 +120,16 @@ export default function HomePage() {
           <div className={styles.wrap}>
             <div className={styles.howGrid}>
               <div className={styles.howHead}>
-                <span className={styles.eyebrow}>התהליך</span>
+                <span className={styles.eyebrow}>{how.eyebrow}</span>
                 <h2 className={styles.sec}>
-                  שלושה שלבים.
+                  {how.title[0]}
                   <br />
-                  אין שלב רביעי.
+                  {how.title[1]}
                 </h2>
-                <p className={styles.lede}>בלי אפיון וסקיצות, בלי חודש של תכתובות.</p>
+                <p className={styles.lede}>{how.lede}</p>
               </div>
               <ol className={styles.howSteps}>
-                {HOW_STEPS_HOME.map((step) => (
+                {how.steps.map((step) => (
                   <li key={step.n} className={styles.hs}>
                     <span className={styles.ghost} aria-hidden="true">{step.n}</span>
                     <div>
@@ -158,13 +148,11 @@ export default function HomePage() {
           <div className={styles.wrap}>
             <div className={styles.helpGrid}>
               <div>
-                <span className={styles.eyebrow}>לא נשארים לבד</span>
-                <h2 className={styles.sec}>מלווים אתכם עד שהאתר באוויר.</h2>
-                <p className={styles.lede}>
-                  המערכת בונה, ואתם מחליטים. בכל שלב אפשר לשאול, לבקש שינוי, או פשוט לומר שמשהו לא מרגיש נכון.
-                </p>
+                <span className={styles.eyebrow}>{help.eyebrow}</span>
+                <h2 className={styles.sec}>{help.title}</h2>
+                <p className={styles.lede}>{help.lede}</p>
                 <ul className={styles.helpList}>
-                  {HELP_LIST.map((item, i) => (
+                  {help.list.map((item, i) => (
                     <li key={item.title}>
                       <span className={styles.hi}>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
@@ -189,16 +177,16 @@ export default function HomePage() {
           <div className={styles.wrap}>
             <div className={styles.incGrid}>
               <div className={styles.incHead}>
-                <span className={`${styles.eyebrow} ${styles.eyebrowAq}`}>מה כלול</span>
+                <span className={`${styles.eyebrow} ${styles.eyebrowAq}`}>{included.eyebrow}</span>
                 <h2 className={styles.sec}>
-                  רשימה מלאה.
+                  {included.title[0]}
                   <br />
-                  מה שלא כתוב כאן, לא נכלל.
+                  {included.title[1]}
                 </h2>
-                <p className={styles.lede}>בלי כוכביות ובלי אותיות קטנות. זה החוזה בינינו.</p>
+                <p className={styles.lede}>{included.lede}</p>
               </div>
               <ol className={styles.manifest}>
-                {GETS_LIST.map((item) => (
+                {included.list.map((item) => (
                   <li key={item.title}>
                     <b>{item.title}</b>
                     <p>{item.body}</p>
@@ -214,12 +202,12 @@ export default function HomePage() {
           <div className={styles.wrap}>
             <div className={styles.faqGrid}>
               <div className={styles.faqHead}>
-                <span className={styles.eyebrow}>תשובות</span>
-                <h2 className={styles.sec}>שאלות שחשוב לשאול לפני, לא אחרי.</h2>
-                <p className={styles.lede}>ומה שלא מופיע כאן? שואלים אותנו ישירות.</p>
+                <span className={styles.eyebrow}>{faq.eyebrow}</span>
+                <h2 className={styles.sec}>{faq.title}</h2>
+                <p className={styles.lede}>{faq.lede}</p>
               </div>
               <div className={styles.qa}>
-                {HOME_FAQ.map((item) => (
+                {faq.items.map((item) => (
                   <details key={item.q} className={styles.q}>
                     <summary>
                       {item.q}
@@ -240,14 +228,14 @@ export default function HomePage() {
         {/* Closing CTA */}
         <section className={styles.band}>
           <div className={`${styles.wrap} ${styles.closer}`}>
-            <h2 className={`${styles.sec} ${styles.closerH2}`}>האתר שלכם מתחיל במשפט אחד.</h2>
+            <h2 className={`${styles.sec} ${styles.closerH2}`}>{closer.title}</h2>
             <a className={`${styles.btn} ${styles.btnPrimary} ${styles.closerBtn}`} href="https://uxellent.site">
-              התחילו לבנות
+              {closer.cta}
               <svg className={styles.arw} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </a>
-            <p className={styles.fine}>בלי כרטיס אשראי · אפשר להפסיק מתי שרוצים</p>
+            <p className={styles.fine}>{closer.fine}</p>
           </div>
         </section>
       </main>

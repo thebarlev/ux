@@ -3,7 +3,8 @@
 import { useState } from "react"
 import styles from "./redesign.module.css"
 import { BoldText } from "./BoldText"
-import { PLANS, PLAN_CTA_LABEL, type Plan } from "@/app/_content/redesign/pricing"
+import { getPricingContent, type Plan } from "@/app/_content/redesign/pricing"
+import { type Locale } from "@/content/i18n/dictionary"
 
 const CHECK = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
@@ -16,12 +17,13 @@ function planHref(plan: Plan, billing: "monthly" | "yearly") {
   return `https://uxellent.site?plan=${plan.slug}&billing=${billing}`
 }
 
-export function PricingPlans() {
+export function PricingPlans({ locale = "he" }: { locale?: Locale }) {
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly")
+  const { billing: billingLabels, plans } = getPricingContent(locale)
 
   return (
     <>
-      <div className={styles.billTabs} role="tablist" aria-label="מסלול חיוב">
+      <div className={styles.billTabs} role="tablist" aria-label={locale === "en" ? "Billing period" : "מסלול חיוב"}>
         <button
           type="button"
           className={`${styles.billTab} ${billing === "monthly" ? styles.billTabOn : ""}`}
@@ -29,7 +31,7 @@ export function PricingPlans() {
           aria-selected={billing === "monthly"}
           onClick={() => setBilling("monthly")}
         >
-          חודשי
+          {billingLabels.monthly}
         </button>
         <button
           type="button"
@@ -38,16 +40,16 @@ export function PricingPlans() {
           aria-selected={billing === "yearly"}
           onClick={() => setBilling("yearly")}
         >
-          שנתי <em>20%-</em>
+          {billingLabels.yearly} <em>{billingLabels.yearlyBadge}</em>
         </button>
       </div>
 
       <div className={`${styles.plans} ${styles.plansFour}`}>
-        {PLANS.map((plan) => {
+        {plans.map((plan) => {
           const price = billing === "monthly" ? plan.monthly : plan.yearly
           return (
             <div key={plan.slug} className={`${styles.plan} ${plan.best ? styles.planBest : ""}`}>
-              {plan.best ? <span className={styles.plTag}>הכי נבחרת</span> : null}
+              {plan.tag ? <span className={styles.plTag}>{plan.tag}</span> : null}
               <span className={styles.plN}>{plan.name}</span>
               <p className={styles.plFor}>{plan.forWhom}</p>
               <span className={styles.plP}>
@@ -55,7 +57,7 @@ export function PricingPlans() {
                   <span>{price ?? 0}</span>
                   <span className={styles.shk}>₪</span>
                 </b>
-                {price !== null ? <i>לחודש</i> : null}
+                {price !== null ? <i>{locale === "en" ? "/ month" : "לחודש"}</i> : null}
               </span>
               <ul className={styles.planList}>
                 {plan.features.map((f) => (
@@ -69,7 +71,7 @@ export function PricingPlans() {
                 className={`${styles.btn} ${plan.best ? styles.btnPrimary : styles.btnGhost}`}
                 href={planHref(plan, billing)}
               >
-                {PLAN_CTA_LABEL[plan.slug]}
+                {plan.ctaLabel}
               </a>
             </div>
           )

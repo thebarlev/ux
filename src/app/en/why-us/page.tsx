@@ -7,38 +7,38 @@ import styles from "@/app/_components/redesign/redesign.module.css"
 import { getWhyUsContent } from "@/app/_content/redesign/whyUs"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-const { hero } = getWhyUsContent("he")
+const { hero } = getWhyUsContent("en")
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/why-us", languages: heEnAlternateLanguages("/why-us", "/en/why-us") },
-  title: "למה אנחנו | אתרי תדמית בעברית לבעלי מקצוע חופשי",
+  alternates: { canonical: "/en/why-us", languages: heEnAlternateLanguages("/why-us", "/en/why-us") },
+  title: "Why us | Uxellent | AI-built business websites in Hebrew",
   description: hero.lede,
   openGraph: {
-    title: "למה אנחנו | Uxellent",
+    title: "Why us | Uxellent",
     description: hero.lede,
-    url: "https://uxellent.com/why-us",
+    url: "https://uxellent.com/en/why-us",
     siteName: "Uxellent",
-    locale: "he_IL",
+    locale: "en_US",
     type: "website",
   },
   robots: { index: true, follow: true },
 }
 
-export default function WhyUsPage() {
-  const { hero, features, closer } = getWhyUsContent("he")
+export default function WhyUsPageEn() {
+  const { hero, features, closer } = getWhyUsContent("en")
   return (
-    <RedesignShell>
+    <RedesignShell locale="en">
       <main id="main">
         <InnerHero eyebrow={hero.eyebrow} title={hero.title} lede={hero.lede} stats={hero.stats} />
         <section className={`${styles.band} ${styles.whyUsWarm}`}>
           <div className={styles.wrap}>
             {features.map((feature) => (
-              <FeatureBlock key={feature.title} feature={feature} />
+              <FeatureBlock key={feature.title} feature={feature} locale="en" />
             ))}
           </div>
         </section>
-        <PCloseCta title={closer.title} lede={closer.lede} />
+        <PCloseCta title={closer.title} lede={closer.lede} locale="en" />
       </main>
     </RedesignShell>
   )

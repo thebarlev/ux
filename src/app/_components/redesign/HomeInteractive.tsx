@@ -4,7 +4,8 @@ import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import styles from "./redesign.module.css"
 import { sanitizePrompt, buildPlatformUrl } from "./promptUtils"
-import { PROMPT_EXAMPLES, DEMO_STEPS, PROMPT_MAX_LENGTH } from "@/app/_content/redesign/home"
+import { PROMPT_MAX_LENGTH } from "@/app/_content/redesign/home"
+import { getDictionary, type Locale } from "@/content/i18n/dictionary"
 
 const SPARKLE = (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -17,8 +18,8 @@ const CHECK = (
   </svg>
 )
 
-function usePlaceholderCarousel(active: boolean) {
-  const [placeholder, setPlaceholder] = useState("במה אתם עוסקים?")
+function usePlaceholderCarousel(active: boolean, base: string, examplePrefix: string, examples: readonly string[]) {
+  const [placeholder, setPlaceholder] = useState(base)
   useEffect(() => {
     if (!active) return
     const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
@@ -28,13 +29,13 @@ function usePlaceholderCarousel(active: boolean) {
     let timer: ReturnType<typeof setTimeout>
 
     const typeExample = () => {
-      const word = PROMPT_EXAMPLES[exampleIndex % PROMPT_EXAMPLES.length]
+      const word = examples[exampleIndex % examples.length]
       let c = 0
       const typeTick = () => {
         if (cancelled) return
         c += 1
         if (c <= word.length) {
-          setPlaceholder(`למשל: ${word.slice(0, c)}|`)
+          setPlaceholder(`${examplePrefix}: ${word.slice(0, c)}|`)
           timer = setTimeout(typeTick, 55)
         } else {
           timer = setTimeout(holdThenErase, 1600)
@@ -42,18 +43,18 @@ function usePlaceholderCarousel(active: boolean) {
       }
       const holdThenErase = () => {
         if (cancelled) return
-        setPlaceholder(`למשל: ${word}`)
+        setPlaceholder(`${examplePrefix}: ${word}`)
         let ec = word.length
         const eraseTick = () => {
           if (cancelled) return
           ec -= 1
           if (ec <= 0) {
             exampleIndex += 1
-            setPlaceholder("במה אתם עוסקים?")
+            setPlaceholder(base)
             timer = setTimeout(typeExample, 700)
             return
           }
-          setPlaceholder(`למשל: ${word.slice(0, ec)}|`)
+          setPlaceholder(`${examplePrefix}: ${word.slice(0, ec)}|`)
           timer = setTimeout(eraseTick, 26)
         }
         timer = setTimeout(eraseTick, 26)
@@ -66,11 +67,13 @@ function usePlaceholderCarousel(active: boolean) {
       cancelled = true
       clearTimeout(timer)
     }
-  }, [active])
+  }, [active, base, examplePrefix, examples])
   return placeholder
 }
 
-function useDemoPanel() {
+type DemoStep = { question: string; cls: string; done: string }
+
+function useDemoPanel(steps: DemoStep[]) {
   const [typedQuestion, setTypedQuestion] = useState("")
   const [done, setDone] = useState(false)
   const [doneText, setDoneText] = useState("")
@@ -79,7 +82,7 @@ function useDemoPanel() {
   useEffect(() => {
     const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
     if (reduce) {
-      const last = DEMO_STEPS[DEMO_STEPS.length - 1]
+      const last = steps[steps.length - 1]
       setTypedQuestion(last.question)
       setDone(true)
       setDoneText(last.done)
@@ -98,8 +101,8 @@ function useDemoPanel() {
 
     let k = 0
     const run = () => {
-      const step = DEMO_STEPS[k % DEMO_STEPS.length]
-      const first = k % DEMO_STEPS.length === 0
+      const step = steps[k % steps.length]
+      const first = k % steps.length === 0
       setDone(false)
       if (first) {
         setPanelClass("")
@@ -137,18 +140,19 @@ function useDemoPanel() {
       cancelled = true
       timers.forEach(clearTimeout)
     }
-  }, [])
+  }, [steps])
 
   return { typedQuestion, done, panelClass, doneText }
 }
 
-export function HomeInteractive() {
+export function HomeInteractive({ locale = "he" }: { locale?: Locale }) {
+  const t = getDictionary(locale).home.hero
   const [value, setValue] = useState("")
   const [dockOn, setDockOn] = useState(false)
   const composerRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const placeholder = usePlaceholderCarousel(value.length === 0)
-  const demo = useDemoPanel()
+  const placeholder = usePlaceholderCarousel(value.length === 0, t.basePlaceholder, t.examplePrefix, t.promptExamples)
+  const demo = useDemoPanel(t.demoSteps)
 
   useEffect(() => {
     const el = composerRef.current
@@ -187,14 +191,14 @@ export function HomeInteractive() {
       >
         <p className={styles.askLabel}>
           {SPARKLE}
-          התחילו לכתוב. זה כל מה שצריך
+          {t.askLabel}
         </p>
         <div className={styles.composer} ref={composerRef}>
           <textarea
             ref={textareaRef}
             rows={1}
             maxLength={PROMPT_MAX_LENGTH}
-            aria-label="במה אתם עוסקים"
+            aria-label={t.basePlaceholder}
             placeholder={placeholder}
             value={value}
             onChange={(e) => setValue(e.target.value)}
@@ -208,12 +212,12 @@ export function HomeInteractive() {
           <div className={styles.composerFoot}>
             <span className={styles.cfChip}>
               {SPARKLE}
-              עברית
+              {t.cfChip}
             </span>
             <span className={`${styles.cfCount} ${count >= PROMPT_MAX_LENGTH ? styles.cfCountOver : ""}`}>
               {count}/{PROMPT_MAX_LENGTH}
             </span>
-            <button className={styles.cfSend} type="submit" disabled={disabled} aria-label="בנו לי אתר">
+            <button className={styles.cfSend} type="submit" disabled={disabled} aria-label={t.dockPlaceholder}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 19V5M5 12l7-7 7 7" />
               </svg>
@@ -221,7 +225,7 @@ export function HomeInteractive() {
           </div>
         </div>
         <p className={styles.askMeta}>
-          <span>{CHECK}בלי כרטיס אשראי</span>
+          <span>{CHECK}{t.noCreditCard}</span>
         </p>
       </form>
 
@@ -229,7 +233,7 @@ export function HomeInteractive() {
         <div className={styles.showSay}>
           <span className={styles.ssTag}>
             {SPARKLE}
-            כותבים בעברית
+            {t.ssTag}
           </span>
           <p className={styles.ssLine}>
             {demo.typedQuestion}
@@ -249,30 +253,30 @@ export function HomeInteractive() {
           <div className={`${styles.hm} ${demo.panelClass}`}>
             {demo.panelClass.includes(styles.hmVBg) ? (
               <div className={styles.hmBg}>
-                <Image src="/redesign/demo-lawfirm.webp" alt="משרד עורכי דין" width={900} height={560} />
+                <Image src="/redesign/demo-lawfirm.webp" alt="" width={900} height={560} />
               </div>
             ) : null}
             <div className={styles.hmNav}>
-              <span className={styles.hmLg}>ליבוביץ׳ ושות׳</span>
-              <span className={styles.hmLk}>תחומי עיסוק</span>
-              <span className={styles.hmLk}>המשרד</span>
-              <span className={styles.hmLk}>פרסומים</span>
-              <span className={styles.hmCta}>קביעת פגישה</span>
+              <span className={styles.hmLg}>{t.demoFirm}</span>
+              {t.demoNavLinks.map((link) => (
+                <span key={link} className={styles.hmLk}>{link}</span>
+              ))}
+              <span className={styles.hmCta}>{t.demoCta}</span>
             </div>
             <div className={styles.hmBody}>
               <div className={styles.hmCopy}>
                 <h3 className={styles.hmH}>
-                  ייצוג משפטי <em>שמתחיל בהקשבה</em>
+                  {t.demoHeadline} <em>{t.demoHeadlineEm}</em>
                 </h3>
-                <p className={styles.hmP}>דיני משפחה · הסכמי ממון · צוואות · פגישת היכרות ללא עלות</p>
+                <p className={styles.hmP}>{t.demoBody}</p>
                 <div className={styles.hmBtns}>
                   <span className={styles.hmB2}>
                     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                       <path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.9.5 3.68 1.4 5.22L2 22l5.06-1.56a9.8 9.8 0 004.98 1.34h.01c5.43 0 9.83-4.4 9.83-9.84C21.88 6.4 17.47 2 12.04 2zm5.7 13.9c-.24.68-1.4 1.3-1.94 1.35-.5.05-1.12.07-1.8-.11a15 15 0 01-1.63-.6c-2.87-1.24-4.74-4.12-4.88-4.31-.14-.19-1.17-1.55-1.17-2.96 0-1.4.74-2.1 1-2.38.26-.29.57-.36.76-.36h.55c.17 0 .41-.07.64.49.24.57.82 1.97.89 2.11.07.14.12.31.02.5-.09.19-.14.31-.28.48l-.42.49c-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.17-.19.7-.81.88-1.09.19-.28.37-.24.62-.14.26.09 1.65.78 1.93.92.28.14.47.21.54.33.07.11.07.66-.17 1.34z" />
                     </svg>
-                    וואטסאפ
+                    {t.demoWhatsapp}
                   </span>
-                  <span className={styles.hmB1}>צרו קשר</span>
+                  <span className={styles.hmB1}>{t.demoContact}</span>
                 </div>
               </div>
             </div>
@@ -290,8 +294,8 @@ export function HomeInteractive() {
         >
           <input
             maxLength={PROMPT_MAX_LENGTH}
-            placeholder="במה אתם עוסקים? אבנה לכם אתר"
-            aria-label="במה אתם עוסקים"
+            placeholder={t.dockPlaceholder}
+            aria-label={t.basePlaceholder}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             tabIndex={dockOn ? 0 : -1}
@@ -299,7 +303,7 @@ export function HomeInteractive() {
           <span className={styles.dockCnt}>
             {count}/{PROMPT_MAX_LENGTH}
           </span>
-          <button className={styles.cfSend} type="submit" disabled={disabled} aria-label="בנו לי אתר" tabIndex={dockOn ? 0 : -1}>
+          <button className={styles.cfSend} type="submit" disabled={disabled} aria-label={t.dockPlaceholder} tabIndex={dockOn ? 0 : -1}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 19V5M5 12l7-7 7 7" />
             </svg>

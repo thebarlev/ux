@@ -5,37 +5,53 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
 import styles from "./redesign.module.css"
+import { getDictionary, type Locale } from "@/content/i18n/dictionary"
 
-const NAV_LINKS = [
-  { href: "/why-us", label: "למה אנחנו" },
-  { href: "/pricing", label: "מחירים" },
-  { href: "/how-it-works", label: "איך זה עובד" },
-  { href: "/blog", label: "מאמרים" },
-  { href: "/#faq", label: "שאלות" },
-] as const
+/** The /en counterpart of the current path, for the language-switch link.
+ *  Correct for every page except a blog article without a translation —
+ *  those pages pass their own `langSwitchHref` instead. */
+function defaultCounterpartPath(pathname: string, locale: Locale) {
+  if (locale === "en") {
+    if (pathname === "/en") return "/"
+    return pathname.replace(/^\/en/, "") || "/"
+  }
+  if (pathname === "/") return "/en"
+  return `/en${pathname}`
+}
 
-const MOBILE_LINKS = [
-  { href: "/why-us", label: "למה אנחנו" },
-  { href: "/products", label: "מוצרים" },
-  { href: "/pricing", label: "מחירים" },
-  { href: "/how-it-works", label: "איך זה עובד" },
-  { href: "/included", label: "מה כלול" },
-  { href: "/blog", label: "מאמרים" },
-  { href: "/#faq", label: "שאלות נפוצות" },
-] as const
-
-export function RedesignHeader() {
+export function RedesignHeader({ locale = "he", langSwitchHref }: { locale?: Locale; langSwitchHref?: string }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
+  const t = getDictionary(locale).nav
+  const prefix = locale === "en" ? "/en" : ""
+  const homeHref = locale === "en" ? "/en" : "/"
+  const switchHref = langSwitchHref ?? defaultCounterpartPath(pathname ?? homeHref, locale)
+
+  const navLinks = [
+    { href: `${prefix}/why-us`, label: t.whyUs },
+    { href: `${prefix}/pricing`, label: t.pricing },
+    { href: `${prefix}/how-it-works`, label: t.howItWorks },
+    { href: `${prefix}/blog`, label: t.blog },
+    { href: `${homeHref}#faq`, label: t.faq },
+  ]
+  const mobileLinks = [
+    { href: `${prefix}/why-us`, label: t.whyUs },
+    { href: `${prefix}/products`, label: t.products },
+    { href: `${prefix}/pricing`, label: t.pricing },
+    { href: `${prefix}/how-it-works`, label: t.howItWorks },
+    { href: `${prefix}/included`, label: t.included },
+    { href: `${prefix}/blog`, label: t.blog },
+    { href: `${homeHref}#faq`, label: t.faqMobile },
+  ]
 
   return (
-    <header className={styles.hdr} dir="rtl">
+    <header className={styles.hdr} dir={locale === "en" ? "ltr" : "rtl"}>
       <div className={styles.wrap}>
-        <Link className={styles.brand} href="/" aria-label="Uxellent">
+        <Link className={styles.brand} href={homeHref} aria-label="Uxellent">
           <Image src="/logo.svg" alt="Uxellent" width={150} height={47} priority />
         </Link>
-        <nav className={styles.nav} aria-label="ראשי">
-          {NAV_LINKS.map((item) => (
+        <nav className={styles.nav} aria-label={locale === "en" ? "Main" : "ראשי"}>
+          {navLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -45,15 +61,18 @@ export function RedesignHeader() {
               {item.label}
             </Link>
           ))}
+          <Link href={switchHref} lang={locale === "en" ? "he" : "en"}>
+            {t.langSwitch}
+          </Link>
         </nav>
         <span className={styles.hdrEnd}>
           <a className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`} href="https://uxellent.site">
-            התחילו בחינם
+            {t.startFree}
           </a>
           <button
             type="button"
             className={styles.burger}
-            aria-label={menuOpen ? "סגור תפריט" : "פתח תפריט"}
+            aria-label={menuOpen ? (locale === "en" ? "Close menu" : "סגור תפריט") : locale === "en" ? "Open menu" : "פתח תפריט"}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
           >
@@ -64,11 +83,14 @@ export function RedesignHeader() {
         </span>
       </div>
       <div className={`${styles.mnav} ${menuOpen ? styles.mnavOn : ""}`}>
-        {MOBILE_LINKS.map((item) => (
+        {mobileLinks.map((item) => (
           <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
             {item.label}
           </Link>
         ))}
+        <Link href={switchHref} lang={locale === "en" ? "he" : "en"} onClick={() => setMenuOpen(false)}>
+          {t.langSwitch}
+        </Link>
       </div>
     </header>
   )
