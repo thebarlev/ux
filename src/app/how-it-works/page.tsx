@@ -34,7 +34,7 @@ export default function HowItWorksPage() {
             ))}
           </div>
         </section>
-        <PCloseCta title={HOW_CLOSER.title} lede={HOW_CLOSER.lede} cta={HOW_CLOSER.cta} />
+        <PCloseCta title={HOW_CLOSER.title} lede={HOW_CLOSER.lede} />
       </main>
     </RedesignShell>
   )

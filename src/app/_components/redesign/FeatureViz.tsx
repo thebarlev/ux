@@ -119,19 +119,20 @@ export function FeatureViz({ viz }: { viz: FeatureVizData }) {
           <div className={styles.vzStudio}>
             <div className={styles.vzStudioTb}>
               <i /><i />
-              <span className={styles.vzStudioTbUrl}>ronel.uxellent.site</span>
+              <span className={styles.vzStudioTbUrl}>{viz.url}</span>
               <span className={styles.vzStudioTbPub}>פרסום</span>
             </div>
             <div className={styles.vzStudioSp}>
               <div className={styles.vzStudioRl}>
-                <span>הכותרת</span>
-                <span className={styles.vzStudioRlOn}>השירותים</span>
-                <span>גלריה</span>
-                <span>יצירת קשר</span>
+                {viz.navItems.map((item, i) => (
+                  <span key={item} className={i === viz.activeIndex ? styles.vzStudioRlOn : undefined}>
+                    {item}
+                  </span>
+                ))}
               </div>
               <div className={styles.vzStudioCv}>
                 <div className={styles.vzStudioZone}>
-                  <span className={styles.vzStudioZt}>עריכת השירותים</span>
+                  <span className={styles.vzStudioZt}>{viz.zoneLabel}</span>
                   <div className={styles.vzStudioZh} />
                   <div className={styles.vzStudioZr}>
                     <i /><i /><i /><i />

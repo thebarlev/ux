@@ -47,5 +47,4 @@ export const HOW_STEPS: Feature[] = [
 export const HOW_CLOSER = {
   title: "הכול מתחיל בשורה אחת בעברית.",
   lede: "בלי כרטיס אשראי · אפשר להפסיק מתי שרוצים",
-  cta: { label: "התחילו בחינם", href: "https://uxellent.site" },
 }

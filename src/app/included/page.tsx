@@ -37,7 +37,7 @@ export default function IncludedPage() {
             </div>
           </div>
         </section>
-        <PCloseCta title={INCLUDED_CLOSER.title} lede={INCLUDED_CLOSER.lede} cta={INCLUDED_CLOSER.cta} />
+        <PCloseCta title={INCLUDED_CLOSER.title} lede={INCLUDED_CLOSER.lede} />
       </main>
     </RedesignShell>
   )

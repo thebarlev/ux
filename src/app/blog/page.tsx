@@ -46,7 +46,7 @@ export default function BlogIndexPage() {
                   <span className={styles.ametaDot} />
                   <i>AI · SEO · אורגני</i>
                 </span>
-                <span className={styles.afeatGo}>לקריאת המאמר ←</span>
+                <span className={styles.afeatGo}>לקריאת המאמר &gt;</span>
               </div>
               <div className={styles.afeatIm}>
                 <Image src={BLOG_FEATURED.image} alt="" width={520} height={520} />
@@ -76,7 +76,7 @@ export default function BlogIndexPage() {
             </div>
           </div>
         </section>
-        <PCloseCta title={BLOG_CLOSER.title} lede={BLOG_CLOSER.lede} cta={BLOG_CLOSER.cta} />
+        <PCloseCta title={BLOG_CLOSER.title} lede={BLOG_CLOSER.lede} />
       </main>
     </RedesignShell>
   )

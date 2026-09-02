@@ -1,22 +1,13 @@
 import styles from "./redesign.module.css"
+import { CloseComposer } from "./CloseComposer"
 
-export function PCloseCta({
-  title,
-  lede,
-  cta,
-}: {
-  title: string
-  lede: string
-  cta: { label: string; href: string }
-}) {
+export function PCloseCta({ title, lede }: { title: string; lede: string }) {
   return (
     <section className={styles.pclose}>
       <div className={styles.wrap}>
         <h2>{title}</h2>
         <p>{lede}</p>
-        <a className={`${styles.btn} ${styles.btnPrimary}`} href={cta.href}>
-          {cta.label}
-        </a>
+        <CloseComposer />
       </div>
     </section>
   )

@@ -10,7 +10,7 @@ export const BLOG_HERO = {
   title: ["דברים שלמדנו", "תוך כדי עבודה."],
   lede: "מדריכים קצרים על קידום, ביצועים ואוטומציה, בגובה העיניים ובלי מילים גבוהות.",
   stats: [
-    { value: "6", label: "מדריכים" },
+    { value: "4", label: "מדריכים" },
     { value: "2 דק׳", label: "קריאה ממוצעת" },
   ],
 }
@@ -59,32 +59,19 @@ export const BLOG_ROWS: BlogCard[] = [
     readingTime: "1 דק׳",
     image: "/redesign/blog/automatio-make.webp",
   },
-  {
-    slug: "green-invoice",
-    categoryLabel: "ניהול עסק",
-    title: "איך לבחור מערכת להפקת מסמכים חשבונאיים",
-    excerpt: "בלי ליפול על טעויות יקרות: מה חייבים לבדוק לפני שסוגרים על מערכת חשבוניות.",
-    readingTime: "2 דק׳",
-    image: "/redesign/blog/green-invoice.webp",
-  },
-  {
-    slug: "negative-receipt",
-    categoryLabel: "ניהול עסק",
-    title: "קבלה שלילית: מה זה ומתי משתמשים בה",
-    excerpt: "המסמך הרשמי לביטול קבלה שהונפקה: מתי הוא נדרש ואיך מפיקים אותו נכון.",
-    readingTime: "1 דק׳",
-    image: "/redesign/blog/negative-receipt.webp",
-  },
 ]
+
+/** green-invoice and negative-receipt were dropped from the index (round10 —
+ *  articles.html now lists 4). Their MDX and routes stay live at their URLs;
+ *  BlogArticlePage looks them up straight from contentlayer, not from this
+ *  array, so removing them here only affects the index and "related" rail. */
 
 export const BLOG_CLOSER = {
   title: "אחרי הקריאה, הכי פשוט לנסות.",
   lede: "משפט אחד בעברית ואתר מלא באוויר. חבילת החינם לא דורשת כרטיס אשראי.",
-  cta: { label: "התחילו בחינם", href: "https://uxellent.site" },
 }
 
 export const ARTICLE_CLOSER = {
   title: "האתר שלכם יכול להיות המקור שמצוטט.",
   lede: "המערכת בונה עמודים במבנה שגם מנועי חיפוש וגם מנועי AI מבינים.",
-  cta: { label: "התחילו בחינם", href: "https://uxellent.site" },
 }

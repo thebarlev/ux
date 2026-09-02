@@ -73,4 +73,5 @@ export const HEADERLESS_PATTERNS = [
   /^\/how-it-works(\/|$)/,
   /^\/included(\/|$)/,
   /^\/blog(\/|$)/,
+  /^\/why-us(\/|$)/,
 ] as const

@@ -10,7 +10,7 @@ export type FeatureViz =
   | { kind: "landing" }
   | { kind: "chat"; messages: { from: "me" | "ai"; text: string; bold?: string }[] }
   | { kind: "serp"; url: string; title: string; description: string; badges: string[] }
-  | { kind: "studio" }
+  | { kind: "studio"; url: string; navItems: string[]; activeIndex: number; zoneLabel: string }
 
 export type Feature = {
   no: string
@@ -40,7 +40,7 @@ export const PRODUCTS_FEATURES: Feature[] = [
     title: "בניית אתרים ב-AI",
     body: 'מתארים את העיסוק במשפט אחד, נגיד "שיננית בפתח תקווה, מקבלת בתיאום", ומקבלים אתר תדמית שלם: עיצוב, תוכן כתוב בעברית, עמוד נפרד לכל שירות וטופס פניות שמגיע ישירות למייל שלכם.',
     chips: ["תוכן נכתב עבורכם", "עמוד לכל שירות", "כתובת חינם באוויר"],
-    cta: { label: "להתחיל בחינם ←", href: "https://uxellent.site" },
+    cta: { label: "להתחיל בחינם >", href: "https://uxellent.site" },
     viz: { kind: "composer", typingText: "עורך דין בתל אביב, דיני משפחה והסכמי ממון" },
   },
   {
@@ -48,7 +48,7 @@ export const PRODUCTS_FEATURES: Feature[] = [
     title: "חידוש אתר קיים",
     body: "האתר הישן שלכם נשאר בגוגל עם כל הוותק שצבר. אנחנו מושכים ממנו את הפרטים (שירותים, טלפון, אזורי פעילות) ובונים סביבם אתר חדש באותה כתובת. המיקום נשמר, המראה מתחלף.",
     chips: ["אותה כתובת בגוגל", "הפרטים נשמרים", "עיצוב עדכני"],
-    cta: { label: "לחדש את האתר ←", href: "https://uxellent.site" },
+    cta: { label: "לחדש את האתר >", href: "https://uxellent.site" },
     flip: true,
     viz: { kind: "before-after" },
   },
@@ -57,7 +57,7 @@ export const PRODUCTS_FEATURES: Feature[] = [
     title: "עמוד נחיתה לקמפיין",
     body: "מטרה אחת ושום הסחה. כל קליק מהמודעה מגיע לעמוד שמוביל לפעולה אחת: שיחה, וואטסאפ או השארת פרטים. מחליפים מסר בקמפיין? כותבים למערכת והעמוד מתעדכן.",
     chips: ["פעולה אחת במרכז", "בלי תפריט מסיח", "מתעדכן בהוראה"],
-    cta: { label: "לבנות עמוד קמפיין ←", href: "https://uxellent.site" },
+    cta: { label: "לבנות עמוד קמפיין >", href: "https://uxellent.site" },
     viz: { kind: "landing" },
   },
   {
@@ -65,7 +65,7 @@ export const PRODUCTS_FEATURES: Feature[] = [
     title: "עריכה בשיחה, בעברית",
     body: "אין עורך שצריך ללמוד. כותבים מה רוצים, והמערכת משנה את האתר בפועל. גם חצי שנה אחרי הפרסום, בלי להיזכר איך עובד שום כלי.",
     chips: ["בלי עקומת למידה", "שינויי עיצוב בלי הגבלה", "גם אחרי הפרסום"],
-    cta: { label: "איך זה עובד ←", href: "/how-it-works" },
+    cta: { label: "איך זה עובד >", href: "/how-it-works" },
     flip: true,
     viz: {
       kind: "chat",
@@ -82,7 +82,7 @@ export const PRODUCTS_FEATURES: Feature[] = [
     title: "בנוי נכון לגוגל",
     body: "כל אתר יוצא עם מבנה כותרות תקין, כתובות נקיות, תיאורי עמוד וטעינה מהירה. זה הבסיס שגוגל ומנועי חיפוש מבוססי AI צריכים, והוא כלול במחיר. דירוג אנחנו לא מבטיחים; מי שמבטיח, מוכר משהו אחר.",
     chips: ["מבנה סמנטי תקין", "טעינה מהירה", "מוכן לחיפוש AI"],
-    cta: { label: "מה עוד כלול ←", href: "/included" },
+    cta: { label: "מה עוד כלול >", href: "/included" },
     viz: {
       kind: "serp",
       url: "yourname.uxellent.site",
@@ -96,14 +96,13 @@ export const PRODUCTS_FEATURES: Feature[] = [
     title: "סטודיו ניהול, למי שרוצה ידיים על ההגה",
     body: "בנוסף לצ׳אט יש אזור ניהול אישי. לוחצים על חלק באתר ועורכים אותו ישירות, מסדרים את חלקי העמוד, מחליפים צבע וגופן, ומפרסמים בלחיצה. שינוי קטן ומהיר? לא חייבים אפילו לכתוב משפט.",
     chips: ["עריכה בקליק על החלק", "סידור חלקי העמוד", "צבע וגופן בהחלפה", "פרסום בלחיצה"],
-    cta: { label: "להתחיל בחינם ←", href: "https://uxellent.site" },
+    cta: { label: "להתחיל בחינם >", href: "https://uxellent.site" },
     flip: true,
-    viz: { kind: "studio" },
+    viz: { kind: "studio", url: "ronel.uxellent.site", navItems: ["הכותרת", "השירותים", "גלריה", "יצירת קשר"], activeIndex: 1, zoneLabel: "עריכת השירותים" },
   },
 ]
 
 export const PRODUCTS_CLOSER = {
   title: "הדרך הכי מהירה להבין היא פשוט לנסות.",
   lede: "חבילת החינם לא דורשת כרטיס אשראי.",
-  cta: { label: "התחילו בחינם", href: "https://uxellent.site" },
 }

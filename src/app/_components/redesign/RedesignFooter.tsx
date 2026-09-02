@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import styles from "./redesign.module.css"
 
-type FooterItem = { label: string; href: string; pending?: boolean }
+type FooterItem = { label: string; href: string }
 
 const F1_PRODUCT: FooterItem[] = [
   { label: "מוצרים", href: "/products" },
@@ -20,17 +20,10 @@ const F2_COMPANY: FooterItem[] = [
   { label: "קידום בגוגל וב-AI", href: "/growth-guides" },
 ]
 
-/** Pending items stay non-links ("בהכנה") exactly as approved — even where a
- *  same-titled page already exists elsewhere on the site (see agent5-brief.md). */
 const F3_LEGAL: FooterItem[] = [
-  { label: "תנאי שימוש", href: "/terms", pending: true },
-  { label: "מדיניות פרטיות", href: "/privacy", pending: true },
-  { label: "נספח עיבוד מידע (DPA)", href: "/dpa", pending: true },
-  { label: "מדיניות שימוש מקובל", href: "/aup", pending: true },
-  { label: "רשימת ספקי משנה", href: "/subprocessors", pending: true },
-  { label: "ביטול והחזרים", href: "/refunds", pending: true },
-  { label: "מדיניות עוגיות", href: "/cookies", pending: true },
-  { label: "הצהרת נגישות", href: "/accessibility", pending: true },
+  { label: "תנאי שימוש", href: "/terms" },
+  { label: "מדיניות פרטיות", href: "/privacy" },
+  { label: "הצהרת נגישות", href: "/accessibility" },
   { label: "מחיקת חשבון", href: "/account-deletion" },
 ]
 
@@ -41,14 +34,7 @@ function FooterColumn({ title, items }: { title: string; items: FooterItem[] }) 
       <ul>
         {items.map((item) => (
           <li key={item.label}>
-            {item.pending ? (
-              <span className={styles.pend}>
-                {item.label}
-                <span className={styles.soon}>בהכנה</span>
-              </span>
-            ) : (
-              <Link href={item.href}>{item.label}</Link>
-            )}
+            <Link href={item.href}>{item.label}</Link>
           </li>
         ))}
       </ul>
@@ -80,6 +66,11 @@ export function RedesignFooter() {
         </p>
         <div className={styles.ftrBot}>
           <span>© {new Date().getFullYear()} Uxellent. כל הזכויות שמורות.</span>
+          <span className={styles.ftrBotR}>
+            <Link href="/terms">תנאי שימוש</Link>
+            <Link href="/privacy">פרטיות</Link>
+            <Link href="/accessibility">הצהרת נגישות</Link>
+          </span>
         </div>
       </div>
     </footer>

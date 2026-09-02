@@ -124,7 +124,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
           </div>
         </section>
 
-        <PCloseCta title={ARTICLE_CLOSER.title} lede={ARTICLE_CLOSER.lede} cta={ARTICLE_CLOSER.cta} />
+        <PCloseCta title={ARTICLE_CLOSER.title} lede={ARTICLE_CLOSER.lede} />
       </main>
     </RedesignShell>
   )

@@ -4,17 +4,17 @@ import { InnerHero } from "@/app/_components/redesign/InnerHero"
 import { FeatureBlock } from "@/app/_components/redesign/FeatureBlock"
 import { PCloseCta } from "@/app/_components/redesign/PCloseCta"
 import styles from "@/app/_components/redesign/redesign.module.css"
-import { PRODUCTS_HERO, PRODUCTS_FEATURES, PRODUCTS_CLOSER } from "@/app/_content/redesign/products"
+import { WHY_US_HERO, WHY_US_FEATURES, WHY_US_CLOSER } from "@/app/_content/redesign/whyUs"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/products" },
-  title: "מוצרים | Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
-  description: PRODUCTS_HERO.lede,
+  alternates: { canonical: "/why-us" },
+  title: "למה אנחנו | אתרי תדמית בעברית לבעלי מקצוע חופשי",
+  description: WHY_US_HERO.lede,
   openGraph: {
-    title: "מוצרים | Uxellent",
-    description: PRODUCTS_HERO.lede,
-    url: "https://uxellent.com/products",
+    title: "למה אנחנו | Uxellent",
+    description: WHY_US_HERO.lede,
+    url: "https://uxellent.com/why-us",
     siteName: "Uxellent",
     locale: "he_IL",
     type: "website",
@@ -22,19 +22,19 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-export default function ProductsPage() {
+export default function WhyUsPage() {
   return (
     <RedesignShell>
       <main id="main">
-        <InnerHero eyebrow={PRODUCTS_HERO.eyebrow} title={PRODUCTS_HERO.title} lede={PRODUCTS_HERO.lede} stats={PRODUCTS_HERO.stats} />
-        <section className={styles.band}>
+        <InnerHero eyebrow={WHY_US_HERO.eyebrow} title={WHY_US_HERO.title} lede={WHY_US_HERO.lede} stats={WHY_US_HERO.stats} />
+        <section className={`${styles.band} ${styles.whyUsWarm}`}>
           <div className={styles.wrap}>
-            {PRODUCTS_FEATURES.map((feature) => (
+            {WHY_US_FEATURES.map((feature) => (
               <FeatureBlock key={feature.title} feature={feature} />
             ))}
           </div>
         </section>
-        <PCloseCta title={PRODUCTS_CLOSER.title} lede={PRODUCTS_CLOSER.lede} />
+        <PCloseCta title={WHY_US_CLOSER.title} lede={WHY_US_CLOSER.lede} />
       </main>
     </RedesignShell>
   )
