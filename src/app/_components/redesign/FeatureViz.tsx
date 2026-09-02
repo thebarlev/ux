@@ -112,6 +112,40 @@ export function FeatureViz({ viz }: { viz: FeatureVizData }) {
     )
   }
 
+  if (viz.kind === "studio") {
+    return (
+      <div className={styles.featViz}>
+        <div className={styles.vz}>
+          <div className={styles.vzStudio}>
+            <div className={styles.vzStudioTb}>
+              <i /><i />
+              <span className={styles.vzStudioTbUrl}>ronel.uxellent.site</span>
+              <span className={styles.vzStudioTbPub}>פרסום</span>
+            </div>
+            <div className={styles.vzStudioSp}>
+              <div className={styles.vzStudioRl}>
+                <span>הכותרת</span>
+                <span className={styles.vzStudioRlOn}>השירותים</span>
+                <span>גלריה</span>
+                <span>יצירת קשר</span>
+              </div>
+              <div className={styles.vzStudioCv}>
+                <div className={styles.vzStudioZone}>
+                  <span className={styles.vzStudioZt}>עריכת השירותים</span>
+                  <div className={styles.vzStudioZh} />
+                  <div className={styles.vzStudioZr}>
+                    <i /><i /><i /><i />
+                  </div>
+                </div>
+                <div className={styles.vzStudioRest} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={styles.featViz}>
       <div className={`${styles.vz} ${styles.vzSerp}`}>

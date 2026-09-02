@@ -10,6 +10,7 @@ export type FeatureViz =
   | { kind: "landing" }
   | { kind: "chat"; messages: { from: "me" | "ai"; text: string; bold?: string }[] }
   | { kind: "serp"; url: string; title: string; description: string; badges: string[] }
+  | { kind: "studio" }
 
 export type Feature = {
   no: string
@@ -89,6 +90,15 @@ export const PRODUCTS_FEATURES: Feature[] = [
       description: "משרד בוטיק לדיני משפחה, הסכמי ממון וצוואות. פגישת היכרות ראשונה ללא עלות…",
       badges: ["מבנה תקין ✓", "מהירות ✓", "תיאור עמוד ✓"],
     },
+  },
+  {
+    no: "06 · אזור הניהול",
+    title: "סטודיו ניהול, למי שרוצה ידיים על ההגה",
+    body: "בנוסף לצ׳אט יש אזור ניהול אישי. לוחצים על חלק באתר ועורכים אותו ישירות, מסדרים את חלקי העמוד, מחליפים צבע וגופן, ומפרסמים בלחיצה. שינוי קטן ומהיר? לא חייבים אפילו לכתוב משפט.",
+    chips: ["עריכה בקליק על החלק", "סידור חלקי העמוד", "צבע וגופן בהחלפה", "פרסום בלחיצה"],
+    cta: { label: "להתחיל בחינם ←", href: "https://uxellent.site" },
+    flip: true,
+    viz: { kind: "studio" },
   },
 ]
 

@@ -59,6 +59,18 @@ export default function PricingPage() {
               </span>
             </p>
 
+            <p className={styles.prDom}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" />
+              </svg>
+              <span>
+                <b>על המכסה, בפשטות:</b> המכסה היא חודשית. בקשה ל-AI זה כל פעם שאתם כותבים למערכת
+                מה לבנות או לשנות, ובקשה אחת יכולה להיות גם &quot;תבנה עמוד חדש לשירות&quot;. יש תקרה יומית רחבה
+                (פי 3 מהקצב הרגיל) כדי שיום עמוס אחד לא יגמור את החודש. <b>ומה לא נספר אף פעם:</b>{" "}
+                עריכה בקליק בסטודיו, סידור חלקים, צבע וגופן, ופרסום. בלי הגבלה, בכל החבילות.
+              </span>
+            </p>
+
             <div className={styles.prExtra}>
               {PRICING_EXTRA.map((item) => (
                 <div key={item.title}>
