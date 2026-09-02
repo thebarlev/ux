@@ -39,6 +39,15 @@ const CHECK = (
   </svg>
 )
 
+const HELP_ICONS = [
+  <path key="chat" d="M21 12a8 8 0 01-8 8H7l-4 3 1.2-4.4A8 8 0 1121 12z" />,
+  <path key="edit" d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />,
+  <>
+    <path key="check-ring" d="M12 3a9 9 0 100 18 9 9 0 000-18z" />
+    <path key="check-mark" d="M9 12l2 2 4-4" />
+  </>,
+]
+
 export default function HomePage() {
   return (
     <RedesignShell>
@@ -155,11 +164,11 @@ export default function HomePage() {
                   המערכת בונה, ואתם מחליטים. בכל שלב אפשר לשאול, לבקש שינוי, או פשוט לומר שמשהו לא מרגיש נכון.
                 </p>
                 <ul className={styles.helpList}>
-                  {HELP_LIST.map((item) => (
+                  {HELP_LIST.map((item, i) => (
                     <li key={item.title}>
                       <span className={styles.hi}>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 12a8 8 0 01-8 8H7l-4 3 1.2-4.4A8 8 0 1121 12z" />
+                          {HELP_ICONS[i]}
                         </svg>
                       </span>
                       <span>
@@ -176,7 +185,7 @@ export default function HomePage() {
         </section>
 
         {/* What's included (condensed) */}
-        <section className={`${styles.band} ${styles.bandInk}`} id="included">
+        <section className={`${styles.band} ${styles.bandInk} ${styles.bandInkWarm}`} id="included">
           <div className={styles.wrap}>
             <div className={styles.incGrid}>
               <div className={styles.incHead}>
