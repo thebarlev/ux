@@ -1,3 +1,5 @@
+import { Gauge } from "lucide-react"
+
 type BlogCoverIconProps = {
   slug?: string
   title: string
@@ -24,19 +26,6 @@ function IconAutomation() {
       <circle {...strokeProps} cx="220" cy="102" r="18" />
       <circle {...strokeProps} cx="220" cy="208" r="18" />
       <path {...strokeProps} d="m147 74 7 18 18 7-18 7-7 18-7-18-18-7 18-7 7-18Z" />
-    </>
-  )
-}
-
-function IconSpeed() {
-  return (
-    <>
-      <path {...strokeProps} d="M72 186a78 78 0 1 1 156 0" />
-      <path {...strokeProps} d="M150 107 204 154" />
-      <path {...strokeProps} d="m120 82 13-17m47 17 13-17M88 125l-20-6m164 6 20-6" />
-      <path {...strokeProps} d="m126 190 22-48h-18l18-34-6 30h19l-24 52Z" />
-      <circle cx="150" cy="186" r="16" fill="#5389BB" fillOpacity="0.16" />
-      <circle {...strokeProps} cx="150" cy="186" r="16" />
     </>
   )
 }
@@ -98,8 +87,6 @@ function renderIcon(slug?: string) {
   switch (slug) {
     case "automatio-make":
       return <IconAutomation />
-    case "fast-slow-web":
-      return <IconSpeed />
     case "green-invoice":
       return <IconInvoice />
     case "negative-receipt":
@@ -114,6 +101,14 @@ function renderIcon(slug?: string) {
 }
 
 export function BlogCoverIcon({ slug, title }: BlogCoverIconProps) {
+  if (slug === "fast-slow-web") {
+    return (
+      <div className="flex h-full w-full items-center justify-center text-[#5389BB]" role="img" aria-label={title}>
+        <Gauge width={160} height={160} strokeWidth={1.5} aria-hidden="true" />
+      </div>
+    )
+  }
+
   return (
     <div className="h-full w-full text-[#5389BB]" role="img" aria-label={title}>
       <svg

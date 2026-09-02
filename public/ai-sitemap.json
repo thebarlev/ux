@@ -2,7 +2,7 @@
   "site": "https://uxellent.com",
   "brand": "VOW",
   "description": "AI-powered accountant, digital invoicing and website development platform.",
-  "generated_at": "2026-04-03T15:08:28.841Z",
+  "generated_at": "2026-09-02T18:37:54.179Z",
   "priority_pages": [
     {
       "url": "https://uxellent.com",
@@ -125,7 +125,19 @@
       "type": "page"
     },
     {
+      "url": "https://uxellent.com/en/idea-to-product",
+      "type": "page"
+    },
+    {
       "url": "https://uxellent.com/growth-guides",
+      "type": "page"
+    },
+    {
+      "url": "https://uxellent.com/idea-to-product",
+      "type": "page"
+    },
+    {
+      "url": "https://uxellent.com/thanks/startup-kit",
       "type": "page"
     }
   ]
