@@ -7,26 +7,27 @@ import styles from "@/app/_components/redesign/redesign.module.css"
 import { getIncludedContent } from "@/app/_content/redesign/included"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-const { hero } = getIncludedContent("he")
-
-export const metadata: Metadata = {
-  metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/included", languages: heEnAlternateLanguages("/included", "/en/included") },
-  title: "מה כלול | Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
-  description: hero.lede,
-  openGraph: {
-    title: "מה כלול | Uxellent",
+export async function generateMetadata(): Promise<Metadata> {
+  const { hero } = await getIncludedContent("he")
+  return {
+    metadataBase: new URL("https://uxellent.com"),
+    alternates: { canonical: "/included", languages: heEnAlternateLanguages("/included", "/en/included") },
+    title: "מה כלול | Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
     description: hero.lede,
-    url: "https://uxellent.com/included",
-    siteName: "Uxellent",
-    locale: "he_IL",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
+    openGraph: {
+      title: "מה כלול | Uxellent",
+      description: hero.lede,
+      url: "https://uxellent.com/included",
+      siteName: "Uxellent",
+      locale: "he_IL",
+      type: "website",
+    },
+    robots: { index: true, follow: true },
+  }
 }
 
-export default function IncludedPage() {
-  const { hero, features, notIncludedLabel, notIncluded, closer } = getIncludedContent("he")
+export default async function IncludedPage() {
+  const { hero, features, notIncludedLabel, notIncluded, closer } = await getIncludedContent("he")
   return (
     <RedesignShell>
       <main id="main">

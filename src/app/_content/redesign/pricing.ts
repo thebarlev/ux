@@ -1,4 +1,4 @@
-import { getDictionary, type Locale } from "@/content/i18n/dictionary"
+import { getLiveDictionary, type Locale } from "@/content/i18n/dictionary"
 
 export type Plan = {
   slug: "free" | "start" | "business" | "pro"
@@ -19,8 +19,8 @@ const PRICES: Record<Plan["slug"], { monthly: number | null; yearly: number | nu
   pro: { monthly: 257, yearly: 206 },
 }
 
-export function getPricingContent(locale: Locale = "he") {
-  const t = getDictionary(locale).pricing
+export async function getPricingContent(locale: Locale = "he") {
+  const t = (await getLiveDictionary(locale)).pricing
 
   const plans: Plan[] = t.plans.map((p) => ({
     slug: p.slug as Plan["slug"],

@@ -1,8 +1,8 @@
 import type { Feature } from "./products"
-import { getDictionary, type Locale } from "@/content/i18n/dictionary"
+import { getLiveDictionary, type Locale } from "@/content/i18n/dictionary"
 
-export function getHowItWorksContent(locale: Locale = "he") {
-  const t = getDictionary(locale).howItWorks
+export async function getHowItWorksContent(locale: Locale = "he") {
+  const t = (await getLiveDictionary(locale)).howItWorks
   const [s1, s2, s3] = t.steps
 
   const steps: Feature[] = [

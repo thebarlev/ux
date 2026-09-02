@@ -10,12 +10,8 @@ import styles from "@/app/_components/redesign/redesign.module.css"
 import { JsonLd, articleSchema, breadcrumbListSchema } from "@/components/JsonLd"
 import { extractH2Headings } from "@/lib/redesign/extractHeadings"
 import { getBlogContent, formatReadingTime, type BlogCard } from "@/app/_content/redesign/blog"
-import { getDictionary } from "@/content/i18n/dictionary"
+import { getLiveDictionary } from "@/content/i18n/dictionary"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
-
-const blog = getBlogContent("en")
-const blogNavLabel = getDictionary("en").nav.blog
-const ORDER: BlogCard[] = [blog.featured, ...blog.rows]
 
 function findPost(slug: string) {
   return allArticles.find((a) => a.slug === slug && a.locale === "en")
@@ -47,6 +43,9 @@ export default async function BlogArticlePageEn({ params }: { params: Promise<{ 
   const post = findPost(slug)
   if (!post) notFound()
 
+  const blog = await getBlogContent("en")
+  const blogNavLabel = (await getLiveDictionary("en")).nav.blog
+  const ORDER: BlogCard[] = [blog.featured, ...blog.rows]
   const card = ORDER.find((c) => c.slug === slug)
   const headings = extractH2Headings(post.body.raw)
   const shareUrl = `https://uxellent.com/en/blog/${post.slug}`

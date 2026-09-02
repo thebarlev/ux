@@ -7,26 +7,27 @@ import styles from "@/app/_components/redesign/redesign.module.css"
 import { getProductsContent } from "@/app/_content/redesign/products"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-const { hero } = getProductsContent("en")
-
-export const metadata: Metadata = {
-  metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/en/products", languages: heEnAlternateLanguages("/products", "/en/products") },
-  title: "Products | Uxellent | AI-built business websites in Hebrew",
-  description: hero.lede,
-  openGraph: {
-    title: "Products | Uxellent",
+export async function generateMetadata(): Promise<Metadata> {
+  const { hero } = await getProductsContent("en")
+  return {
+    metadataBase: new URL("https://uxellent.com"),
+    alternates: { canonical: "/en/products", languages: heEnAlternateLanguages("/products", "/en/products") },
+    title: "Products | Uxellent | AI-built business websites in Hebrew",
     description: hero.lede,
-    url: "https://uxellent.com/en/products",
-    siteName: "Uxellent",
-    locale: "en_US",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
+    openGraph: {
+      title: "Products | Uxellent",
+      description: hero.lede,
+      url: "https://uxellent.com/en/products",
+      siteName: "Uxellent",
+      locale: "en_US",
+      type: "website",
+    },
+    robots: { index: true, follow: true },
+  }
 }
 
-export default function ProductsPageEn() {
-  const { hero, features, closer } = getProductsContent("en")
+export default async function ProductsPageEn() {
+  const { hero, features, closer } = await getProductsContent("en")
   return (
     <RedesignShell locale="en">
       <main id="main">

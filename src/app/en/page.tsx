@@ -10,22 +10,23 @@ import { getHomeContent } from "@/app/_content/redesign/home"
 import { BoldText } from "@/app/_components/redesign/BoldText"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-const home = getHomeContent("en")
-
-export const metadata: Metadata = {
-  metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/en", languages: heEnAlternateLanguages("/", "/en") },
-  title: "Uxellent | AI-built business websites in Hebrew",
-  description: home.hero.lede,
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  const home = await getHomeContent("en")
+  return {
+    metadataBase: new URL("https://uxellent.com"),
+    alternates: { canonical: "/en", languages: heEnAlternateLanguages("/", "/en") },
     title: "Uxellent | AI-built business websites in Hebrew",
     description: home.hero.lede,
-    url: "https://uxellent.com/en",
-    siteName: "Uxellent",
-    locale: "en_US",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
+    openGraph: {
+      title: "Uxellent | AI-built business websites in Hebrew",
+      description: home.hero.lede,
+      url: "https://uxellent.com/en",
+      siteName: "Uxellent",
+      locale: "en_US",
+      type: "website",
+    },
+    robots: { index: true, follow: true },
+  }
 }
 
 const CHECK = (
@@ -43,8 +44,8 @@ const HELP_ICONS = [
   </>,
 ]
 
-export default function HomePageEn() {
-  const { hero, il, build, how, help, included, faq, closer } = getHomeContent("en")
+export default async function HomePageEn() {
+  const { hero, il, build, how, help, included, faq, closer } = await getHomeContent("en")
   return (
     <RedesignShell locale="en">
       <Suspense fallback={null}>

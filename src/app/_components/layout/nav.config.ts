@@ -61,6 +61,7 @@ export const HEADER_CTA = {
  * - /en — בשלב 1 האנגלית נשארת עם HeaderEN דרך en/layout (שלב 2 יאחד).
  * - /, /pricing, /products, /how-it-works, /included, /blog — עיצוב 2026-08
  *   (redesign/marketing-2026-08): לעמודים האלה יש RedesignHeader משלהם.
+ * - /admin — עמוד ניהול פנימי, בלי כרום ציבורי בכלל.
  */
 export const HEADERLESS_PATTERNS = [
   /^\/lp(\/|$)/,
@@ -74,4 +75,5 @@ export const HEADERLESS_PATTERNS = [
   /^\/included(\/|$)/,
   /^\/blog(\/|$)/,
   /^\/why-us(\/|$)/,
+  /^\/admin(\/|$)/,
 ] as const

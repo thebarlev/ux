@@ -4,7 +4,7 @@
  * content/articles/*.mdx — this file only carries the approved index-page
  * teaser copy and cover art, never the article bodies themselves.
  */
-import { getDictionary, type Locale } from "@/content/i18n/dictionary"
+import { getLiveDictionary, type Locale } from "@/content/i18n/dictionary"
 
 export type BlogCard = {
   slug: string
@@ -29,8 +29,8 @@ export function formatReadingTime(minutes: number, locale: Locale = "he") {
   return locale === "en" ? `A ${minutes} minute read` : `קריאה של ${minutes} דק׳`
 }
 
-export function getBlogContent(locale: Locale = "he") {
-  const t = getDictionary(locale).blog
+export async function getBlogContent(locale: Locale = "he") {
+  const t = (await getLiveDictionary(locale)).blog
 
   const featured: BlogCard = {
     ...FEATURED_STRUCTURE,

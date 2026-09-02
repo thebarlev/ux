@@ -8,22 +8,23 @@ import styles from "@/app/_components/redesign/redesign.module.css"
 import { getBlogContent } from "@/app/_content/redesign/blog"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-const blog = getBlogContent("he")
-
-export const metadata: Metadata = {
-  metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/blog", languages: heEnAlternateLanguages("/blog", "/en/blog") },
-  title: "מדריכי צמיחה | Uxellent",
-  description: blog.hero.lede,
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  const blog = await getBlogContent("he")
+  return {
+    metadataBase: new URL("https://uxellent.com"),
+    alternates: { canonical: "/blog", languages: heEnAlternateLanguages("/blog", "/en/blog") },
     title: "מדריכי צמיחה | Uxellent",
     description: blog.hero.lede,
-    url: "https://uxellent.com/blog",
-    siteName: "Uxellent",
-    locale: "he_IL",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
+    openGraph: {
+      title: "מדריכי צמיחה | Uxellent",
+      description: blog.hero.lede,
+      url: "https://uxellent.com/blog",
+      siteName: "Uxellent",
+      locale: "he_IL",
+      type: "website",
+    },
+    robots: { index: true, follow: true },
+  }
 }
 
 const ARROW = (
@@ -32,8 +33,8 @@ const ARROW = (
   </svg>
 )
 
-export default function BlogIndexPage() {
-  const { hero, featured, rows, closer, featuredNo } = getBlogContent("he")
+export default async function BlogIndexPage() {
+  const { hero, featured, rows, closer, featuredNo, metaTags, readMore } = await getBlogContent("he")
   return (
     <RedesignShell>
       <main id="main">
@@ -48,9 +49,9 @@ export default function BlogIndexPage() {
                 <span className={styles.ameta}>
                   <i>{featured.readingTime}</i>
                   <span className={styles.ametaDot} />
-                  <i>{blog.metaTags}</i>
+                  <i>{metaTags}</i>
                 </span>
-                <span className={styles.afeatGo}>{blog.readMore} &gt;</span>
+                <span className={styles.afeatGo}>{readMore} &gt;</span>
               </div>
               <div className={styles.afeatIm}>
                 <Image src={featured.image} alt="" width={520} height={520} />

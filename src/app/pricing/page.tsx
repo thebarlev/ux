@@ -8,33 +8,34 @@ import styles from "@/app/_components/redesign/redesign.module.css"
 import { getPricingContent } from "@/app/_content/redesign/pricing"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-const { hero } = getPricingContent("he")
-
-export const metadata: Metadata = {
-  metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/pricing", languages: heEnAlternateLanguages("/pricing", "/en/pricing") },
-  title: "מחירים | Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
-  description: hero.lede,
-  openGraph: {
-    title: "מחירים | Uxellent",
+export async function generateMetadata(): Promise<Metadata> {
+  const { hero } = await getPricingContent("he")
+  return {
+    metadataBase: new URL("https://uxellent.com"),
+    alternates: { canonical: "/pricing", languages: heEnAlternateLanguages("/pricing", "/en/pricing") },
+    title: "מחירים | Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
     description: hero.lede,
-    url: "https://uxellent.com/pricing",
-    siteName: "Uxellent",
-    locale: "he_IL",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
+    openGraph: {
+      title: "מחירים | Uxellent",
+      description: hero.lede,
+      url: "https://uxellent.com/pricing",
+      siteName: "Uxellent",
+      locale: "he_IL",
+      type: "website",
+    },
+    robots: { index: true, follow: true },
+  }
 }
 
-export default function PricingPage() {
-  const { hero, notes } = getPricingContent("he")
+export default async function PricingPage() {
+  const { hero, notes, billing, plans } = await getPricingContent("he")
   return (
     <RedesignShell>
       <main id="main" className={styles.pricingMain}>
         <InnerHero eyebrow={hero.eyebrow} title={hero.title} lede={hero.lede} />
         <section className={`${styles.band} ${styles.bandPaper2}`} id="pricing">
           <div className={styles.wrap}>
-            <PricingPlans />
+            <PricingPlans billingLabels={billing} plans={plans} />
 
             <div className={styles.prNote}>
               {notes.map((note, i) => (

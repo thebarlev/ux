@@ -1,8 +1,8 @@
 import type { Feature } from "@/app/_content/redesign/products"
-import { getDictionary, type Locale } from "@/content/i18n/dictionary"
+import { getLiveDictionary, type Locale } from "@/content/i18n/dictionary"
 
-export function getWhyUsContent(locale: Locale = "he") {
-  const t = getDictionary(locale).whyUs
+export async function getWhyUsContent(locale: Locale = "he") {
+  const t = (await getLiveDictionary(locale)).whyUs
   const prefix = locale === "en" ? "/en" : ""
   const [f1, f2, f3] = t.features
 

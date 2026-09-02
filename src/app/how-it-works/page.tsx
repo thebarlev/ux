@@ -7,26 +7,27 @@ import styles from "@/app/_components/redesign/redesign.module.css"
 import { getHowItWorksContent } from "@/app/_content/redesign/how-it-works"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-const { hero } = getHowItWorksContent("he")
-
-export const metadata: Metadata = {
-  metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/how-it-works", languages: heEnAlternateLanguages("/how-it-works", "/en/how-it-works") },
-  title: "איך זה עובד | Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
-  description: hero.lede,
-  openGraph: {
-    title: "איך זה עובד | Uxellent",
+export async function generateMetadata(): Promise<Metadata> {
+  const { hero } = await getHowItWorksContent("he")
+  return {
+    metadataBase: new URL("https://uxellent.com"),
+    alternates: { canonical: "/how-it-works", languages: heEnAlternateLanguages("/how-it-works", "/en/how-it-works") },
+    title: "איך זה עובד | Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
     description: hero.lede,
-    url: "https://uxellent.com/how-it-works",
-    siteName: "Uxellent",
-    locale: "he_IL",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
+    openGraph: {
+      title: "איך זה עובד | Uxellent",
+      description: hero.lede,
+      url: "https://uxellent.com/how-it-works",
+      siteName: "Uxellent",
+      locale: "he_IL",
+      type: "website",
+    },
+    robots: { index: true, follow: true },
+  }
 }
 
-export default function HowItWorksPage() {
-  const { hero, steps, closer } = getHowItWorksContent("he")
+export default async function HowItWorksPage() {
+  const { hero, steps, closer } = await getHowItWorksContent("he")
   return (
     <RedesignShell>
       <main id="main">

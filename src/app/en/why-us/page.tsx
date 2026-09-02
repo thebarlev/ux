@@ -7,26 +7,27 @@ import styles from "@/app/_components/redesign/redesign.module.css"
 import { getWhyUsContent } from "@/app/_content/redesign/whyUs"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-const { hero } = getWhyUsContent("en")
-
-export const metadata: Metadata = {
-  metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/en/why-us", languages: heEnAlternateLanguages("/why-us", "/en/why-us") },
-  title: "Why us | Uxellent | AI-built business websites in Hebrew",
-  description: hero.lede,
-  openGraph: {
-    title: "Why us | Uxellent",
+export async function generateMetadata(): Promise<Metadata> {
+  const { hero } = await getWhyUsContent("en")
+  return {
+    metadataBase: new URL("https://uxellent.com"),
+    alternates: { canonical: "/en/why-us", languages: heEnAlternateLanguages("/why-us", "/en/why-us") },
+    title: "Why us | Uxellent | AI-built business websites in Hebrew",
     description: hero.lede,
-    url: "https://uxellent.com/en/why-us",
-    siteName: "Uxellent",
-    locale: "en_US",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
+    openGraph: {
+      title: "Why us | Uxellent",
+      description: hero.lede,
+      url: "https://uxellent.com/en/why-us",
+      siteName: "Uxellent",
+      locale: "en_US",
+      type: "website",
+    },
+    robots: { index: true, follow: true },
+  }
 }
 
-export default function WhyUsPageEn() {
-  const { hero, features, closer } = getWhyUsContent("en")
+export default async function WhyUsPageEn() {
+  const { hero, features, closer } = await getWhyUsContent("en")
   return (
     <RedesignShell locale="en">
       <main id="main">

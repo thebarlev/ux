@@ -1,8 +1,8 @@
 import type { Feature } from "@/app/_content/redesign/products"
-import { getDictionary, type Locale } from "@/content/i18n/dictionary"
+import { getLiveDictionary, type Locale } from "@/content/i18n/dictionary"
 
-export function getIncludedContent(locale: Locale = "he") {
-  const t = getDictionary(locale).included
+export async function getIncludedContent(locale: Locale = "he") {
+  const t = (await getLiveDictionary(locale)).included
   const prefix = locale === "en" ? "/en" : ""
   const [f1, f2, f3] = t.features
 

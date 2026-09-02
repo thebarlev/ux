@@ -3,7 +3,7 @@
  * Text lives in src/content/i18n/{he,en}.json; this file holds the
  * locale-agnostic structure (hrefs, viz configuration, image/URL strings).
  */
-import { getDictionary, type Locale } from "@/content/i18n/dictionary"
+import { getLiveDictionary, type Locale } from "@/content/i18n/dictionary"
 
 export type FeatureViz =
   | { kind: "composer"; typingText: string }
@@ -23,8 +23,8 @@ export type Feature = {
   viz: FeatureViz
 }
 
-export function getProductsContent(locale: Locale = "he") {
-  const t = getDictionary(locale).products
+export async function getProductsContent(locale: Locale = "he") {
+  const t = (await getLiveDictionary(locale)).products
   const prefix = locale === "en" ? "/en" : ""
   const [f1, f2, f3, f4, f5, f6] = t.features
 

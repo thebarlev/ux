@@ -8,33 +8,34 @@ import styles from "@/app/_components/redesign/redesign.module.css"
 import { getPricingContent } from "@/app/_content/redesign/pricing"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-const { hero } = getPricingContent("en")
-
-export const metadata: Metadata = {
-  metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/en/pricing", languages: heEnAlternateLanguages("/pricing", "/en/pricing") },
-  title: "Pricing | Uxellent | AI-built business websites in Hebrew",
-  description: hero.lede,
-  openGraph: {
-    title: "Pricing | Uxellent",
+export async function generateMetadata(): Promise<Metadata> {
+  const { hero } = await getPricingContent("en")
+  return {
+    metadataBase: new URL("https://uxellent.com"),
+    alternates: { canonical: "/en/pricing", languages: heEnAlternateLanguages("/pricing", "/en/pricing") },
+    title: "Pricing | Uxellent | AI-built business websites in Hebrew",
     description: hero.lede,
-    url: "https://uxellent.com/en/pricing",
-    siteName: "Uxellent",
-    locale: "en_US",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
+    openGraph: {
+      title: "Pricing | Uxellent",
+      description: hero.lede,
+      url: "https://uxellent.com/en/pricing",
+      siteName: "Uxellent",
+      locale: "en_US",
+      type: "website",
+    },
+    robots: { index: true, follow: true },
+  }
 }
 
-export default function PricingPageEn() {
-  const { hero, notes } = getPricingContent("en")
+export default async function PricingPageEn() {
+  const { hero, notes, billing, plans } = await getPricingContent("en")
   return (
     <RedesignShell locale="en">
       <main id="main" className={styles.pricingMain}>
         <InnerHero eyebrow={hero.eyebrow} title={hero.title} lede={hero.lede} />
         <section className={`${styles.band} ${styles.bandPaper2}`} id="pricing">
           <div className={styles.wrap}>
-            <PricingPlans locale="en" />
+            <PricingPlans locale="en" billingLabels={billing} plans={plans} />
 
             <div className={styles.prNote}>
               {notes.map((note, i) => (

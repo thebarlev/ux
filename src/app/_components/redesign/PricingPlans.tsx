@@ -3,8 +3,10 @@
 import { useState } from "react"
 import styles from "./redesign.module.css"
 import { BoldText } from "./BoldText"
-import { getPricingContent, type Plan } from "@/app/_content/redesign/pricing"
+import { type Plan } from "@/app/_content/redesign/pricing"
 import { type Locale } from "@/content/i18n/dictionary"
+
+type BillingLabels = { monthly: string; yearly: string; yearlyBadge: string }
 
 const CHECK = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
@@ -17,9 +19,16 @@ function planHref(plan: Plan, billing: "monthly" | "yearly") {
   return `https://uxellent.site?plan=${plan.slug}&billing=${billing}`
 }
 
-export function PricingPlans({ locale = "he" }: { locale?: Locale }) {
+export function PricingPlans({
+  locale = "he",
+  billingLabels,
+  plans,
+}: {
+  locale?: Locale
+  billingLabels: BillingLabels
+  plans: Plan[]
+}) {
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly")
-  const { billing: billingLabels, plans } = getPricingContent(locale)
 
   return (
     <>
