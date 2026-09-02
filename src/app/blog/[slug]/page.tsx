@@ -98,7 +98,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
                 ))}
               </aside>
             ) : null}
-            <ArticleMdxContent code={post.body.code} />
+            <ArticleMdxContent code={post.body.code} headings={headings} />
           </div>
         </article>
 
