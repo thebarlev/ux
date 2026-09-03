@@ -5,6 +5,7 @@ import { Assistant } from "next/font/google";
 import { JsonLd, ORGANIZATION_SCHEMA, WEBSITE_SCHEMA } from "@/components/JsonLd";
 import { DeferredScripts } from "@/components/DeferredScripts";
 import { SiteHeader } from "@/app/_components/layout/SiteHeader";
+import { LanguageBanner } from "@/app/_components/LanguageBanner";
 import { TrackingProvider } from "@/app/_components/tracking/TrackingProvider";
 import { MetaPixelRouteTracker } from "@/app/_components/tracking/MetaPixelRouteTracker";
 import { getPixelId, metaPixelBootstrapScript } from "@/lib/analytics/meta-pixel";
@@ -75,6 +76,8 @@ export default function RootLayout({
             {metaPixelBootstrapScript(metaPixelId)}
           </Script>
         ) : null}
+
+        <LanguageBanner />
 
         {/* The language row above the header is gone: Hebrew is the focus, and
             the switch now lives quietly in the footer. SiteHeader returns null

@@ -15,9 +15,9 @@ export function RedesignShell({
 }) {
   return (
     <div className={`${styles.root} ${redesignFont.variable}`} dir={locale === "en" ? "ltr" : "rtl"} lang={locale}>
-      <RedesignHeader locale={locale} langSwitchHref={langSwitchHref} />
+      <RedesignHeader locale={locale} />
       {children}
-      <RedesignFooter locale={locale} />
+      <RedesignFooter locale={locale} langSwitchHref={langSwitchHref} />
     </div>
   )
 }

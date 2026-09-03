@@ -7,25 +7,12 @@ import { useState } from "react"
 import styles from "./redesign.module.css"
 import { getDictionary, type Locale } from "@/content/i18n/dictionary"
 
-/** The /en counterpart of the current path, for the language-switch link.
- *  Correct for every page except a blog article without a translation —
- *  those pages pass their own `langSwitchHref` instead. */
-function defaultCounterpartPath(pathname: string, locale: Locale) {
-  if (locale === "en") {
-    if (pathname === "/en") return "/"
-    return pathname.replace(/^\/en/, "") || "/"
-  }
-  if (pathname === "/") return "/en"
-  return `/en${pathname}`
-}
-
-export function RedesignHeader({ locale = "he", langSwitchHref }: { locale?: Locale; langSwitchHref?: string }) {
+export function RedesignHeader({ locale = "he" }: { locale?: Locale }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
   const t = getDictionary(locale).nav
   const prefix = locale === "en" ? "/en" : ""
   const homeHref = locale === "en" ? "/en" : "/"
-  const switchHref = langSwitchHref ?? defaultCounterpartPath(pathname ?? homeHref, locale)
 
   const navLinks = [
     { href: `${prefix}/why-us`, label: t.whyUs },
@@ -61,9 +48,6 @@ export function RedesignHeader({ locale = "he", langSwitchHref }: { locale?: Loc
               {item.label}
             </Link>
           ))}
-          <Link href={switchHref} lang={locale === "en" ? "he" : "en"}>
-            {t.langSwitch}
-          </Link>
         </nav>
         <span className={styles.hdrEnd}>
           <a className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`} href="https://uxellent.site">
@@ -88,9 +72,6 @@ export function RedesignHeader({ locale = "he", langSwitchHref }: { locale?: Loc
             {item.label}
           </Link>
         ))}
-        <Link href={switchHref} lang={locale === "en" ? "he" : "en"} onClick={() => setMenuOpen(false)}>
-          {t.langSwitch}
-        </Link>
       </div>
     </header>
   )

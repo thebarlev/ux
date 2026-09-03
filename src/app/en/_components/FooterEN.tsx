@@ -1,8 +1,8 @@
-import Link from "next/link"
 import Image from "next/image"
 import { Facebook, Twitter, Instagram, Mail } from "lucide-react"
 import { EnLink } from "./EnLink"
 import { growthGuideFooterLinks } from "@/lib/growth-guides/topics"
+import { LangSwitchLink } from "@/app/_components/i18n/LangSwitchLink"
 
 const LEGAL_LINKS = [
   { href: "/en/terms", label: "Terms" },
@@ -128,15 +128,15 @@ export function FooterEN() {
           {/* Counterpart to the English link in the Hebrew footer — the top
               language bar is gone, so this is the only way back. */}
           <div className="flex items-center gap-4 text-[13px] text-white/50">
-            <Link
+            <LangSwitchLink
               href="/"
-              hrefLang="he"
+              target="he"
               lang="he"
               dir="rtl"
               className="hover:text-white transition-colors"
             >
               עברית
-            </Link>
+            </LangSwitchLink>
             <p className="text-left">© {new Date().getFullYear()} Uxellent</p>
           </div>
         </div>

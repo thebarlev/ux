@@ -2,6 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Facebook, Twitter, Instagram, Mail } from "lucide-react"
 import { growthGuideFooterLinksHe } from "@/lib/growth-guides/topics"
+import { LangSwitchLink } from "@/app/_components/i18n/LangSwitchLink"
 
 const LEGAL_LINKS = [
   { href: "/terms", label: "תנאים משפטיים" },
@@ -146,15 +147,15 @@ export function SiteFooter({ tone = "black" }: { tone?: SiteFooterTone } = {}) {
           {/* The only language switch on the site now that the top bar is gone.
               Hebrew leads, so this stays deliberately quiet. */}
           <div className="flex items-center gap-4 text-[13px] text-white/50">
-            <Link
+            <LangSwitchLink
               href="/en"
-              hrefLang="en"
+              target="en"
               lang="en"
               dir="ltr"
               className="hover:text-white transition-colors"
             >
               English
-            </Link>
+            </LangSwitchLink>
             <p className="text-right sm:text-left">
               © {new Date().getFullYear()} Uxellent
             </p>

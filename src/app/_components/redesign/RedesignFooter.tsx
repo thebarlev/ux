@@ -2,12 +2,14 @@ import Link from "next/link"
 import Image from "next/image"
 import styles from "./redesign.module.css"
 import { BoldText } from "./BoldText"
+import { FooterLangSwitch } from "./FooterLangSwitch"
 import { getDictionary, type Locale } from "@/content/i18n/dictionary"
 
 type FooterItem = { label: string; href: string }
 
-export function RedesignFooter({ locale = "he" }: { locale?: Locale }) {
+export function RedesignFooter({ locale = "he", langSwitchHref }: { locale?: Locale; langSwitchHref?: string }) {
   const t = getDictionary(locale).footer
+  const navT = getDictionary(locale).nav
   const prefix = locale === "en" ? "/en" : ""
   const homeHref = locale === "en" ? "/en" : "/"
 
@@ -59,6 +61,7 @@ export function RedesignFooter({ locale = "he" }: { locale?: Locale }) {
             <Link href="/terms">{t.quickTerms}</Link>
             <Link href="/privacy">{t.quickPrivacy}</Link>
             <Link href="/accessibility">{t.quickAccessibility}</Link>
+            <FooterLangSwitch locale={locale} label={navT.langSwitch} hrefOverride={langSwitchHref} />
           </span>
         </div>
       </div>
