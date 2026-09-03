@@ -2,6 +2,13 @@ import { get } from "@vercel/global-config"
 
 export const EDGE_CONFIG_KEY = "dictionary_overrides"
 
+/** Sibling key holding write metadata (currently just lastUpdatedAt) — kept
+ *  separate from EDGE_CONFIG_KEY so the overrides tree itself stays a pure
+ *  he/en dictionary shape. */
+export const EDGE_CONFIG_META_KEY = "dictionary_overrides_meta"
+
+export type DictionaryOverridesMeta = { lastUpdatedAt?: string }
+
 export type DictionaryOverrides = { he?: unknown; en?: unknown }
 
 /** Live he/en copy overrides written by /admin, layered over the base

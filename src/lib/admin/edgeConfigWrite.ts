@@ -1,5 +1,5 @@
 import "server-only"
-import { EDGE_CONFIG_KEY, readOverrides } from "@/lib/i18n/edgeOverrides"
+import { EDGE_CONFIG_KEY, EDGE_CONFIG_META_KEY, readOverrides } from "@/lib/i18n/edgeOverrides"
 
 /** Writes go through the Vercel REST API — the read-only @vercel/global-config
  *  SDK has no write path. Requires VERCEL_API_TOKEN (a Global Config-scoped
@@ -29,7 +29,10 @@ export async function writeOverride(locale: "he" | "en", path: string, value: st
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      items: [{ operation: "upsert", key: EDGE_CONFIG_KEY, value: nextOverrides }],
+      items: [
+        { operation: "upsert", key: EDGE_CONFIG_KEY, value: nextOverrides },
+        { operation: "upsert", key: EDGE_CONFIG_META_KEY, value: { lastUpdatedAt: new Date().toISOString() } },
+      ],
     }),
   })
   if (!res.ok) {
