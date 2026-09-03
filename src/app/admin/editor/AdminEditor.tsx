@@ -46,6 +46,10 @@ export function AdminEditor() {
     setStatus(null)
   }
 
+  function cancelRow() {
+    setOpenPath(null)
+  }
+
   async function save(path: string, original: Row) {
     setSaving(true)
     setStatus(null)
@@ -81,81 +85,91 @@ export function AdminEditor() {
     }
   }
 
-  async function logout() {
-    await fetch("/api/admin/logout", { method: "POST" })
-    router.refresh()
-  }
-
   if (status === "session_expired") {
     return (
-      <div style={{ padding: 32 }}>
-        <p>Session expired.</p>
-        <button onClick={() => router.refresh()}>Reload</button>
+      <div className="mx-auto max-w-5xl">
+        <div className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
+          <p className="text-sm text-[#151515]">החיבור פג תוקף.</p>
+          <button
+            onClick={() => router.refresh()}
+            className="mt-3 rounded-lg bg-[#157AB8] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0C5580]"
+          >
+            רענון
+          </button>
+        </div>
       </div>
     )
   }
 
   return (
-    <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700 }}>Uxellent Admin — site copy</h1>
-        <button onClick={logout} style={{ fontSize: 13, background: "none", border: "1px solid #ccc", borderRadius: 6, padding: "6px 12px", cursor: "pointer" }}>
-          Sign out
-        </button>
+    <div className="mx-auto max-w-5xl">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-[#151515]">עריכת טקסטים</h1>
+        <p className="mt-1 text-sm text-[#747474]">חיפוש ועריכה של תוכן האתר בעברית ובאנגלית</p>
       </div>
 
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search keys or text (he/en)…"
-        style={{ width: "100%", padding: "10px 12px", borderRadius: 8, border: "1px solid #ddd", marginBottom: 16, fontSize: 14 }}
+        placeholder="חיפוש לפי מפתח או טקסט (עברית/אנגלית)…"
+        className="mb-4 w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm shadow-sm outline-none focus:border-[#157AB8]"
       />
 
       {rows === null ? (
-        <p>Loading…</p>
+        <p className="text-sm text-[#747474]">טוען…</p>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div className="flex flex-col gap-2">
           {filtered.map((row) => (
-            <div key={row.path} style={{ background: "#fff", borderRadius: 10, border: "1px solid #e5e5e5", overflow: "hidden" }}>
+            <div key={row.path} className="overflow-hidden rounded-xl border border-black/5 bg-white shadow-sm">
               <button
                 onClick={() => (openPath === row.path ? setOpenPath(null) : openRow(row))}
-                style={{ width: "100%", textAlign: "left", padding: "10px 14px", background: "none", border: "none", cursor: "pointer" }}
+                className="w-full px-4 py-3 text-start transition-colors hover:bg-[#f5f9fa]"
               >
-                <div style={{ fontSize: 11, color: "#888", fontFamily: "monospace" }}>{row.path}</div>
-                <div style={{ display: "flex", gap: 16, fontSize: 13, marginTop: 2 }}>
-                  <span dir="rtl" style={{ flex: 1, color: "#222" }}>{row.he}</span>
-                  <span style={{ flex: 1, color: "#555" }}>{row.en}</span>
+                <div className="font-mono text-[11px] text-[#9a9a9a]" dir="ltr">
+                  {row.path}
+                </div>
+                <div className="mt-1 flex gap-4 text-sm">
+                  <span dir="rtl" className="flex-1 text-[#222]">{row.he}</span>
+                  <span dir="ltr" className="flex-1 text-[#666]">{row.en}</span>
                 </div>
               </button>
 
               {openPath === row.path ? (
-                <div style={{ padding: "0 14px 14px", display: "flex", gap: 12 }}>
-                  <div style={{ flex: 1 }}>
-                    <label style={{ fontSize: 11, color: "#888" }}>Hebrew</label>
+                <div className="flex flex-col gap-3 border-t border-black/5 p-4 sm:flex-row">
+                  <div className="flex-1">
+                    <label className="text-xs text-[#747474]">עברית</label>
                     <textarea
                       dir="rtl"
                       value={heDraft}
                       onChange={(e) => setHeDraft(e.target.value)}
                       rows={2}
-                      style={{ width: "100%", padding: 8, borderRadius: 6, border: "1px solid #ddd", fontSize: 13 }}
+                      className="mt-1 w-full rounded-lg border border-black/10 p-2 text-sm outline-none focus:border-[#157AB8]"
                     />
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <label style={{ fontSize: 11, color: "#888" }}>English</label>
+                  <div className="flex-1">
+                    <label className="text-xs text-[#747474]">אנגלית</label>
                     <textarea
+                      dir="ltr"
                       value={enDraft}
                       onChange={(e) => setEnDraft(e.target.value)}
                       rows={2}
-                      style={{ width: "100%", padding: 8, borderRadius: 6, border: "1px solid #ddd", fontSize: 13 }}
+                      className="mt-1 w-full rounded-lg border border-black/10 p-2 text-sm outline-none focus:border-[#157AB8]"
                     />
                   </div>
-                  <div style={{ alignSelf: "flex-end" }}>
+                  <div className="flex items-end gap-2">
+                    <button
+                      onClick={cancelRow}
+                      disabled={saving}
+                      className="rounded-lg border border-black/10 px-4 py-2 text-sm font-medium text-[#333] transition-colors hover:bg-[#f5f9fa] disabled:opacity-60"
+                    >
+                      ביטול
+                    </button>
                     <button
                       onClick={() => save(row.path, row)}
                       disabled={saving}
-                      style={{ padding: "8px 14px", borderRadius: 6, border: "none", background: "#111827", color: "#fff", fontSize: 13, cursor: "pointer" }}
+                      className="rounded-lg bg-[#157AB8] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0C5580] disabled:opacity-60"
                     >
-                      {saving ? "..." : "Save"}
+                      {saving ? "שומר…" : "שמירה"}
                     </button>
                   </div>
                 </div>
@@ -165,8 +179,16 @@ export function AdminEditor() {
         </div>
       )}
 
-      {status === "saved" ? <p style={{ position: "fixed", bottom: 20, right: 20, background: "#065f46", color: "#fff", padding: "8px 14px", borderRadius: 8, fontSize: 13 }}>Saved — live within a few seconds.</p> : null}
-      {status === "save_failed" ? <p style={{ position: "fixed", bottom: 20, right: 20, background: "#991b1b", color: "#fff", padding: "8px 14px", borderRadius: 8, fontSize: 13 }}>Save failed.</p> : null}
+      {status === "saved" ? (
+        <p className="fixed bottom-6 start-6 rounded-lg bg-[#0f7a4a] px-4 py-2 text-sm text-white shadow-lg">
+          נשמר — יופיע באתר תוך כמה שניות.
+        </p>
+      ) : null}
+      {status === "save_failed" ? (
+        <p className="fixed bottom-6 start-6 rounded-lg bg-[#991b1b] px-4 py-2 text-sm text-white shadow-lg">
+          השמירה נכשלה.
+        </p>
+      ) : null}
     </div>
   )
 }
