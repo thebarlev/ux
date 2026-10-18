@@ -1,8 +1,6 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { StatusPage } from "@/app/_components/redesign/StatusPage"
 
 export const metadata: Metadata = {
   title: "התשלום נכשל | Uxellent",
@@ -16,30 +14,15 @@ export const metadata: Metadata = {
   },
 }
 
+// Cardcom's FailedRedirectUrl (lib/payments/cardcom.ts).
 export default function CheckoutFailedPage() {
   return (
-    <div className="min-h-screen bg-background px-4 py-12">
-      <div className="mx-auto w-full max-w-md">
-        <Card>
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">התשלום נכשל</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-center">
-            <p className="text-sm text-muted-foreground">
-              זה קורה לפעמים. אפשר לנסות שוב דרך עמוד התמחור.
-            </p>
-            <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
-              <Button asChild>
-                <Link href="/pricing">נסו שוב</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/">חזרה ללנדינג</Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+    <StatusPage
+      eyebrow="התשלום לא הושלם"
+      title={["משהו השתבש,", "התשלום לא עבר"]}
+      lede="לא חויבתם. אפשר לנסות שוב, או לכתוב לנו ל-support@uxellent.com ונעזור."
+      primary={{ label: "נסו שוב", href: "/pricing" }}
+      secondary={{ label: "חזרה לעמוד הבית", href: "/" }}
+    />
   )
 }
-
