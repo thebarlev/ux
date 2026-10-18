@@ -230,7 +230,7 @@ export default async function HomePage() {
         <section className={styles.band}>
           <div className={`${styles.wrap} ${styles.closer}`}>
             <h2 className={`${styles.sec} ${styles.closerH2}`}>{closer.title}</h2>
-            <a className={`${styles.btn} ${styles.btnPrimary} ${styles.closerBtn}`} href="https://uxellent.site">
+            <a className={`${styles.btn} ${styles.btnPrimary} ${styles.closerBtn}`} href="https://ai.uxellent.com">
               {closer.cta}
               <svg className={styles.arw} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />

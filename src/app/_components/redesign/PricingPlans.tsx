@@ -15,8 +15,8 @@ const CHECK = (
 )
 
 function planHref(plan: Plan, billing: "monthly" | "yearly") {
-  if (plan.slug === "free") return "https://uxellent.site?plan=free"
-  return `https://uxellent.site?plan=${plan.slug}&billing=${billing}`
+  if (plan.slug === "free") return "https://ai.uxellent.com?plan=free"
+  return `https://ai.uxellent.com?plan=${plan.slug}&billing=${billing}`
 }
 
 export function PricingPlans({

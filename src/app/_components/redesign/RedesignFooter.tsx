@@ -18,7 +18,7 @@ export function RedesignFooter({ locale = "he", langSwitchHref }: { locale?: Loc
     { label: t.product.howItWorks, href: `${prefix}/how-it-works` },
     { label: t.product.included, href: `${prefix}/included` },
     { label: t.product.pricing, href: `${prefix}/pricing` },
-    { label: t.product.platform, href: "https://uxellent.site" },
+    { label: t.product.platform, href: "https://ai.uxellent.com" },
   ]
   const f2: FooterItem[] = [
     { label: t.company.about, href: `${prefix}/about` },
@@ -44,7 +44,7 @@ export function RedesignFooter({ locale = "he", langSwitchHref }: { locale?: Loc
               <Image src="/footer-logo.svg" alt="Uxellent" width={150} height={47} />
             </Link>
             <p className={styles.blurb}>{t.blurb}</p>
-            <a className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`} href="https://uxellent.site">
+            <a className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`} href="https://ai.uxellent.com">
               {t.startBuilding}
             </a>
           </div>

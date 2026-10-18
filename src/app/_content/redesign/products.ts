@@ -34,7 +34,7 @@ export async function getProductsContent(locale: Locale = "he") {
       title: f1.title,
       body: f1.body,
       chips: f1.chips,
-      cta: { label: `${f1.ctaLabel} >`, href: "https://uxellent.site" },
+      cta: { label: `${f1.ctaLabel} >`, href: "https://ai.uxellent.com" },
       viz: { kind: "composer", typingText: f1.vizComposerText! },
     },
     {
@@ -42,7 +42,7 @@ export async function getProductsContent(locale: Locale = "he") {
       title: f2.title,
       body: f2.body,
       chips: f2.chips,
-      cta: { label: `${f2.ctaLabel} >`, href: "https://uxellent.site" },
+      cta: { label: `${f2.ctaLabel} >`, href: "https://ai.uxellent.com" },
       flip: true,
       viz: { kind: "before-after" },
     },
@@ -51,7 +51,7 @@ export async function getProductsContent(locale: Locale = "he") {
       title: f3.title,
       body: f3.body,
       chips: f3.chips,
-      cta: { label: `${f3.ctaLabel} >`, href: "https://uxellent.site" },
+      cta: { label: `${f3.ctaLabel} >`, href: "https://ai.uxellent.com" },
       viz: { kind: "landing" },
     },
     {
@@ -90,7 +90,7 @@ export async function getProductsContent(locale: Locale = "he") {
       title: f6.title,
       body: f6.body,
       chips: f6.chips,
-      cta: { label: `${f6.ctaLabel} >`, href: "https://uxellent.site" },
+      cta: { label: `${f6.ctaLabel} >`, href: "https://ai.uxellent.com" },
       flip: true,
       viz: {
         kind: "studio",

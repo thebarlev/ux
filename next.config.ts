@@ -74,10 +74,14 @@ const nextConfig: NextConfig = {
     { source: "/marketing/seo-ai", destination: "/seo-ai", statusCode: 301 },
     { source: "/seo-ai", destination: "/growth-guides", statusCode: 301 },
     { source: "/roi", destination: "/", statusCode: 301 },
-    // /checkout/success and /checkout/failed are Cardcom's return URLs and
-    // /thanks/startup-kit is a URL-based conversion point — all three stay real
-    // pages, so the package-id catch-all below must not swallow them.
+    // /checkout/success and /checkout/failed are Cardcom's return URLs and stay
+    // real pages, so the package-id catch-all below must not swallow them.
     { source: "/checkout/:packageId((?!success$|failed$).+)", destination: "/", statusCode: 301 },
+    // Startup-kit form dropped and no live /lp campaigns (Itzik, 2026-10-18).
+    { source: "/thanks/startup-kit", destination: "/", statusCode: 301 },
+    { source: "/lp/ecommerce", destination: "/", statusCode: 301 },
+    { source: "/lp/services", destination: "/", statusCode: 301 },
+    { source: "/lp/thank-you", destination: "/", statusCode: 301 },
   ],
   headers: async () => [
     {

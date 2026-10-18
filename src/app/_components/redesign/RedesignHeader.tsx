@@ -50,7 +50,7 @@ export function RedesignHeader({ locale = "he" }: { locale?: Locale }) {
           ))}
         </nav>
         <span className={styles.hdrEnd}>
-          <a className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`} href="https://uxellent.site">
+          <a className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`} href="https://ai.uxellent.com">
             {t.startFree}
           </a>
           <button
