@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation"
 
 export function WhatsAppButton() {
   const pathname = usePathname()
+  if (pathname?.startsWith("/admin")) return null
+
   const isEn = pathname?.startsWith("/en")
   const positionClass = isEn ? "right-6" : "left-6"
 

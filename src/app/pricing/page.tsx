@@ -1,72 +1,60 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { JsonLd, faqPageSchema } from "@/components/JsonLd";
-import { SiteFooter } from "@/app/_components/home/SiteFooter";
-import { AboutSection } from "@/app/_components/home/AboutSection";
-import { PriceSection } from "@/app/_components/home/PriceSection";
-import { ServiceFaqSection } from "@/app/_components/services/ServiceFaqSection";
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang";
+import type { Metadata } from "next"
+import { Fragment } from "react"
+import { RedesignShell } from "@/app/_components/redesign/RedesignShell"
+import { InnerHero } from "@/app/_components/redesign/InnerHero"
+import { PricingPlans } from "@/app/_components/redesign/PricingPlans"
+import { BrandMark } from "@/app/_components/redesign/BrandMark"
+import styles from "@/app/_components/redesign/redesign.module.css"
+import { getPricingContent } from "@/app/_content/redesign/pricing"
+import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-export const metadata: Metadata = {
-  title: "מחירון חשבונית דיגיטלית | Uxellent",
-  description: "מחירון חשבונית דיגיטלית מאובטחת עם חיבור לרשות המסים, חתימה דיגיטלית ושנה ראשונה חינם לעסקים.",
-  alternates: {
-    canonical: "/pricing",
-    languages: heEnAlternateLanguages("/pricing", "/en/pricing"),
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { hero } = await getPricingContent("he")
+  return {
+    metadataBase: new URL("https://uxellent.com"),
+    alternates: { canonical: "/pricing", languages: heEnAlternateLanguages("/pricing", "/en/pricing") },
+    title: "מחירים | Uxellent | אתרי תדמית בעברית לבעלי מקצוע חופשי",
+    description: hero.lede,
+    openGraph: {
+      title: "מחירים | Uxellent",
+      description: hero.lede,
+      url: "https://uxellent.com/pricing",
+      siteName: "Uxellent",
+      locale: "he_IL",
+      type: "website",
+    },
+    robots: { index: true, follow: true },
+  }
+}
 
-const PRICING_FAQ = [
-  {
-    id: "pricing-faq-1",
-    question: "כמה עולה חשבונית דיגיטלית?",
-    answer: "שנה ראשונה חינם. אחר כך מנוי חודשי או שנתי - פרטים בעמוד.",
-  },
-  {
-    id: "pricing-faq-2",
-    question: "מה כולל השנה החינמית?",
-    answer: "הפקת עד 10 מסמכים בחודש, חתימה דיגיטלית, חיבור לרשות המיסים.",
-  },
-  {
-    id: "pricing-faq-3",
-    question: "האם אפשר לבטל?",
-    answer: "כן. ביטול מנוי חודשי בתום החודש. מנוי שנתי - לפי מדיניות ההחזרים.",
-  },
-  {
-    id: "pricing-faq-4",
-    question: "אילו מסמכים אפשר להפיק?",
-    answer: "חשבוניות מס, קבלות, חשבוניות עסקה ועוד - 12 סוגי מסמכים.",
-  },
-] as const;
-
-export default function PricePage() {
+export default async function PricingPage() {
+  const { hero, notes, billing, plans } = await getPricingContent("he")
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
-      <JsonLd data={faqPageSchema(PRICING_FAQ.map((i) => ({ question: i.question, answer: i.answer })))} />
+    <RedesignShell>
+      <main id="main" className={styles.pricingMain}>
+        <InnerHero eyebrow={hero.eyebrow} title={hero.title} lede={hero.lede} />
+        <section className={`${styles.band} ${styles.bandPaper2}`} id="pricing">
+          <div className={styles.wrap}>
+            <PricingPlans billingLabels={billing} plans={plans} />
 
-      <main id="main" role="main">
-        <section className="py-[var(--space-section)]">
-          <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-[720px] text-center">
-              <h1 className="text-[44px] font-semibold leading-[1.1] text-black sm:text-[56px] lg:text-[64px]">
-                מחירון חשבונית דיגיטלית
-              </h1>
-              <p className="mt-4 text-[20px] font-semibold leading-[32px] text-[color:var(--vow-muted)]">
-                חשבונית דיגיטלית מאובטחת עם חיבור לרשות המיסים. שנה ראשונה חינם לכל עסק.{" "}
-                <Link href="/invoice" className="text-[#5389BB] underline hover:no-underline">
-                  פרטים על החשבונית הדיגיטלית
-                </Link>
-              </p>
+            <div className={styles.prNote}>
+              {notes.map((note, i) => (
+                <Fragment key={note.title}>
+                  {i > 0 ? (
+                    <div className={styles.pnSep}>
+                      <BrandMark className={styles.pnSepSvg} />
+                    </div>
+                  ) : null}
+                  <div>
+                    <b>{note.title}</b>
+                    <p>{note.body}</p>
+                  </div>
+                </Fragment>
+              ))}
             </div>
           </div>
         </section>
-
-        <PriceSection />
-        <ServiceFaqSection title="שאלות נפוצות על התמחור" items={[...PRICING_FAQ]} />
-        <AboutSection />
       </main>
-
-      <SiteFooter />
-    </div>
-  );
+    </RedesignShell>
+  )
 }

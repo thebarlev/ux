@@ -1,8 +1,6 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { StatusPage } from "@/app/_components/redesign/StatusPage"
 
 export const metadata: Metadata = {
   title: "התשלום הצליח | Uxellent",
@@ -16,30 +14,17 @@ export const metadata: Metadata = {
   },
 }
 
+// Cardcom's SuccessRedirectUrl (lib/payments/cardcom.ts). The payment itself is
+// recorded by the webhook (/api/cardcom/webhook), not by this page, so it only
+// has to answer 200 to the browser redirect, with whatever query Cardcom adds.
 export default function CheckoutSuccessPage() {
   return (
-    <div className="min-h-screen bg-background px-4 py-12">
-      <div className="mx-auto w-full max-w-md">
-        <Card>
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">התשלום התקבל</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-center">
-            <p className="text-sm text-muted-foreground">
-              תודה! ניתן להמשיך הלאה או לחזור לעמוד הבית.
-            </p>
-            <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
-              <Button asChild>
-                <Link href="/">חזרה ללנדינג</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/pricing">לתמחור</Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+    <StatusPage
+      eyebrow="התשלום התקבל"
+      title={["תודה!", "התשלום הושלם בהצלחה"]}
+      lede="קיבלנו את התשלום. אפשר להמשיך הלאה או לחזור לעמוד הבית."
+      primary={{ label: "חזרה לעמוד הבית", href: "/" }}
+      secondary={{ label: "לתמחור", href: "/pricing" }}
+    />
   )
 }
-

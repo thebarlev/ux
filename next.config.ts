@@ -59,6 +59,29 @@ const nextConfig: NextConfig = {
       destination: "/en/seo-ai",
       permanent: true,
     },
+    // ── redesign/marketing-2026-08 (design-review/approved-2026-08/redirect-map.html) ──
+    // Old agency-service pages, folded into the new site. 301, not `permanent: true`
+    // (which Next emits as 308) — see the /new-home entry above for why.
+    // /pricing is deliberately absent: it keeps its URL with new content, like /.
+    // /lp/ecommerce and /lp/services are deliberately absent too — pending Itzik's
+    // call on whether their ad campaigns are still live (agent5-brief.md).
+    { source: "/design", destination: "/", statusCode: 301 },
+    { source: "/develop", destination: "/", statusCode: 301 },
+    { source: "/develop-ai", destination: "/", statusCode: 301 },
+    { source: "/idea-to-product", destination: "/", statusCode: 301 },
+    { source: "/marketing", destination: "/", statusCode: 301 },
+    { source: "/marketing/ppc", destination: "/", statusCode: 301 },
+    { source: "/marketing/seo-ai", destination: "/seo-ai", statusCode: 301 },
+    { source: "/seo-ai", destination: "/growth-guides", statusCode: 301 },
+    { source: "/roi", destination: "/", statusCode: 301 },
+    // /checkout/success and /checkout/failed are Cardcom's return URLs and stay
+    // real pages, so the package-id catch-all below must not swallow them.
+    { source: "/checkout/:packageId((?!success$|failed$).+)", destination: "/", statusCode: 301 },
+    // Startup-kit form dropped and no live /lp campaigns (Itzik, 2026-10-18).
+    { source: "/thanks/startup-kit", destination: "/", statusCode: 301 },
+    { source: "/lp/ecommerce", destination: "/", statusCode: 301 },
+    { source: "/lp/services", destination: "/", statusCode: 301 },
+    { source: "/lp/thank-you", destination: "/", statusCode: 301 },
   ],
   headers: async () => [
     {

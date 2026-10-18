@@ -25,6 +25,26 @@ const EXCLUDED_SEGMENTS = new Set([
   "checkout",
 ])
 
+/**
+ * redesign/marketing-2026-08 (redirect-map.html): these exact Hebrew routes
+ * now 301 away via next.config.ts redirects, so they stay out of both
+ * sitemaps even though their page.tsx files are still on disk pending a
+ * separate cleanup pass. Exact paths (not EXCLUDED_SEGMENTS) so the English
+ * /en/seo-ai, /en/idea-to-product, etc. — untouched this round — still list.
+ */
+const REDIRECTED_ROUTE_PATHS = new Set([
+  "/design",
+  "/develop",
+  "/develop-ai",
+  "/idea-to-product",
+  "/marketing",
+  "/marketing/ppc",
+  "/marketing/seo-ai",
+  "/roi",
+  "/seo-ai",
+  "/thanks/startup-kit",
+])
+
 function isRouteGroup(segment) {
   return segment.startsWith("(") && segment.endsWith(")")
 }
@@ -144,6 +164,7 @@ async function main() {
   for (const filePath of pageFiles) {
     const routePath = toRoutePath(filePath)
     if (!routePath) continue
+    if (REDIRECTED_ROUTE_PATHS.has(routePath)) continue
     if (await isRedirectPage(filePath)) continue
     routePaths.push(routePath)
   }
