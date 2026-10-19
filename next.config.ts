@@ -9,6 +9,9 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const nextConfig: NextConfig = {
   experimental: {
     inlineCss: true,
+    // Two root layouts ((he) and (en)) since 2026-10, so unmatched URLs need a
+    // global 404: app/global-not-found.tsx.
+    globalNotFound: true,
   },
   images: {
     qualities: [60, 75],

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Image from "next/image"
-import { EnLink } from "@/app/en/_components/EnLink"
+import { EnLink } from "@/app/(en)/en/_components/EnLink"
 
 const CONSENT_KEY = "vow_cookie_consent"
 const CONSENT_TIMESTAMP_KEY = "vow_cookie_consent_ts"

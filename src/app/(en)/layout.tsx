@@ -10,7 +10,7 @@ import { TrackingProvider } from "@/app/_components/tracking/TrackingProvider";
 import { MetaPixelRouteTracker } from "@/app/_components/tracking/MetaPixelRouteTracker";
 import { getPixelId, metaPixelBootstrapScript } from "@/lib/analytics/meta-pixel";
 import { Suspense } from "react";
-import "./globals.css";
+import "../globals.css";
 
 const LeadPopupHost = dynamic(
   () => import("@/app/_components/home/LeadPopupHost").then((m) => m.LeadPopupHost),
@@ -44,7 +44,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+/**
+ * Root layout for the English site (/en). Same chrome and tracking as the
+ * Hebrew root layout in (he)/layout.tsx; only lang and dir differ, so the
+ * <html> element is correct for English pages.
+ */
+export default function RootLayoutEn({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -52,7 +57,7 @@ export default function RootLayout({
   const metaPixelId = getPixelId();
 
   return (
-    <html lang="he" dir="rtl" className={assistant.variable}>
+    <html lang="en" dir="ltr" className={assistant.variable}>
       <head>
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         {/* Pixel now loads on arrival rather than on idle, so warm the connection. */}

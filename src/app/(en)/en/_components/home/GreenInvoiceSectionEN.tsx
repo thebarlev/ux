@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { EnLink } from "@/app/en/_components/EnLink"
+import { EnLink } from "@/app/(en)/en/_components/EnLink"
 import { CheckIcon } from "@/app/_components/home/CheckIcon"
 import { GREEN_INVOICE_BENEFITS_EN } from "./homeEn.constants"
 import { H2 } from "@/components/ui/Heading"

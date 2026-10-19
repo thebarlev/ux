@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { FooterEN } from "@/app/en/_components/FooterEN"
-import { HeaderEN } from "@/app/en/_components/HeaderEN"
-import { PackagesSectionEN } from "@/app/en/_components/home/PackagesSectionEN"
+import { FooterEN } from "@/app/(en)/en/_components/FooterEN"
+import { HeaderEN } from "@/app/(en)/en/_components/HeaderEN"
+import { PackagesSectionEN } from "@/app/(en)/en/_components/home/PackagesSectionEN"
 import { LogoRow } from "@/app/_components/home/LogoRow"
 import type { PricePlan } from "@/app/_components/home/PriceSection"
 import { PriceSection } from "@/app/_components/home/PriceSection"

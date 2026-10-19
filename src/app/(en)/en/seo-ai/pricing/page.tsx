@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { SEO_AI_PRICING_EN } from "@/app/en/_config/seoAiPricingEn"
+import { SEO_AI_PRICING_EN } from "@/app/(en)/en/_config/seoAiPricingEn"
 import { PriceSection } from "@/app/_components/home/PriceSection"
 
 export const metadata: Metadata = {

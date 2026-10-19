@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 import { growthGuides, getGrowthGuideTopic } from "@/lib/growth-guides/topics"
-import { growthGuidesHe } from "@/app/growth-guides/growthGuides.data"
+import { growthGuidesHe } from "@/app/(he)/growth-guides/growthGuides.data"
 import { H2, H3 } from "@/components/ui/Heading"
 
 type RelatedGuidesProps = {
