@@ -1,60 +1,31 @@
 import type { Metadata } from "next"
-import { Fragment } from "react"
-import { RedesignShell } from "@/app/_components/redesign/RedesignShell"
-import { InnerHero } from "@/app/_components/redesign/InnerHero"
-import { PricingPlans } from "@/app/_components/redesign/PricingPlans"
-import { BrandMark } from "@/app/_components/redesign/BrandMark"
-import styles from "@/app/_components/redesign/redesign.module.css"
-import { getPricingContent } from "@/app/_content/redesign/pricing"
+
+import { HomePage } from "@/app/_home/HomePage"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
-export async function generateMetadata(): Promise<Metadata> {
-  const { hero } = await getPricingContent("en")
-  return {
-    metadataBase: new URL("https://uxellent.com"),
-    alternates: { canonical: "/en/pricing", languages: heEnAlternateLanguages("/pricing", "/en/pricing") },
-    title: "Pricing | Uxellent | AI-built business websites in Hebrew",
-    description: hero.lede,
-    openGraph: {
-      title: "Pricing | Uxellent",
-      description: hero.lede,
-      url: "https://uxellent.com/en/pricing",
-      siteName: "Uxellent",
-      locale: "en_US",
-      type: "website",
-    },
-    robots: { index: true, follow: true },
-  }
+import "@/app/_home/pricing.en.css"
+
+const TITLE = "Pricing | Uxellent · AI website builder, start free"
+const DESCRIPTION =
+  "AI that designs and writes like an expert, and an editor that changes anything in a click. Start free, with no setup fees and no commitment."
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://uxellent.com"),
+  alternates: { canonical: "/en/pricing", languages: heEnAlternateLanguages("/pricing", "/en/pricing") },
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "https://uxellent.com/en/pricing",
+    siteName: "Uxellent",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
+  robots: { index: true, follow: true },
 }
 
-export default async function PricingPageEn() {
-  const { hero, notes, billing, plans } = await getPricingContent("en")
-  return (
-    <RedesignShell locale="en">
-      <main id="main" className={styles.pricingMain}>
-        <InnerHero eyebrow={hero.eyebrow} title={hero.title} lede={hero.lede} />
-        <section className={`${styles.band} ${styles.bandPaper2}`} id="pricing">
-          <div className={styles.wrap}>
-            <PricingPlans locale="en" billingLabels={billing} plans={plans} />
-
-            <div className={styles.prNote}>
-              {notes.map((note, i) => (
-                <Fragment key={note.title}>
-                  {i > 0 ? (
-                    <div className={styles.pnSep}>
-                      <BrandMark className={styles.pnSepSvg} />
-                    </div>
-                  ) : null}
-                  <div>
-                    <b>{note.title}</b>
-                    <p>{note.body}</p>
-                  </div>
-                </Fragment>
-              ))}
-            </div>
-          </div>
-        </section>
-      </main>
-    </RedesignShell>
-  )
+export default function Page() {
+  return <HomePage lang="en" page="pricing" />
 }

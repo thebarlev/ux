@@ -4,6 +4,8 @@ import { HomeBehaviors } from "./HomeBehaviors"
 import { A11Y_COPY } from "./home.config"
 import { HOME_FAQ_EN, HOME_HTML_EN } from "./markup.en"
 import { HOME_FAQ_HE, HOME_HTML_HE } from "./markup.he"
+import { PRICING_FAQ_EN, PRICING_HTML_EN } from "./pricing-markup.en"
+import { PRICING_FAQ_HE, PRICING_HTML_HE } from "./pricing-markup.he"
 
 // Heebo, Hebrew + Latin, only the weights the design uses; next/font preloads
 // them and serves them with font-display: swap.
@@ -15,18 +17,25 @@ const heebo = Heebo({
 })
 
 const SOURCE = {
-  he: { html: HOME_HTML_HE, faq: HOME_FAQ_HE },
-  en: { html: HOME_HTML_EN, faq: HOME_FAQ_EN },
+  home: {
+    he: { html: HOME_HTML_HE, faq: HOME_FAQ_HE },
+    en: { html: HOME_HTML_EN, faq: HOME_FAQ_EN },
+  },
+  pricing: {
+    he: { html: PRICING_HTML_HE, faq: PRICING_FAQ_HE },
+    en: { html: PRICING_HTML_EN, faq: PRICING_FAQ_EN },
+  },
 } as const
 
 /**
- * The home page from the approved sheets (uxb-009 HE, uxb-010 EN). The whole
- * page, hero demo included, is server-rendered HTML, so it shows before any JS
- * runs; HomeBehaviors then adds the motion and interactions.
+ * A page built from the approved sheets: home (uxb-009 HE, uxb-010 EN) or
+ * pricing (uxb-011 HE, uxb-012 EN). The whole page, hero demo included, is
+ * server-rendered HTML, so it shows before any JS runs; HomeBehaviors then adds
+ * the motion and interactions.
  */
-export function HomePage({ lang }: { lang: "he" | "en" }) {
-  const { html, faq } = SOURCE[lang]
-  const rootId = `uxh-${lang}`
+export function HomePage({ lang, page = "home" }: { lang: "he" | "en"; page?: "home" | "pricing" }) {
+  const { html, faq } = SOURCE[page][lang]
+  const rootId = `${page === "home" ? "uxh" : "uxp"}-${lang}`
   const faqLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -41,7 +50,7 @@ export function HomePage({ lang }: { lang: "he" | "en" }) {
     <>
       <div
         id={rootId}
-        className={`uxh-${lang} ${heebo.variable}`}
+        className={`${rootId} ${heebo.variable}`}
         lang={lang}
         dir={lang === "he" ? "rtl" : "ltr"}
         dangerouslySetInnerHTML={{ __html: html.replace("{{A11Y}}", A11Y_COPY[lang]) }}

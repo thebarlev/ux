@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { SHEET_PAGES } from "@/app/_home/home.config"
 import { usePathname, useRouter } from "next/navigation"
 import { counterpartPath, isEnglishPath } from "@/lib/i18n/counterpartPath"
 import { GEO_HINT_COOKIE, LANG_PREF_COOKIE, readCookie, setLangPrefCookie } from "@/lib/i18n/langPrefCookie"
@@ -55,10 +56,10 @@ export function LanguageBanner() {
       ? { dir: "ltr" as const, message: "Prefer English?", action: "View this site in English", close: "Close" }
       : { dir: "rtl" as const, message: "מעדיפים עברית?", action: "צפייה באתר בעברית", close: "סגירה" }
 
-  // The 2026-10 home pages (tbl-019) are measured for layout shift (CLS <= 0.05).
-  // A banner inserted above them after load pushes the whole page down, so on
-  // those two pages it sits as a bar at the bottom of the screen instead.
-  const overlay = pathname === "/" || pathname === "/en"
+  // The 2026-10 sheet pages (home, pricing) are measured for layout shift
+  // (CLS <= 0.05). A banner inserted above them after load pushes the whole
+  // page down, so on those pages it sits as a bar at the bottom instead.
+  const overlay = SHEET_PAGES.has(pathname)
 
   return (
     <div

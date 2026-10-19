@@ -1,13 +1,14 @@
 "use client"
 
+import { SHEET_PAGES } from "@/app/_home/home.config"
 import { usePathname } from "next/navigation"
 
 export function WhatsAppButton() {
   const pathname = usePathname()
   if (pathname?.startsWith("/admin")) return null
-  // The 2026-10 home pages (tbl-019) follow the approved sheets, which have no
-  // floating WhatsApp button.
-  if (pathname === "/" || pathname === "/en") return null
+  // The 2026-10 pages built from the approved sheets (home tbl-019, pricing
+  // tbl-020) have no floating WhatsApp button.
+  if (pathname && SHEET_PAGES.has(pathname)) return null
 
   const isEn = pathname?.startsWith("/en")
   const positionClass = isEn ? "right-6" : "left-6"

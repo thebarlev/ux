@@ -248,6 +248,100 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
       }, 0.35)
     }
 
+    // -- pricing: monthly / yearly switch (default yearly). Prices come from the
+    //    design's data-m / data-y; plan buttons keep billing= in step.
+    const bill = [...root.querySelectorAll<HTMLButtonElement>(".bill button")]
+    if (bill.length) {
+      const set = (k: "m" | "y", focus = false) => {
+        bill.forEach((b) => {
+          const isOn = b.dataset.b === k
+          b.classList.toggle("on", isOn)
+          b.setAttribute("aria-checked", String(isOn))
+          b.tabIndex = isOn ? 0 : -1
+          if (isOn && focus) b.focus()
+        })
+        root.querySelectorAll<HTMLElement>(".pl-price b, .pl-yr").forEach((e) => {
+          const v = e.dataset[k]
+          if (v !== undefined) e.textContent = v
+        })
+        root.querySelectorAll<HTMLAnchorElement>(".pl-cta[data-plan]").forEach((a) => {
+          if (a.dataset.plan === "free") return
+          // keep the exact URL format the live pricing page uses
+          a.setAttribute("href", a.getAttribute("href")!.replace(/billing=(monthly|yearly)/, `billing=${k === "m" ? "monthly" : "yearly"}`))
+        })
+      }
+      bill.forEach((b) => {
+        b.tabIndex = b.classList.contains("on") ? 0 : -1
+        on(b, "click", () => set(b.dataset.b as "m" | "y"))
+        on(b, "keydown", (e) => {
+          if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+            e.preventDefault()
+            set(b.dataset.b === "m" ? "y" : "m", true)
+          }
+        })
+      })
+    }
+
+    // -- pricing: the blue band drifts in one row and the centre item grows
+    //    (script from the design). Hebrew flows right, English flows left.
+    const mq = root.querySelector<HTMLElement>(".mq")
+    const strip = mq?.querySelector<HTMLElement>(".inc")
+    if (mq && strip && !reduced) {
+      const orig = [...strip.children] as HTMLElement[]
+      const clones: HTMLElement[] = []
+      for (let k = 0; k < 3; k++)
+        orig.forEach((e) => {
+          const c = e.cloneNode(true) as HTMLElement
+          c.setAttribute("aria-hidden", "true")
+          strip.appendChild(c)
+          clones.push(c)
+        })
+      const half = strip.scrollWidth / 4
+      let x = -half
+      let last = performance.now()
+      let raf = 0
+      let paused = false
+      let visible = true
+      const step = (t: number) => {
+        const dt = Math.min(64, t - last)
+        last = t
+        if (!paused) {
+          if (rtl) {
+            x += dt * 0.045
+            if (x >= 0) x -= half
+          } else {
+            x -= dt * 0.045
+            if (x <= -2 * half) x += half
+          }
+        }
+        strip.style.transform = `translateX(${x}px)`
+        const r = mq.getBoundingClientRect()
+        const cx = r.left + r.width / 2
+        const R = r.width * 0.3
+        for (const e of strip.children as HTMLCollectionOf<HTMLElement>) {
+          const bb = e.getBoundingClientRect()
+          const d = Math.abs(bb.left + bb.width / 2 - cx)
+          const k = Math.max(0, 1 - d / R)
+          e.style.transform = `scale(${(1 + 0.38 * k * k).toFixed(3)})`
+          e.classList.toggle("hot", k > 0.6)
+        }
+        raf = visible ? requestAnimationFrame(step) : 0
+      }
+      raf = requestAnimationFrame(step)
+      on(mq, "mouseenter", () => { paused = true })
+      on(mq, "mouseleave", () => { paused = false })
+      observe(mq, (e) => {
+        visible = e[0].isIntersecting
+        if (visible && !raf) { last = performance.now(); raf = requestAnimationFrame(step) }
+      }, 0)
+      cleanups.push(() => {
+        cancelAnimationFrame(raf)
+        clones.forEach((c) => c.remove())
+        strip.style.transform = ""
+        orig.forEach((e) => { e.style.transform = ""; e.classList.remove("hot") })
+      })
+    }
+
     // -- "built right": rings fill once in view
     const bq = root.querySelector<HTMLElement>("#bq")
     if (bq) {

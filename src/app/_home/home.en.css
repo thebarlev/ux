@@ -812,10 +812,17 @@
 .uxh-en .ben:focus-visible{outline-offset:-3px}
 /* WCAG AA contrast (tbl-019 asks for AA). The only deviations from the sheet;
    delete this block to get the sheet colours back. */
-.uxh-en .prompt button{background:#147bbb}
-.uxh-en .prompt button:hover{background:var(--brand-d)}
 .uxh-en .hw-n{opacity:1}
 .uxh-en .hw-t{opacity:.48}
 .uxh-en .hw-i:hover .hw-t{opacity:.7}
 .uxh-en .hw-i.on .hw-t{opacity:1}
 .uxh-en .gs-k{color:#93712f}
+
+/* ---- one blue (tbl-020): buttons + blue band, hover = ink ---- */
+.uxh-en{--blue-a:#0f72b3;--blue-b:#2a5fcf}
+.uxh-en .prompt button,.uxh-en .m-acts a.p,.uxh-en .cl-btn,.uxh-en .pl-badge{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;border-color:transparent!important;color:#fff!important}
+.uxh-en .prompt button:hover,.uxh-en .m-acts a.p:hover,.uxh-en .cl-btn:hover,.uxh-en .pl-cta:hover,.uxh-en .pl.pop .pl-cta:hover,.uxh-en .pl-cta:focus-visible{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important}
+.uxh-en #inc.sec{background:linear-gradient(100deg,var(--blue-a),var(--blue-b))!important}
+.uxh-en .pl.pop .pl-cta{border-color:var(--blue-a)!important;color:var(--blue-a)!important}
+.uxh-en .pl.pop .pl-cta:hover,.uxh-en .pl.pop .pl-cta:focus-visible{color:#fff!important}
+.uxh-en .gs-h.rv{opacity:1!important;transform:none!important;filter:none!important;animation:none!important}
