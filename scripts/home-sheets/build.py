@@ -341,7 +341,10 @@ def finish_css(css, lang, home):
     # SVG is left out: its geometry (d, r, cx…) lives in CSS properties that
     # `all` would revert to nothing.
     nsvg = ":where(*:not(svg):not(svg *))"
+    # `all` does not cover direction, and the site's globals force
+    # direction:rtl on ul/ol/li, so lists take the page's direction back.
     css = (f":where({root}) {nsvg},:where({root}) {nsvg}::before,:where({root}) {nsvg}::after{{all:revert}}\n"
+           f":where({root}) :where(ul,ol,li){{direction:inherit}}\n"
            + css)
     css = css.replace(f"{root} .ft h4", f"{root} .ft h2").replace(".f-ai h5", ".f-ai .f-h")
     assert ".ft h4" not in css and (not home or " h5" not in css)

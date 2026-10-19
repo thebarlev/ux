@@ -1,4 +1,5 @@
 :where(.uxp-he) :where(*:not(svg):not(svg *)),:where(.uxp-he) :where(*:not(svg):not(svg *))::before,:where(.uxp-he) :where(*:not(svg):not(svg *))::after{all:revert}
+:where(.uxp-he) :where(ul,ol,li){direction:inherit}
 
 .uxp-he{
  --ink:#0b1220;--ink2:#3b4556;--line:#e6e9ef;--brand:#1990d8;--brand-d:#0f72b3;--tint:#eaf5fc;--bg:#fbfcfe;

@@ -1,4 +1,5 @@
 :where(.uxh-he) :where(*:not(svg):not(svg *)),:where(.uxh-he) :where(*:not(svg):not(svg *))::before,:where(.uxh-he) :where(*:not(svg):not(svg *))::after{all:revert}
+:where(.uxh-he) :where(ul,ol,li){direction:inherit}
 
 .uxh-he{
  --ink:#0b1220;--ink2:#3b4556;--line:#e6e9ef;--brand:#1990d8;--brand-d:#0f72b3;--tint:#eaf5fc;--bg:#fbfcfe;
