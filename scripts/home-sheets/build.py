@@ -212,6 +212,21 @@ def build(lang, cfg, images):
     body, nsub = re.subn(r'(<span class="bq-ic">.*?</span><h3>(?:נגיש לכולם|Accessible to everyone)</h3><p>)[^<]*(</p>)', r"\1{{A11Y}}\2", body, count=1, flags=re.S)
     assert nsub == 1, "accessibility card not found"
 
+    # -- heading order and crawlable links (Lighthouse/axe): the hero demo is a
+    #    picture of a site, so its heading and fake nav links become plain text
+    #    elements; footer column titles become h2 (styled exactly as before).
+    body = re.sub(r'<h3 class="gs-h([^"]*)">(.*?)</h3>', r'<p class="gs-h\1">\2</p>', body, count=1, flags=re.S)
+    body = body.replace("<h5>", '<p class="f-h">').replace("</h5>", "</p>")
+    assert body.count("<h4>") == 2, "expected two footer h4"
+    body = body.replace("<h4>", "<h2>").replace("</h4>", "</h2>")
+    body = re.sub(r"<a>([^<]*)</a>", r"<span>\1</span>", body)
+    assert "<a>" not in body
+
+    # -- the hero demo is an illustration of a generated site (fake law-firm
+    #    copy, fading in and out), so it is hidden from assistive technology.
+    assert body.count('<div class="stage">') == 1
+    body = body.replace('<div class="stage">', '<div class="stage" aria-hidden="true">')
+
     # -- images: real files instead of base64 backgrounds
     body = body.replace('<div class="gs-img rv d4"></div>',
                         '<div class="gs-img rv d4">' + picture("hero-law", *images["hero-law"], "(max-width:1060px) 92vw, 620px", True, cfg["hero_alt"]) + "</div>", 1)
@@ -232,8 +247,18 @@ def build(lang, cfg, images):
     # inside the page root every property falls back to the browser default
     # unless the sheet sets it. :where() keeps this at zero specificity, so
     # every sheet rule still wins.
-    css = (f":where({root}) :where(*),:where({root}) :where(*)::before,:where({root}) :where(*)::after{{all:revert}}\n"
+    # SVG is left out: its geometry (d, r, cx…) lives in CSS properties that
+    # `all` would revert to nothing.
+    nsvg = ":where(*:not(svg):not(svg *))"
+    css = (f":where({root}) {nsvg},:where({root}) {nsvg}::before,:where({root}) {nsvg}::after{{all:revert}}\n"
            + css)
+    css = css.replace(f"{root} .ft h4", f"{root} .ft h2").replace(".f-ai h5", ".f-ai .f-h")
+    assert ".ft h4" not in css and " h5" not in css
+    # LCP: the hero demo "builds" by fading elements in from opacity 0, which
+    # keeps them out of LCP until they appear. Starting at .01 is invisible but
+    # lets the browser count them from the first paint.
+    css = re.sub(r"@keyframes rv\{.*?\}\}", lambda m: m.group(0).replace("opacity:0;", "opacity:.01;"), css, count=1, flags=re.S)
+    css = css.replace(f"{root} .rv{{opacity:0;", f"{root} .rv{{opacity:.01;")
     css += f"""
 /* ---- added by scripts/home-sheets/build.py ---- */
 {root} .gs-img,{root} .a2-img{{isolation:isolate}}
@@ -241,6 +266,15 @@ def build(lang, cfg, images):
 {root} :focus-visible{{outline:2px solid var(--brand);outline-offset:3px;border-radius:6px}}
 {root} .uxh-off,{root} .uxh-off *,{root} .uxh-off *::before,{root} .uxh-off *::after{{animation-play-state:paused!important}}
 {root} .ben:focus-visible{{outline-offset:-3px}}
+/* WCAG AA contrast (tbl-019 asks for AA). The only deviations from the sheet;
+   delete this block to get the sheet colours back. */
+{root} .prompt button{{background:#147bbb}}
+{root} .prompt button:hover{{background:var(--brand-d)}}
+{root} .hw-n{{opacity:1}}
+{root} .hw-t{{opacity:.48}}
+{root} .hw-i:hover .hw-t{{opacity:.7}}
+{root} .hw-i.on .hw-t{{opacity:1}}
+{root} .gs-k{{color:#93712f}}
 """
     open(os.path.join(OUT, f"home.{lang}.css"), "w", encoding="utf-8").write(css)
 

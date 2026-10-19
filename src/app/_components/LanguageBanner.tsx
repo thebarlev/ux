@@ -55,8 +55,18 @@ export function LanguageBanner() {
       ? { dir: "ltr" as const, message: "Prefer English?", action: "View this site in English", close: "Close" }
       : { dir: "rtl" as const, message: "מעדיפים עברית?", action: "צפייה באתר בעברית", close: "סגירה" }
 
+  // The 2026-10 home pages (tbl-019) are measured for layout shift (CLS <= 0.05).
+  // A banner inserted above them after load pushes the whole page down, so on
+  // those two pages it sits as a bar at the bottom of the screen instead.
+  const overlay = pathname === "/" || pathname === "/en"
+
   return (
-    <div dir={copy.dir} className="flex items-center justify-center gap-3 bg-[#151515] px-4 py-2.5 text-center text-sm text-white">
+    <div
+      dir={copy.dir}
+      className={`flex items-center justify-center gap-3 bg-[#151515] px-4 py-2.5 text-center text-sm text-white${
+        overlay ? " fixed inset-x-0 bottom-0 z-50 pb-[max(0.625rem,env(safe-area-inset-bottom))]" : ""
+      }`}
+    >
       <span>{copy.message}</span>
       <button
         onClick={switchLanguage}

@@ -1,4 +1,4 @@
-:where(.uxh-he) :where(*),:where(.uxh-he) :where(*)::before,:where(.uxh-he) :where(*)::after{all:revert}
+:where(.uxh-he) :where(*:not(svg):not(svg *)),:where(.uxh-he) :where(*:not(svg):not(svg *))::before,:where(.uxh-he) :where(*:not(svg):not(svg *))::after{all:revert}
 
 .uxh-he{
  --ink:#0b1220;--ink2:#3b4556;--line:#e6e9ef;--brand:#1990d8;--brand-d:#0f72b3;--tint:#eaf5fc;--bg:#fbfcfe;
@@ -88,14 +88,14 @@
 .uxh-he .gs-ic svg{width:44px;height:44px;display:block}
 .uxh-he .gs-svc b{display:block;color:#14213d;font-size:14.5px;margin-bottom:4px}
 
-.uxh-he .rv{opacity:0;transform:translateY(10px);animation:rv 10s infinite cubic-bezier(.2,.8,.2,1)}
-@keyframes rv{0%,6%{opacity:0;transform:translateY(10px);filter:blur(4px)}14%,90%{opacity:1;transform:none;filter:none}97%,100%{opacity:0}}
+.uxh-he .rv{opacity:.01;transform:translateY(10px);animation:rv 10s infinite cubic-bezier(.2,.8,.2,1)}
+@keyframes rv{0%,6%{opacity:.01;transform:translateY(10px);filter:blur(4px)}14%,90%{opacity:1;transform:none;filter:none}97%,100%{opacity:0}}
 .uxh-he .d1{animation-delay:.3s}.uxh-he .d2{animation-delay:.9s}.uxh-he .d3{animation-delay:1.5s}.uxh-he .d4{animation-delay:2.1s}.uxh-he .d5{animation-delay:2.7s}.uxh-he .d6{animation-delay:3.3s}.uxh-he .d7{animation-delay:3.7s}.uxh-he .d8{animation-delay:4.1s}
 
 .uxh-he .float{position:absolute;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh-l);text-align:right;z-index:3}
 .uxh-he .f-ai{top:150px;left:-48px;width:276px;padding:16px}
-.uxh-he .f-ai h5{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;margin-bottom:12px}
-.uxh-he .f-ai h5 svg{width:14px;height:14px;fill:var(--brand);animation:spin 6s linear infinite}
+.uxh-he .f-ai .f-h{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;margin-bottom:12px}
+.uxh-he .f-ai .f-h svg{width:14px;height:14px;fill:var(--brand);animation:spin 6s linear infinite}
 .uxh-he .f-ai ul{list-style:none;display:grid;gap:9px}
 .uxh-he .f-ai li{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--ink2)}
 .uxh-he .tick{width:18px;height:18px;border-radius:50%;background:var(--tint);display:grid;place-items:center;flex:none}
@@ -303,7 +303,7 @@
 .uxh-he .ft-pts{list-style:none;display:grid;gap:9px;margin-top:14px}
 .uxh-he .ft-pts li{display:flex;gap:9px;align-items:center;font-size:15px;color:var(--ink2)}
 .uxh-he .ft-pts li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brand);flex:none}
-.uxh-he .ft h4{font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:14px}
+.uxh-he .ft h2{font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:14px}
 .uxh-he .ft a.l{display:block;font-size:15.5px;margin-bottom:10px}
 .uxh-he .ft a.l:hover{color:var(--brand-d)}
 .uxh-he .copy{margin-top:40px;font-size:13px;color:var(--ink2);display:flex;justify-content:space-between}
@@ -457,8 +457,8 @@
 @media(max-width:1060px){
  .uxh-he .stage{margin-top:52px}
  .uxh-he .f-ai{position:absolute;top:-19px;left:50%;right:auto;transform:translateX(-50%);width:max-content;max-width:92%;margin:0;padding:9px 16px;border-radius:99px;box-shadow:0 10px 24px -10px rgba(11,18,32,.25);z-index:4}
- .uxh-he .f-ai h5{margin:0;font-size:13px;white-space:nowrap}
- .uxh-he .f-ai h5::after{content:"";width:12px;height:12px;border-radius:50%;border:2px solid #cfe6f6;border-top-color:var(--brand);animation:spin 1s linear infinite;margin-inline-start:4px}
+ .uxh-he .f-ai .f-h{margin:0;font-size:13px;white-space:nowrap}
+ .uxh-he .f-ai .f-h::after{content:"";width:12px;height:12px;border-radius:50%;border:2px solid #cfe6f6;border-top-color:var(--brand);animation:spin 1s linear infinite;margin-inline-start:4px}
  .uxh-he .f-ai ul{display:none}
 }
 
@@ -785,3 +785,12 @@
 .uxh-he :focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:6px}
 .uxh-he .uxh-off,.uxh-he .uxh-off *,.uxh-he .uxh-off *::before,.uxh-he .uxh-off *::after{animation-play-state:paused!important}
 .uxh-he .ben:focus-visible{outline-offset:-3px}
+/* WCAG AA contrast (tbl-019 asks for AA). The only deviations from the sheet;
+   delete this block to get the sheet colours back. */
+.uxh-he .prompt button{background:#147bbb}
+.uxh-he .prompt button:hover{background:var(--brand-d)}
+.uxh-he .hw-n{opacity:1}
+.uxh-he .hw-t{opacity:.48}
+.uxh-he .hw-i:hover .hw-t{opacity:.7}
+.uxh-he .hw-i.on .hw-t{opacity:1}
+.uxh-he .gs-k{color:#93712f}
