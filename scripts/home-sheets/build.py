@@ -248,6 +248,10 @@ def build(lang, cfg, images, page="home"):
     else:
         assert body.count('<div class="bill"') == 1 and body.count('class="mq"') == 1
         body = body.replace('<button role="radio"', '<button type="button" role="radio"')
+        # heading order: the plan names are h3 under the h1, so a visually hidden
+        # h2 names the plans group (no visual change)
+        assert body.count('<div class="plans">') == 1
+        body = body.replace('<div class="plans">', f'<h2 class="uxh-vh">{"חבילות" if lang == "he" else "Plans"}</h2><div class="plans">')
 
     # -- footer column titles become h2 (heading order), styled as before
     assert body.count("<h4>") == 2, "expected two footer h4"
@@ -368,6 +372,7 @@ def finish_css(css, lang, home):
     else:
         # pricing FAQ (tbl-020): answers in black, support address on its own line
         css += f"{root} .faq .ans{{color:var(--ink)}}\n"
+        css += f"{root} .uxh-vh{{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}}\n"
         # blue band with prefers-reduced-motion: no movement, items wrap and stay put
         css += (f"@media (prefers-reduced-motion:reduce){{{root} #inc .mq{{-webkit-mask:none;mask:none}}"
                 f"{root} #inc .mq .inc{{flex-wrap:wrap!important;justify-content:center!important;width:auto!important;gap:10px 0!important;transform:none!important}}"

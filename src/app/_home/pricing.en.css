@@ -947,4 +947,5 @@
 .uxp-en .pl.pop .pl-cta{border-color:var(--blue-a)!important;color:var(--blue-a)!important}
 .uxp-en .pl.pop .pl-cta:hover,.uxp-en .pl.pop .pl-cta:focus-visible{color:#fff!important}
 .uxp-en .faq .ans{color:var(--ink)}
+.uxp-en .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
 @media (prefers-reduced-motion:reduce){.uxp-en #inc .mq{-webkit-mask:none;mask:none}.uxp-en #inc .mq .inc{flex-wrap:wrap!important;justify-content:center!important;width:auto!important;gap:10px 0!important;transform:none!important}.uxp-en #inc .mq .in-c{transform:none!important}}
