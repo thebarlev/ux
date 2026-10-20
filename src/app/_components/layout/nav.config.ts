@@ -70,6 +70,7 @@ export const HEADERLESS_PATTERNS = [
   /^\/en(\/|$)/,
   /^\/$/,
   /^\/pricing(\/|$)/,
+  /^\/contact(\/|$)/,
   /^\/products(\/|$)/,
   /^\/how-it-works(\/|$)/,
   /^\/included(\/|$)/,

@@ -797,7 +797,7 @@
 .uxp-en .pl h3{font-size:22px;font-weight:800;letter-spacing:-.02em}
 .uxp-en .pl-d{font-size:14.5px;line-height:1.5;color:var(--ink2);margin-top:6px;min-height:44px}
 .uxp-en .pl-price{display:flex;align-items:baseline;gap:4px;margin-top:20px;direction:ltr;justify-content:flex-end}
-.uxp-en [dir=rtl] .pl-price{flex-direction:row-reverse;justify-content:flex-start}
+[dir=rtl] .uxp-en .pl-price{flex-direction:row-reverse;justify-content:flex-start}
 .uxp-en .pl-price .cur{font-size:22px;font-weight:700}
 .uxp-en .pl-price b{font-size:clamp(44px,3.6vw,56px);font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
 .uxp-en .pl-price .per{font-size:15px;color:var(--ink2);margin-inline-start:6px}
@@ -943,8 +943,8 @@
 
 /* ---- one blue (tbl-020): buttons + blue band, hover = ink ---- */
 .uxp-en{--blue-a:#0f72b3;--blue-b:#2a5fcf}
-.uxp-en .go-btn,.uxp-en .m-acts a.p,.uxp-en .cl-btn,.uxp-en .pl-badge{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;border-color:transparent!important;color:#fff!important}
-.uxp-en .go-btn:hover,.uxp-en .go-btn:focus-visible,.uxp-en .m-acts a.p:hover,.uxp-en .cl-btn:hover,.uxp-en .pl-cta:hover,.uxp-en .pl.pop .pl-cta:hover,.uxp-en .pl-cta:focus-visible{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important}
+.uxp-en .go-btn,.uxp-en .m-acts a.p,.uxp-en .cl-btn,.uxp-en .ct-btn,.uxp-en .pl-badge{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;border-color:transparent!important;color:#fff!important}
+.uxp-en .go-btn:hover,.uxp-en .go-btn:focus-visible,.uxp-en .ct-btn:hover,.uxp-en .ct-btn:focus-visible,.uxp-en .m-acts a.p:hover,.uxp-en .cl-btn:hover,.uxp-en .pl-cta:hover,.uxp-en .pl.pop .pl-cta:hover,.uxp-en .pl-cta:focus-visible{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important}
 .uxp-en #inc.sec{background:linear-gradient(100deg,var(--blue-a),var(--blue-b))!important}
 .uxp-en .pl.pop .pl-cta{border-color:var(--blue-a)!important;color:var(--blue-a)!important}
 .uxp-en .pl.pop .pl-cta:hover,.uxp-en .pl.pop .pl-cta:focus-visible{color:#fff!important}

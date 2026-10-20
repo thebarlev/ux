@@ -8,5 +8,5 @@ export const A11Y_COPY = {
   en: "Built to WCAG accessibility guidelines: keyboard navigation, screen reader support, alt text on every image.",
 } as const
 
-/** Routes rendered from the approved sheets (home tbl-019, pricing tbl-020). */
-export const SHEET_PAGES: ReadonlySet<string> = new Set(["/", "/en", "/pricing", "/en/pricing"])
+/** Routes rendered from the approved sheets (home tbl-019, pricing tbl-020, contact tbl-022). */
+export const SHEET_PAGES: ReadonlySet<string> = new Set(["/", "/en", "/pricing", "/en/pricing", "/contact", "/en/contact"])

@@ -12,6 +12,7 @@ import { getPixelId, metaPixelBootstrapScript } from "@/lib/analytics/meta-pixel
 import { Suspense } from "react";
 import "../globals.css";
 import "../mobile-type.css";
+import "../text-links.css";
 
 const LeadPopupHost = dynamic(
   () => import("@/app/_components/home/LeadPopupHost").then((m) => m.LeadPopupHost),

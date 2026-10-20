@@ -7,55 +7,57 @@
  * A headline that does not fit a narrow phone shrinks a little.
  * Text inside the demo illustrations (the fake site screens) keeps its size.
  *
- * Part A: the redesigned pages (home and pricing, both languages): the approved
+ * Part A: the redesigned pages (home, pricing, contact; both languages): the approved
  *         L-mobile-type.css as is, on the page root instead of body.
- * Part B: every other page (the inner pages), by element. The contact page is
- *         left out until it is approved; admin and checkout have no site footer
- *         and are left out too.
+ * Part B: every other page (the inner pages), by element. Admin and checkout
+ *         have no site footer and are left out.
  */
 
-/* ---------- Part A: home + pricing (L-mobile-type.css as approved, body -> page root) ---------- */
+/* ---------- Part A: home, pricing, contact (L-mobile-type.css as approved, body -> page root) ---------- */
 /* L-mobile-type · mobile type scale: running text 20px, everything else follows */
 @media(max-width:1060px){
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en){--h2:40px}
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .sh h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .who2 h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .bhead h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .closing h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) #inc h2{font-size:40px!important;line-height:1.08}
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) h1,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pr-h,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .hero h1{font-size:46px!important;line-height:1.04}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en){--h2:40px}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .sh h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .who2 h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .bhead h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .closing h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) #inc h2{font-size:40px!important;line-height:1.08}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) h1,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pr-h,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .hero h1{font-size:46px!important;line-height:1.04}
  /* running text = 20 */
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .sub,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .sh p,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .bq-lead,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pr-lead,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .ct-lead,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .who2-c p,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .ben p,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .bq-p p,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) details .ans,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl li,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl-d,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .ft-lead,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) footer li,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .hw-d,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .faq .sh p{font-size:20px!important;line-height:1.55}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .sub,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .sh p,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .bq-lead,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pr-lead,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .ct-lead,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .who2-c p,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .ben p,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .bq-p p,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) details .ans,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl li,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl-d,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .ft-lead,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) footer li,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .hw-d,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .faq .sh p{font-size:20px!important;line-height:1.55}
  /* titles inside sections */
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .ben h3{font-size:28px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl h3{font-size:26px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .bq-p h3{font-size:22px!important}
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .hw-t{font-size:24px!important}
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) details summary{font-size:22px!important;line-height:1.35}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .ben h3{font-size:28px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl h3{font-size:26px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .bq-p h3{font-size:22px!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .hw-t{font-size:24px!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) details summary{font-size:22px!important;line-height:1.35}
  /* controls and labels = 18 */
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .prompt button,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl-cta,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .cl-btn,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .ct-btn,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .bill button,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .fld2>span,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .fld2 input,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .fld2 select,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .fld2 textarea,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .mq .in-c,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .ct-links,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl-lead,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .ct-mail small{font-size:18px!important}
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .prompt input{font-size:18px!important}
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .ct-mail a{font-size:21px!important}
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) footer a,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .menu a{font-size:18px}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .prompt button,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl-cta,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .cl-btn,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .ct-btn,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .bill button,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .fld2>span,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .fld2 input,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .fld2 select,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .fld2 textarea,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .mq .in-c,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .ct-links,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl-lead,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .ct-mail small{font-size:18px!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .prompt input{font-size:18px!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .ct-mail a{font-size:21px!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) footer a,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .menu a{font-size:18px}
  /* secondary = 16 */
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .trust span,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl-note,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl-yr,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl-act small,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pr-foot,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .cl-sub,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .ct-note,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .copy,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .lang a,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) footer h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .eyebrow,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl-badge,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .bill em,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .no{font-size:16px!important}
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl-act span{font-size:16px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl-act b{font-size:32px!important}
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl-price b{font-size:52px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pl-price .per{font-size:17px!important}
- div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .cl-sub{gap:6px!important;font-size:15px!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .trust span,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl-note,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl-yr,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl-act small,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pr-foot,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .cl-sub,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .ct-note,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .copy,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .lang a,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) footer h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .eyebrow,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl-badge,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .bill em,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .no{font-size:16px!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl-act span{font-size:16px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl-act b{font-size:32px!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl-price b{font-size:52px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pl-price .per{font-size:17px!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .cl-sub{gap:6px!important;font-size:15px!important}
 }
-@media(max-width:1060px){div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .hero h1{font-size:min(46px,10.6vw)!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .trust{flex-wrap:wrap;justify-content:center;gap:8px 16px}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) details summary{gap:14px}}
-@media(max-width:360px){div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .bill button{padding:10px 14px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .cl-sub{font-size:14px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .sh h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .closing h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) #inc h2{font-size:36px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) h1,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pr-h{font-size:40px!important}}
+@media(max-width:1060px){div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .hero h1{font-size:min(46px,10.6vw)!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .trust{flex-wrap:wrap;justify-content:center;gap:8px 16px}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) details summary{gap:14px}}
+@media(max-width:360px){div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .bill button{padding:10px 14px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .cl-sub{font-size:14px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .sh h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .closing h2,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) #inc h2{font-size:36px!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) h1,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pr-h{font-size:40px!important}}
 
-@media(max-width:1060px){div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) .pr-h{font-size:min(46px,10.2vw)!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) #faq .ans,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) #faq .sh p,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en) #faq .sh p a{font-size:20px!important}}
+@media(max-width:1060px){div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .pr-h{font-size:min(46px,10.2vw)!important}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) #faq .ans,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) #faq .sh p,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) #faq .sh p a{font-size:20px!important}}
+
+@media(max-width:1060px){div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .ft-pts li{align-items:flex-start}div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en) .ft-pts li::before{margin-top:.62em}}
+
 /* the English home headline is longer, so it shrinks a little more (uxb-010 v6) */
 @media(max-width:1060px){div.uxh-en .hero h1{font-size:min(46px,9.4vw)!important}}
 
 /* ---------- Part B: inner pages ---------- */
 @media (max-width:1060px){
- :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,#category)) body :is(h1):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:min(46px,10.6vw)!important;line-height:1.08!important;overflow-wrap:break-word}
- :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,#category)) body :is(h2):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:40px!important;line-height:1.12!important;overflow-wrap:break-word}
- :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,#category)) body :is(h3):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:26px!important;line-height:1.25!important}
- :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,#category)) body :is(h4,h5,h6,summary):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:22px!important;line-height:1.35!important}
- :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,#category)) body :is(p,li,dd,blockquote):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:20px!important;line-height:1.55!important}
- :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,#category)) body :is(button,input,select,textarea,label):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:18px!important}
- :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,#category)) body footer a:not([aria-hidden="true"] *){font-size:18px!important}
- :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,#category)) body :is(footer p,small,time):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:16px!important;line-height:1.5!important}
+ :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en)) body :is(h1):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:min(46px,10.6vw)!important;line-height:1.08!important;overflow-wrap:break-word}
+ :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en)) body :is(h2):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:40px!important;line-height:1.12!important;overflow-wrap:break-word}
+ :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en)) body :is(h3):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:26px!important;line-height:1.25!important}
+ :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en)) body :is(h4,h5,h6,summary):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:22px!important;line-height:1.35!important}
+ :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en)) body :is(p,li,dd,blockquote):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:20px!important;line-height:1.55!important}
+ :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en)) body :is(button,input,select,textarea,label):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:18px!important}
+ :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en)) body footer a:not([aria-hidden="true"] *){font-size:18px!important}
+ :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en)) body :is(footer p,small,time):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:16px!important;line-height:1.5!important}
 }
 @media (max-width:360px){
- :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,#category)) body :is(h1):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:min(40px,11vw)!important}
- :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,#category)) body :is(h2):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:36px!important}
+ :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en)) body :is(h1):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:min(40px,11vw)!important}
+ :root:has(body footer):not(:has(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en)) body :is(h2):not(header *,[aria-hidden="true"] *,[role="dialog"] *){font-size:36px!important}
 }

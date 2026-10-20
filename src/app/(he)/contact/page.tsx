@@ -1,63 +1,30 @@
 import type { Metadata } from "next"
 
-import { SiteFooter } from "@/app/_components/home/SiteFooter"
+import { HomePage } from "@/app/_home/HomePage"
 import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
-import { ContactForm } from "@/app/_components/contact/ContactForm"
-import { ServiceFaqSection } from "@/app/_components/services/ServiceFaqSection"
-import { JsonLd, faqPageSchema } from "@/components/JsonLd"
-import { H2 } from "@/components/ui/Heading"
+
+import "@/app/_home/contact.he.css"
+
+const TITLE = "צור קשר | Uxellent"
+const DESCRIPTION = "שאלה על האתר, על החבילות או על משהו שלא עובד? כתבו לנו ונחזור אליכם בהקדם."
 
 export const metadata: Metadata = {
-  title: "צור קשר עם Uxellent | SEO, פיתוח ושיווק",
-  description: "דברו עם Uxellent על קידום אתרים, פיתוח אתרים, מערכות AI ושיווק דיגיטלי. נשיב תוך שעות ספורות בימי עסקים.",
-  alternates: {
-    canonical: "/contact",
-    languages: heEnAlternateLanguages("/contact", "/en/contact"),
+  metadataBase: new URL("https://uxellent.com"),
+  alternates: { canonical: "/contact", languages: heEnAlternateLanguages("/contact", "/en/contact") },
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "https://uxellent.com/contact",
+    siteName: "Uxellent",
+    locale: "he_IL",
+    type: "website",
   },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
+  robots: { index: true, follow: true },
 }
 
-const CONTACT_FAQ = [
-  { id: "contact-faq-1", question: "תוך כמה זמן תחזרו?", answer: "תוך שעות ספורות בימי עסקים." },
-  { id: "contact-faq-2", question: "איך ליצור קשר מלבד הטופס?", answer: "וואטסאפ 054-5215193, מייל support@uxellent.com" },
-  { id: "contact-faq-3", question: "האם השיחה הראשונה מחייבת?", answer: "לא. שיחת היכרות קצרה ללא התחייבות." },
-  { id: "contact-faq-4", question: "אילו שירותים אתם מציעים?", answer: "פיתוח אתרים, שיווק דיגיטלי, עיצוב, חשבונית דיגיטלית, רו״ח AI." },
-] as const;
-
-export default function ContactPage() {
-  return (
-    <div className="min-h-screen bg-white" dir="rtl">
-      <JsonLd data={faqPageSchema(CONTACT_FAQ.map((i) => ({ question: i.question, answer: i.answer })))} />
-
-      <main id="main" role="main">
-        <div className="mx-auto max-w-[1440px] px-4 py-[var(--space-section)] sm:px-6 lg:px-8">
-          <div className="mx-auto w-full max-w-[720px] text-right">
-            <h1 className="text-[44px] font-semibold leading-[52px] text-black sm:text-[56px] sm:leading-[64px]">
-              צור קשר עם Uxellent
-            </h1>
-            <p className="mt-2 text-[20px] font-semibold leading-[32px] text-[color:var(--vow-muted)]">
-              נשמח לשמוע ממך. מלאו את הפרטים ונחזור תוך שעות ספורות. אפשר גם בוואטסאפ:{" "}
-              <span dir="ltr" className="whitespace-nowrap [unicode-bidi:isolate]">
-                054-5215193
-              </span>
-              . ימי א׳–ה׳,{" "}
-              <span dir="ltr" className="whitespace-nowrap [unicode-bidi:isolate]">
-                9:00–18:00
-              </span>
-              .
-            </p>
-
-            <H2 className="mt-10">השאירו פרטים</H2>
-            <div className="mt-4">
-              <ContactForm />
-            </div>
-          </div>
-        </div>
-
-        <ServiceFaqSection title="שאלות נפוצות לפני יצירת קשר" items={[...CONTACT_FAQ]} />
-      </main>
-
-      <SiteFooter />
-    </div>
-  )
+export default function Page() {
+  return <HomePage lang="he" page="contact" />
 }
-

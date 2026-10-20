@@ -11,6 +11,7 @@ import { FooterEN } from "./_components/FooterEN"
 const REDESIGN_EN_PATTERNS = [
   /^\/en$/,
   /^\/en\/pricing(\/|$)/,
+  /^\/en\/contact(\/|$)/,
   /^\/en\/products(\/|$)/,
   /^\/en\/how-it-works(\/|$)/,
   /^\/en\/included(\/|$)/,

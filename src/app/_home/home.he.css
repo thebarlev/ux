@@ -808,8 +808,8 @@
 
 /* ---- one blue (tbl-020): buttons + blue band, hover = ink ---- */
 .uxh-he{--blue-a:#0f72b3;--blue-b:#2a5fcf}
-.uxh-he .go-btn,.uxh-he .m-acts a.p,.uxh-he .cl-btn,.uxh-he .pl-badge{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;border-color:transparent!important;color:#fff!important}
-.uxh-he .go-btn:hover,.uxh-he .go-btn:focus-visible,.uxh-he .m-acts a.p:hover,.uxh-he .cl-btn:hover,.uxh-he .pl-cta:hover,.uxh-he .pl.pop .pl-cta:hover,.uxh-he .pl-cta:focus-visible{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important}
+.uxh-he .go-btn,.uxh-he .m-acts a.p,.uxh-he .cl-btn,.uxh-he .ct-btn,.uxh-he .pl-badge{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;border-color:transparent!important;color:#fff!important}
+.uxh-he .go-btn:hover,.uxh-he .go-btn:focus-visible,.uxh-he .ct-btn:hover,.uxh-he .ct-btn:focus-visible,.uxh-he .m-acts a.p:hover,.uxh-he .cl-btn:hover,.uxh-he .pl-cta:hover,.uxh-he .pl.pop .pl-cta:hover,.uxh-he .pl-cta:focus-visible{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important}
 .uxh-he #inc.sec{background:linear-gradient(100deg,var(--blue-a),var(--blue-b))!important}
 .uxh-he .pl.pop .pl-cta{border-color:var(--blue-a)!important;color:var(--blue-a)!important}
 .uxh-he .pl.pop .pl-cta:hover,.uxh-he .pl.pop .pl-cta:focus-visible{color:#fff!important}

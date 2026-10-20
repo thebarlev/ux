@@ -9,6 +9,28 @@ const COPY = {
   en: { menu: "Menu", close: "Close menu" },
 } as const
 
+/** Contact form wording (tbl-022). */
+const FORM_COPY = {
+  he: {
+    name: "כתבו את השם שלכם.",
+    email: "כתבו את כתובת המייל שלכם.",
+    emailBad: "כתובת המייל לא נראית תקינה. בדקו אותה ונסו שוב.",
+    msg: "כתבו לנו הודעה.",
+    done: "תודה! קיבלנו את ההודעה ונחזור אליכם בהקדם.",
+    fail: "משהו השתבש. אפשר לכתוב לנו ישירות ל-",
+  },
+  en: {
+    name: "Please enter your name.",
+    email: "Please enter your email address.",
+    emailBad: "That email address doesn’t look right. Please check it.",
+    msg: "Please write us a message.",
+    done: "Thanks! We got your message and will get back to you soon.",
+    fail: "Something went wrong. You can email us directly at ",
+  },
+} as const
+const SUPPORT = "support@uxellent.com"
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+
 /** New professions that pop into "who it's for", with their icons (from the sheets). */
 const NEW_ORBS: Record<Lang, readonly string[]> = {
   he: ["רופאי שיניים", "מורים פרטיים", "וטרינרים", "שמאים", "מתורגמנים", "קוסמטיקאיות", "מאמני כושר", "גני אירועים"],
@@ -70,6 +92,89 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
       on(burger, "click", () => setOpen(!menu.classList.contains("open")))
       menu.querySelectorAll<HTMLElement>("a").forEach((a) => on(a, "click", () => setOpen(false)))
       on(window, "keydown", (e) => { if ((e as KeyboardEvent).key === "Escape" && menu.classList.contains("open")) { setOpen(false); burger.focus() } })
+    }
+
+    // -- contact form: check the fields, send to /api/site-contact, then thank
+    const form = root.querySelector<HTMLFormElement>("[data-uxc-form]")
+    if (form) {
+      const t = FORM_COPY[lang]
+      const field = (n: string) => form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${n}"]`)
+      const setErr = (n: string, msg: string) => {
+        const el = field(n)
+        const err = root.querySelector<HTMLElement>(`#uxc-${n}-e`)
+        if (!el || !err) return
+        err.textContent = msg
+        if (msg) el.setAttribute("aria-invalid", "true")
+        else el.removeAttribute("aria-invalid")
+      }
+      const check = (n: string) => {
+        const v = (field(n)?.value ?? "").trim()
+        let msg = ""
+        if (n === "name" && !v) msg = t.name
+        if (n === "email") msg = !v ? t.email : EMAIL_RE.test(v) ? "" : t.emailBad
+        if (n === "msg" && !v) msg = t.msg
+        setErr(n, msg)
+        return !msg
+      }
+      const REQUIRED = ["name", "email", "msg"]
+      // once a field has shown an error, it re-checks as the person types
+      REQUIRED.forEach((n) => {
+        const el = field(n)
+        if (!el) return
+        on(el as HTMLElement, "input", () => { if (el.getAttribute("aria-invalid")) check(n) })
+        on(el as HTMLElement, "blur", () => { if (el.value.trim()) check(n) })
+      })
+      const fail = form.querySelector<HTMLElement>(".uxc-fail")
+      const done = root.querySelector<HTMLElement>(".uxc-done")
+      const btn = form.querySelector<HTMLButtonElement>(".ct-btn")
+      const showFail = () => {
+        if (!fail) return
+        fail.textContent = t.fail
+        const a = document.createElement("a")
+        a.href = `mailto:${SUPPORT}`
+        a.className = "lnk"
+        a.innerHTML = `<bdi>${SUPPORT}</bdi>`
+        fail.appendChild(a)
+        fail.hidden = false
+      }
+      let busy = false
+      on(form as HTMLElement, "submit", async (e) => {
+        e.preventDefault()
+        if (busy) return
+        const bad = REQUIRED.filter((n) => !check(n))
+        if (bad.length) { field(bad[0])?.focus(); return }
+        busy = true
+        btn?.setAttribute("aria-busy", "true")
+        if (fail) fail.hidden = true
+        let ok = false
+        try {
+          const res = await fetch("/api/site-contact", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              name: field("name")?.value ?? "",
+              email: field("email")?.value ?? "",
+              topic: (form.querySelector<HTMLSelectElement>('[name="topic"]')?.value) ?? "",
+              message: field("msg")?.value ?? "",
+              website: field("website")?.value ?? "",
+              lang,
+            }),
+          })
+          ok = res.ok && (await res.json().catch(() => null))?.ok === true
+        } catch {
+          ok = false
+        }
+        busy = false
+        btn?.removeAttribute("aria-busy")
+        if (ok && done) {
+          done.textContent = t.done
+          form.hidden = true
+          done.hidden = false
+          done.focus()
+        } else {
+          showFail()
+        }
+      })
     }
 
     // -- benefits slider ("what you get")

@@ -2,11 +2,12 @@
 """
 Builds the home pages (/ and /en) from Itzik's approved review sheets.
 
-    python3 scripts/home-sheets/build.py <sheet-dir> <image-dir>
+    python3 scripts/home-sheets/build.py <sheet-dir> <contact-sheet-dir> <image-dir>
 
 <sheet-dir> holds the four approved sheets (tbl-021): uxb-009-v35-home-he.html,
 uxb-010-v6-home-en.html, uxb-011-v12-pricing-he.html, uxb-012-v3-pricing-en.html;
-<image-dir> holds hero-law.webp (tbl-019). The sheets are the source of truth for markup and CSS;
+<contact-sheet-dir> holds uxb-013-v6-contact-he.html and uxb-014-v2-contact-en.html
+(tbl-022); <image-dir> holds hero-law.webp (tbl-019). The sheets are the source of truth for markup and CSS;
 this script only:
   - drops the review chrome (.sheet-label, every .ztag),
   - wires the links (anchors, pricing/contact/legal pages, platform URLs),
@@ -16,8 +17,8 @@ this script only:
   - adds the aria wiring the sheets leave out (tabs, carousel, menu),
   - leaves out the sheets' copy of the mobile type rule: the site keeps it in
     one place, src/app/mobile-type.css, for these pages and every inner page.
-Outputs: src/app/_home/{markup,pricing-markup}.{he,en}.ts and
-{home,pricing}.{he,en}.css, plus public/home/*.{webp,avif}. Image variants need sharp (from node_modules).
+Outputs: src/app/_home/{markup,pricing-markup,contact-markup}.{he,en}.ts and
+{home,pricing,contact}.{he,en}.css, plus public/home/*.{webp,avif}. Image variants need sharp (from node_modules).
 """
 import base64
 import glob
@@ -29,7 +30,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 HOME_SHEETS = PRICING_SHEETS = sys.argv[1]
-IMAGES = sys.argv[2]
+CONTACT_SHEETS = sys.argv[2]
+IMAGES = sys.argv[3]
 OUT = os.path.join(ROOT, "src/app/_home")
 PUB = os.path.join(ROOT, "public/home")
 os.makedirs(OUT, exist_ok=True)
@@ -41,8 +43,10 @@ LANGS = {
     "he": {
         "file": "uxb-009-v35-home-he.html",
         "pricing_file": "uxb-011-v12-pricing-he.html",
+        "contact_file": "uxb-013-v6-contact-he.html",
         "home": "/",
         "pricing": "/pricing",
+        "contact": "/contact",
         "pre": "",
         "nav": {
             "איך זה עובד": "#how",
@@ -65,8 +69,10 @@ LANGS = {
     "en": {
         "file": "uxb-010-v6-home-en.html",
         "pricing_file": "uxb-012-v3-pricing-en.html",
+        "contact_file": "uxb-014-v2-contact-en.html",
         "home": "/en",
         "pricing": "/en/pricing",
+        "contact": "/en/contact",
         "pre": "/en",
         "nav": {
             "How it works": "#how",
@@ -128,6 +134,9 @@ def scope_css(css, root):
                 parts.append(root)
             elif s == "*":
                 parts += [root, f"{root} *"]
+            elif s.startswith("[dir="):
+                d, rest = s.split(" ", 1)
+                parts.append(f"{d} {root} {rest}")
             elif s.startswith(("html ", "body ")):
                 parts.append(root + s[4:] if s.startswith("html") else root + s[4:])
             else:
@@ -179,8 +188,8 @@ BLUE_A, BLUE_B = "#0f72b3", "#2a5fcf"
 
 
 def brand_blue_css(root):
-    btns = ",".join(f"{root} {s}" for s in (".go-btn", ".m-acts a.p", ".cl-btn", ".pl-badge"))
-    hovers = ",".join(f"{root} {s}" for s in (".go-btn:hover", ".go-btn:focus-visible", ".m-acts a.p:hover", ".cl-btn:hover",
+    btns = ",".join(f"{root} {s}" for s in (".go-btn", ".m-acts a.p", ".cl-btn", ".ct-btn", ".pl-badge"))
+    hovers = ",".join(f"{root} {s}" for s in (".go-btn:hover", ".go-btn:focus-visible", ".ct-btn:hover", ".ct-btn:focus-visible", ".m-acts a.p:hover", ".cl-btn:hover",
                                               ".pl-cta:hover", ".pl.pop .pl-cta:hover", ".pl-cta:focus-visible"))
     return f"""
 /* ---- one blue (tbl-020): buttons + blue band, hover = ink ---- */
@@ -195,7 +204,11 @@ def brand_blue_css(root):
 
 def build(lang, cfg, images, page="home"):
     home = page == "home"
-    sheet = os.path.join(HOME_SHEETS, cfg["file"]) if home else os.path.join(PRICING_SHEETS, cfg["pricing_file"])
+    sheet = {
+        "home": os.path.join(HOME_SHEETS, cfg["file"]),
+        "pricing": os.path.join(PRICING_SHEETS, cfg["pricing_file"]),
+        "contact": os.path.join(CONTACT_SHEETS, cfg["contact_file"]),
+    }[page]
     src = open(sheet, encoding="utf-8").read()
     css = re.search(r"<style[^>]*>(.*?)</style>", src, re.S).group(1)
     body = re.search(r"<body[^>]*>(.*)</body>", src, re.S).group(1)
@@ -211,12 +224,13 @@ def build(lang, cfg, images, page="home"):
 
     nav = dict(cfg["nav"])
     if not home:
-        # on the pricing page the section links go to the home page's sections
+        # on the inner pages the section links go to the home page's sections
         for k, v in nav.items():
             if v.startswith("#"):
                 nav[k] = ("/" if cfg["home"] == "/" else cfg["home"]) + v
         body = body.replace('href="#how"', f'href="{nav[next(k for k in nav if cfg["nav"][k] == "#how")]}"')
         body = body.replace('class="l" href="#faq"', f'class="l" href="{nav[next(k for k in nav if cfg["nav"][k] == "#faq")]}"')
+    if page == "pricing":
         # plan buttons: same platform URLs as the live pricing page, billing follows the switch
         slugs = iter(["free", "start", "business", "pro"])
         def plan(m):
@@ -239,7 +253,7 @@ def build(lang, cfg, images, page="home"):
         href = nav.get(text.strip())
         assert href, f"no target for link {text!r} ({lang})"
         attrs = attrs.replace('href="#"', 'href="' + href + '"')
-        if not home and href == cfg["pricing"] and "aria-current" not in attrs:
+        if not home and href == cfg[page] and "aria-current" not in attrs:
             attrs += ' aria-current="page"'
         return "<a" + attrs + ">" + text + "</a>"
 
@@ -251,6 +265,8 @@ def build(lang, cfg, images, page="home"):
 
     if home:
         body = home_markup(body, cfg, images)
+    elif page == "contact":
+        body = contact_markup(body, lang, cfg)
     else:
         assert body.count('<div class="bill"') == 1 and body.count('class="mq"') == 1
         body = body.replace('<button role="radio"', '<button type="button" role="radio"')
@@ -264,23 +280,72 @@ def build(lang, cfg, images, page="home"):
     body = body.replace("<h4>", "<h2>").replace("</h4>", "</h2>")
 
     # -- CSS: no data URIs, scoped, Heebo from next/font, a few additions
-    css = finish_css(css, lang, home)
-    open(os.path.join(OUT, f"{'home' if home else 'pricing'}.{lang}.css"), "w", encoding="utf-8").write(css)
+    css = finish_css(css, lang, page)
+    open(os.path.join(OUT, f"{page}.{lang}.css"), "w", encoding="utf-8").write(css)
 
     faq = [
         {"q": re.sub(r"<[^>]+>", "", q).strip(), "a": re.sub(r"<[^>]+>", "", a).strip()}
         for q, a in re.findall(r"<summary>(.*?)<span class=\"pm\">\+</span></summary><div class=\"ans\">(.*?)</div>", body, re.S)
     ]
-    want = 9 if home else 6
+    want = {"home": 9, "pricing": 6, "contact": 0}[page]
     assert len(faq) == want, f"expected {want} FAQ entries in {page}/{lang}, got {len(faq)}"
-    name = "HOME" if home else "PRICING"
+    name = page.upper()
     ts = (
         f"// Generated by scripts/home-sheets/build.py from {os.path.basename(sheet)}. Do not edit by hand.\n"
         f"export const {name}_HTML_{lang.upper()} = {json.dumps(body.strip(), ensure_ascii=False)}\n\n"
         f"export const {name}_FAQ_{lang.upper()} = {json.dumps(faq, ensure_ascii=False, indent=2)} as const\n"
     )
-    open(os.path.join(OUT, f"{'markup' if home else 'pricing-markup'}.{lang}.ts"), "w", encoding="utf-8").write(ts)
+    open(os.path.join(OUT, f"{'markup' if home else page + '-markup'}.{lang}.ts"), "w", encoding="utf-8").write(ts)
     print(page, lang, "markup", len(body), "css", len(css), "faq", len(faq))
+
+
+def contact_markup(body, lang, cfg):
+    """Contact page (tbl-022): the sheet's form, wired for HomeBehaviors and /api/site-contact."""
+    # language switch: contact <-> contact
+    body = body.replace('<a href="/" lang="he"', '<a href="/contact" lang="he"').replace('<a href="/en" lang="en"', '<a href="/en/contact" lang="en"')
+    assert body.count('<form class="ct-form" novalidate onsubmit="return false">') == 1
+    body = body.replace('<form class="ct-form" novalidate onsubmit="return false">',
+                        '<form class="ct-form" novalidate method="post" data-uxc-form>')
+    # each field: its label names it, its error (filled in by the script) describes it
+    for name in ("name", "email", "topic", "msg"):
+        body, n = re.subn(rf'<label class="fld2"><span>([^<]*)</span><(input|select|textarea) name="{name}"',
+                          rf'<label class="fld2"><span id="uxc-{name}-l">\1</span><\2 id="uxc-{name}" name="{name}" aria-labelledby="uxc-{name}-l"', body, count=1)
+        assert n == 1, name
+    for name in ("name", "email", "msg"):
+        body, n = re.subn(rf'(<(?:input|textarea) id="uxc-{name}" [^>]*?) required>',
+                          rf'\1 required aria-required="true" aria-describedby="uxc-{name}-e">', body, count=1)
+        assert n == 1, name
+        close = "</textarea>" if name == "msg" else ""
+        body, n = re.subn(rf'(<(?:input|textarea) id="uxc-{name}" [^>]*>{close})</label>',
+                          rf'\1<span class="uxc-err" id="uxc-{name}-e"></span></label>', body, count=1)
+        assert n == 1, name
+    # spam: a field people never see; bots fill it in
+    hp = "Website" if lang == "en" else "אתר"
+    body = body.replace('<button class="ct-btn" type="submit">',
+                        f'<div class="uxc-hp" aria-hidden="true"><label>{hp}<input name="website" tabindex="-1" autocomplete="off"></label></div>'
+                        '<p class="uxc-fail" role="alert" hidden></p><button class="ct-btn" type="submit">', 1)
+    # after sending, the form makes way for this
+    body = body.replace("</form>", '</form><p class="uxc-done" role="status" tabindex="-1" hidden></p>', 1)
+    assert "<details" not in body and "tel:" not in body
+    return body
+
+
+# Contact page additions (tbl-022): errors, honeypot, the thank-you line.
+CONTACT_CSS = """
+/* ---- contact form (tbl-022) ---- */
+{root} [hidden]{display:none!important}
+{root} .uxc-hp{position:absolute!important;inset-inline-start:-10000px;width:1px;height:1px;overflow:hidden}
+{root} .fld2>span.uxc-err{display:block;font-size:15px;line-height:1.4;color:#b42318;font-weight:500}
+{root} .fld2>span.uxc-err:empty{display:none}
+{root} .fld2 [aria-invalid=true]{border-color:#d92d20}
+{root} .fld2 [aria-invalid=true]:focus{box-shadow:0 0 0 3px rgba(217,45,32,.16)}
+{root} .uxc-fail{color:#b42318;font-weight:600;text-align:center;line-height:1.5}
+{root} .uxc-done{max-width:560px;margin:0 auto;text-align:center;font-size:clamp(20px,1.6vw,22px);line-height:1.55;font-weight:600;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:24px;padding:clamp(28px,3vw,44px);box-shadow:var(--sh)}
+{root} .uxc-done:focus{outline:none}
+{root} .ct-btn[aria-busy=true]{opacity:.7;cursor:progress}
+@media(max-width:768px){{root} .uxc-done{background:none;border:0;box-shadow:none;padding:8px 0}}
+@media(max-width:1060px){{root} .fld2>span.uxc-err{font-size:16px!important}}
+"""
 
 
 def home_markup(body, cfg, images):
@@ -329,9 +394,10 @@ def home_markup(body, cfg, images):
     return body
 
 
-def finish_css(css, lang, home):
+def finish_css(css, lang, page):
+    home = page == "home"
     # the sheets' copy of the mobile type rule; the site has it once, in src/app/mobile-type.css
-    css, nmt = re.subn(r"/\* L-mobile-type.*?(?=/\* v35|\Z)", "", css, count=1, flags=re.S)
+    css, nmt = re.subn(r"/\* L-mobile-type.*?(?=/\* v35|/\* uxb-013 contact|\Z)", "", css, count=1, flags=re.S)
     assert nmt == 1 and "font-size:20px!important" not in css
     css = re.sub(r"url\(data:image/[a-z+]+;base64,[A-Za-z0-9+/=]+\)", "none", css)
     # review chrome out of the CSS too: comments (they carry "uxb-0xx" version
@@ -339,7 +405,7 @@ def finish_css(css, lang, home):
     css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
     css = re.sub(r"(^|[{}])[^{}@]*(?:\.ztag|\.sheet-label)[^{}]*\{[^{}]*\}", r"\1", css)
     css = css.replace('font-family:"Heebo",', 'font-family:var(--font-heebo),"Heebo",')
-    root = f".{'uxh' if home else 'uxp'}-{lang}"
+    root = f".{ {'home': 'uxh', 'pricing': 'uxp', 'contact': 'uxc'}[page] }-{lang}"
     css = scope_css(css, root)
     # The sheets were designed on plain browser defaults. The site's globals
     # (Tailwind preflight, base h2/li/ul rules) would otherwise leak in, so
@@ -377,7 +443,9 @@ def finish_css(css, lang, home):
 {root} .gs-k{{color:#93712f}}
 """
     css += brand_blue_css(root)
-    if home:
+    if page == "contact":
+        css += CONTACT_CSS.replace("{root}", root)
+    elif home:
         # LCP (tbl-020): the demo headline is shown from the first paint
         css += f"{root} .gs-h.rv{{opacity:1!important;transform:none!important;filter:none!important;animation:none!important}}\n"
     else:
@@ -403,6 +471,7 @@ def main():
     for lang, cfg in LANGS.items():
         build(lang, cfg, images, "home")
         build(lang, cfg, images, "pricing")
+        build(lang, cfg, images, "contact")
 
 
 main()
