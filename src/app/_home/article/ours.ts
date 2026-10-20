@@ -25,7 +25,7 @@ export type Ours = {
 
 export const OURS_COPY = {
   he: { kick: "ב-UXellent", h: "כל זה כבר |בנוי באתר שלכם.", btn: "בנו לי אתר בחינם" },
-  en: { kick: "With UXellent", h: "All of this is |already in your site.", btn: "Build my site, free" },
+  en: { kick: "With UXellent", h: "All of this is |already built into your site.", btn: "Build my site, free" },
 } as const
 
 export const OURS: Record<string, Record<Lang, Ours>> = {

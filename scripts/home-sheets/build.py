@@ -13,7 +13,7 @@ uxb-017-v1-text-page-he.html, uxb-018-v1-text-page-en.html (tbl-023); <nav-sheet
 uxb-021-v2-navkit-reference-he.html (header, mobile menu, breadcrumbs and footer for
 every page), uxb-019-v1-blog-he.html and uxb-020-v2-article-he.html (tbl-024);
 <features-sheet-dir> holds uxb-021-v7-features-he.html and uxb-022-v1-features-en.html (tbl-025)
-and the article template v4, uxb-020-v4-article-he.html (tbl-025b).
+and the article templates uxb-020-v4-article-he.html (tbl-025b) and uxb-023-v1-article-en.html (tbl-025c).
 The English blog and article pages are built from the Hebrew sheets with the
 English texts below (there is no English sheet for them). The sheets are the source of truth for markup and CSS;
 this script only:
@@ -58,6 +58,7 @@ LANGS = {
         "faq_file": "uxb-015-v1-faq-he.html",
         "text_file": "uxb-017-v1-text-page-he.html",
         "features_file": "uxb-021-v7-features-he.html",
+        "article_file": "uxb-020-v4-article-he.html",
         "home": "/",
         "blog": "/blog",
         "pricing": "/pricing",
@@ -97,6 +98,7 @@ LANGS = {
         "faq_file": "uxb-016-v1-faq-en.html",
         "text_file": "uxb-018-v1-text-page-en.html",
         "features_file": "uxb-022-v1-features-en.html",
+        "article_file": "uxb-023-v1-article-en.html",
         "home": "/en",
         "blog": "/en/blog",
         "pricing": "/en/pricing",
@@ -248,7 +250,7 @@ def build(lang, cfg, images, page="home"):
         "text": os.path.join(PAGE_SHEETS, cfg["text_file"]),
         "blog": os.path.join(NAV_SHEETS, BLOG_SHEET),
         "guides": os.path.join(NAV_SHEETS, BLOG_SHEET),
-        "article": os.path.join(FEATURES_SHEETS, ARTICLE_SHEET),
+        "article": os.path.join(FEATURES_SHEETS, cfg["article_file"]),
         "features": os.path.join(FEATURES_SHEETS, cfg["features_file"]),
     }[page]
     src = open(sheet, encoding="utf-8").read()
@@ -260,7 +262,8 @@ def build(lang, cfg, images, page="home"):
     body, nh = re.subn(r"<header id=\"hdr\">.*?</header>", lambda m: head, body, count=1, flags=re.S)
     body, nf = re.subn(r"<footer\b.*?</footer>", lambda m: foot, body, count=1, flags=re.S)
     assert (nh, nf) == (1, 1), (page, nh, nf)
-    if lang == "en" and page in ("blog", "guides", "article"):
+    # the English blog and guides index pages have no sheet of their own (articles do: uxb-023)
+    if lang == "en" and page in ("blog", "guides"):
         body = english_page(body, page)
         css = css.replace("text-align:right", "text-align:start")
     if page in ("blog", "guides"):
@@ -472,7 +475,6 @@ TEXT_CSS = """
 
 
 BLOG_SHEET = "uxb-019-v1-blog-he.html"
-ARTICLE_SHEET = "uxb-020-v4-article-he.html"  # tbl-025b, in <features-sheet-dir>
 NAVKIT_SHEET = "uxb-021-v2-navkit-reference-he.html"
 
 
@@ -503,6 +505,9 @@ def chrome(lang):
     foot = re.search(r"<footer\b.*?</footer>", body, re.S).group(0)
     # the sheet marks its own page; the site marks the current page when it renders
     head, foot = head.replace(' aria-current="page"', ""), foot.replace(' aria-current="page"', "")
+    # tbl-025c: the blog is not in the header or the menu, only in the footer
+    head, nb = re.subn(r'<a(?: class="m")? href="#">מאמרים</a>', "", head)
+    assert nb == 2 and "מאמרים" not in head, nb
     if lang == "he":
         return head, foot
     for he, en in CHROME_EN.items():

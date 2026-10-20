@@ -1062,6 +1062,9 @@
 }
 
 
+.uxa-en{letter-spacing:-.005em}.uxa-en h1,.uxa-en .pr-h,.uxa-en .sh h2,.uxa-en .ou h2{letter-spacing:-.035em!important}
+
+
 .uxa-en #hdr nav a[aria-current]{color:var(--ink);font-weight:700;position:relative}
 .uxa-en #hdr nav a[aria-current]::after{content:"";position:absolute;inset-inline:14px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,#0f72b3,#2a5fcf)}
 .uxa-en .menu a.m[aria-current]{color:var(--brand-d);font-weight:700}
