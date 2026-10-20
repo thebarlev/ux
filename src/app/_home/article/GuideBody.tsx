@@ -1,7 +1,7 @@
 import { Fragment } from "react"
 
 import type { Lang } from "../chrome"
-import { VisualBlock, type Visual } from "./visuals"
+import { Callout, VisualBlock, type Visual } from "./visuals"
 
 type Part = string | readonly { type: "text" | "link"; text: string; href?: string }[]
 export type GuideLike = {
@@ -12,6 +12,7 @@ export type GuideLike = {
     paragraphs: readonly Part[]
     bullets?: readonly string[]
     links?: readonly { label: string; href: string; description: string }[]
+    note?: { title: string; text: string }
     visual?: Visual
   }[]
   faq: readonly { id: string; question: string; answer: string }[]
@@ -54,6 +55,7 @@ export function GuideBody({ guide, lang }: { guide: GuideLike; lang: Lang }) {
               ))}
             </ul>
           ) : null}
+          {s.note ? <Callout title={s.note.title}>{s.note.text}</Callout> : null}
           {s.visual ? <VisualBlock v={s.visual} /> : null}
         </section>
       ))}

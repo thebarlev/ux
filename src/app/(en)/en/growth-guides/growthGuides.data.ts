@@ -25,6 +25,8 @@ export type GrowthGuideSection = {
   paragraphs: readonly GrowthGuideParagraph[]
   bullets?: readonly string[]
   links?: readonly GrowthGuideLink[]
+  /** short callout after the text and before the visual: how a UXellent site handles this point */
+  note?: { title: string; text: string }
   /** article-template visual shown after this section's text (tbl-024b) */
   visual?: Visual
 }
@@ -134,9 +136,9 @@ const growthGuideContent = [
         visual: {
           kind: "trio",
           items: [
-            { icon: "search", title: "Map intent first", text: "Start with the topics buyers already search for, before you write anything new." },
-            { icon: "layout", title: "Clear page structure", text: "Better hierarchy, titles and headings make each page easy to read and easy to rank." },
-            { icon: "link", title: "Connected pages", text: "Supporting guides and internal links lead visitors from a question to an inquiry." },
+            { icon: "search", title: "Map the topics", text: "Start with topics people really search for, where there is an intent to buy behind the search." },
+            { icon: "layout", title: "A page for every service", text: "Each core service gets its own page, with one clear message." },
+            { icon: "link", title: "Internal links", text: "Link related pages together, so both Google and visitors can find their way." },
           ],
         },
       },
@@ -153,14 +155,32 @@ const growthGuideContent = [
           "Link related pages together so authority flows through the site instead of stopping on isolated pages.",
           "Track organic sessions, contact clicks, and form submissions by landing page.",
         ],
+        note: {
+          title: "On a UXellent site",
+          text: "Speed and the technical basics are covered from the start. A site built on UXellent is fast on every device, with hosting and SSL included, and every page is built with SEO and structured business data, ready for AI search. That leaves you free to focus on content and the links between your pages.",
+        },
         visual: {
           kind: "timeline",
           steps: [
-            { when: "Step 1", title: "Fix the basics", text: "Audit your top five pages for speed, titles, H1s and calls to action." },
-            { when: "Step 2", title: "Build and connect", text: "Give each core service its own page, add FAQ content and link related pages." },
-            { when: "Step 3", title: "Measure by page", text: "Track organic sessions, contact clicks and form submissions for each landing page." },
+            { when: "Step 1", title: "Fix the basics", text: "Check speed, titles and H1s on your most important pages." },
+            { when: "Step 2", title: "Strengthen the content", text: "Add FAQs and link together the pages that cover the same topic." },
+            { when: "Step 3", title: "Measure and improve", text: "Track traffic and leads for each page, and improve what is not working." },
           ],
         },
+      },
+      {
+        id: "traffic-mistakes",
+        title: "Common Traffic Mistakes to Avoid",
+        paragraphs: [
+          "Many businesses try to bring in traffic before their pages are ready. The result is visits that do not stay on the site and never turn into an inquiry.",
+          "It is better to start small and do it well. One clear page for each service is worth more than ten generic ones.",
+        ],
+        bullets: [
+          "Writing content on topics no customer is searching for.",
+          "Copying a competitor's site structure without knowing why it works.",
+          "Counting how many people came in, but not what they did next.",
+          "Giving up after a month because results are not showing yet.",
+        ],
       },
       {
         id: "traffic-vow-cta",
@@ -286,6 +306,18 @@ const growthGuideContent = [
         answer:
           "There is no single best source. The most effective approach is combining SEO, paid ads, and conversion-focused landing pages into one system.",
       },
+      {
+        id: "traffic-faq-13",
+        question: "Do I need a blog to get traffic?",
+        answer:
+          "Not always. Good service pages and clear FAQs are often enough to get started.",
+      },
+      {
+        id: "traffic-faq-14",
+        question: "What matters more, the amount of traffic or its quality?",
+        answer:
+          "Quality. Traffic that does not move the business forward does not really help.",
+      },
     ],
     ctaTitle: "Ready to build traffic that compounds?",
     ctaSubtitle:
@@ -388,17 +420,35 @@ const growthGuideContent = [
           "Improve crawlability by cleaning duplicate pages, thin pages, and broken links.",
           "Measure rankings together with qualified conversions, not rankings alone.",
         ],
+        note: {
+          title: "Making the changes yourself",
+          text: "On a site built on UXellent, every page is built with SEO, structured business data and is ready for AI search. What is left is the part only you know: the message. You can sharpen a title or a paragraph in the chat, or by clicking the text on the page.",
+        },
         visual: {
           kind: "table",
           caption: "What to fix and why",
           head: ["Problem", "What to do", "Why it helps"],
           rows: [
-            ["Vague titles and H1s", "Rewrite them to match the real query", "Searchers and Google see the fit right away"],
-            ["No proof, FAQs or process", "Add sections for pain points, proof, FAQs and next steps", "Visitors get answers and feel safer reaching out"],
-            ["Isolated pages", "Link them from related guides and service pages", "Authority reaches the pages that matter"],
-            ["Duplicate, thin or broken pages", "Clean them up or merge them", "The site is easier to crawl and understand"],
+            ["Generic titles", "Sharpen the title and H1 to match the search", "Google and visitors quickly see what the page is about"],
+            ["No proof or FAQs", "Add FAQs, proof and your work process", "Visitors get answers and feel safer reaching out"],
+            ["Isolated pages", "Link to them from related pages", "The important page gets more support"],
+            ["Duplicates and broken links", "Clean them up and merge", "The site is cleaner and easier to crawl"],
           ],
         },
+      },
+      {
+        id: "seo-measure",
+        title: "How to Know Your SEO Improvements Are Working",
+        paragraphs: [
+          "A better position is a good sign, but it is not the goal. The goal is more inquiries from the pages you improved.",
+          "After each change, give the page a few weeks. Then check for more impressions, more clicks and more inquiries. If only one of them went up, that shows you where to keep working.",
+          "Test one page at a time. If you change many things at once, it is hard to tell what helped and what did not. This way every change teaches you something about your site and your customers.",
+        ],
+        bullets: [
+          "Impressions but no clicks: improve the title.",
+          "Clicks but no inquiries: sharpen the message and the call to action.",
+          "No change at all: the page may not answer what people are searching for.",
+        ],
       },
       {
         id: "seo-vow-cta",
@@ -558,12 +608,16 @@ const growthGuideContent = [
           "Use proof, examples, and trust markers to reduce hesitation.",
           "Build forms and booking flows that feel like the natural next step.",
         ],
+        note: {
+          title: "An easy next step",
+          text: "A site built on UXellent comes with a contact form and a WhatsApp button. People who want to reach you can do it the way that suits them, without hunting for your details.",
+        },
         visual: {
           kind: "trio",
           items: [
-            { icon: "link", title: "Matched intent", text: "Traffic source, page promise and CTA all point to the same need." },
-            { icon: "shield", title: "Proof up front", text: "Examples and trust markers answer doubts before they stop a visitor." },
-            { icon: "chat", title: "An easy next step", text: "Forms and booking flows feel like part of the page, not a hurdle." },
+            { icon: "link", title: "Matched to the source", text: "The page picks up exactly where the visitor's search or click left off." },
+            { icon: "shield", title: "Proof and trust", text: "Examples, testimonials and a clear process make it less scary to reach out." },
+            { icon: "chat", title: "A simple next step", text: "The form feels like a natural part of the page, not an obstacle." },
           ],
         },
       },
@@ -580,6 +634,25 @@ const growthGuideContent = [
           "Use form labels and CTA text that describe the value of responding, not just the action.",
           "Measure lead quality by page, keyword, and source so you know what actually converts.",
         ],
+      },
+      {
+        id: "leads-followup",
+        title: "What Happens After a Lead Arrives",
+        paragraphs: [
+          "A good lead can still slip away if nobody answers in time. Someone who contacted you has probably contacted your competitors too.",
+          "Decide ahead of time who answers, how fast, and what to say on the first call. That way every inquiry gets the same care, even on busy days.",
+          "Leads that did not close teach you something too. If many of them asked the same question, the page probably does not answer it well enough. Add the answer to the page itself.",
+        ],
+        bullets: [
+          "Get back to the person as fast as you can.",
+          "Ask what they need before you suggest a solution.",
+          "Note where each lead came from.",
+          "Once a month, check which leads became customers.",
+        ],
+        note: {
+          title: "On a UXellent site",
+          text: "Every inquiry from the site is saved in the system and emailed to you. It stays saved even if the email fails, so no lead is lost because of an email problem. The address that receives your inquiries is verified by email, so they reach an inbox you actually check.",
+        },
       },
       {
         id: "leads-vow-cta",
@@ -756,10 +829,28 @@ const growthGuideContent = [
         visual: {
           kind: "timeline",
           steps: [
-            { when: "Step 1", title: "Pick the offers", text: "Choose the offers and audiences you want to promote this quarter." },
-            { when: "Step 2", title: "Build matching pages", text: "Create a page and supporting content for each offer, with proof and FAQs." },
-            { when: "Step 3", title: "Judge by lead quality", text: "Review each channel by the leads it brings, not by reach or clicks." },
+            { when: "Step 1", title: "Pick the offers", text: "Decide which offers you want to promote, and to which audience." },
+            { when: "Step 2", title: "Build the pages", text: "Give each offer a matching page, with FAQs and supporting content." },
+            { when: "Step 3", title: "Measure quality", text: "Check which inquiries came from each channel, not just how many clicks." },
           ],
+        },
+      },
+      {
+        id: "promote-channels",
+        title: "How to Choose a Channel",
+        paragraphs: [
+          "A good channel is one where your customers already are, and one you can keep up over time.",
+          "Start with one channel, and add the next only after the first one works. Before you open a new channel, ask yourself three questions. If the answer to any of them is no, it is better to wait.",
+          "A channel that brings no inquiries after a fair amount of time is not a failure. It is information. You can stop it, learn what did not work, and move that time to a channel that is already proving itself. That way you keep moving without wasting resources.",
+        ],
+        bullets: [
+          "Are my customers looking for a solution here, or just passing time?",
+          "Do I have a matching page to send people to when they arrive?",
+          "Can I put time into this channel every week, even six months from now?",
+        ],
+        note: {
+          title: "On a UXellent site",
+          text: "Having a matching page to send people to is the part a site built on UXellent makes simple. You make changes in the chat or with click-to-edit, and every page is built with SEO and ready for AI search. If you already have a site, you can import it instead of starting over.",
         },
       },
       {
@@ -884,9 +975,9 @@ const growthGuideContent = [
           caption: "What stops buyers and what to do",
           head: ["What stops buyers", "What to do"],
           rows: [
-            ["Pages that do not convert", "Improve the pages people visit before a sale first"],
-            ["An unclear offer", "Lead with benefits and outcome-focused proof above the fold"],
-            ["No clear path to a decision", "Add comparison, FAQ and process sections"],
+            ["Pages that do not convert", "Improve the pages that lead to an inquiry first"],
+            ["An unclear offer", "Show the benefit and proof right at the top of the page"],
+            ["No clear path to a decision", "Add comparisons, FAQs and your work process"],
           ],
         },
       },
@@ -944,6 +1035,25 @@ const growthGuideContent = [
           "Make the call to action specific so buyers know what happens next.",
           "Track inquiry-to-sale quality so you optimize for customers, not just leads.",
         ],
+      },
+      {
+        id: "customers-trust",
+        title: "How to Build Trust Fast",
+        paragraphs: [
+          "A new customer does not know you. They have a few seconds to decide whether to keep reading or go back to the search results.",
+          "What helps them decide is not a nice slogan. It is clear signs that you know what you are doing, and that other people have already trusted you.",
+          "Trust also comes from small details. A page that loads fast, text without typos and full contact details tell the customer there is a real business behind the site. When those details are missing, people start to doubt you, even if your service is excellent.",
+        ],
+        bullets: [
+          "Real examples of work you have done.",
+          "Testimonials with a name and details, not just one vague line.",
+          "A simple explanation of what happens after someone gets in touch.",
+          "A clear way to contact you on every page.",
+        ],
+        note: {
+          title: "The small details, handled",
+          text: "A site built on UXellent is fast on every device, with hosting and SSL included, and it is built with accessibility in mind. A contact form and a WhatsApp button give every visitor a clear way to reach you.",
+        },
       },
       {
         id: "customers-vow-cta",
@@ -1057,6 +1167,18 @@ const growthGuideContent = [
         answer:
           "Paid campaigns can generate leads within days. SEO typically takes a few months. The best strategy combines both for short-term and long-term growth.",
       },
+      {
+        id: "customers-faq-11",
+        question: "Which pages matter most for getting customers?",
+        answer:
+          "Service pages, pricing, comparisons and FAQs usually make the biggest difference.",
+      },
+      {
+        id: "customers-faq-12",
+        question: "What should I improve first?",
+        answer:
+          "The pages that already get traffic and have a direct effect on revenue.",
+      },
     ],
     ctaTitle: "Want more online customers, not just more clicks?",
     ctaSubtitle:
@@ -1121,7 +1243,7 @@ const growthGuideContent = [
             },
             {
               type: "text",
-              text: " can help identify those pages - if Google is testing a page, better relevance and stronger structure can move it up faster than a new URL.",
+              text: " can help identify those pages. If Google is testing a page, better relevance and stronger structure can move it up faster than a new URL.",
             },
           ],
           [
@@ -1159,13 +1281,35 @@ const growthGuideContent = [
           "Link from stronger pages to the target page using natural anchor text.",
           "Remove thin or duplicate content that confuses topical authority.",
         ],
+        note: {
+          title: "On a UXellent site",
+          text: "Every page is built with SEO and structured business data, and is ready for AI search. The technical base is already there, so your time goes into the steps above: sharper titles, better answers and stronger links.",
+        },
         visual: {
           kind: "timeline",
           steps: [
             { when: "Step 1", title: "Find pages close to winning", text: "List the pages ranking in positions 8 to 25 and start there." },
             { when: "Step 2", title: "Improve the page", text: "Sharpen titles and H2s, then add FAQs, examples, proof and process details." },
-            { when: "Step 3", title: "Clean up and connect", text: "Link to it from stronger pages and remove thin or duplicate content." },
+            { when: "Step 3", title: "Clean up and strengthen", text: "Remove weak or duplicate pages, and link to the page from stronger ones." },
           ],
+        },
+      },
+      {
+        id: "rank-patience",
+        title: "What Fast Really Means in SEO",
+        paragraphs: [
+          "Fast in SEO does not mean tomorrow morning. Google needs time to crawl the page again and understand what changed.",
+          "So work on several pages that are close to winning at the same time, instead of waiting on each one. When one page moves, learn what worked and apply it to the rest.",
+          "Be careful about what you measure. Positions can go up and down from day to day. Look at the trend over a few weeks, and check whether the page brings more clicks and inquiries.",
+        ],
+        bullets: [
+          "Write down what you changed and when, so you know what made the difference.",
+          "Do not change the same page every few days.",
+          "Keep strengthening a page even after it reaches page one.",
+        ],
+        note: {
+          title: "Room to experiment",
+          text: "A site built on UXellent is backed up automatically every night, 30 nights back. You can try a change on a page knowing an earlier version is kept.",
         },
       },
       {
@@ -1329,9 +1473,9 @@ const growthGuideContent = [
         visual: {
           kind: "trio",
           items: [
-            { icon: "check", title: "Offers that pay", text: "Focus on the services and channels that bring measurable results." },
-            { icon: "layout", title: "Pages that do three jobs", text: "Each page should rank, convert and support follow-up." },
-            { icon: "chart", title: "Long-term leverage", text: "SEO and AI visibility keep working long after the work is done." },
+            { icon: "check", title: "Offers that bring income", text: "Focus on the services that already bring in money, not everything you could sell." },
+            { icon: "layout", title: "Pages that convert", text: "Each core service gets a clear page that explains what people get and how to reach you." },
+            { icon: "chart", title: "SEO for the long run", text: "Steady work on the site that keeps bringing inquiries in the months ahead." },
           ],
         },
       },
@@ -1348,6 +1492,25 @@ const growthGuideContent = [
           "Improve site speed, internal linking, and mobile clarity so users stay engaged.",
           "Review what channels produce qualified leads and cut the ones that create noise.",
         ],
+      },
+      {
+        id: "smallbiz-week",
+        title: "What It Looks Like in a Normal Week",
+        paragraphs: [
+          "A small business has no marketing department. So set a fixed time each week to work on the site, even if it is short.",
+          "A little every week beats a full day every few months. Consistency is what builds the compounding effect.",
+          "Keep a note of what you did each week. After a few months you will see what brought inquiries and what did not, and you can decide based on data instead of gut feeling. It saves time and money, and helps you focus on what really works for your business.",
+        ],
+        bullets: [
+          "Answer one question on the site that a customer asked this week.",
+          "Check where your latest inquiries came from.",
+          "Improve a headline or opening line on one service page.",
+          "Ask a happy customer for a testimonial.",
+        ],
+        note: {
+          title: "Fits into a short weekly slot",
+          text: "On a site built on UXellent you make these changes yourself, in the chat or by clicking the text you want to edit. The site is backed up every night, 30 nights back, so you can make a small change every week with peace of mind.",
+        },
       },
       {
         id: "smallbiz-vow-cta",
@@ -1473,8 +1636,8 @@ const growthGuideContent = [
           rows: [
             ["Speed", "Fast results", "Takes a few months"],
             ["When you stop", "Inquiries stop too", "Pages keep working"],
-            ["What you build", "Rented attention", "Earned attention that compounds"],
-            ["What it needs", "Ongoing spend", "Strong pages, content and proof"],
+            ["What you build", "Temporary attention", "An asset that grows over time"],
+            ["What it needs", "A steady budget", "Good pages, content and proof"],
           ],
         },
       },
@@ -1532,6 +1695,25 @@ const growthGuideContent = [
           "Build internal links from educational content to service pages and inquiry points.",
           "Track which organic landing pages produce the best-fit leads over time.",
         ],
+      },
+      {
+        id: "clients-content",
+        title: "What Kind of Content Brings Clients",
+        paragraphs: [
+          "Not every piece of content brings inquiries. Content that brings clients answers the questions people ask right before they choose a provider.",
+          "Start with the questions you hear on sales calls. Each one can become a page, a paragraph on a service page, or an FAQ.",
+          "When your content answers those questions, the client comes to the first call already understanding the process. The call is shorter, and it is easier to reach a decision. That is exactly what ads alone do not give you.",
+        ],
+        bullets: [
+          "How long the process takes and what happens at each stage.",
+          "What makes you different from others in your field.",
+          "What the client needs to prepare before you start.",
+          "Which mistakes they should avoid.",
+        ],
+        note: {
+          title: "Found on Google and in AI search",
+          text: "On a site built on UXellent, every page is built with SEO and structured business data, and is ready for AI search. The answers you add can be found by people who are searching, and the inquiries they bring are saved in the system and emailed to you.",
+        },
       },
       {
         id: "clients-vow-cta",
