@@ -110,6 +110,11 @@ const nextConfig: NextConfig = {
     { source: "/en/how-it-works/:path*", destination: "/en", statusCode: 301 },
     { source: "/en/included/:path*", destination: "/en", statusCode: 301 },
     { source: "/en/marketing", destination: "/en", statusCode: 301 },
+    // tbl-025: the two invoice/receipt articles are retired
+    { source: "/blog/green-invoice", destination: "/blog", statusCode: 301 },
+    { source: "/blog/negative-receipt", destination: "/blog", statusCode: 301 },
+    { source: "/en/blog/green-invoice", destination: "/en/blog", statusCode: 301 },
+    { source: "/en/blog/negative-receipt", destination: "/en/blog", statusCode: 301 },
   ],
   headers: async () => [
     {

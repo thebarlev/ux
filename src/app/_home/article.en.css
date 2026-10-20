@@ -1035,6 +1035,7 @@
 .uxa-en .menu a.m[aria-current]{color:var(--brand-d);font-weight:700}
 .uxa-en footer a.l[aria-current]{color:var(--ink);font-weight:700}
 .uxa-en .crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;color:var(--ink2);margin-bottom:clamp(24px,3vw,40px);text-align:start}
+.uxa-en .crumb{margin-top:calc(-1*clamp(20px,4vw,64px))}
 .uxa-en .crumb a{color:var(--ink2)}.uxa-en .crumb a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .uxa-en .crumb svg{width:15px;height:15px;opacity:.6;flex:none}.uxa-en .crumb span[aria-current]{color:var(--ink);font-weight:600}
 .uxa-en .ft{grid-template-columns:1.5fr 1fr 1fr 1fr!important}

@@ -10,6 +10,7 @@ import { SiteChrome } from "@/app/_home/SiteChrome"
 const REDESIGN_EN_PATTERNS = [
   /^\/en$/,
   /^\/en\/pricing(\/|$)/,
+  /^\/en\/features(\/|$)/,
   /^\/en\/contact(\/|$)/,
   /^\/en\/faq(\/|$)/,
   /^\/en\/(privacy|terms|accessibility|account-deletion)(\/|$)/,

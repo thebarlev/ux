@@ -9,10 +9,10 @@ export const A11Y_COPY = {
   en: "Built with accessibility in mind.",
 } as const
 
-/** Routes rendered from the approved sheets (home tbl-019, pricing tbl-020, contact tbl-022, FAQ and text pages tbl-023). */
+/** Routes rendered from the approved sheets (home tbl-019, pricing tbl-020, contact tbl-022, FAQ and text pages tbl-023, what you get tbl-025). */
 export const TEXT_PAGES = ["privacy", "terms", "accessibility", "account-deletion"] as const
 export const SHEET_PAGES: ReadonlySet<string> = new Set([
-  "/", "/en", "/pricing", "/en/pricing", "/contact", "/en/contact", "/faq", "/en/faq",
+  "/", "/en", "/pricing", "/en/pricing", "/contact", "/en/contact", "/faq", "/en/faq", "/features", "/en/features",
   ...TEXT_PAGES.flatMap((p) => [`/${p}`, `/en/${p}`]),
 ])
 

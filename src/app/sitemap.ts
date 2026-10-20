@@ -9,6 +9,7 @@ const staticRoutes = [
   // Hebrew
   "",
   "/pricing",
+  "/features",
   "/privacy",
   "/terms",
   "/contact",
@@ -20,6 +21,7 @@ const staticRoutes = [
   // English
   "/en",
   "/en/pricing",
+  "/en/features",
   "/en/privacy",
   "/en/terms",
   "/en/contact",

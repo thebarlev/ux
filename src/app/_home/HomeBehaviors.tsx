@@ -528,6 +528,107 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
       })
     }
 
+    // -- what you get (uxb-021, tbl-025): the mockups play while on screen
+    //    (script from the design). The first frame is in the markup, which is
+    //    also all that shows with reduced motion. Every box has a fixed height,
+    //    so nothing on the page moves; the texts come from the sheet, via data-*.
+    if (!reduced) {
+      let alive = true
+      const timers: number[] = []
+      cleanups.push(() => { alive = false; timers.forEach((t) => window.clearInterval(t)) })
+      const seen = (el: Element) => {
+        let v = false
+        observe(el, (e) => { v = e[0].isIntersecting }, 0.3)
+        return () => v
+      }
+      const sites = root.querySelector<HTMLElement>(".mk-sites")
+      if (sites) {
+        const cards = [...sites.querySelectorAll<HTMLElement>(".st")].reverse()
+        const shown = seen(sites)
+        let o = 0
+        timers.push(window.setInterval(() => {
+          if (!shown()) return
+          o = (o + 1) % 3
+          cards.forEach((c, k) => { c.dataset.p = String((k - o + 3) % 3) })
+        }, 3200))
+      }
+      const chat = root.querySelector<HTMLElement>('[data-anim="chat"]')
+      const log = chat?.querySelector<HTMLElement>(".mk-log")
+      const typ = chat?.querySelector<HTMLElement>(".mk-typ")
+      if (chat && log && typ) {
+        const q = JSON.parse(chat.dataset.q ?? "[]") as [string, string][]
+        const hint = typ.textContent ?? ""
+        const shown = seen(chat)
+        const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
+        const add = (who: "me" | "ai", text: string) => {
+          const d = document.createElement("div")
+          d.className = `mk-msg ${who}`
+          if (who === "ai") {
+            const dot = document.createElement("span")
+            dot.className = "mk-dot"
+            const t = document.createElement("span")
+            t.textContent = text
+            d.append(dot, t)
+          } else d.textContent = text
+          log.appendChild(d)
+          while (log.children.length > 4) log.firstElementChild!.remove()
+        }
+        ;(async () => {
+          // the first request and answer are already there
+          for (let i = 1; alive; i++) {
+            while (alive && !shown()) await wait(500)
+            if (!alive) return
+            const [ask, answer] = q[i % q.length]
+            typ.classList.remove("ph")
+            typ.textContent = ""
+            for (const c of ask) {
+              if (!alive) return
+              typ.textContent += c
+              typ.scrollLeft = rtl ? -typ.scrollWidth : typ.scrollWidth
+              await wait(45)
+            }
+            await wait(450)
+            if (!alive) return
+            typ.textContent = hint
+            typ.classList.add("ph")
+            add("me", ask)
+            await wait(900)
+            if (!alive) return
+            add("ai", answer)
+            await wait(2200)
+          }
+        })()
+        cleanups.push(() => { typ.textContent = hint; typ.classList.add("ph") })
+      }
+      const leads = root.querySelector<HTMLElement>('[data-anim="leads"]')
+      const feed = leads?.querySelector<HTMLElement>(".mk-feed")
+      if (leads && feed) {
+        const items = JSON.parse(leads.dataset.leads ?? "[]") as [number, string, string][]
+        const icons = JSON.parse(leads.dataset.icons ?? "[]") as string[]
+        const now = leads.dataset.now ?? ""
+        const shown = seen(leads)
+        let i = 3
+        timers.push(window.setInterval(() => {
+          if (!shown()) return
+          const [icon, title, text] = items[i++ % items.length]
+          const d = document.createElement("div")
+          d.className = "mk-mail in"
+          d.innerHTML = `${icons[icon]}<span><b></b><em></em></span><i class="mk-new"></i>`
+          d.querySelector("b")!.textContent = title
+          d.querySelector("em")!.textContent = text
+          feed.querySelectorAll(".mk-new").forEach((n) => {
+            const s = document.createElement("small")
+            s.textContent = now
+            n.replaceWith(s)
+          })
+          // always exactly three: the new one on top, the oldest goes
+          feed.prepend(d)
+          while (feed.children.length > 3) feed.lastElementChild!.remove()
+          ;[...feed.children].forEach((c, k) => c.classList.toggle("old", k >= 1))
+        }, 2600))
+      }
+    }
+
     // -- "built right": rings fill once in view
     const bq = root.querySelector<HTMLElement>("#bq")
     if (bq) {

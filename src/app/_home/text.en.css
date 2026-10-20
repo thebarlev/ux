@@ -969,6 +969,7 @@
 .uxt-en .menu a.m[aria-current]{color:var(--brand-d);font-weight:700}
 .uxt-en footer a.l[aria-current]{color:var(--ink);font-weight:700}
 .uxt-en .crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;color:var(--ink2);margin-bottom:clamp(24px,3vw,40px);text-align:start}
+.uxt-en .crumb{margin-top:calc(-1*clamp(20px,4vw,64px))}
 .uxt-en .crumb a{color:var(--ink2)}.uxt-en .crumb a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .uxt-en .crumb svg{width:15px;height:15px;opacity:.6;flex:none}.uxt-en .crumb span[aria-current]{color:var(--ink);font-weight:600}
 .uxt-en .ft{grid-template-columns:1.5fr 1fr 1fr 1fr!important}

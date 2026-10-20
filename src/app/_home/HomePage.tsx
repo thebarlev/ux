@@ -17,6 +17,8 @@ import { BLOG_HTML_EN, BLOG_PARTS_EN } from "./blog-markup.en"
 import { BLOG_HTML_HE, BLOG_PARTS_HE } from "./blog-markup.he"
 import { GUIDES_HTML_EN, GUIDES_PARTS_EN } from "./guides-markup.en"
 import { GUIDES_HTML_HE, GUIDES_PARTS_HE } from "./guides-markup.he"
+import { FEATURES_HTML_EN } from "./features-markup.en"
+import { FEATURES_HTML_HE } from "./features-markup.he"
 
 const SOURCE = {
   home: {
@@ -47,6 +49,10 @@ const SOURCE = {
     he: { html: GUIDES_HTML_HE, faq: [] },
     en: { html: GUIDES_HTML_EN, faq: [] },
   },
+  features: {
+    he: { html: FEATURES_HTML_HE, faq: [] },
+    en: { html: FEATURES_HTML_EN, faq: [] },
+  },
 } as const
 
 const PARTS = {
@@ -54,10 +60,11 @@ const PARTS = {
   guides: { he: GUIDES_PARTS_HE, en: GUIDES_PARTS_EN },
 } as const
 
-const ROOT = { home: "uxh", pricing: "uxp", contact: "uxc", faq: "uxf", text: "uxt", blog: "uxb", guides: "uxg" } as const
+const ROOT = { home: "uxh", pricing: "uxp", contact: "uxc", faq: "uxf", text: "uxt", blog: "uxb", guides: "uxg", features: "uxw" } as const
 
 // Each inner page: its address in both languages and its breadcrumb label.
 const PAGES = {
+  features: { he: "/features", en: "/en/features", label: { he: "מה מקבלים", en: "What you get" } },
   pricing: { he: "/pricing", en: "/en/pricing", label: { he: "מחירים", en: "Pricing" } },
   contact: { he: "/contact", en: "/en/contact", label: { he: "צור קשר", en: "Contact" } },
   faq: { he: "/faq", en: "/en/faq", label: { he: "שאלות נפוצות", en: "FAQ" } },
@@ -106,7 +113,7 @@ function fillText(html: string, legal: LegalText, paths: { he: string; en: strin
 /**
  * A page built from the approved sheets: home (uxb-009 HE, uxb-010 EN),
  * pricing (uxb-011 HE, uxb-012 EN), contact (uxb-013 HE, uxb-014 EN), FAQ
- * (uxb-015 HE, uxb-016 EN) or a text page (template uxb-017 HE, uxb-018 EN,
+ * (uxb-015 HE, uxb-016 EN), what you get (uxb-021 HE, uxb-022 EN) or a text page (template uxb-017 HE, uxb-018 EN,
  * filled with `legal`). The whole page, hero demo included, is
  * server-rendered HTML, so it shows before any JS runs; HomeBehaviors then adds
  * the motion and interactions.

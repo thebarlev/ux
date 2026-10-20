@@ -2,7 +2,7 @@
 """
 Builds the home pages (/ and /en) from Itzik's approved review sheets.
 
-    python3 scripts/home-sheets/build.py <sheet-dir> <contact-sheet-dir> <image-dir> <page-sheet-dir> <nav-sheet-dir>
+    python3 scripts/home-sheets/build.py <sheet-dir> <contact-sheet-dir> <image-dir> <page-sheet-dir> <nav-sheet-dir> <features-sheet-dir>
 
 <sheet-dir> holds the four approved sheets (tbl-021): uxb-009-v35-home-he.html,
 uxb-010-v6-home-en.html, uxb-011-v12-pricing-he.html, uxb-012-v3-pricing-en.html;
@@ -11,7 +11,8 @@ uxb-010-v6-home-en.html, uxb-011-v12-pricing-he.html, uxb-012-v3-pricing-en.html
 uxb-015-v1-faq-he.html, uxb-016-v1-faq-en.html and the text-page templates
 uxb-017-v1-text-page-he.html, uxb-018-v1-text-page-en.html (tbl-023); <nav-sheet-dir> holds
 uxb-021-v2-navkit-reference-he.html (header, mobile menu, breadcrumbs and footer for
-every page), uxb-019-v1-blog-he.html and uxb-020-v2-article-he.html (tbl-024).
+every page), uxb-019-v1-blog-he.html and uxb-020-v2-article-he.html (tbl-024);
+<features-sheet-dir> holds uxb-021-v7-features-he.html and uxb-022-v1-features-en.html (tbl-025).
 The English blog and article pages are built from the Hebrew sheets with the
 English texts below (there is no English sheet for them). The sheets are the source of truth for markup and CSS;
 this script only:
@@ -40,6 +41,7 @@ CONTACT_SHEETS = sys.argv[2]
 IMAGES = sys.argv[3]
 PAGE_SHEETS = sys.argv[4]
 NAV_SHEETS = sys.argv[5]
+FEATURES_SHEETS = sys.argv[6]
 OUT = os.path.join(ROOT, "src/app/_home")
 PUB = os.path.join(ROOT, "public/home")
 os.makedirs(OUT, exist_ok=True)
@@ -54,6 +56,7 @@ LANGS = {
         "contact_file": "uxb-013-v6-contact-he.html",
         "faq_file": "uxb-015-v1-faq-he.html",
         "text_file": "uxb-017-v1-text-page-he.html",
+        "features_file": "uxb-021-v7-features-he.html",
         "home": "/",
         "blog": "/blog",
         "pricing": "/pricing",
@@ -62,7 +65,7 @@ LANGS = {
         "pre": "",
         "nav": {
             "איך זה עובד": "#how",
-            "מה מקבלים": "#ben",
+            "מה מקבלים": "/features",
             "למי זה מתאים": "#who",
             "מאמרים": "/blog",
             "הצהרת נגישות": "/accessibility",
@@ -76,6 +79,7 @@ LANGS = {
             "תנאי שימוש": "/terms",
             "מדיניות פרטיות": "/privacy",
             "עמוד המחירים": "/pricing",
+            "לכל החבילות והמחירים": "/pricing",
         },
         "logo_label": "Uxellent, לעמוד הבית",
         # home FAQ, own domain (tbl-023): only on Business and Pro, same text as the FAQ page
@@ -91,6 +95,7 @@ LANGS = {
         "contact_file": "uxb-014-v2-contact-en.html",
         "faq_file": "uxb-016-v1-faq-en.html",
         "text_file": "uxb-018-v1-text-page-en.html",
+        "features_file": "uxb-022-v1-features-en.html",
         "home": "/en",
         "blog": "/en/blog",
         "pricing": "/en/pricing",
@@ -99,7 +104,7 @@ LANGS = {
         "pre": "/en",
         "nav": {
             "How it works": "#how",
-            "What you get": "#ben",
+            "What you get": "/en/features",
             "Who it’s for": "#who",
             "Blog": "/en/blog",
             "Accessibility statement": "/en/accessibility",
@@ -113,6 +118,7 @@ LANGS = {
             "Terms of use": "/en/terms",
             "Privacy policy": "/en/privacy",
             "pricing page": "/en/pricing",
+            "See all plans and pricing": "/en/pricing",
         },
         "logo_label": "Uxellent, home",
         "domain_q": "Can I use my own domain?",
@@ -242,6 +248,7 @@ def build(lang, cfg, images, page="home"):
         "blog": os.path.join(NAV_SHEETS, BLOG_SHEET),
         "guides": os.path.join(NAV_SHEETS, BLOG_SHEET),
         "article": os.path.join(NAV_SHEETS, ARTICLE_SHEET),
+        "features": os.path.join(FEATURES_SHEETS, cfg["features_file"]),
     }[page]
     src = open(sheet, encoding="utf-8").read()
     css = re.search(r"<style[^>]*>(.*?)</style>", src, re.S).group(1)
@@ -259,6 +266,8 @@ def build(lang, cfg, images, page="home"):
         body = blog_markup(body, lang, cfg, page)
     elif page == "article":
         body = article_markup(body, lang, cfg)
+    elif page == "features":
+        body = features_markup(body, lang, src)
 
     # -- links
     body = body.replace('<a href="#"><svg class="logo-svg"', f'<a href="{cfg["home"]}" aria-label="{cfg["logo_label"]}"><svg class="logo-svg"', 1)
@@ -311,6 +320,8 @@ def build(lang, cfg, images, page="home"):
         body = text_markup(body, lang, cfg)
     elif page in ("blog", "guides", "article"):
         pass  # done before the links (see above)
+    elif page == "features":
+        pass  # done before the links (see above)
     else:
         assert body.count('<div class="bill"') == 1 and body.count('class="mq"') == 1
         body = body.replace('<button role="radio"', '<button type="button" role="radio"')
@@ -334,7 +345,7 @@ def build(lang, cfg, images, page="home"):
         {"q": re.sub(r"<[^>]+>", "", q).strip(), "a": re.sub(r"<[^>]+>", "", a).strip()}
         for q, a in re.findall(r"<summary>(.*?)<span class=\"pm\">\+</span></summary><div class=\"ans\">(.*?)</div>", body, re.S)
     ]
-    want = {"home": 9, "pricing": 6, "contact": 0, "faq": 18, "text": 0, "blog": 0, "guides": 0, "article": 0}[page]
+    want = {"home": 9, "pricing": 6, "contact": 0, "faq": 18, "text": 0, "blog": 0, "guides": 0, "article": 0, "features": 0}[page]
     assert len(faq) == want, f"expected {want} FAQ entries in {page}/{lang}, got {len(faq)}"
     name = page.upper()
     ts = (
@@ -399,7 +410,7 @@ CONTACT_CSS = """
 """
 
 
-ROOTS = {"home": "uxh", "pricing": "uxp", "contact": "uxc", "faq": "uxf", "text": "uxt", "blog": "uxb", "guides": "uxg", "article": "uxa"}
+ROOTS = {"home": "uxh", "pricing": "uxp", "contact": "uxc", "faq": "uxf", "text": "uxt", "blog": "uxb", "guides": "uxg", "article": "uxa", "features": "uxw"}
 
 
 def faq_markup(body, lang, cfg):
@@ -594,6 +605,60 @@ def article_markup(body, lang, cfg):
     return body
 
 
+def features_markup(body, lang, src):
+    """What you get, /features (uxb-021 HE, uxb-022 EN, tbl-025). The four
+    mockups are pictures of the product, hidden from assistive technology.
+    Their first frame is written into the markup (that is also the reduced
+    motion view); HomeBehaviors plays the rest, with the sheet's own texts,
+    which the script reads from data attributes."""
+    body = body.replace('<a href="/" lang="he"', '<a href="/features" lang="he"').replace('<a href="/en" lang="en"', '<a href="/en/features" lang="en"')
+    # the sheet's breadcrumbs: the site writes its own in the same place (landmarks, {{CRUMB}})
+    body, n = re.subn(r'<nav class="crumb"[^>]*>.*?</nav>', "", body, count=1, flags=re.S)
+    assert n == 1 and body.count('<div class="fr-v">') == 4
+    body = body.replace('<div class="fr-v">', '<div class="fr-v" aria-hidden="true">')
+    # the comparison table's corner cell names the row headers (screen readers only)
+    corner = "מה משווים" if lang == "he" else "Compared"
+    body, n = re.subn(r'<thead><tr><th></th>', f'<thead><tr><th><span class="uxh-vh">{corner}</span></th>', body, count=1)
+    assert n == 1
+    js = re.findall(r"<script>(.*?)</script>", src, re.S)[-1]
+    attr = lambda v: json.dumps(v, ensure_ascii=False).replace("&", "&amp;").replace('"', "&quot;")
+    # three sites: the front one first (the script's starting order)
+    sites = re.findall(r'<div class="st st-[abc]">', body)
+    assert len(sites) == 3
+    for k, cls in enumerate(["st-c", "st-b", "st-a"]):
+        body = body.replace(f'<div class="st {cls}">', f'<div class="st {cls}" data-p="{2 - k}">', 1)
+    # chat: the first request and its answer
+    q = re.findall(r"\['([^']*)','([^']*)'\]", re.search(r"const Q=\[(.*?)\];", js, re.S).group(1))
+    assert len(q) == 5, q
+    log = f'<div class="mk-msg me">{q[0][0]}</div><div class="mk-msg ai"><span class="mk-dot"></span><span>{q[0][1]}</span></div>'
+    body, n1 = re.subn(r'<div class="mk mk-b" data-anim="chat"><div class="mk-log"></div><div class="mk-in"><span class="mk-typ">',
+                       lambda m: f'<div class="mk mk-b" data-anim="chat" data-q="{attr(q)}"><div class="mk-log">{log}</div><div class="mk-in"><span class="mk-typ ph">', body, count=1)
+    # enquiries: three items, the newest on top
+    icons = dict(re.findall(r"\b([MW])='(<svg.*?</svg>)'", js, re.S))
+    leads = [(["M", "W"].index(i), t, e) for i, t, e in re.findall(r"\[([MW]),'([^']*)','([^']*)'\]", js)]
+    now = re.search(r"textContent:'([^']*)'", js).group(1)
+    assert len(icons) == 2 and len(leads) == 6 and now
+    ic = [icons["M"], icons["W"]]
+    item = lambda it, k: (f'<div class="mk-mail{" old" if k else ""}">{ic[it[0]]}<span><b>{it[1]}</b><em>{it[2]}</em></span>'
+                          + ('<i class="mk-new"></i>' if k == 0 else f"<small>{now}</small>") + "</div>")
+    feed = "".join(item(leads[k], k) for k in range(3))
+    body, n2 = re.subn(r'<div class="mk mk-d" data-anim="leads"><div class="mk-feed"></div>',
+                       lambda m: f'<div class="mk mk-d" data-anim="leads" data-leads="{attr(leads)}" data-icons="{attr(ic)}" data-now="{now}"><div class="mk-feed">{feed}</div>', body, count=1)
+    assert (n1, n2) == (1, 1), (n1, n2)
+    return body
+
+
+# Features page (tbl-025): the law-firm mockup uses the hero photo, as a file.
+FEATURES_CSS = """
+/* ---- features (tbl-025) ---- */
+{root} .st-img:not(.st-img-b):not(.st-img-c){background:url(/home/hero-law-480.webp) center/cover}
+/* the request being typed stays on one line (the box keeps its height on a 320px phone); the script keeps its end in view */
+{root} .mk-typ{flex:1;min-width:0;overflow:hidden;white-space:nowrap;padding-inline-end:8px}
+/* the site's base CSS makes every svg a block; in the table the check sits beside the text on desktop (above it on mobile, as in the sheet) */
+@media(min-width:1061px){{root} .cmp td.us svg{display:inline-block}}
+"""
+
+
 SKIP = {"he": "דלג לתוכן", "en": "Skip to content"}
 
 
@@ -607,9 +672,15 @@ def landmarks(body, lang, home):
         if '<div class="lg-head">' in body:
             body = body.replace('<div class="lg-head">', '<div class="lg-head">{{CRUMB}}', 1)
         else:
+            # inside the first section's wrap; a wrap that is also a layout
+            # (contact: "wrap ct", a grid) gets its own wrap above it
             m = body.index('<main id="main" tabindex="-1">')
-            w = body.index('<div class="wrap">', m) + len('<div class="wrap">')
-            body = body[:w] + "{{CRUMB}}" + body[w:]
+            w = body.index('<div class="wrap', m)
+            if body.startswith('<div class="wrap">', w):
+                w += len('<div class="wrap">')
+                body = body[:w] + "{{CRUMB}}" + body[w:]
+            else:
+                body = body[:w] + '<div class="wrap">{{CRUMB}}</div>' + body[w:]
     return body
 
 
@@ -679,7 +750,7 @@ def write_chrome(body, css, lang):
     foot = body[body.index("</main>") + len("</main>") :]
     root = f".uxn-{lang}"
     css = prune_css(css.replace(f".uxa-{lang}", root), head + foot, root)
-    css += f"\n{root} .uxn-crumbs{{padding-top:clamp(20px,2.4vw,32px)}}{root} .uxn-crumbs .crumb{{margin-bottom:0}}\n"
+    css += f"\n{root} .uxn-crumbs{{padding-top:clamp(16px,2vw,40px)}}{root} .uxn-crumbs .crumb{{margin:0}}\n"
     open(os.path.join(OUT, f"chrome.{lang}.css"), "w", encoding="utf-8").write(css)
     ts = (f"// Generated by scripts/home-sheets/build.py (navkit chrome). Do not edit by hand.\n"
           f"export const CHROME_HEAD_{lang.upper()} = {json.dumps(head.strip(), ensure_ascii=False)}\n\n"
@@ -697,6 +768,7 @@ NAV_CSS = """
 .menu a.m[aria-current]{color:var(--brand-d);font-weight:700}
 footer a.l[aria-current]{color:var(--ink);font-weight:700}
 .crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;color:var(--ink2);margin-bottom:clamp(24px,3vw,40px);text-align:start}
+.crumb{margin-top:calc(-1*clamp(20px,4vw,64px))}
 .crumb a{color:var(--ink2)}.crumb a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .crumb svg{width:15px;height:15px;opacity:.6;flex:none}.crumb span[aria-current]{color:var(--ink);font-weight:600}
 .ft{grid-template-columns:1.5fr 1fr 1fr 1fr!important}
@@ -838,6 +910,11 @@ def finish_css(css, lang, page):
         css += FAQ_CSS.replace("{root}", root) + TEXT_CSS.replace("{root}", root)
     elif page == "article":
         css += FAQ_CSS.replace("{root}", root) + TEXT_CSS.replace("{root}", root) + ARTICLE_CSS.replace("{root}", root)
+    elif page == "features":
+        css += FEATURES_CSS.replace("{root}", root)
+        css += (f"@media (prefers-reduced-motion:reduce){{{root} #inc .mq{{-webkit-mask:none;mask:none}}"
+                f"{root} #inc .mq .inc{{flex-wrap:wrap!important;justify-content:center!important;width:auto!important;gap:10px 0!important;transform:none!important}}"
+                f"{root} #inc .mq .in-c{{transform:none!important}}}}\n")
     elif home:
         # LCP (tbl-020): the demo headline is shown from the first paint
         css += f"{root} .gs-h.rv{{opacity:1!important;transform:none!important;filter:none!important;animation:none!important}}\n"
@@ -872,6 +949,7 @@ def main():
         build(lang, cfg, images, "blog")
         build(lang, cfg, images, "guides")
         build(lang, cfg, images, "article")
+        build(lang, cfg, images, "features")
 
 
 main()
