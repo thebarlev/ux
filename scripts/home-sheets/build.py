@@ -12,7 +12,8 @@ uxb-015-v1-faq-he.html, uxb-016-v1-faq-en.html and the text-page templates
 uxb-017-v1-text-page-he.html, uxb-018-v1-text-page-en.html (tbl-023); <nav-sheet-dir> holds
 uxb-021-v2-navkit-reference-he.html (header, mobile menu, breadcrumbs and footer for
 every page), uxb-019-v1-blog-he.html and uxb-020-v2-article-he.html (tbl-024);
-<features-sheet-dir> holds uxb-021-v7-features-he.html and uxb-022-v1-features-en.html (tbl-025).
+<features-sheet-dir> holds uxb-021-v7-features-he.html and uxb-022-v1-features-en.html (tbl-025)
+and the article template v4, uxb-020-v4-article-he.html (tbl-025b).
 The English blog and article pages are built from the Hebrew sheets with the
 English texts below (there is no English sheet for them). The sheets are the source of truth for markup and CSS;
 this script only:
@@ -247,7 +248,7 @@ def build(lang, cfg, images, page="home"):
         "text": os.path.join(PAGE_SHEETS, cfg["text_file"]),
         "blog": os.path.join(NAV_SHEETS, BLOG_SHEET),
         "guides": os.path.join(NAV_SHEETS, BLOG_SHEET),
-        "article": os.path.join(NAV_SHEETS, ARTICLE_SHEET),
+        "article": os.path.join(FEATURES_SHEETS, ARTICLE_SHEET),
         "features": os.path.join(FEATURES_SHEETS, cfg["features_file"]),
     }[page]
     src = open(sheet, encoding="utf-8").read()
@@ -471,7 +472,7 @@ TEXT_CSS = """
 
 
 BLOG_SHEET = "uxb-019-v1-blog-he.html"
-ARTICLE_SHEET = "uxb-020-v2-article-he.html"
+ARTICLE_SHEET = "uxb-020-v4-article-he.html"  # tbl-025b, in <features-sheet-dir>
 NAVKIT_SHEET = "uxb-021-v2-navkit-reference-he.html"
 
 
@@ -589,14 +590,25 @@ def blog_markup(body, lang, cfg, page):
 def article_markup(body, lang, cfg):
     """Article template (uxb-020, tbl-024b): the article itself is React (MDX or
     guide data, see ArticlePage); this keeps the related cards and the closing."""
+    # "With UXellent" (v4): the section stays, its texts are per article (ArticlePage, ours.ts)
+    ours = re.search(r'<section class="sec zone" id="ours">.*?</section>', body, re.S).group(0)
+    item = re.search(r'<ul class="ou-l">\s*(<li>.*?</li>)', ours, re.S).group(1)
+    item = re.sub(r"<b>.*?</b>", "<b>{{B}}</b>", item, flags=re.S)
+    item = re.sub(r"<span>.*?</span>", "<span>{{S}}</span>", item, flags=re.S)
+    ours = re.sub(r'(<span class="kick">).*?(</span>)', r"\1{{OU_KICK}}\2", ours, count=1, flags=re.S)
+    ours = re.sub(r"(<h2>).*?(</h2>)", r"\1{{OU_H}}\2", ours, count=1, flags=re.S)
+    ours = re.sub(r'(<div class="ou-t">.*?<p>).*?(</p>)', r"\1{{OU_P}}\2", ours, count=1, flags=re.S)
+    ours, nb = re.subn(r'<a class="go-btn" href="#">[^<]*</a>', f'<a class="go-btn" href="{PLATFORM}">{{{{OU_BTN}}}}</a>', ours, count=1)
+    ours, nl = re.subn(r'<ul class="ou-l">.*?</ul>', '<ul class="ou-l">{{OU_ITEMS}}</ul>', ours, count=1, flags=re.S)
+    assert (nb, nl) == (1, 1) and "{{OU_KICK}}" in ours and "{{OU_H}}" in ours and "{{OU_P}}" in ours
     i = body.index('<section class="sec zone ct-top" id="article">')
     j = body.index('<section class="sec zone" id="related">')
-    body = body[:i] + "{{ARTICLE}}" + body[j:]
+    body = body[:i] + "{{ARTICLE}}{{OURS}}" + body[j:]
     card = re.search(r'<div class="ar-rel">(<a class="bl-c" href="#">.*?</a>)', body, re.S).group(1)
     card = re.sub(r'<span class="bl-k">[^<]*</span>', '<span class="bl-k">{{K}}</span>', card).replace('href="#"', 'href="{{HREF}}"')
     card = re.sub(r"<h3>.*?</h3>", "<h3>{{T}}</h3>", card, flags=re.S)
     card = re.sub(r'<span class="bl-m">[^<]*</span>', '<span class="bl-m">{{M}}</span>', card)
-    PARTS[(lang, "article")] = {"card": card}
+    PARTS[(lang, "article")] = {"card": card, "ours": ours, "ours_item": item}
     body, n1 = re.subn(r'<div class="ar-rel">.*?</a></div>', lambda m: '<div class="ar-rel">{{RELATED}}</div>', body, count=1, flags=re.S)
     body, n2 = re.subn(r'(<section class="sec zone" id="related"><div class="wrap">\s*<div class="sh bl-gh"><h2>).*?(</h2>)', r"\1{{REL_H}}\2", body, count=1, flags=re.S)
     body, n3 = re.subn(r'<p class="ar-all"><a class="lnk" href="#">[^<]*</a></p>', '<p class="ar-all"><a class="lnk" href="{{ALL_HREF}}">{{ALL_LABEL}}</a></p>', body, count=1)
@@ -799,6 +811,26 @@ ARTICLE_CSS = """
 """
 
 
+# Mobile law (tbl-025b): up to 1060px only ONE container level, never a box in a box.
+# Home "how it works": the tinted stage drops, and so do the panels that hold
+# fields (brief, chat, publish), like the features mockups; the site picture
+# (scene 2) stays a picture.
+ONE_LEVEL_HOME = """
+/* ---- mobile: one container level (tbl-025b) ---- */
+@media(max-width:1060px){
+ {root} .hw-stage{background:none;border-radius:0}{root} .hw-stage::before{display:none}
+ {root} .hw-sc{padding:0}
+ {root} .hw-sc .pn:is(.a1,.a3-chat,.a4){background:none;box-shadow:none;border:0;border-radius:0;padding:0;width:100%;max-width:none}
+}
+"""
+# Pricing: the plan card is the one container; the AI-actions box inside it
+# becomes a plain row between two lines.
+ONE_LEVEL_PRICING = """
+/* ---- mobile: one container level (tbl-025b) ---- */
+@media(max-width:1060px){{root} .pl-act{background:none;border-radius:0;padding:14px 0;border-block:1px solid var(--line)}}
+"""
+
+
 def home_markup(body, cfg, images):
     # -- FAQ, own domain: the FAQ page's answer (tbl-023)
     body, nd = re.subn(rf'(<summary>{re.escape(cfg["domain_q"])}<span class="pm">\+</span></summary><div class="ans">)[^<]*(</div>)',
@@ -916,9 +948,11 @@ def finish_css(css, lang, page):
                 f"{root} #inc .mq .inc{{flex-wrap:wrap!important;justify-content:center!important;width:auto!important;gap:10px 0!important;transform:none!important}}"
                 f"{root} #inc .mq .in-c{{transform:none!important}}}}\n")
     elif home:
+        css += ONE_LEVEL_HOME.replace("{root}", root)
         # LCP (tbl-020): the demo headline is shown from the first paint
         css += f"{root} .gs-h.rv{{opacity:1!important;transform:none!important;filter:none!important;animation:none!important}}\n"
     elif page == "pricing":
+        css += ONE_LEVEL_PRICING.replace("{root}", root)
         # pricing FAQ (tbl-020): answers in black, support address on its own line
         css += f"{root} .faq .ans{{color:var(--ink)}}\n"
         # AA (tbl-024 accessibility pass): the "-20%" badge text was 3.95:1

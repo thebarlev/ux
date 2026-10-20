@@ -118,6 +118,20 @@
 .uxn-en footer{padding-bottom:28px!important}
 .uxn-en .lang{gap:24px!important}
 .uxn-en .lang a{padding-inline:0!important}
+.uxn-en #hdr nav a[aria-current="page"]{color:var(--ink);font-weight:700;position:relative}
+.uxn-en #hdr nav a[aria-current="page"]::after{content:"";position:absolute;inset-inline:14px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,#0f72b3,#2a5fcf)}
+.uxn-en .menu a.m[aria-current="page"]{color:var(--brand-d);font-weight:700}
+.uxn-en footer a.l[aria-current="page"]{color:var(--ink);font-weight:700}
+.uxn-en .crumb{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--ink2);margin-bottom:clamp(24px,3vw,40px);text-align:start}
+.uxn-en .crumb a{color:var(--ink2)}
+.uxn-en .crumb a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.uxn-en .crumb svg{width:15px;height:15px;opacity:.6}
+.uxn-en .crumb span{color:var(--ink);font-weight:600}
+.uxn-en .ft{grid-template-columns:1.5fr 1fr 1fr 1fr!important}
+@media(max-width:1060px){.uxn-en .crumb{font-size:16px}
+.uxn-en .ft{grid-template-columns:1fr 1fr!important}
+.uxn-en .ft>div:first-child{grid-column:1/-1}}
+@media(max-width:1180px) and (min-width:1061px){.uxn-en #hdr nav a{padding:8px 10px}}
 .uxn-en #hdr nav a[aria-current]{color:var(--ink);font-weight:700;position:relative}
 .uxn-en #hdr nav a[aria-current]::after{content:"";position:absolute;inset-inline:14px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,#0f72b3,#2a5fcf)}
 .uxn-en .menu a.m[aria-current]{color:var(--brand-d);font-weight:700}

@@ -678,3 +678,6 @@
 .prNote p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.85; }
 .pnSep { display: grid; place-items: center; padding: clamp(34px, 4.4vw, 48px) 0; }
 .pnSepSvg { width: 22px; height: 22px; display: block; opacity: .5; }
+
+/* mobile law (tbl-025b): one container level, so the illustration panel drops and its cards take the full width */
+@media (max-width: 1060px) { .featViz, .whyUsWarm .featViz { background: none; border: 0; border-radius: 0; padding: 0; min-height: 0; overflow: visible; } .featViz .vz { width: 100%; } }

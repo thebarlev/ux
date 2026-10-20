@@ -836,4 +836,11 @@
 .uxh-he .lang{gap:24px!important}
 .uxh-he .lang a{padding-inline:0!important;margin:0!important}
 .uxh-he .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
+
+/* ---- mobile: one container level (tbl-025b) ---- */
+@media(max-width:1060px){
+ .uxh-he .hw-stage{background:none;border-radius:0}.uxh-he .hw-stage::before{display:none}
+ .uxh-he .hw-sc{padding:0}
+ .uxh-he .hw-sc .pn:is(.a1,.a3-chat,.a4){background:none;box-shadow:none;border:0;border-radius:0;padding:0;width:100%;max-width:none}
+}
 .uxh-he .gs-h.rv{opacity:1!important;transform:none!important;filter:none!important;animation:none!important}

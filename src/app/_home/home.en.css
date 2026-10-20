@@ -863,4 +863,11 @@
 .uxh-en .lang{gap:24px!important}
 .uxh-en .lang a{padding-inline:0!important;margin:0!important}
 .uxh-en .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
+
+/* ---- mobile: one container level (tbl-025b) ---- */
+@media(max-width:1060px){
+ .uxh-en .hw-stage{background:none;border-radius:0}.uxh-en .hw-stage::before{display:none}
+ .uxh-en .hw-sc{padding:0}
+ .uxh-en .hw-sc .pn:is(.a1,.a3-chat,.a4){background:none;box-shadow:none;border:0;border-radius:0;padding:0;width:100%;max-width:none}
+}
 .uxh-en .gs-h.rv{opacity:1!important;transform:none!important;filter:none!important;animation:none!important}

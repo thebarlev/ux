@@ -118,6 +118,20 @@
 .uxn-he footer{padding-bottom:28px!important}
 .uxn-he .lang{gap:24px!important}
 .uxn-he .lang a{padding-inline:0!important}
+.uxn-he #hdr nav a[aria-current="page"]{color:var(--ink);font-weight:700;position:relative}
+.uxn-he #hdr nav a[aria-current="page"]::after{content:"";position:absolute;inset-inline:14px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,#0f72b3,#2a5fcf)}
+.uxn-he .menu a.m[aria-current="page"]{color:var(--brand-d);font-weight:700}
+.uxn-he footer a.l[aria-current="page"]{color:var(--ink);font-weight:700}
+.uxn-he .crumb{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--ink2);margin-bottom:clamp(24px,3vw,40px);text-align:start}
+.uxn-he .crumb a{color:var(--ink2)}
+.uxn-he .crumb a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.uxn-he .crumb svg{width:15px;height:15px;opacity:.6}
+.uxn-he .crumb span{color:var(--ink);font-weight:600}
+.uxn-he .ft{grid-template-columns:1.5fr 1fr 1fr 1fr!important}
+@media(max-width:1060px){.uxn-he .crumb{font-size:16px}
+.uxn-he .ft{grid-template-columns:1fr 1fr!important}
+.uxn-he .ft>div:first-child{grid-column:1/-1}}
+@media(max-width:1180px) and (min-width:1061px){.uxn-he #hdr nav a{padding:8px 10px}}
 .uxn-he #hdr nav a[aria-current]{color:var(--ink);font-weight:700;position:relative}
 .uxn-he #hdr nav a[aria-current]::after{content:"";position:absolute;inset-inline:14px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,#0f72b3,#2a5fcf)}
 .uxn-he .menu a.m[aria-current]{color:var(--brand-d);font-weight:700}

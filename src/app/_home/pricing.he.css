@@ -964,6 +964,9 @@
 .uxp-he .lang{gap:24px!important}
 .uxp-he .lang a{padding-inline:0!important;margin:0!important}
 .uxp-he .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
+
+/* ---- mobile: one container level (tbl-025b) ---- */
+@media(max-width:1060px){.uxp-he .pl-act{background:none;border-radius:0;padding:14px 0;border-block:1px solid var(--line)}}
 .uxp-he .faq .ans{color:var(--ink)}
 .uxp-he .bill em{color:#106f41}
 .uxp-he .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}

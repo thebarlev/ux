@@ -3,13 +3,14 @@ import type { ReactNode } from "react"
 import { ARTICLE_HTML_EN, ARTICLE_PARTS_EN } from "../article-markup.en"
 import { ARTICLE_HTML_HE, ARTICLE_PARTS_HE } from "../article-markup.he"
 import type { Card } from "../blog-data"
-import { crumbHtml, crumbLd, fill, markCurrent, type Crumb, type Lang } from "../chrome"
+import { crumbHtml, crumbLd, esc, fill, markCurrent, type Crumb, type Lang } from "../chrome"
 import { heebo } from "../font"
 import { HomeBehaviors } from "../HomeBehaviors"
+import { OURS, OURS_COPY } from "./ours"
 
 const SOURCE = {
-  he: { html: ARTICLE_HTML_HE, card: ARTICLE_PARTS_HE.card },
-  en: { html: ARTICLE_HTML_EN, card: ARTICLE_PARTS_EN.card },
+  he: { html: ARTICLE_HTML_HE, card: ARTICLE_PARTS_HE.card, ours: ARTICLE_PARTS_HE.ours, item: ARTICLE_PARTS_HE.ours_item },
+  en: { html: ARTICLE_HTML_EN, card: ARTICLE_PARTS_EN.card, ours: ARTICLE_PARTS_EN.ours, item: ARTICLE_PARTS_EN.ours_item },
 } as const
 
 const COPY = {
@@ -34,10 +35,26 @@ function titleParts(title: string): [string, string] {
   return k > 0 ? [t.slice(0, k + 1), t.slice(k + 1)] : ["", t]
 }
 
+/** "With UXellent" (v4): this article's lead and three points, or nothing if it has none. */
+function oursHtml(lang: Lang, slug: string) {
+  const o = OURS[slug]?.[lang]
+  if (!o) return ""
+  const c = OURS_COPY[lang]
+  const [pre, blue] = (o.h ?? c.h).split("|")
+  const src = SOURCE[lang]
+  return fill(src.ours, {
+    OU_KICK: c.kick,
+    OU_H: `${esc(pre)}<span class="bl">${esc(blue)}</span>`,
+    OU_P: esc(o.p),
+    OU_BTN: c.btn,
+    OU_ITEMS: o.points.map(([b, t]) => fill(src.item, { B: esc(b), S: esc(t) })).join(""),
+  })
+}
+
 /**
- * The article template (uxb-020, approved 20.10.2026, tbl-024b) for blog
+ * The article template (uxb-020 v4, approved 20.10.2026, tbl-024b / tbl-025b) for blog
  * articles and growth guides: breadcrumbs, title, subtitle, reading time and
- * tags, a sticky contents list (chips on mobile), the text, two related cards
+ * tags, a sticky contents list (chips on mobile), the text, "With UXellent", two related cards
  * with a link to all, closing, footer. Header, related cards, closing and
  * footer come from the generated markup; the article itself is React.
  */
@@ -123,7 +140,7 @@ export function ArticlePage({
               </div>
             </div>
           </section>
-          <div style={{ display: "contents" }} dangerouslySetInnerHTML={{ __html: mid.replace("{{ARTICLE}}", "") }} />
+          <div style={{ display: "contents" }} dangerouslySetInnerHTML={{ __html: mid.replace("{{ARTICLE}}", "").replace("{{OURS}}", oursHtml(lang, slug)) }} />
         </main>
         <div style={{ display: "contents" }} dangerouslySetInnerHTML={{ __html: foot }} />
       </div>
