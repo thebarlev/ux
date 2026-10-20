@@ -16,13 +16,15 @@ const SOURCE = {
 const COPY = {
   he: {
     toc: "במאמר הזה",
-    blog: { rel: 'עוד <span class="bl">מאמרים.</span>', all: "לכל המאמרים", crumb: "מאמרים" },
-    guide: { rel: 'עוד <span class="bl">מדריכים.</span>', all: "לכל המדריכים", crumb: "מדריכי צמיחה" },
+    crumb: "מאמרים",
+    blog: { rel: 'עוד <span class="bl">מאמרים.</span>', all: "לכל המאמרים", hash: "" },
+    guide: { rel: 'עוד <span class="bl">מדריכים.</span>', all: "לכל המדריכים", hash: "#guides" },
   },
   en: {
     toc: "In this article",
-    blog: { rel: 'More <span class="bl">articles.</span>', all: "All articles", crumb: "Blog" },
-    guide: { rel: 'More <span class="bl">guides.</span>', all: "All guides", crumb: "Growth guides" },
+    crumb: "Blog",
+    blog: { rel: 'More <span class="bl">articles.</span>', all: "All articles", hash: "" },
+    guide: { rel: 'More <span class="bl">guides.</span>', all: "All guides", hash: "#guides" },
   },
 } as const
 
@@ -53,7 +55,7 @@ function oursHtml(lang: Lang, slug: string) {
 
 /**
  * The article template (uxb-020 v4, approved 20.10.2026, tbl-024b / tbl-025b) for blog
- * articles and growth guides: breadcrumbs, title, subtitle, reading time and
+ * articles and growth guides, all under /blog (tbl-028): breadcrumbs, title, subtitle, reading time and
  * tags, a sticky contents list (chips on mobile), the text, "With UXellent", two related cards
  * with a link to all, closing, footer. Header, related cards, closing and
  * footer come from the generated markup; the article itself is React.
@@ -85,19 +87,18 @@ export function ArticlePage({
 }) {
   const t = COPY[lang]
   const k = t[kind]
-  const base = kind === "blog" ? "/blog" : "/growth-guides"
-  const index = (lang === "en" ? "/en" : "") + base
+  // articles and growth guides all live under the blog (tbl-028)
   const blog = lang === "en" ? "/en/blog" : "/blog"
-  const current = `${index}/${slug}`
-  const crumbs: Crumb[] = [{ label: k.crumb, href: index }, { label: topic }, { label: titleParts(title).join("") }]
+  const current = `${blog}/${slug}`
+  const crumbs: Crumb[] = [{ label: t.crumb, href: blog }, { label: topic }, { label: titleParts(title).join("") }]
   const [pre, blue] = titleParts(title)
   const rootId = `uxa-${lang}`
 
   const html = markCurrent(SOURCE[lang].html, current, blog)
-    .replace("{{HE_PATH}}", `${base}/${slug}`)
-    .replace("{{EN_PATH}}", `/en${base}/${slug}`)
+    .replace("{{HE_PATH}}", `/blog/${slug}`)
+    .replace("{{EN_PATH}}", `/en/blog/${slug}`)
     .replace("{{REL_H}}", k.rel)
-    .replace("{{ALL_HREF}}", index)
+    .replace("{{ALL_HREF}}", blog + k.hash)
     .replace("{{ALL_LABEL}}", k.all)
     .replace("{{RELATED}}", related.map((c) => fill(SOURCE[lang].card, { HREF: c.href, K: c.k, T: c.t, M: c.m })).join(""))
   const [head, rest] = html.split('<main id="main" tabindex="-1">')

@@ -2,6 +2,9 @@
 
 import { useEffect, useRef } from "react"
 
+import { getPixelId, metaPixelBootstrapScript } from "@/lib/analytics/meta-pixel"
+import { onConsent } from "@/lib/consent"
+
 /**
  * The Meta Pixel is deliberately not loaded here.
  *
@@ -59,22 +62,22 @@ function injectInline(code: string, id: string) {
 }
 
 /**
- * One gtag.js load serves both GA4 and Google Ads — they share the library, so
- * this is a single request with two config calls. It also defines window.gtag,
+ * One gtag.js load serves both GA4 and Google Ads — they share the library.
+ * Each is configured only once its consent category is allowed (tbl-027):
+ * GA4 is measurement, Google Ads is marketing. It also defines window.gtag,
  * which is what the lead form's generate_lead event calls.
  */
-function loadGoogleTags() {
-  const ga = JSON.stringify(GA_MEASUREMENT_ID)
-  const ads = JSON.stringify(GOOGLE_ADS_ID)
-  injectScript(
-    `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`,
-    "gtag-script",
-  )
-  injectInline(
-    `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}` +
-      `gtag('js',new Date());gtag('config',${ga});gtag('config',${ads});`,
-    "gtag-inline",
-  )
+function loadGoogleTag(id: string) {
+  injectScript(`https://www.googletagmanager.com/gtag/js?id=${id}`, "gtag-script")
+  injectInline(`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());`, "gtag-inline")
+  injectInline(`gtag('config',${JSON.stringify(id)});`, `gtag-config-${id}`)
+}
+
+/** The Meta Pixel, when marketing is allowed after the page loaded (the layout's snippet covers arrival). */
+function loadMetaPixel() {
+  const id = getPixelId()
+  if (!id || window.fbq) return
+  injectInline(metaPixelBootstrapScript(id), "meta-pixel-late")
 }
 
 function loadPostHog() {
@@ -94,20 +97,23 @@ function loadPostHog() {
   })
 }
 
-/** Phase 1: GA4 + Google Ads. Phase 2: PostHog (heaviest, last). */
+/** Phase 1: GA4 + Google Ads. Phase 2: PostHog (heaviest, last). Each only with its consent. */
 function runDeferredLoad() {
-  loadGoogleTags()
+  onConsent("analytics", () => loadGoogleTag(GA_MEASUREMENT_ID))
+  onConsent("marketing", () => loadGoogleTag(GOOGLE_ADS_ID))
+  onConsent("marketing", loadMetaPixel)
 
+  const posthog = () => onConsent("analytics", loadPostHog)
   if (typeof requestAnimationFrame !== "undefined") {
     requestAnimationFrame(() => {
       if (typeof requestIdleCallback !== "undefined") {
-        requestIdleCallback(() => loadPostHog(), { timeout: 2000 })
+        requestIdleCallback(posthog, { timeout: 2000 })
       } else {
-        setTimeout(loadPostHog, 500)
+        setTimeout(posthog, 500)
       }
     })
   } else {
-    setTimeout(loadPostHog, 500)
+    setTimeout(posthog, 500)
   }
 }
 

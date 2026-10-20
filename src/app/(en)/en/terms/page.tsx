@@ -1,34 +1,13 @@
 import type { Metadata } from "next"
 
 import { HomePage } from "@/app/_home/HomePage"
-import { LEGAL } from "@/app/_home/legal/terms.en"
-import { JsonLd, webPageSchema } from "@/components/JsonLd"
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+import { legalMetadata } from "@/app/_home/legalPages"
 
-import "@/app/_home/text.en.css"
+import "@/app/_home/legal.en.css"
 
-export const metadata: Metadata = {
-  title: "Terms of Use | Uxellent",
-  description: "Read the Uxellent terms of use covering your rights, responsibilities, and the rules for using our website and services.",
-  alternates: {
-    canonical: "/en/terms",
-    languages: heEnAlternateLanguages("/terms", "/en/terms"),
-  },
-}
+export const metadata: Metadata = legalMetadata("terms", "en")
 
-// Text-page template (tbl-023); the text itself lives in src/app/_home/legal.
-export default function TermsPageEn() {
-  return (
-    <>
-      <JsonLd
-        data={webPageSchema({
-          name: "Terms of Use | Uxellent",
-          description: "Uxellent Terms of Use - Last updated February 2026",
-          url: "https://uxellent.com/en/terms",
-          dateModified: "2026-02-16",
-        })}
-      />
-      <HomePage lang="en" page="text" legal={LEGAL} paths={{ he: "/terms", en: "/en/terms" }} />
-    </>
-  )
+// Legal page (uxb-025 on the text-page template, tbl-028).
+export default function Page() {
+  return <HomePage lang="en" page="legal" legalPage="terms" />
 }

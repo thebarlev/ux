@@ -229,7 +229,7 @@
         "Start free.",
         "Upgrade when you need to."
       ],
-      "lede": "Prices are monthly, before VAT. Cancel anytime."
+      "lede": "Prices are monthly, including VAT. Cancel anytime."
     },
     "billing": {
       "monthly": "Monthly",

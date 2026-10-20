@@ -21,6 +21,8 @@ export type Article = {
   tags?: any | undefined
   locale?: string | undefined
   slug?: string | undefined
+  metaTitle?: string | undefined
+  readingTime?: string | undefined
   /** MDX file body */
   body: MDX
   slug: string

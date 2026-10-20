@@ -1,20 +1,22 @@
 import "server-only"
-import { BrevoClient } from "@getbrevo/brevo"
 import nodemailer from "nodemailer"
+import { Resend } from "resend"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 
 /**
  * Contact page form (/contact, /en/contact, tbl-022).
- * Same mail infrastructure as the other site forms: Brevo first, SMTP as
- * fallback (see /api/new-home-contact). The address and keys live here, on
- * the server, never in the browser. The sender goes in Reply-To.
+ * Sent through Resend (tbl-028), from the sending domain that is verified
+ * there (mail.uxellent.site); SMTP stays as the fallback. The address and keys
+ * live here, on the server, never in the browser. The sender goes in Reply-To.
  * Spam: a honeypot field and a small per-IP rate limit; no captcha.
  */
 
 export const runtime = "nodejs"
 
 const TO = "support@uxellent.com"
+// uxellent.com is not a verified Resend domain; mail.uxellent.site is
+const FROM = process.env.SITE_CONTACT_FROM?.trim() || "UXellent Website <site@mail.uxellent.site>"
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
@@ -108,30 +110,26 @@ export async function POST(req: NextRequest) {
       `IP: ${ip}`,
     ].join("\n")
 
-    const brevoKey = process.env.BREVO_API_KEY?.trim()
-    if (brevoKey) {
-      try {
-        await new BrevoClient({ apiKey: brevoKey }).transactionalEmails.sendTransacEmail({
-          sender: { name: "Uxellent Website", email: TO },
-          to: [{ email: TO }],
-          replyTo: { email, name },
-          subject,
-          textContent: text,
-          htmlContent: `
+    const resendKey = process.env.RESEND_API_KEY?.trim()
+    if (resendKey) {
+      const { error } = await new Resend(resendKey).emails.send({
+        from: FROM,
+        to: [TO],
+        replyTo: `${name.replace(/[<>"]/g, "")} <${email}>`,
+        subject,
+        text,
+        html: `
             <div dir="rtl" style="font-family:Arial;line-height:1.6">
               <h2>פנייה חדשה מעמוד צור קשר</h2>
               ${rows.map(([k, v]) => `<p><b>${k}:</b> ${escapeHtml(v)}</p>`).join("")}
               <p><b>הודעה:</b></p>
               <p style="white-space:pre-wrap">${escapeHtml(message)}</p>
             </div>`,
-        })
-        return NextResponse.json({ ok: true })
-      } catch (err) {
-        const body = err && typeof err === "object" && "body" in err ? (err as { body?: { message?: string } }).body : undefined
-        console.error("[site-contact] brevo failed:", body?.message ?? err)
-      }
+      })
+      if (!error) return NextResponse.json({ ok: true })
+      console.error("[site-contact] resend failed:", error.message)
     } else {
-      console.error("[site-contact] BREVO_API_KEY missing, trying smtp fallback")
+      console.error("[site-contact] RESEND_API_KEY missing, trying smtp fallback")
     }
 
     const sent = await sendViaSmtp({ replyTo: email, subject, text })

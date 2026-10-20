@@ -2,7 +2,7 @@
 """
 Builds the home pages (/ and /en) from Itzik's approved review sheets.
 
-    python3 scripts/home-sheets/build.py <sheet-dir> <contact-sheet-dir> <image-dir> <page-sheet-dir> <nav-sheet-dir> <features-sheet-dir>
+    python3 scripts/home-sheets/build.py <sheet-dir> <contact-sheet-dir> <image-dir> <page-sheet-dir> <nav-sheet-dir> <features-sheet-dir> <tbl-028-dir> <who-he-dir> <consent-dir>
 
 <sheet-dir> holds the four approved sheets (tbl-021): uxb-009-v35-home-he.html,
 uxb-010-v6-home-en.html, uxb-011-v12-pricing-he.html, uxb-012-v3-pricing-en.html;
@@ -12,10 +12,12 @@ uxb-015-v1-faq-he.html, uxb-016-v1-faq-en.html and the text-page templates
 uxb-017-v1-text-page-he.html, uxb-018-v1-text-page-en.html (tbl-023); <nav-sheet-dir> holds
 uxb-021-v2-navkit-reference-he.html (header, mobile menu, breadcrumbs and footer for
 every page), uxb-019-v1-blog-he.html and uxb-020-v2-article-he.html (tbl-024);
-<features-sheet-dir> holds uxb-021-v7-features-he.html and uxb-022-v1-features-en.html (tbl-025)
-and the article templates uxb-020-v4-article-he.html (tbl-025b) and uxb-023-v1-article-en.html (tbl-025c).
-The English blog and article pages are built from the Hebrew sheets with the
-English texts below (there is no English sheet for them). The sheets are the source of truth for markup and CSS;
+<features-sheet-dir> holds the article templates uxb-020-v4-article-he.html (tbl-025b) and uxb-023-v1-article-en.html (tbl-025c);
+<tbl-028-dir> holds what you get uxb-021-v10 / uxb-022-v2, who it's for in English uxb-028-v1, the blog
+indexes uxb-019-v3 / uxb-029-v2, the 404 pages uxb-030-v2 / uxb-031-v2 and legal-pages/ (HE) and
+legal-pages/en/ (EN); <who-he-dir> holds uxb-024-v4-who-uxellent.html (who it's for, Hebrew);
+<consent-dir> holds the cookie banner sheets uxb-026-v2 / uxb-027-v2 (tbl-027).
+The sheets are the source of truth for markup and CSS;
 this script only:
   - drops the review chrome (.sheet-label, every .ztag),
   - wires the links (anchors, pricing/contact/legal pages, platform URLs),
@@ -43,6 +45,9 @@ IMAGES = sys.argv[3]
 PAGE_SHEETS = sys.argv[4]
 NAV_SHEETS = sys.argv[5]
 FEATURES_SHEETS = sys.argv[6]
+NEW_SHEETS = sys.argv[7]
+WHO_HE_SHEETS = sys.argv[8]
+CONSENT_SHEETS = sys.argv[9]
 OUT = os.path.join(ROOT, "src/app/_home")
 PUB = os.path.join(ROOT, "public/home")
 os.makedirs(OUT, exist_ok=True)
@@ -57,8 +62,13 @@ LANGS = {
         "contact_file": "uxb-013-v6-contact-he.html",
         "faq_file": "uxb-015-v1-faq-he.html",
         "text_file": "uxb-017-v1-text-page-he.html",
-        "features_file": "uxb-021-v7-features-he.html",
+        "features_file": "uxb-021-v10-features-uxellent.html",
         "article_file": "uxb-020-v4-article-he.html",
+        "blog_file": "uxb-019-v3-blog-uxellent.html",
+        "who_file": os.path.join(WHO_HE_SHEETS, "uxb-024-v4-who-uxellent.html"),
+        "nf_file": "uxb-030-v2-404-uxellent.html",
+        "legal_dir": "legal-pages", "legal_suffix": "",
+        "consent_file": "uxb-026-v2-cookie-banner-uxellent.html",
         "home": "/",
         "blog": "/blog",
         "pricing": "/pricing",
@@ -68,7 +78,7 @@ LANGS = {
         "nav": {
             "איך זה עובד": "#how",
             "מה מקבלים": "/features",
-            "למי זה מתאים": "#who",
+            "למי זה מתאים": "/for-who",
             "מאמרים": "/blog",
             "הצהרת נגישות": "/accessibility",
             "מחירים": "/pricing",
@@ -80,6 +90,10 @@ LANGS = {
             "בנו לי אתר": PLATFORM,
             "תנאי שימוש": "/terms",
             "מדיניות פרטיות": "/privacy",
+            "מדיניות עוגיות": "/cookies",
+            "ביטול עסקה": "/cancel",
+            "שימוש מותר": "/acceptable-use",
+            "הגדרות עוגיות": "/cookies#c-banner",
             "עמוד המחירים": "/pricing",
             "לכל החבילות והמחירים": "/pricing",
         },
@@ -97,8 +111,13 @@ LANGS = {
         "contact_file": "uxb-014-v2-contact-en.html",
         "faq_file": "uxb-016-v1-faq-en.html",
         "text_file": "uxb-018-v1-text-page-en.html",
-        "features_file": "uxb-022-v1-features-en.html",
+        "features_file": "uxb-022-v2-features-en-uxellent.html",
         "article_file": "uxb-023-v1-article-en.html",
+        "blog_file": "uxb-029-v2-blog-en-uxellent.html",
+        "who_file": "uxb-028-v1-who-en-uxellent.html",
+        "nf_file": "uxb-031-v2-404-en-uxellent.html",
+        "legal_dir": "legal-pages/en", "legal_suffix": "-en",
+        "consent_file": "uxb-027-v2-cookie-banner-en-uxellent.html",
         "home": "/en",
         "blog": "/en/blog",
         "pricing": "/en/pricing",
@@ -108,7 +127,7 @@ LANGS = {
         "nav": {
             "How it works": "#how",
             "What you get": "/en/features",
-            "Who it’s for": "#who",
+            "Who it’s for": "/en/for-who",
             "Blog": "/en/blog",
             "Accessibility statement": "/en/accessibility",
             "Pricing": "/en/pricing",
@@ -120,6 +139,10 @@ LANGS = {
             "Build my site": PLATFORM,
             "Terms of use": "/en/terms",
             "Privacy policy": "/en/privacy",
+            "Cookie policy": "/en/cookies",
+            "Cancellation": "/en/cancel",
+            "Acceptable use": "/en/acceptable-use",
+            "Cookie settings": "/en/cookies#c-banner",
             "pricing page": "/en/pricing",
             "See all plans and pricing": "/en/pricing",
         },
@@ -240,7 +263,7 @@ def brand_blue_css(root):
 """
 
 
-def build(lang, cfg, images, page="home"):
+def build(lang, cfg, images, page="home", legal=None):
     home = page == "home"
     sheet = {
         "home": os.path.join(HOME_SHEETS, cfg["file"]),
@@ -248,10 +271,12 @@ def build(lang, cfg, images, page="home"):
         "contact": os.path.join(CONTACT_SHEETS, cfg["contact_file"]),
         "faq": os.path.join(PAGE_SHEETS, cfg["faq_file"]),
         "text": os.path.join(PAGE_SHEETS, cfg["text_file"]),
-        "blog": os.path.join(NAV_SHEETS, BLOG_SHEET),
-        "guides": os.path.join(NAV_SHEETS, BLOG_SHEET),
+        "blog": os.path.join(NEW_SHEETS, cfg["blog_file"]),
         "article": os.path.join(FEATURES_SHEETS, cfg["article_file"]),
-        "features": os.path.join(FEATURES_SHEETS, cfg["features_file"]),
+        "features": os.path.join(NEW_SHEETS, cfg["features_file"]),
+        "who": os.path.join(NEW_SHEETS, cfg["who_file"]),
+        "nf": os.path.join(NEW_SHEETS, cfg["nf_file"]),
+        "legal": os.path.join(NEW_SHEETS, cfg["legal_dir"], f"legal-{legal}{cfg['legal_suffix']}.html"),
     }[page]
     src = open(sheet, encoding="utf-8").read()
     css = re.search(r"<style[^>]*>(.*?)</style>", src, re.S).group(1)
@@ -262,16 +287,18 @@ def build(lang, cfg, images, page="home"):
     body, nh = re.subn(r"<header id=\"hdr\">.*?</header>", lambda m: head, body, count=1, flags=re.S)
     body, nf = re.subn(r"<footer\b.*?</footer>", lambda m: foot, body, count=1, flags=re.S)
     assert (nh, nf) == (1, 1), (page, nh, nf)
-    # the English blog and guides index pages have no sheet of their own (articles do: uxb-023)
-    if lang == "en" and page in ("blog", "guides"):
-        body = english_page(body, page)
-        css = css.replace("text-align:right", "text-align:start")
-    if page in ("blog", "guides"):
-        body = blog_markup(body, lang, cfg, page)
+    if page == "blog":
+        body = blog_markup(body, lang, cfg)
     elif page == "article":
         body = article_markup(body, lang, cfg)
     elif page == "features":
         body = features_markup(body, lang, src)
+    elif page == "who":
+        body = who_markup(body, lang)
+    elif page == "nf":
+        body = nf_markup(body, lang)
+    elif page == "legal":
+        body = legal_markup(body, lang, cfg, legal)
 
     # -- links
     body = body.replace('<a href="#"><svg class="logo-svg"', f'<a href="{cfg["home"]}" aria-label="{cfg["logo_label"]}"><svg class="logo-svg"', 1)
@@ -310,6 +337,9 @@ def build(lang, cfg, images, page="home"):
 
     body = re.sub(r"<a([^>]*)>([^<]*)</a>", link, body)
     assert 'href="#"' not in body, f"unwired links left in {lang}"
+    # "Cookie settings" opens the settings window (ConsentBanner); without JS it is the policy's consent section
+    body, nck = re.subn(r'(<a class="l" href="(?:/en)?/cookies#c-banner")>', r'\1 data-ck-open>', body)
+    assert nck == 1, nck
 
     # -- menu / burger
     body = body.replace('<button class="burger" id="burger"', '<button type="button" class="burger" id="burger" aria-controls="menu" aria-expanded="false"', 1)
@@ -322,9 +352,7 @@ def build(lang, cfg, images, page="home"):
         body = faq_markup(body, lang, cfg)
     elif page == "text":
         body = text_markup(body, lang, cfg)
-    elif page in ("blog", "guides", "article"):
-        pass  # done before the links (see above)
-    elif page == "features":
+    elif page in ("blog", "article", "features", "who", "nf", "legal"):
         pass  # done before the links (see above)
     else:
         assert body.count('<div class="bill"') == 1 and body.count('class="mq"') == 1
@@ -339,7 +367,7 @@ def build(lang, cfg, images, page="home"):
     body = body.replace("<h4>", "<h2>").replace("</h4>", "</h2>")
 
     # -- skip link, main landmark, breadcrumbs slot (tbl-024 accessibility pass)
-    body = landmarks(body, lang, home)
+    body = landmarks(body, lang, home or page == "nf")
 
     # -- CSS: no data URIs, scoped, Heebo from next/font, a few additions
     css = finish_css(css, lang, page)
@@ -349,7 +377,7 @@ def build(lang, cfg, images, page="home"):
         {"q": re.sub(r"<[^>]+>", "", q).strip(), "a": re.sub(r"<[^>]+>", "", a).strip()}
         for q, a in re.findall(r"<summary>(.*?)<span class=\"pm\">\+</span></summary><div class=\"ans\">(.*?)</div>", body, re.S)
     ]
-    want = {"home": 9, "pricing": 6, "contact": 0, "faq": 18, "text": 0, "blog": 0, "guides": 0, "article": 0, "features": 0}[page]
+    want = {"home": 9, "pricing": 6, "contact": 0, "faq": 18, "text": 0, "blog": 0, "article": 0, "features": 0, "who": 0, "nf": 0, "legal": 0}[page]
     assert len(faq) == want, f"expected {want} FAQ entries in {page}/{lang}, got {len(faq)}"
     name = page.upper()
     ts = (
@@ -357,10 +385,15 @@ def build(lang, cfg, images, page="home"):
         f"export const {name}_HTML_{lang.upper()} = {json.dumps(body.strip(), ensure_ascii=False)}\n\n"
         f"export const {name}_FAQ_{lang.upper()} = {json.dumps(faq, ensure_ascii=False, indent=2)} as const\n"
     )
-    if page in ("blog", "guides", "article"):
+    if page in ("blog", "article"):
         ts += extra_parts(body, lang, page)
     if page == "article":
         write_chrome(body, css, lang)
+    if page == "legal":
+        # six pages per language, one CSS (the six sheets share it)
+        LEGAL_OUT.setdefault(lang, {})[legal] = body.strip()
+        print(page, legal, lang, "markup", len(body), "css", len(css))
+        return
     open(os.path.join(OUT, f"{'markup' if home else page + '-markup'}.{lang}.ts"), "w", encoding="utf-8").write(ts)
     print(page, lang, "markup", len(body), "css", len(css), "faq", len(faq))
 
@@ -390,11 +423,19 @@ def contact_markup(body, lang, cfg):
     body = body.replace('<button class="ct-btn" type="submit">',
                         f'<div class="uxc-hp" aria-hidden="true"><label>{hp}<input name="website" tabindex="-1" autocomplete="off"></label></div>'
                         '<p class="uxc-fail" role="alert" hidden></p><button class="ct-btn" type="submit">', 1)
+    # tbl-027: a short privacy note right under the send button
+    body, npv = re.subn(r'(<button class="ct-btn" type="submit">[^<]*</button>)', lambda m: m.group(1) + PRIVACY_NOTE[lang], body, count=1)
+    assert npv == 1
     # after sending, the form makes way for this
     body = body.replace("</form>", '</form><p class="uxc-done" role="status" tabindex="-1" hidden></p>', 1)
     assert "<details" not in body and "tel:" not in body
     return body
 
+
+PRIVACY_NOTE = {
+    "he": '<p class="uxc-priv">את הפרטים מקבלת UXellent כדי לחזור אליכם. מסירתם רשות. פרטים נוספים ב<a class="lnk" href="/privacy">מדיניות הפרטיות</a>.</p>',
+    "en": '<p class="uxc-priv">UXellent receives these details to get back to you. Providing them is optional. See our <a class="lnk" href="/en/privacy">Privacy policy</a>.</p>',
+}
 
 # Contact page additions (tbl-022): errors, honeypot, the thank-you line.
 CONTACT_CSS = """
@@ -409,12 +450,14 @@ CONTACT_CSS = """
 {root} .uxc-done{max-width:560px;margin:0 auto;text-align:center;font-size:clamp(20px,1.6vw,22px);line-height:1.55;font-weight:600;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:24px;padding:clamp(28px,3vw,44px);box-shadow:var(--sh)}
 {root} .uxc-done:focus{outline:none}
 {root} .ct-btn[aria-busy=true]{opacity:.7;cursor:progress}
+{root} .uxc-priv{font-size:15px;line-height:1.55;color:var(--ink2);text-align:center}
 @media(max-width:768px){{root} .uxc-done{background:none;border:0;box-shadow:none;padding:8px 0}}
 @media(max-width:1060px){{root} .fld2>span.uxc-err{font-size:16px!important}}
 """
 
 
-ROOTS = {"home": "uxh", "pricing": "uxp", "contact": "uxc", "faq": "uxf", "text": "uxt", "blog": "uxb", "guides": "uxg", "article": "uxa", "features": "uxw"}
+ROOTS = {"home": "uxh", "pricing": "uxp", "contact": "uxc", "faq": "uxf", "text": "uxt", "blog": "uxb", "article": "uxa", "features": "uxw",
+         "who": "uxo", "nf": "uxz", "legal": "uxl"}
 
 
 def faq_markup(body, lang, cfg):
@@ -474,7 +517,6 @@ TEXT_CSS = """
 """
 
 
-BLOG_SHEET = "uxb-019-v1-blog-he.html"
 NAVKIT_SHEET = "uxb-021-v2-navkit-reference-he.html"
 
 
@@ -484,7 +526,8 @@ def sheet_body(src):
     body = re.sub(r"<script.*?</script>", "", body, flags=re.S)
     body = re.sub(r'<div class="sheet-label">.*?</div>\s*', "", body, flags=re.S)
     body = re.sub(r'<span class="ztag"[^>]*>.*?</span>', "", body, flags=re.S)
-    assert "ztag" not in body and "sheet-label" not in body and "uxb-0" not in body
+    # a legal sheet's open-point marks (‼️) may name a design sheet
+    assert "ztag" not in body and "sheet-label" not in body and "uxb-0" not in re.sub(r'<mark class="flag">.*?</mark>', "", body)
     return body
 
 
@@ -495,7 +538,13 @@ CHROME_EN = {
     "שאלות נפוצות": "FAQ", "צור קשר": "Contact", "כניסה": "Log in", "הצטרפות חינם": "Start free",
     "איך זה עובד": "How it works", "האתר": "Product", "חשבון": "Account", "מידע": "Info",
     "תנאי שימוש": "Terms of use", "מדיניות פרטיות": "Privacy policy", "הצהרת נגישות": "Accessibility statement",
+    "מדיניות עוגיות": "Cookie policy", "ביטול עסקה": "Cancellation", "שימוש מותר": "Acceptable use", "הגדרות עוגיות": "Cookie settings",
 }
+
+# tbl-027 / tbl-028: the footer's Info column, the six legal pages and the cookie settings
+FOOT_INFO = ('<div><h4>מידע</h4><a class="l" href="#">תנאי שימוש</a><a class="l" href="#">מדיניות פרטיות</a>'
+             '<a class="l" href="#">מדיניות עוגיות</a><a class="l" href="#">הצהרת נגישות</a><a class="l" href="#">ביטול עסקה</a>'
+             '<a class="l" href="#">שימוש מותר</a><a class="l" href="#">הגדרות עוגיות</a></div>')
 
 
 def chrome(lang):
@@ -508,6 +557,10 @@ def chrome(lang):
     # tbl-025c: the blog is not in the header or the menu, only in the footer
     head, nb = re.subn(r'<a(?: class="m")? href="#">מאמרים</a>', "", head)
     assert nb == 2 and "מאמרים" not in head, nb
+    # tbl-028: no logo in the footer (only in the header); it starts with the lead line and the points
+    foot, nl = re.subn(r'(<div class="ft"><div>)\s*<svg class="logo-svg".*?</svg>\s*', r"\1", foot, count=1, flags=re.S)
+    foot, ni = re.subn(r"<div><h4>מידע</h4>.*?</div>", lambda m: FOOT_INFO, foot, count=1, flags=re.S)
+    assert (nl, ni) == (1, 1) and "logo-svg" not in foot, (nl, ni)
     if lang == "he":
         return head, foot
     for he, en in CHROME_EN.items():
@@ -526,33 +579,13 @@ def chrome(lang):
     return head, foot
 
 
-# English texts for the blog, guides and article pages (built from the Hebrew sheets).
-BLOG_EN = {
-    'דברים שלמדנו <span class="bl">תוך כדי עבודה.</span>': 'Things we learned <span class="bl">on the job.</span>',
-    "מאמרים קצרים על אתרים, קידום ו-AI, לעסקים שמוכרים שירות.": "Short articles on websites, search and AI, for businesses that sell a service.",
-    'מדריכי <span class="bl">צמיחה.</span>': 'Growth <span class="bl">guides.</span>',
-    "מדריכים קצרים ומדויקים על SEO, תנועה, לידים וקידום דיגיטלי.": "Short, precise guides on SEO, traffic, leads and digital marketing.",
-    'aria-label="במאמר הזה"': 'aria-label="In this article"',
-}
-
-
-def english_page(body, page):
-    for he, en in BLOG_EN.items():
-        body = body.replace(he, en)
-    # closing: the English sheets' closing section
-    en_body = sheet_body(open(os.path.join(PAGE_SHEETS, LANGS["en"]["faq_file"]), encoding="utf-8").read())
-    en_close = re.search(r'<div class="closing">.*?</div></div>', en_body, re.S).group(0)
-    body, n = re.subn(r'<div class="closing">.*?</div></div>', lambda m: en_close, body, count=1, flags=re.S)
-    assert n == 1
-    return body
-
-
 PARTS = {}
 
 
-def blog_markup(body, lang, cfg, page):
-    """Blog index /blog and growth guides /growth-guides (uxb-019, tbl-024): the
-    cards become templates that HomePage fills from the articles and guides."""
+def blog_markup(body, lang, cfg):
+    """Blog index /blog (uxb-019 v3 HE, uxb-029 v2 EN, tbl-028): the featured
+    article, three more and the eight growth guides; the cards become templates
+    that HomePage fills from the articles (blog-data)."""
     feat = re.search(r'<a class="bl-feat" href="#">.*?</a>(?=<div class="bl-cards">)', body, re.S).group(0)
     card = re.search(r'<a class="bl-c" href="#">.*?</a>', body, re.S).group(0)
     guide = re.search(r'<a class="bl-g" href="#">.*?</a>', body, re.S).group(0)
@@ -570,25 +603,15 @@ def blog_markup(body, lang, cfg, page):
     guide = re.sub(r'<span class="bl-n">[^<]*</span>', '<span class="bl-n">{{N}}</span>', guide)
     guide = re.sub(r"<h3>.*?</h3>", "<h3>{{T}}</h3>", guide, flags=re.S)
     guide = re.sub(r"<p>.*?</p>", "<p>{{P}}</p>", guide, flags=re.S)
-    PARTS[(lang, page)] = {"featured": feat, "card": card, "guide": guide}
+    PARTS[(lang, "blog")] = {"featured": feat, "card": card, "guide": guide}
 
     top = '<div class="bl-top">{{FEATURED}}<div class="bl-cards">{{CARDS}}</div></div>'
     body, n1 = re.subn(r'<div class="bl-top">.*?</a></div></div>', lambda m: top, body, count=1, flags=re.S)
     body, n2 = re.subn(r'<div class="bl-grid">.*?</a></div>', lambda m: '<div class="bl-grid">{{GUIDES}}</div>', body, count=1, flags=re.S)
-    assert (n1, n2) == (1, 1), (n1, n2)
-    paths = ("/blog", "/en/blog") if page == "blog" else ("/growth-guides", "/en/growth-guides")
-    if page == "guides":
-        # same template with the guides only: the guides take the top of the page
-        h1, lead = ('מדריכי <span class="bl">צמיחה.</span>', "מדריכים קצרים ומדויקים על SEO, תנועה, לידים וקידום דיגיטלי.")
-        if lang == "en":
-            h1, lead = BLOG_EN[h1], BLOG_EN[lead]
-        body = re.sub(r'(<h1 class="pr-h">).*?(</h1>)', lambda m: m.group(1) + h1 + m.group(2), body, count=1, flags=re.S)
-        body = re.sub(r'(<p class="pr-lead">).*?(</p>)', lambda m: m.group(1) + lead + m.group(2), body, count=1, flags=re.S)
-        # heading order: the guide titles are h3, so a visually hidden h2 names the list
-        body = body.replace(top, f'<h2 class="uxh-vh">{"המדריכים" if lang == "he" else "The guides"}</h2><div class="bl-grid">{{{{GUIDES}}}}</div>', 1)
-        body, n = re.subn(r'<section class="sec zone" id="guides">.*?</section>\s*', "", body, count=1, flags=re.S)
-        assert n == 1
-    body = body.replace('<a href="/" lang="he"', f'<a href="{paths[0]}" lang="he"').replace('<a href="/en" lang="en"', f'<a href="{paths[1]}" lang="en"')
+    # the sheet's breadcrumbs: the site writes its own in the same place (landmarks, {{CRUMB}})
+    body, n3 = re.subn(r'<nav class="crumb"[^>]*>.*?</nav>', "", body, count=1, flags=re.S)
+    assert (n1, n2, n3) == (1, 1, 1), (n1, n2, n3)
+    body = body.replace('<a href="/" lang="he"', '<a href="/blog" lang="he"').replace('<a href="/en" lang="en"', '<a href="/en/blog" lang="en"')
     return body
 
 
@@ -663,6 +686,106 @@ def features_markup(body, lang, src):
                        lambda m: f'<div class="mk mk-d" data-anim="leads" data-leads="{attr(leads)}" data-icons="{attr(ic)}" data-now="{now}"><div class="mk-feed">{feed}</div>', body, count=1)
     assert (n1, n2) == (1, 1), (n1, n2)
     return body
+
+
+def who_markup(body, lang):
+    """Who it's for, /for-who (uxb-024 v4 HE, uxb-028 v1 EN, tbl-028): three site
+    types and the professions band (HomeBehaviors drives the band, as on pricing)."""
+    body = body.replace('<a href="/" lang="he"', '<a href="/for-who" lang="he"').replace('<a href="/en" lang="en"', '<a href="/en/for-who" lang="en"')
+    body, n = re.subn(r'<nav class="crumb"[^>]*>.*?</nav>', "", body, count=1, flags=re.S)
+    assert n == 1 and body.count('<span class="ty-ic">') == 3 and body.count('class="mq"') == 1
+    body = body.replace('<span class="ty-ic">', '<span class="ty-ic" aria-hidden="true">')
+    return body
+
+
+def nf_markup(body, lang):
+    """404 (uxb-030 v2 HE, uxb-031 v2 EN, tbl-028): no breadcrumbs; the site adds
+    the <main> landmark itself, so the sheet's own one goes."""
+    body, n = re.subn(r"<main>(.*?)</main>", r"\1", body, count=1, flags=re.S)
+    assert n == 1 and "<main" not in body
+    for a, b in (('href="/who"', 'href="/for-who"'), ('href="/en/who"', 'href="/en/for-who"')):
+        body = body.replace(a, b)
+    assert "/who\"" not in body
+    return body
+
+
+# the legal sheets (uxb-025, tbl-027 / tbl-028) and their addresses on the site
+LEGAL = {"terms": "terms", "privacy": "privacy", "cookies": "cookies", "accessibility": "accessibility", "cancel": "cancel", "aup": "acceptable-use"}
+LEGAL_OUT = {}
+
+
+def legal_markup(body, lang, cfg, legal):
+    """A legal page (uxb-025, tbl-027 / tbl-028) on the text-page template. The
+    yellow ‼️ marks stay on Preview, so the open points are visible (tbl-027)."""
+    pre = cfg["pre"]
+    route = LEGAL[legal]
+    body = body.replace('<a href="/" lang="he"', f'<a href="/{route}" lang="he"').replace('<a href="/en" lang="en"', f'<a href="/en/{route}" lang="en"')
+    body, n1 = re.subn(r'<main id="main">(.*?)</main>', r"\1", body, count=1, flags=re.S)
+    body, n2 = re.subn(r'<nav class="crumb"[^>]*>.*?</nav>', "", body, count=1, flags=re.S)
+    assert (n1, n2) == (1, 1) and "<main" not in body, (legal, n1, n2)
+    # links between the legal pages
+    body, nl = re.subn(r'href="legal-([a-z]+)(?:-en)?\.html"', lambda m: f'href="{pre}/{LEGAL[m.group(1)]}"', body)
+    assert ".html" not in body, legal
+    body = body.replace('<nav class="fq-nav"', '<nav class="fq-nav" data-uxf-nav', 1)
+    # a table that scrolls on a phone can be reached and scrolled with the keyboard; it is named by its section
+    def tables(m):
+        h = re.sub(r"<[^>]+>", "", re.search(r"<h2>(.*?)</h2>", m.group(0), re.S).group(1)).strip()
+        return m.group(0).replace('<div class="tw">', f'<div class="tw" tabindex="0" role="region" aria-label="{h}">')
+    body = re.sub(r'<section class="lg-s".*?</section>', tables, body, flags=re.S)
+    assert '<div class="tw">' not in body
+    return body
+
+
+# Legal pages: a long contents list scrolls inside its own column on desktop.
+LEGAL_CSS = """
+/* ---- legal pages (tbl-028) ---- */
+@media(min-width:1061px){{root} .lg .fq-nav{max-height:calc(100vh - 130px);overflow-y:auto;scrollbar-width:thin}}
+{root} .fq-nav a[aria-current=true]{background:var(--tint);color:var(--brand-d)}
+{root} .fq-list,{root} .lg-body{min-width:0}
+/* tables keep whole words (the page's overflow-wrap:anywhere would split "קטגוריה" in a narrow column) */
+{root} .tw{overflow-wrap:normal}
+{root} .tw:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+"""
+
+
+def write_legal():
+    for lang, pages in LEGAL_OUT.items():
+        assert sorted(pages) == sorted(LEGAL), pages.keys()
+        ts = (f"// Generated by scripts/home-sheets/build.py from the legal sheets (uxb-025, tbl-028). Do not edit by hand.\n"
+              f"export const LEGAL_HTML_{lang.upper()} = {json.dumps({LEGAL[k]: v for k, v in pages.items()}, ensure_ascii=False, indent=1)} as const\n")
+        open(os.path.join(OUT, f"legal-markup.{lang}.ts"), "w", encoding="utf-8").write(ts)
+
+
+def write_consent():
+    """The cookie banner and its settings window (uxb-026 v2 HE, uxb-027 v2 EN,
+    tbl-027): markup and CSS from the sheets, scoped under .uxk-<lang>;
+    ConsentBanner adds the behaviour (the sheet's own script is a demo)."""
+    for lang, cfg in LANGS.items():
+        src = open(os.path.join(CONSENT_SHEETS, cfg["consent_file"]), encoding="utf-8").read()
+        body = re.search(r"<body[^>]*>(.*)</body>", src, re.S).group(1)
+        body = re.sub(r'<span class="ztag"[^>]*>.*?</span>', "", body, flags=re.S)
+        ck = re.search(r'<div class="ck" id="ck".*?(?=<script>)', body, re.S).group(0).strip()
+        assert ck.count('id="ckm"') == 1 and "ztag" not in ck
+        # the banner starts hidden (ConsentBanner shows it when no choice is stored); buttons are buttons
+        ck = ck.replace('<div class="ck" id="ck"', '<div class="ck off" id="ck" hidden', 1)
+        ck = ck.replace("<button ", '<button type="button" ')
+        ck = ck.replace('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">')
+        policy = "/cookies" if lang == "he" else "/en/cookies"
+        ck, n = re.subn(r'<a class="lnk" href="#">', f'<a class="lnk" href="{policy}">', ck)
+        assert n == 1 and 'href="#"' not in ck, n
+        css = re.search(r"<style[^>]*>(.*?)</style>", src, re.S).group(1)
+        rootvars = re.search(r":root\{[^}]*\}", css).group(0)
+        block = re.search(r"/\* uxb-026 cookie banner \*/(.*?)(?=/\*|\Z)", css, re.S).group(1)
+        root = f".uxk-{lang}"
+        base = (f"{rootvars.replace(':root', root)}\n{root}{{font-family:var(--font-heebo),\"Heebo\",system-ui,sans-serif;color:var(--ink);"
+                f"line-height:1.5;-webkit-font-smoothing:antialiased}}\n{root} *{{box-sizing:border-box;margin:0}}\n"
+                f"{root} [hidden]{{display:none!important}}\n{root} .lnk{{color:var(--brand-d);text-decoration:underline;text-underline-offset:3px}}\n")
+        out = base + scope_css(block, root)
+        open(os.path.join(OUT, f"consent.{lang}.css"), "w", encoding="utf-8").write(out)
+        ts = (f"// Generated by scripts/home-sheets/build.py from {cfg['consent_file']}. Do not edit by hand.\n"
+              f"export const CONSENT_HTML_{lang.upper()} = {json.dumps(ck, ensure_ascii=False)}\n")
+        open(os.path.join(OUT, f"consent-markup.{lang}.ts"), "w", encoding="utf-8").write(ts)
+        print("consent", lang, len(ck), len(out))
 
 
 # Features page (tbl-025): the law-firm mockup uses the hero photo, as a file.
@@ -813,6 +936,8 @@ ARTICLE_CSS = """
 {root} .ar-tbl:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 {root} .ar-meta i{display:inline-block}
 @media(max-width:1060px){{root} .ar-body h2,{root} .ar-body>section{scroll-margin-top:130px}{root} .ar-body h3{font-size:22px}}
+/* tbl-028: h1 > h2. The article title is smaller than on the other pages (long titles), so the section titles below it are too */
+@media(min-width:1061px){{root} :is(.sh,.closing,.ou) h2{font-size:min(56px,3.6vw)!important}}
 """
 
 
@@ -947,7 +1072,9 @@ def finish_css(css, lang, page):
         css += FAQ_CSS.replace("{root}", root) + TEXT_CSS.replace("{root}", root)
     elif page == "article":
         css += FAQ_CSS.replace("{root}", root) + TEXT_CSS.replace("{root}", root) + ARTICLE_CSS.replace("{root}", root)
-    elif page == "features":
+    elif page == "legal":
+        css += LEGAL_CSS.replace("{root}", root)
+    elif page in ("features", "who"):
         css += FEATURES_CSS.replace("{root}", root)
         css += (f"@media (prefers-reduced-motion:reduce){{{root} #inc .mq{{-webkit-mask:none;mask:none}}"
                 f"{root} #inc .mq .inc{{flex-wrap:wrap!important;justify-content:center!important;width:auto!important;gap:10px 0!important;transform:none!important}}"
@@ -986,9 +1113,14 @@ def main():
         build(lang, cfg, images, "faq")
         build(lang, cfg, images, "text")
         build(lang, cfg, images, "blog")
-        build(lang, cfg, images, "guides")
         build(lang, cfg, images, "article")
         build(lang, cfg, images, "features")
+        build(lang, cfg, images, "who")
+        build(lang, cfg, images, "nf")
+        for legal in LEGAL:
+            build(lang, cfg, images, "legal", legal)
+    write_legal()
+    write_consent()
 
 
 main()

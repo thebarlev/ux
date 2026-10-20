@@ -4,7 +4,7 @@
  */
 export function heEnAlternateLanguages(hePath: string, enPath: string) {
   return {
-    "he-IL": hePath,
+    he: hePath,
     en: enPath,
     "x-default": hePath,
   } as const

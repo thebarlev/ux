@@ -6,6 +6,25 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
 
+// tbl-028: old address -> new page, in both languages (the /en twin is added below)
+const MOVED: Record<string, string> = {
+  "/blog/fast-slow-web": "/blog/slow-site",
+  "/blog/wordpress-vs-other": "/blog/wordpress-vs",
+  "/blog/automatio-make": "/blog/automation",
+  "/growth-guides": "/blog",
+  "/growth-guides/how-to-get-traffic-to-my-website": "/blog/guide-traffic",
+  "/growth-guides/how-to-improve-website-seo": "/blog/guide-seo",
+  "/growth-guides/how-to-get-leads": "/blog/guide-leads",
+  "/growth-guides/how-to-promote-my-business-online": "/blog/guide-promote",
+  "/growth-guides/how-to-get-customers-online": "/blog/guide-clients",
+  "/growth-guides/how-to-rank-on-google-fast": "/blog/guide-rank-fast",
+  "/growth-guides/how-to-grow-small-business-online": "/blog/guide-small-business",
+  "/growth-guides/how-to-get-clients-without-ads": "/blog/guide-no-ads",
+  // the old "why us" page; "who it's for" is the page that replaces it
+  "/why-us": "/for-who",
+  "/who": "/for-who",
+}
+
 const nextConfig: NextConfig = {
   experimental: {
     inlineCss: true,
@@ -75,8 +94,9 @@ const nextConfig: NextConfig = {
     { source: "/idea-to-product", destination: "/", statusCode: 301 },
     { source: "/marketing", destination: "/", statusCode: 301 },
     { source: "/marketing/ppc", destination: "/", statusCode: 301 },
-    { source: "/marketing/seo-ai", destination: "/seo-ai", statusCode: 301 },
-    { source: "/seo-ai", destination: "/growth-guides", statusCode: 301 },
+    // tbl-028: straight to the blog, where the growth guides now live (no chain)
+    { source: "/marketing/seo-ai", destination: "/blog", statusCode: 301 },
+    { source: "/seo-ai", destination: "/blog", statusCode: 301 },
     { source: "/roi", destination: "/", statusCode: 301 },
     // /checkout/success and /checkout/failed are Cardcom's return URLs and stay
     // real pages, so the package-id catch-all below must not swallow them.
@@ -115,6 +135,11 @@ const nextConfig: NextConfig = {
     { source: "/blog/negative-receipt", destination: "/blog", statusCode: 301 },
     { source: "/en/blog/green-invoice", destination: "/en/blog", statusCode: 301 },
     { source: "/en/blog/negative-receipt", destination: "/en/blog", statusCode: 301 },
+    // tbl-028: the articles and growth guides have new addresses under /blog
+    ...Object.entries(MOVED).flatMap(([from, to]) => [
+      { source: from, destination: to, statusCode: 301 },
+      { source: `/en${from}`, destination: `/en${to}`, statusCode: 301 },
+    ]),
   ],
   headers: async () => [
     {

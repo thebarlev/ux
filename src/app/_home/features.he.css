@@ -1120,6 +1120,14 @@
 .uxw-he .cmp thead th:first-child{border-start-start-radius:23px}.uxw-he .cmp thead th:last-child{border-start-end-radius:23px}
 
 
+.uxw-he #whopage.sec,.uxw-he #feat.sec{padding-bottom:0}
+.uxw-he .ty-ic{width:auto;height:auto;background:none;border-radius:0;justify-content:start}.uxw-he .ty-ic svg{width:44px;height:44px;stroke-width:1.5}
+@media(max-width:1060px){.uxw-he .ty-ic svg{width:40px;height:40px}}
+
+
+@media(max-width:1060px){.uxw-he .ft-ck{gap:16px!important}.uxw-he .ft-ck li{flex-direction:column;gap:4px}.uxw-he .ft-ck svg{margin-top:0}}
+
+
 .uxw-he #hdr nav a[aria-current]{color:var(--ink);font-weight:700;position:relative}
 .uxw-he #hdr nav a[aria-current]::after{content:"";position:absolute;inset-inline:14px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,#0f72b3,#2a5fcf)}
 .uxw-he .menu a.m[aria-current]{color:var(--brand-d);font-weight:700}

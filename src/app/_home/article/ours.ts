@@ -48,7 +48,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       ],
     },
   },
-  "fast-slow-web": {
+  "slow-site": {
     he: {
       p: "אצלנו מהירות היא לא משהו שצריך לתקן. היא חלק מהאתר.",
       points: [
@@ -66,7 +66,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       ],
     },
   },
-  "wordpress-vs-other": {
+  "wordpress-vs": {
     he: {
       h: "מה שבוורדפרס דורש תוסף, |כאן כבר בפנים.",
       p: "אצלנו לא צריך לבחור תוספים או לחפש מפתח לכל שינוי.",
@@ -86,7 +86,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       ],
     },
   },
-  "automatio-make": {
+  "automation": {
     he: {
       h: "אוטומציה מתחילה |בפנייה שלא הולכת לאיבוד.",
       p: "לפני שמחברים כלים, כל פנייה צריכה להגיע למקום אחד. זה כבר עובד באתר שלכם.",
@@ -108,7 +108,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
   },
 
   // ---- growth guides
-  "how-to-get-traffic-to-my-website": {
+  "guide-traffic": {
     he: {
       p: "תנועה מגיעה לאתר שגוגל מבין. אצלנו זה בנוי מהיום הראשון.",
       points: [
@@ -126,7 +126,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       ],
     },
   },
-  "how-to-improve-website-seo": {
+  "guide-seo": {
     he: {
       p: "רוב מה שהמדריך הזה מבקש כבר קורה באתר שבונים אצלנו.",
       points: [
@@ -144,7 +144,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       ],
     },
   },
-  "how-to-get-leads": {
+  "guide-leads": {
     he: {
       p: "ליד טוב הוא ליד שלא הולך לאיבוד. זה מה שהאתר עושה בשבילכם.",
       points: [
@@ -162,7 +162,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       ],
     },
   },
-  "how-to-promote-my-business-online": {
+  "guide-promote": {
     he: {
       p: "קידום עובד טוב יותר כשיש לאן לשלוח אנשים. האתר הזה כבר מוכן.",
       points: [
@@ -180,7 +180,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       ],
     },
   },
-  "how-to-get-customers-online": {
+  "guide-clients": {
     he: {
       p: "לקוח מחפש, מוצא ופונה. אצלנו כל אחד מהשלבים כבר בנוי.",
       points: [
@@ -198,7 +198,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       ],
     },
   },
-  "how-to-rank-on-google-fast": {
+  "guide-rank-fast": {
     he: {
       p: "אין קיצור דרך לגוגל. אבל אפשר להתחיל בלי חובות טכניים.",
       points: [
@@ -216,7 +216,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       ],
     },
   },
-  "how-to-grow-small-business-online": {
+  "guide-small-business": {
     he: {
       p: "עסק קטן צריך אתר שלא גוזל ממנו זמן. זה מה שבנינו.",
       points: [
@@ -234,7 +234,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       ],
     },
   },
-  "how-to-get-clients-without-ads": {
+  "guide-no-ads": {
     he: {
       p: "בלי מודעות, האתר צריך לעבוד בשבילכם. אצלנו הוא בנוי לזה.",
       points: [

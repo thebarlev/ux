@@ -1140,3 +1140,5 @@
 .uxa-en .ar-tbl:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .uxa-en .ar-meta i{display:inline-block}
 @media(max-width:1060px){.uxa-en .ar-body h2,.uxa-en .ar-body>section{scroll-margin-top:130px}.uxa-en .ar-body h3{font-size:22px}}
+/* tbl-028: h1 > h2. The article title is smaller than on the other pages (long titles), so the section titles below it are too */
+@media(min-width:1061px){.uxa-en :is(.sh,.closing,.ou) h2{font-size:min(56px,3.6vw)!important}}

@@ -3,21 +3,10 @@
 import { usePathname } from "next/navigation"
 import { SiteChrome } from "@/app/_home/SiteChrome"
 
-/** The 2026-08 redesign pages under /en own their full page chrome
- *  (RedesignShell → RedesignHeader/RedesignFooter, locale="en") — same
- *  pattern as HEADERLESS_PATTERNS for the Hebrew SiteHeader. Without this,
- *  the old HeaderEN/FooterEN wrap them a second time. */
-const REDESIGN_EN_PATTERNS = [
-  /^\/en$/,
-  /^\/en\/pricing(\/|$)/,
-  /^\/en\/features(\/|$)/,
-  /^\/en\/contact(\/|$)/,
-  /^\/en\/faq(\/|$)/,
-  /^\/en\/(privacy|terms|accessibility|account-deletion)(\/|$)/,
-  /^\/en\/why-us(\/|$)/,
-  /^\/en\/blog(\/|$)/,
-  /^\/en\/growth-guides(\/|$)/,
-]
+/** Every /en page brings its own header and footer (the sheet pages, tbl-028),
+ *  except the campaign pages, which keep their own content inside SiteChrome.
+ *  Anything else (the 404 included) is passed through as it is. */
+const CHROME_EN_PATTERNS = [/^\/en\/lp\//]
 
 /** Breadcrumb names for the English pages that keep their own content (tbl-024). */
 const CRUMBS: Record<string, string> = {
@@ -31,11 +20,11 @@ export default function EnLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname() ?? ""
-  if (REDESIGN_EN_PATTERNS.some((re) => re.test(pathname))) {
+  if (!CHROME_EN_PATTERNS.some((re) => re.test(pathname))) {
     return <>{children}</>
   }
 
-  // everything else (the campaign pages, 404) gets the site's header and footer
+  // the campaign pages get the site's header and footer
   const crumb = CRUMBS[pathname]
   return (
     <SiteChrome lang="en" current={crumb ? pathname : undefined} crumbs={crumb ? [{ label: crumb }] : undefined}>

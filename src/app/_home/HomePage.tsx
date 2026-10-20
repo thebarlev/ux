@@ -15,10 +15,14 @@ import { TEXT_HTML_EN } from "./text-markup.en"
 import { TEXT_HTML_HE } from "./text-markup.he"
 import { BLOG_HTML_EN, BLOG_PARTS_EN } from "./blog-markup.en"
 import { BLOG_HTML_HE, BLOG_PARTS_HE } from "./blog-markup.he"
-import { GUIDES_HTML_EN, GUIDES_PARTS_EN } from "./guides-markup.en"
-import { GUIDES_HTML_HE, GUIDES_PARTS_HE } from "./guides-markup.he"
 import { FEATURES_HTML_EN } from "./features-markup.en"
 import { FEATURES_HTML_HE } from "./features-markup.he"
+import { WHO_HTML_EN } from "./who-markup.en"
+import { WHO_HTML_HE } from "./who-markup.he"
+import { NF_HTML_EN } from "./nf-markup.en"
+import { NF_HTML_HE } from "./nf-markup.he"
+import { LEGAL_HTML_EN } from "./legal-markup.en"
+import { LEGAL_HTML_HE } from "./legal-markup.he"
 
 const SOURCE = {
   home: {
@@ -45,44 +49,59 @@ const SOURCE = {
     he: { html: BLOG_HTML_HE, faq: [] },
     en: { html: BLOG_HTML_EN, faq: [] },
   },
-  guides: {
-    he: { html: GUIDES_HTML_HE, faq: [] },
-    en: { html: GUIDES_HTML_EN, faq: [] },
-  },
   features: {
     he: { html: FEATURES_HTML_HE, faq: [] },
     en: { html: FEATURES_HTML_EN, faq: [] },
   },
+  who: {
+    he: { html: WHO_HTML_HE, faq: [] },
+    en: { html: WHO_HTML_EN, faq: [] },
+  },
+  nf: {
+    he: { html: NF_HTML_HE, faq: [] },
+    en: { html: NF_HTML_EN, faq: [] },
+  },
+  // the six legal pages (one markup per page, chosen by `legalPage`)
+  legal: {
+    he: { html: "", faq: [] },
+    en: { html: "", faq: [] },
+  },
 } as const
 
-const PARTS = {
-  blog: { he: BLOG_PARTS_HE, en: BLOG_PARTS_EN },
-  guides: { he: GUIDES_PARTS_HE, en: GUIDES_PARTS_EN },
-} as const
+export type LegalPage = keyof typeof LEGAL_HTML_HE
+const LEGAL_HTML = { he: LEGAL_HTML_HE, en: LEGAL_HTML_EN } as const
+// a legal page's breadcrumb: its own title (the sheet's h1)
+const LEGAL_LABEL: Record<"he" | "en", Record<LegalPage, string>> = {
+  he: { terms: "תנאי שימוש", privacy: "מדיניות פרטיות", cookies: "מדיניות עוגיות", accessibility: "הצהרת נגישות", cancel: "ביטול עסקה והחזרים", "acceptable-use": "שימוש מותר והסרת תוכן" },
+  en: { terms: "Terms of use", privacy: "Privacy policy", cookies: "Cookie policy", accessibility: "Accessibility statement", cancel: "Cancellation and refunds", "acceptable-use": "Acceptable use and content removal" },
+}
 
-const ROOT = { home: "uxh", pricing: "uxp", contact: "uxc", faq: "uxf", text: "uxt", blog: "uxb", guides: "uxg", features: "uxw" } as const
+const PARTS = { he: BLOG_PARTS_HE, en: BLOG_PARTS_EN } as const
+
+const ROOT = { home: "uxh", pricing: "uxp", contact: "uxc", faq: "uxf", text: "uxt", blog: "uxb", features: "uxw", who: "uxo", nf: "uxz", legal: "uxl" } as const
 
 // Each inner page: its address in both languages and its breadcrumb label.
 const PAGES = {
   features: { he: "/features", en: "/en/features", label: { he: "מה מקבלים", en: "What you get" } },
+  who: { he: "/for-who", en: "/en/for-who", label: { he: "למי זה מתאים", en: "Who it’s for" } },
   pricing: { he: "/pricing", en: "/en/pricing", label: { he: "מחירים", en: "Pricing" } },
   contact: { he: "/contact", en: "/en/contact", label: { he: "צור קשר", en: "Contact" } },
   faq: { he: "/faq", en: "/en/faq", label: { he: "שאלות נפוצות", en: "FAQ" } },
   blog: { he: "/blog", en: "/en/blog", label: { he: "מאמרים", en: "Blog" } },
-  guides: { he: "/growth-guides", en: "/en/growth-guides", label: { he: "מדריכי צמיחה", en: "Growth guides" } },
 } as const
 
 function cardsHtml(tpl: string, cards: readonly Card[]) {
   return cards.map((c) => fill(tpl, { HREF: c.href, K: c.k, T: c.t, P: c.p ? `<p>${c.p}</p>` : "", M: c.m, N: c.n ?? "" })).join("")
 }
 
-async function fillBlog(html: string, page: "blog" | "guides", lang: "he" | "en") {
-  const parts = PARTS[page][lang]
-  const guides = cardsHtml(parts.guide, guideCards(lang))
-  if (page === "guides") return html.replace("{{GUIDES}}", guides)
-  const [first, ...rest] = await articleCards(lang)
+function fillBlog(html: string, lang: "he" | "en") {
+  const parts = PARTS[lang]
+  const [first, ...rest] = articleCards(lang)
   const featured = fill(parts.featured, { HREF: first.href, K: first.k, T: first.t, P: first.p, M: first.m })
-  return html.replace("{{FEATURED}}", featured).replace("{{CARDS}}", cardsHtml(parts.card, rest)).replace("{{GUIDES}}", guides)
+  return html
+    .replace("{{FEATURED}}", featured)
+    .replace("{{CARDS}}", cardsHtml(parts.card, rest))
+    .replace("{{GUIDES}}", cardsHtml(parts.guide, guideCards(lang)))
 }
 
 /** A text page's own content (src/app/_home/legal), for the text-page template. */
@@ -118,15 +137,18 @@ function fillText(html: string, legal: LegalText, paths: { he: string; en: strin
  * server-rendered HTML, so it shows before any JS runs; HomeBehaviors then adds
  * the motion and interactions.
  */
-export async function HomePage({
+export function HomePage({
   lang,
   page = "home",
   legal,
+  legalPage,
   paths,
 }: {
   lang: "he" | "en"
   page?: keyof typeof SOURCE
   legal?: LegalText
+  /** page="legal": which of the six */
+  legalPage?: LegalPage
   paths?: { he: string; en: string }
 }) {
   const { faq } = SOURCE[page][lang]
@@ -138,14 +160,17 @@ export async function HomePage({
     html = fillText(html, legal, paths)
     current = paths[lang]
     crumbs = [{ label: legal.title }]
-  } else if (page !== "home") {
+  } else if (page === "legal") {
+    if (!legalPage) throw new Error("legal page needs legalPage")
+    html = LEGAL_HTML[lang][legalPage]
+    current = `${lang === "en" ? "/en" : ""}/${legalPage}`
+    crumbs = [{ label: LEGAL_LABEL[lang][legalPage] }]
+  } else if (page !== "home" && page !== "nf") {
     current = PAGES[page][lang]
     crumbs = [{ label: PAGES[page].label[lang] }]
-    if (page === "blog" || page === "guides") html = await fillBlog(html, page, lang)
+    if (page === "blog") html = fillBlog(html, lang)
   }
-  // the growth guides sit under the blog: its header link is marked as their section
-  const section = page === "guides" ? PAGES.blog[lang] : undefined
-  html = markCurrent(html, current, section).replace("{{CRUMB}}", current ? crumbHtml(lang, crumbs) : "")
+  html = markCurrent(html, current).replace("{{CRUMB}}", current ? crumbHtml(lang, crumbs) : "")
   const rootId = `${ROOT[page]}-${lang}`
   const faqLd = {
     "@context": "https://schema.org",

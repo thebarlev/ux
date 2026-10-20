@@ -48,6 +48,7 @@ export type IconName = keyof typeof ICONS
 
 export type TrioItem = { icon: IconName; title: string; text: string }
 export type Bar = { label: string; from?: number; to: number; value: string }
+/** `when` is an optional label above the title; the step number comes from the CSS counter */
 export type Step = { when: string; title: string; text: string }
 
 /** A visual in data form (growth guides). */
@@ -122,7 +123,7 @@ export function Timeline({ steps }: { steps: readonly Step[] }) {
     <ol className="ar-tl">
       {steps.map((s) => (
         <li key={s.title}>
-          <b>{s.when}</b>
+          {s.when ? <b>{s.when}</b> : null}
           <h3>{s.title}</h3>
           <p>{s.text}</p>
         </li>

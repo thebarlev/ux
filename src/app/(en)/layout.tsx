@@ -6,6 +6,7 @@ import { JsonLd, ORGANIZATION_SCHEMA, WEBSITE_SCHEMA } from "@/components/JsonLd
 import { DeferredScripts } from "@/components/DeferredScripts";
 import { SiteHeader } from "@/app/_components/layout/SiteHeader";
 import { LanguageBanner } from "@/app/_components/LanguageBanner";
+import { ConsentBanner } from "@/app/_home/ConsentBanner";
 import { TrackingProvider } from "@/app/_components/tracking/TrackingProvider";
 import { MetaPixelRouteTracker } from "@/app/_components/tracking/MetaPixelRouteTracker";
 import { getPixelId, metaPixelBootstrapScript } from "@/lib/analytics/meta-pixel";
@@ -101,6 +102,8 @@ export default function RootLayoutEn({
         <LeadPopupHost />
         <WhatsAppButton />
         <DeferredScripts />
+        {/* cookie banner and settings, on every page (tbl-027) */}
+        <ConsentBanner lang="en" />
       </body>
     </html>
   );

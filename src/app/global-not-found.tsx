@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Assistant } from "next/font/google"
 
 import NotFound from "./(he)/not-found"
+import { ConsentBanner } from "./_home/ConsentBanner"
 import "./globals.css"
 import "./mobile-type.css"
 import "./text-links.css"
@@ -17,7 +18,7 @@ const assistant = Assistant({
 })
 
 export const metadata: Metadata = {
-  title: "העמוד לא נמצא | Uxellent",
+  title: "העמוד לא נמצא | UXellent",
   robots: { index: false, follow: true },
 }
 
@@ -26,6 +27,7 @@ export default function GlobalNotFound() {
     <html lang="he" dir="rtl" className={assistant.variable}>
       <body className="antialiased font-sans">
         <NotFound />
+        <ConsentBanner lang="he" />
       </body>
     </html>
   )

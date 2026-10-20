@@ -1,34 +1,13 @@
 import type { Metadata } from "next"
 
 import { HomePage } from "@/app/_home/HomePage"
-import { LEGAL } from "@/app/_home/legal/privacy.he"
-import { JsonLd, webPageSchema } from "@/components/JsonLd"
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+import { legalMetadata } from "@/app/_home/legalPages"
 
-import "@/app/_home/text.he.css"
+import "@/app/_home/legal.he.css"
 
-export const metadata: Metadata = {
-  title: "מדיניות פרטיות | Uxellent",
-  description: "מדיניות הפרטיות של Uxellent מסבירה כיצד אנו אוספים, שומרים ומשתמשים במידע אישי באתר ובשירותים הדיגיטליים.",
-  alternates: {
-    canonical: "/privacy",
-    languages: heEnAlternateLanguages("/privacy", "/en/privacy"),
-  },
-}
+export const metadata: Metadata = legalMetadata("privacy", "he")
 
-// Text-page template (tbl-023); the text itself lives in src/app/_home/legal.
-export default function PrivacyPage() {
-  return (
-    <>
-      <JsonLd
-        data={webPageSchema({
-          name: "מדיניות פרטיות | Uxellent",
-          description: "מדיניות הפרטיות של Uxellent - כיצד אנו שומרים על המידע האישי שלך",
-          url: "https://uxellent.com/privacy",
-          dateModified: "2026-02-01",
-        })}
-      />
-      <HomePage lang="he" page="text" legal={LEGAL} paths={{ he: "/privacy", en: "/en/privacy" }} />
-    </>
-  )
+// Legal page (uxb-025 on the text-page template, tbl-028).
+export default function Page() {
+  return <HomePage lang="he" page="legal" legalPage="privacy" />
 }
