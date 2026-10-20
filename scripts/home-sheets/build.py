@@ -2,18 +2,20 @@
 """
 Builds the home pages (/ and /en) from Itzik's approved review sheets.
 
-    python3 scripts/home-sheets/build.py <home-sheet-dir> <pricing-sheet-dir>
+    python3 scripts/home-sheets/build.py <sheet-dir> <image-dir>
 
-<home-sheet-dir> holds uxb-009-v33-home-he.html, uxb-010-v4-home-en.html and
-hero-law.webp (tbl-019); <pricing-sheet-dir> holds uxb-011-v11-pricing-he.html
-and uxb-012-v2-pricing-en.html (tbl-020). The sheets are the source of truth for markup and CSS;
+<sheet-dir> holds the four approved sheets (tbl-021): uxb-009-v35-home-he.html,
+uxb-010-v6-home-en.html, uxb-011-v12-pricing-he.html, uxb-012-v3-pricing-en.html;
+<image-dir> holds hero-law.webp (tbl-019). The sheets are the source of truth for markup and CSS;
 this script only:
   - drops the review chrome (.sheet-label, every .ztag),
   - wires the links (anchors, pricing/contact/legal pages, platform URLs),
   - turns the base64 CSS backgrounds into real responsive <img> files,
   - scopes every CSS rule under .uxh-he / .uxh-en so nothing leaks to other
     pages, and points font-family at the next/font Heebo variable,
-  - adds the aria wiring the sheets leave out (tabs, carousel, menu).
+  - adds the aria wiring the sheets leave out (tabs, carousel, menu),
+  - leaves out the sheets' copy of the mobile type rule: the site keeps it in
+    one place, src/app/mobile-type.css, for these pages and every inner page.
 Outputs: src/app/_home/{markup,pricing-markup}.{he,en}.ts and
 {home,pricing}.{he,en}.css, plus public/home/*.{webp,avif}. Image variants need sharp (from node_modules).
 """
@@ -26,8 +28,8 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-HOME_SHEETS = sys.argv[1]
-PRICING_SHEETS = sys.argv[2]
+HOME_SHEETS = PRICING_SHEETS = sys.argv[1]
+IMAGES = sys.argv[2]
 OUT = os.path.join(ROOT, "src/app/_home")
 PUB = os.path.join(ROOT, "public/home")
 os.makedirs(OUT, exist_ok=True)
@@ -37,8 +39,8 @@ PLATFORM = "https://ai.uxellent.com"  # the address every CTA on the live site a
 
 LANGS = {
     "he": {
-        "file": "uxb-009-v33-home-he.html",
-        "pricing_file": "uxb-011-v11-pricing-he.html",
+        "file": "uxb-009-v35-home-he.html",
+        "pricing_file": "uxb-011-v12-pricing-he.html",
         "home": "/",
         "pricing": "/pricing",
         "pre": "",
@@ -50,6 +52,8 @@ LANGS = {
             "צור קשר": "/contact",
             "כניסה": PLATFORM,
             "הצטרפות חינם": PLATFORM,
+            "בנו לי אתר בחינם": PLATFORM,
+            "בנו לי אתר": PLATFORM,
             "תנאי שימוש": "/terms",
             "מדיניות פרטיות": "/privacy",
         },
@@ -59,8 +63,8 @@ LANGS = {
         "hero_alt": "",
     },
     "en": {
-        "file": "uxb-010-v4-home-en.html",
-        "pricing_file": "uxb-012-v2-pricing-en.html",
+        "file": "uxb-010-v6-home-en.html",
+        "pricing_file": "uxb-012-v3-pricing-en.html",
         "home": "/en",
         "pricing": "/en/pricing",
         "pre": "/en",
@@ -72,6 +76,8 @@ LANGS = {
             "Contact": "/en/contact",
             "Log in": PLATFORM,
             "Start free": PLATFORM,
+            "Build my site, free": PLATFORM,
+            "Build my site": PLATFORM,
             "Terms of use": "/en/terms",
             "Privacy policy": "/en/privacy",
         },
@@ -173,8 +179,8 @@ BLUE_A, BLUE_B = "#0f72b3", "#2a5fcf"
 
 
 def brand_blue_css(root):
-    btns = ",".join(f"{root} {s}" for s in (".prompt button", ".m-acts a.p", ".cl-btn", ".pl-badge"))
-    hovers = ",".join(f"{root} {s}" for s in (".prompt button:hover", ".m-acts a.p:hover", ".cl-btn:hover",
+    btns = ",".join(f"{root} {s}" for s in (".go-btn", ".m-acts a.p", ".cl-btn", ".pl-badge"))
+    hovers = ",".join(f"{root} {s}" for s in (".go-btn:hover", ".go-btn:focus-visible", ".m-acts a.p:hover", ".cl-btn:hover",
                                               ".pl-cta:hover", ".pl.pop .pl-cta:hover", ".pl-cta:focus-visible"))
     return f"""
 /* ---- one blue (tbl-020): buttons + blue band, hover = ink ---- */
@@ -278,9 +284,8 @@ def build(lang, cfg, images, page="home"):
 
 
 def home_markup(body, cfg, images):
-    # -- prompts: real buttons with a hook for the behaviour script
-    body = re.sub(r"<button>(.*?)</button>", r'<button type="button" data-uxh-go>\1</button>', body, flags=re.S)
-    body = body.replace("<input placeholder=", '<input type="text" enterkeyhint="go" data-uxh-in placeholder=')
+    # -- hero and closing are a single sign-up button each (tbl-021): no field
+    assert 'class="prompt"' not in body and "<input" not in body and body.count('class="go-btn"') == 2
 
     # -- "how it works" tabs: ids + controls, panels as tabpanels
     for k in range(4):
@@ -325,6 +330,9 @@ def home_markup(body, cfg, images):
 
 
 def finish_css(css, lang, home):
+    # the sheets' copy of the mobile type rule; the site has it once, in src/app/mobile-type.css
+    css, nmt = re.subn(r"/\* L-mobile-type.*?(?=/\* v35|\Z)", "", css, count=1, flags=re.S)
+    assert nmt == 1 and "font-size:20px!important" not in css
     css = re.sub(r"url\(data:image/[a-z+]+;base64,[A-Za-z0-9+/=]+\)", "none", css)
     # review chrome out of the CSS too: comments (they carry "uxb-0xx" version
     # notes) and every rule that targets .ztag / .sheet-label
@@ -384,7 +392,7 @@ def finish_css(css, lang, home):
 
 
 def main():
-    images = {"hero-law": sharp_variants(os.path.join(HOME_SHEETS, "hero-law.webp"), "hero-law")}
+    images = {"hero-law": sharp_variants(os.path.join(IMAGES, "hero-law.webp"), "hero-law")}
     # The "how it works" site shot only exists inside the sheet, as a base64 CSS background.
     he = open(os.path.join(HOME_SHEETS, LANGS["he"]["file"]), encoding="utf-8").read()
     m = re.search(r"\.a2-img\{background:url\(data:image/webp;base64,([A-Za-z0-9+/=]+)\)", he)

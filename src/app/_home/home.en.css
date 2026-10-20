@@ -805,6 +805,20 @@
 
 @media(max-width:1060px){.uxh-en .who2{padding-top:60px!important}.uxh-en .who2 h2{margin-top:48px}}
 
+
+.uxh-en .go{display:grid;justify-items:center;gap:16px;margin-top:36px}
+.uxh-en .go-btn{display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;border-radius:14px;padding:16px 36px;background:linear-gradient(90deg,#0f72b3,#2a5fcf);box-shadow:0 14px 30px -16px rgba(15,114,179,.75);transition:background .2s,box-shadow .2s}
+.uxh-en .go-btn:hover,.uxh-en .go-btn:focus-visible{background:var(--ink);box-shadow:0 14px 30px -16px rgba(11,18,32,.6)}
+.uxh-en .go-btn:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+.uxh-en .hero .go+.trust{margin-top:22px}
+.uxh-en .go-sub{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 12px;font-size:15px;color:var(--ink2)}
+.uxh-en .go-sub i{width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.55}
+.uxh-en .sub .br{display:block}
+@media(max-width:1060px){.uxh-en .go{margin-top:26px}.uxh-en .go-btn{font-size:18px!important}.uxh-en .go-sub{flex-wrap:nowrap;white-space:nowrap;font-size:15px}.uxh-en .sub .br{display:inline}}
+@media(max-width:360px){.uxh-en .go-sub{font-size:14px}}
+
+.uxh-en .hero .sub{max-width:680px!important}
+
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxh-en .gs-img,.uxh-en .a2-img{isolation:isolate}
 .uxh-en .uxh-bg,.uxh-en .uxh-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;display:block}
@@ -821,8 +835,8 @@
 
 /* ---- one blue (tbl-020): buttons + blue band, hover = ink ---- */
 .uxh-en{--blue-a:#0f72b3;--blue-b:#2a5fcf}
-.uxh-en .prompt button,.uxh-en .m-acts a.p,.uxh-en .cl-btn,.uxh-en .pl-badge{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;border-color:transparent!important;color:#fff!important}
-.uxh-en .prompt button:hover,.uxh-en .m-acts a.p:hover,.uxh-en .cl-btn:hover,.uxh-en .pl-cta:hover,.uxh-en .pl.pop .pl-cta:hover,.uxh-en .pl-cta:focus-visible{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important}
+.uxh-en .go-btn,.uxh-en .m-acts a.p,.uxh-en .cl-btn,.uxh-en .pl-badge{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;border-color:transparent!important;color:#fff!important}
+.uxh-en .go-btn:hover,.uxh-en .go-btn:focus-visible,.uxh-en .m-acts a.p:hover,.uxh-en .cl-btn:hover,.uxh-en .pl-cta:hover,.uxh-en .pl.pop .pl-cta:hover,.uxh-en .pl-cta:focus-visible{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important}
 .uxh-en #inc.sec{background:linear-gradient(100deg,var(--blue-a),var(--blue-b))!important}
 .uxh-en .pl.pop .pl-cta{border-color:var(--blue-a)!important;color:var(--blue-a)!important}
 .uxh-en .pl.pop .pl-cta:hover,.uxh-en .pl.pop .pl-cta:focus-visible{color:#fff!important}

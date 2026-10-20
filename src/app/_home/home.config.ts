@@ -1,6 +1,3 @@
-/** Platform start page; the prompt text goes along as ?p= (encoded). */
-export const PLATFORM_START_URL = "https://ai.uxellent.com/start"
-
 /**
  * The accessibility sentence in "built right" (נגיש לכולם / Accessible to
  * everyone). One string per language, kept here so the wording can be swapped

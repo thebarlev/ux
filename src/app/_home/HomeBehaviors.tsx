@@ -2,8 +2,6 @@
 
 import { useEffect } from "react"
 
-import { PLATFORM_START_URL } from "./home.config"
-
 type Lang = "he" | "en"
 
 const COPY = {
@@ -30,7 +28,7 @@ const ORB_ICONS = [
 /**
  * The sheets' behaviour, ported 1:1 (menu, benefits slider, "who it's for"
  * confetti orbs, "how it works" steps, "built right" rings) plus what the site
- * needs on top: prompt submit to the platform, keyboard support for the tabs,
+ * needs on top: keyboard support for the tabs,
  * pausing animations of sections that are off screen, and full cleanup.
  */
 export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) {
@@ -55,18 +53,6 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
     root.querySelectorAll<HTMLElement>("header, section, footer").forEach((s) => {
       s.classList.add("uxh-off")
       observe(s, (e) => s.classList.toggle("uxh-off", !e[0].isIntersecting), 0)
-    })
-
-    // -- prompts: send the typed text to the platform start page as ?p=
-    root.querySelectorAll<HTMLElement>(".prompt").forEach((p) => {
-      const input = p.querySelector<HTMLInputElement>("[data-uxh-in]")
-      const button = p.querySelector<HTMLButtonElement>("[data-uxh-go]")
-      const go = () => {
-        const v = (input?.value ?? "").trim()
-        window.location.href = v ? `${PLATFORM_START_URL}?p=${encodeURIComponent(v)}` : PLATFORM_START_URL
-      }
-      if (button) on(button, "click", go)
-      if (input) on(input, "keydown", (e) => { if (e.key === "Enter") go() })
     })
 
     // -- hamburger menu, turns into an X
@@ -134,55 +120,150 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
       reset()
     }
 
-    // -- "who it's for": new professions pop in with confetti
+    // -- "who it's for": no icon may touch another icon or the text, leave the
+    //    section, or be cut (tbl-021). The sheets place the icons by percent,
+    //    which only works at the widths they were drawn at, so every icon is
+    //    measured here and, if it collides, moved to the nearest free spot (or
+    //    left out when there is none). The new professions that pop in only
+    //    land on a free spot.
     const box = root.querySelector<HTMLElement>(".who2")
-    if (box && !reduced) {
-      // Both sheets position the orbs from the right (the CSS animates --mr/--mt).
-      const side = "right"
-      const mob = window.matchMedia("(max-width:1060px)").matches
-      const spots: Array<[number, number | string]> = mob
-        ? [[52, "calc(100% - 64px)"]]
-        : [[60, 5], [2, 38], [28, 93], [97, 10], [44, 96], [98, 88], [30, 5]]
-      const MAX = mob ? 1 : 3
-      let n = 0
-      let visible = false
-      const live: HTMLElement[] = []
-      const burst = (x: number, y: number) => {
-        for (let k = 0; k < 14; k++) {
-          const c = document.createElement("i")
-          c.className = "cf"
-          const a = Math.random() * Math.PI * 2
-          const d = 40 + Math.random() * 50
-          c.style.cssText = `${side}:${x}%;top:${y}%;--dx:${Math.cos(a) * d}px;--dy:${Math.sin(a) * d}px;--r:${Math.random() * 360}deg;background:${["#1990d8", "#7cc5f2", "#0b1220", "#c9e6f8"][k % 4]};${k % 3 ? "" : "border-radius:50%;"}`
-          box.appendChild(c)
-          window.setTimeout(() => c.remove(), 1100)
-        }
+    if (box) {
+      type Rect = { l: number; t: number; r: number; b: number }
+      const FLOAT = 14 // the float animation lifts an icon by up to 14px
+      const GAP = 12 // between icons
+      const TEXT_GAP = 16 // between an icon and the heading, text and star
+      const hit = (a: Rect, b: Rect, g: number) => a.l < b.r + g && b.l < a.r + g && a.t < b.b + g && b.t < a.b + g
+      // the box an icon (with its label) can cover, in section coordinates,
+      // from layout only, so the float and pop-in transforms do not matter
+      const rectOf = (o: HTMLElement, dx = 0, dy = 0): Rect => ({
+        l: o.offsetLeft + dx, r: o.offsetLeft + o.offsetWidth + dx,
+        t: o.offsetTop - FLOAT + dy, b: o.offsetTop + o.offsetHeight + dy,
+      })
+      const textRects = (): Rect[] => {
+        const s = box.getBoundingClientRect()
+        const out: Rect[] = []
+        box.querySelectorAll<HTMLElement>(".who2-c .who2-star, .who2-c h2, .who2-c p, .who2-c .no > *").forEach((el) => {
+          const rg = document.createRange()
+          rg.selectNodeContents(el)
+          const rs = el.classList.contains("who2-star") ? [el.getBoundingClientRect()] : [...rg.getClientRects()]
+          for (const q of rs) if (q.width && q.height) out.push({ l: q.left - s.left, r: q.right - s.left, t: q.top - s.top, b: q.bottom - s.top })
+        })
+        return out
       }
-      const add = () => {
-        const label = NEW_ORBS[lang][n % NEW_ORBS[lang].length]
-        const icon = ORB_ICONS[n % ORB_ICONS.length]
-        const [x, y] = spots[n % spots.length]
-        n++
-        const o = document.createElement("span")
-        o.className = "orb new"
-        o.setAttribute("aria-hidden", "true")
-        const yy = typeof y === "string" ? y : `${y}%`
-        o.style.cssText = `${side}:${x}%;top:${yy};--mr:${x}%;--mt:${yy}`
-        o.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icon}</svg><em>${label}</em>`
-        box.appendChild(o)
-        burst(x, typeof y === "string" ? 90 : y + 3)
-        live.push(o)
-        if (live.length > MAX) {
-          const r = live.shift()
-          if (r) {
-            r.classList.add("out")
-            window.setTimeout(() => r.remove(), 600)
+      // nearest free offset (up to 240px away), or null
+      const OFFSETS: Array<[number, number]> = [[0, 0]]
+      for (let r = 8; r <= 240; r += 8) for (let k = 0; k < 16; k++) OFFSETS.push([Math.round(r * Math.cos((k * Math.PI) / 8)), Math.round(r * Math.sin((k * Math.PI) / 8))])
+      const findSpot = (o: HTMLElement, taken: Rect[], text: Rect[], reach = 240) => {
+        const mob = window.matchMedia("(max-width:1060px)").matches
+        const edge = mob ? 6 : 24
+        const W = box.clientWidth
+        const H = box.clientHeight
+        for (const [dx, dy] of OFFSETS) {
+          if (Math.hypot(dx, dy) > reach) break
+          const q = rectOf(o, dx, dy)
+          if (q.l < edge || q.r > W - edge || q.t < 6 || q.b > H - 6) continue
+          if (text.some((t) => hit(q, t, TEXT_GAP)) || taken.some((t) => hit(q, t, GAP))) continue
+          return { dx, dy, q }
+        }
+        return null
+      }
+      const placed = new Map<HTMLElement, Rect>()
+      const layout = () => {
+        placed.clear()
+        const text = textRects()
+        const taken: Rect[] = []
+        box.querySelectorAll<HTMLElement>(".orb:not(.new)").forEach((o) => {
+          o.style.margin = ""
+          o.style.visibility = ""
+          if (getComputedStyle(o).display === "none") return
+          const f = findSpot(o, taken, text)
+          if (!f) { o.style.visibility = "hidden"; return }
+          // the sheets place icons from the right, so a move is margin-right/top
+          o.style.marginRight = `${-f.dx}px`
+          o.style.marginTop = `${f.dy}px`
+          taken.push(f.q)
+          placed.set(o, f.q)
+        })
+      }
+      let raf = 0
+      const relayout = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { layout(); dropPopped() }) }
+      let dropPopped = () => {}
+      layout()
+      void document.fonts?.ready.then(relayout)
+      on(window, "resize", relayout)
+      cleanups.push(() => cancelAnimationFrame(raf))
+
+      // -- new professions pop in with confetti
+      if (!reduced) {
+        let alive = true
+        cleanups.push(() => { alive = false })
+        // the sheet's spots first, then a few spare ones for widths where they are taken
+        const spotsDesk: Array<[number, number]> = [[60, 5], [2, 38], [30, 94], [94, 6], [44, 96], [92, 88], [48, 3], [14, 62], [84, 64], [70, 92], [24, 10]]
+        let n = 0
+        let visible = false
+        const live: HTMLElement[] = []
+        const fading = new Set<HTMLElement>()
+        dropPopped = () => { live.splice(0).forEach((o) => o.remove()) }
+        const burst = (x: number, y: number) => {
+          for (let k = 0; k < 14; k++) {
+            const c = document.createElement("i")
+            c.className = "cf"
+            const a = Math.random() * Math.PI * 2
+            const d = 40 + Math.random() * 50
+            c.style.cssText = `left:${x}px;top:${y}px;--dx:${Math.cos(a) * d}px;--dy:${Math.sin(a) * d}px;--r:${Math.random() * 360}deg;background:${["#1990d8", "#7cc5f2", "#0b1220", "#c9e6f8"][k % 4]};${k % 3 ? "" : "border-radius:50%;"}`
+            box.appendChild(c)
+            window.setTimeout(() => c.remove(), 1100)
           }
         }
+        const add = () => {
+          const mob = window.matchMedia("(max-width:1060px)").matches
+          const MAX = mob ? 1 : 3
+          // the oldest icon leaves first, and the new one comes in once it is gone
+          if (live.length >= MAX) {
+            const r = live.shift()
+            if (r) {
+              fading.add(r)
+              r.classList.add("out")
+              window.setTimeout(() => { r.remove(); fading.delete(r); pop(mob) }, 600)
+              return
+            }
+          }
+          pop(mob)
+        }
+        const pop = (mob: boolean) => {
+          if (!alive) return
+          const W = box.clientWidth
+          const H = box.clientHeight
+          const label = NEW_ORBS[lang][n % NEW_ORBS[lang].length]
+          const icon = ORB_ICONS[n % ORB_ICONS.length]
+          const o = document.createElement("span")
+          o.className = "orb new"
+          o.setAttribute("aria-hidden", "true")
+          o.style.visibility = "hidden"
+          o.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icon}</svg><em>${label}</em>`
+          box.appendChild(o)
+          const taken = [...placed.values(), ...[...live, ...fading].map((x) => rectOf(x))]
+          const text = textRects()
+          // try the sheet's spots in turn (mobile: bottom centre), each with a small nudge
+          const tries: Array<[number, number]> = mob ? [[52, H - 64]] : spotsDesk.map(([x, y]) => [x, (y / 100) * H])
+          let f: ReturnType<typeof findSpot> = null
+          for (let k = 0; k < tries.length && !f; k++) {
+            const [x, y] = tries[(n + k) % tries.length]
+            o.style.cssText = `visibility:hidden;right:${(x / 100) * W}px;top:${y}px;--mr:${(x / 100) * W}px;--mt:${y}px`
+            f = findSpot(o, taken, text, 72)
+          }
+          n++
+          if (!f) { o.remove(); return } // no free spot right now: skip this pop
+          const right = W - f.q.r
+          const top = f.q.t + FLOAT
+          o.style.cssText = `right:${right}px;top:${top}px;--mr:${right}px;--mt:${top}px`
+          burst((f.q.l + f.q.r) / 2, f.q.t + FLOAT + 24)
+          live.push(o)
+        }
+        observe(box, (e) => { visible = e[0].isIntersecting }, 0.3)
+        const t = window.setInterval(() => { if (visible) add() }, 2600)
+        cleanups.push(() => window.clearInterval(t))
       }
-      observe(box, (e) => { visible = e[0].isIntersecting }, 0.3)
-      const t = window.setInterval(() => { if (visible) add() }, 2600)
-      cleanups.push(() => window.clearInterval(t))
     }
 
     // -- "how it works": four steps that advance on their own while in view

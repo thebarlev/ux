@@ -3,6 +3,7 @@ import { Assistant } from "next/font/google"
 
 import NotFound from "./(he)/not-found"
 import "./globals.css"
+import "./mobile-type.css"
 
 // Unmatched URLs no longer have a single root layout to render inside (the
 // site has (he) and (en) root layouts), so this page brings its own html, font

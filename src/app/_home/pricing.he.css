@@ -919,6 +919,7 @@
 .uxp-he #inc .mq .inc{padding-bottom:0!important}
 @media(max-width:1060px){.uxp-he #plans.sec{padding-bottom:64px}.uxp-he #inc.sec{padding:64px 0!important}}
 
+
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxp-he .gs-img,.uxp-he .a2-img{isolation:isolate}
 .uxp-he .uxh-bg,.uxp-he .uxh-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;display:block}
@@ -935,8 +936,8 @@
 
 /* ---- one blue (tbl-020): buttons + blue band, hover = ink ---- */
 .uxp-he{--blue-a:#0f72b3;--blue-b:#2a5fcf}
-.uxp-he .prompt button,.uxp-he .m-acts a.p,.uxp-he .cl-btn,.uxp-he .pl-badge{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;border-color:transparent!important;color:#fff!important}
-.uxp-he .prompt button:hover,.uxp-he .m-acts a.p:hover,.uxp-he .cl-btn:hover,.uxp-he .pl-cta:hover,.uxp-he .pl.pop .pl-cta:hover,.uxp-he .pl-cta:focus-visible{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important}
+.uxp-he .go-btn,.uxp-he .m-acts a.p,.uxp-he .cl-btn,.uxp-he .pl-badge{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;border-color:transparent!important;color:#fff!important}
+.uxp-he .go-btn:hover,.uxp-he .go-btn:focus-visible,.uxp-he .m-acts a.p:hover,.uxp-he .cl-btn:hover,.uxp-he .pl-cta:hover,.uxp-he .pl.pop .pl-cta:hover,.uxp-he .pl-cta:focus-visible{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important}
 .uxp-he #inc.sec{background:linear-gradient(100deg,var(--blue-a),var(--blue-b))!important}
 .uxp-he .pl.pop .pl-cta{border-color:var(--blue-a)!important;color:var(--blue-a)!important}
 .uxp-he .pl.pop .pl-cta:hover,.uxp-he .pl.pop .pl-cta:focus-visible{color:#fff!important}
