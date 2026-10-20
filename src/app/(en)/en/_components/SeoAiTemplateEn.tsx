@@ -106,7 +106,8 @@ export function SeoAiTemplateEn({
 }: SeoAiTemplateEnProps) {
   return (
     <div className="min-h-screen bg-[#F4F1EC]" dir="ltr" data-keyword={dataKeyword}>
-      <div id="main" role="main" data-keyword={dataKeyword}>
+      {/* the English layout already provides <main id="main"> (tbl-024) */}
+      <div data-keyword={dataKeyword}>
         <ServiceHero
           {...hero}
           ariaLabel={hero.ariaLabel ?? (typeof hero.title === "string" ? hero.title : undefined)}

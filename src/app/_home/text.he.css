@@ -960,6 +960,21 @@
 .uxt-he .lang{gap:24px!important}.uxt-he .lang a{padding-inline:0!important}
 @media(max-width:1060px){.uxt-he .lg-s p,.uxt-he .lg-s li{font-size:20px!important}.uxt-he .lg-s h2{font-size:26px!important}.uxt-he .lg-s{scroll-margin-top:130px}}
 
+
+.uxt-he #hdr nav a[aria-current]{color:var(--ink);font-weight:700;position:relative}
+.uxt-he #hdr nav a[aria-current]::after{content:"";position:absolute;inset-inline:14px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,#0f72b3,#2a5fcf)}
+.uxt-he .menu a.m[aria-current]{color:var(--brand-d);font-weight:700}
+.uxt-he footer a.l[aria-current]{color:var(--ink);font-weight:700}
+.uxt-he .crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;color:var(--ink2);margin-bottom:clamp(24px,3vw,40px);text-align:start}
+.uxt-he .crumb a{color:var(--ink2)}.uxt-he .crumb a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.uxt-he .crumb svg{width:15px;height:15px;opacity:.6;flex:none}.uxt-he .crumb span[aria-current]{color:var(--ink);font-weight:600}
+.uxt-he .ft{grid-template-columns:1.5fr 1fr 1fr 1fr!important}
+@media(max-width:1060px){.uxt-he .crumb{font-size:16px}.uxt-he .ft{grid-template-columns:1fr 1fr!important}.uxt-he .ft>div:first-child{grid-column:1/-1}}
+@media(max-width:1180px) and (min-width:1061px){.uxt-he #hdr nav a{padding:8px 10px}}
+.uxt-he .skip{position:absolute;inset-inline-start:12px;top:-80px;z-index:200;background:var(--ink);color:#fff;font-weight:700;font-size:16px;padding:12px 18px;border-radius:12px;transition:top .15s}
+.uxt-he .skip:focus{top:12px;color:#fff}
+.uxt-he main:focus{outline:none}
+
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxt-he .gs-img,.uxt-he .a2-img{isolation:isolate}
 .uxt-he .uxh-bg,.uxt-he .uxh-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;display:block}
@@ -987,6 +1002,7 @@
 .uxt-he footer{padding-bottom:28px!important}
 .uxt-he .lang{gap:24px!important}
 .uxt-he .lang a{padding-inline:0!important;margin:0!important}
+.uxt-he .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
 
 /* ---- topic menu (tbl-023) ---- */
 .uxt-he .fq-nav a[aria-current=true]{background:var(--tint);color:var(--brand-d)}

@@ -956,6 +956,21 @@
 @media(max-width:768px){.uxc-he .ct-form{background:none;border:0;box-shadow:none;padding:0;border-radius:0}}
 @media(max-width:1060px){.uxc-he .ct-top{padding-top:36px}.uxc-he .ct{grid-template-columns:minmax(0,1fr);gap:32px}.uxc-he .ct-row{grid-template-columns:1fr}.uxc-he .ct-btn{justify-self:stretch}.uxc-he .ct-mail{margin-top:26px}}
 
+
+.uxc-he #hdr nav a[aria-current]{color:var(--ink);font-weight:700;position:relative}
+.uxc-he #hdr nav a[aria-current]::after{content:"";position:absolute;inset-inline:14px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,#0f72b3,#2a5fcf)}
+.uxc-he .menu a.m[aria-current]{color:var(--brand-d);font-weight:700}
+.uxc-he footer a.l[aria-current]{color:var(--ink);font-weight:700}
+.uxc-he .crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;color:var(--ink2);margin-bottom:clamp(24px,3vw,40px);text-align:start}
+.uxc-he .crumb a{color:var(--ink2)}.uxc-he .crumb a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.uxc-he .crumb svg{width:15px;height:15px;opacity:.6;flex:none}.uxc-he .crumb span[aria-current]{color:var(--ink);font-weight:600}
+.uxc-he .ft{grid-template-columns:1.5fr 1fr 1fr 1fr!important}
+@media(max-width:1060px){.uxc-he .crumb{font-size:16px}.uxc-he .ft{grid-template-columns:1fr 1fr!important}.uxc-he .ft>div:first-child{grid-column:1/-1}}
+@media(max-width:1180px) and (min-width:1061px){.uxc-he #hdr nav a{padding:8px 10px}}
+.uxc-he .skip{position:absolute;inset-inline-start:12px;top:-80px;z-index:200;background:var(--ink);color:#fff;font-weight:700;font-size:16px;padding:12px 18px;border-radius:12px;transition:top .15s}
+.uxc-he .skip:focus{top:12px;color:#fff}
+.uxc-he main:focus{outline:none}
+
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxc-he .gs-img,.uxc-he .a2-img{isolation:isolate}
 .uxc-he .uxh-bg,.uxc-he .uxh-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;display:block}
@@ -983,6 +998,7 @@
 .uxc-he footer{padding-bottom:28px!important}
 .uxc-he .lang{gap:24px!important}
 .uxc-he .lang a{padding-inline:0!important;margin:0!important}
+.uxc-he .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
 
 /* ---- contact form (tbl-022) ---- */
 .uxc-he [hidden]{display:none!important}

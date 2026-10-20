@@ -105,6 +105,11 @@ const nextConfig: NextConfig = {
     { source: "/en/account-ai/:path*", destination: "/en", statusCode: 301 },
     { source: "/en/marketing/ppc/:path*", destination: "/en", statusCode: 301 },
     { source: "/en/seo-ai/:path*", destination: "/en", statusCode: 301 },
+    // tbl-024: the English redesign pages that had no Hebrew twin left, and /en/marketing
+    { source: "/en/products/:path*", destination: "/en", statusCode: 301 },
+    { source: "/en/how-it-works/:path*", destination: "/en", statusCode: 301 },
+    { source: "/en/included/:path*", destination: "/en", statusCode: 301 },
+    { source: "/en/marketing", destination: "/en", statusCode: 301 },
   ],
   headers: async () => [
     {

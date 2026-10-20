@@ -9,14 +9,7 @@ locale: "en"
 slug: "green-invoice"
 ---
 
-import {
-  CommonMistakesAccordion,
-  BeforeSigningChecklist,
-  BusinessTypeTable,
-  SupportChecks,
-  HowToChooseSteps,
-  FinalSummaryGrid,
-} from "@/components/article-visuals-invoicing-en";
+import { DataTable, Callout } from "@/app/_home/article/visuals";
 
 When you choose an invoicing and receipt system, you're not just picking software. You're choosing regulatory, operational, and financial infrastructure for your business. Core criteria should be tax authority compliance, reliability, workflow speed, data security, and fit for your business size. If any of these is weak - you'll feel it quickly.
 
@@ -24,32 +17,93 @@ When you choose an invoicing and receipt system, you're not just picking softwar
 
 There are recurring failure points. Most businesses don't fail because they chose a bad system, but because they didn't know what to look for. The five most common pitfalls: incomplete regulation, systems that slow you down, pricing that hides costs, weak support, and insufficient data security.
 
-<CommonMistakesAccordion />
+<DataTable
+  head={["The pitfall", "What it looks like", "Why it matters"]}
+  rows={[
+    ["Incomplete regulation", "Allocation numbers not sent automatically to tax authority; Digital signature not personal or not compliant; Cumbersome reporting processes", "This isn't a nice feature - it's a legal requirement."],
+    ["System that slows you down", "Long production time per document at high volume; No API or integrations with existing tools; Limits on document count in free plan", "Every small delay adds up to hours by month end."],
+    ["Price that looks cheap - until you start using", "High processing fees not shown on pricing page; Paid add-ons for features that seem basic; Per-document cost that jumps fast past plan limit", "Check the full picture, not just the initial price."],
+    ["Support that doesn't really help", "Chatbot instead of a real person; Long response times exactly when you need urgent help; No onboarding support for initial setup", "When something breaks at a critical moment - you need fast human response."],
+    ["Weak data security", "No long-term automatic backup; No transparency on data retention policy; No compliance with security standards for financial data", "You're handling customer financial data - it's critical."],
+  ]}
+/>
 
 ## Checklist Before Signing
 
 Before committing to any system, go through these items in practice - not from the sales page. Open a trial account, issue real documents, and only then will you know if the system delivers what it promises.
 
-<BeforeSigningChecklist />
+<DataTable
+  head={["#", "What to check before signing"]}
+  rows={[
+    ["1", "Does the system fully support Israeli invoices and automatic allocation numbers?"],
+    ["2", "Is the digital signature personal and archived as required?"],
+    ["3", "Is there a real free trial without entering a credit card?"],
+    ["4", "Are there integrations or API if you'll need them later?"],
+    ["5", "What payment methods are available and what's the actual fee?"],
+    ["6", "Is the interface full in your language and mobile-friendly?"],
+    ["7", "What does support look like: phone? chat? response time?"],
+    ["8", "What reports exist and are they enough for your needs?"],
+    ["9", "What happens when you grow - does the price jump significantly?"],
+    ["10", "What do real users say in external reviews?"],
+  ]}
+/>
 
 ## How to Compare Systems Smartly
 
 Instead of focusing on the vendor name, compare by your needs. The system that fits a freelancer starting out won't necessarily fit a company with a team. Each business type has different priorities.
 
-<BusinessTypeTable />
+<DataTable
+  head={["Business type", "Priority 1", "Priority 2", "Priority 3"]}
+  rows={[
+    ["Freelancer / exempt", "Low monthly price", "Simple interface", "Basic payment"],
+    ["High-volume business", "Production speed", "Automation", "Advanced reports"],
+    ["SaaS / business with integrations", "Full API", "Webhooks", "CRM / ERP connection"],
+    ["Growing business", "Price scale", "User management", "Advanced permissions"],
+  ]}
+/>
 
 ## Service and Support - The Real Test
 
 When something breaks - and there's always that day - service quality matters as much as the system itself. A great system with poor support is worth less than a decent system with fast human help. Before choosing, ask yourself four key questions.
 
-<SupportChecks />
+<DataTable
+  head={["#", "Question to ask"]}
+  rows={[
+    ["1", "Is there human support in your language?"],
+    ["2", "How long to get a response?"],
+    ["3", "Is there structured onboarding?"],
+    ["4", "Can you leave easily without contract lock-in?"],
+  ]}
+/>
 
 ## How to Choose Right in Practice
 
 The right selection process doesn't end with reading reviews. It starts with real use. Only after issuing dozens of documents, contacting support with a real question, and calculating total annual cost - will you know what fits your business.
 
-<HowToChooseSteps locale="en" />
+<DataTable
+  head={["Step", "What to do"]}
+  rows={[
+    ["01", "Open 2–3 trial accounts in parallel"],
+    ["02", "Issue at least 50–100 real documents in each system"],
+    ["03", "Check payment, reports and export to accountant"],
+    ["04", "Contact support with a real question and see how they respond"],
+    ["05", "Calculate total cost by annual document count - not monthly"],
+  ]}
+/>
 
 In the end, the right choice isn't the one that looks best on the landing page. It's the one that feels clear, fast, and reliable after a week of real use. Let your business try before it commits.
 
-<FinalSummaryGrid />
+<DataTable
+  head={["Criterion", "What it covers"]}
+  rows={[
+    ["Regulatory compliance", "Local invoices, allocation numbers, compliant digital signature"],
+    ["Performance and speed", "Fast production at high volume, responsive interface"],
+    ["Data security", "Automatic backup, data transparency, security standards"],
+    ["Cost transparency", "No surprises, clear fees, open pricing"],
+    ["Growth fit", "Smooth scale, user management, plan flexibility"],
+  ]}
+/>
+
+<Callout>
+  Don't choose by ad or price alone. Choose by real fit for your business needs today - and in a year.
+</Callout>

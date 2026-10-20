@@ -959,6 +959,21 @@
 
 .uxc-en{letter-spacing:-.005em}.uxc-en h1,.uxc-en .pr-h{letter-spacing:-.035em!important}
 
+
+.uxc-en #hdr nav a[aria-current]{color:var(--ink);font-weight:700;position:relative}
+.uxc-en #hdr nav a[aria-current]::after{content:"";position:absolute;inset-inline:14px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,#0f72b3,#2a5fcf)}
+.uxc-en .menu a.m[aria-current]{color:var(--brand-d);font-weight:700}
+.uxc-en footer a.l[aria-current]{color:var(--ink);font-weight:700}
+.uxc-en .crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;color:var(--ink2);margin-bottom:clamp(24px,3vw,40px);text-align:start}
+.uxc-en .crumb a{color:var(--ink2)}.uxc-en .crumb a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.uxc-en .crumb svg{width:15px;height:15px;opacity:.6;flex:none}.uxc-en .crumb span[aria-current]{color:var(--ink);font-weight:600}
+.uxc-en .ft{grid-template-columns:1.5fr 1fr 1fr 1fr!important}
+@media(max-width:1060px){.uxc-en .crumb{font-size:16px}.uxc-en .ft{grid-template-columns:1fr 1fr!important}.uxc-en .ft>div:first-child{grid-column:1/-1}}
+@media(max-width:1180px) and (min-width:1061px){.uxc-en #hdr nav a{padding:8px 10px}}
+.uxc-en .skip{position:absolute;inset-inline-start:12px;top:-80px;z-index:200;background:var(--ink);color:#fff;font-weight:700;font-size:16px;padding:12px 18px;border-radius:12px;transition:top .15s}
+.uxc-en .skip:focus{top:12px;color:#fff}
+.uxc-en main:focus{outline:none}
+
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxc-en .gs-img,.uxc-en .a2-img{isolation:isolate}
 .uxc-en .uxh-bg,.uxc-en .uxh-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;display:block}
@@ -986,6 +1001,7 @@
 .uxc-en footer{padding-bottom:28px!important}
 .uxc-en .lang{gap:24px!important}
 .uxc-en .lang a{padding-inline:0!important;margin:0!important}
+.uxc-en .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
 
 /* ---- contact form (tbl-022) ---- */
 .uxc-en [hidden]{display:none!important}

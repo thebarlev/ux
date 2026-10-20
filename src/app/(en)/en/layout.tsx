@@ -1,8 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { HeaderEN } from "./_components/HeaderEN"
-import { FooterEN } from "./_components/FooterEN"
+import { SiteChrome } from "@/app/_home/SiteChrome"
 
 /** The 2026-08 redesign pages under /en own their full page chrome
  *  (RedesignShell → RedesignHeader/RedesignFooter, locale="en") — same
@@ -14,12 +13,16 @@ const REDESIGN_EN_PATTERNS = [
   /^\/en\/contact(\/|$)/,
   /^\/en\/faq(\/|$)/,
   /^\/en\/(privacy|terms|accessibility|account-deletion)(\/|$)/,
-  /^\/en\/products(\/|$)/,
-  /^\/en\/how-it-works(\/|$)/,
-  /^\/en\/included(\/|$)/,
   /^\/en\/why-us(\/|$)/,
   /^\/en\/blog(\/|$)/,
+  /^\/en\/growth-guides(\/|$)/,
 ]
+
+/** Breadcrumb names for the English pages that keep their own content (tbl-024). */
+const CRUMBS: Record<string, string> = {
+  "/en/lp/seo-services": "SEO services",
+  "/en/lp/digital-marketing": "Digital marketing",
+}
 
 export default function EnLayout({
   children,
@@ -31,12 +34,14 @@ export default function EnLayout({
     return <>{children}</>
   }
 
+  // everything else (the campaign pages, 404) gets the site's header and footer
+  const crumb = CRUMBS[pathname]
   return (
+    <SiteChrome lang="en" current={crumb ? pathname : undefined} crumbs={crumb ? [{ label: crumb }] : undefined}>
     <div
       dir="ltr"
       className="min-h-screen flex flex-col bg-[#F4F1EC] text-left"
     >
-      <HeaderEN />
 
       <main
         id="main"
@@ -46,7 +51,7 @@ export default function EnLayout({
         {children}
       </main>
 
-      <FooterEN />
     </div>
+    </SiteChrome>
   )
 }

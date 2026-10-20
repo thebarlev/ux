@@ -1,3 +1,4 @@
+import type { Visual } from "@/app/_home/article/visuals"
 import {
   growthGuides as growthGuideTopics,
 } from "@/lib/growth-guides/topics"
@@ -24,6 +25,8 @@ export type GrowthGuideSection = {
   paragraphs: readonly GrowthGuideParagraph[]
   bullets?: readonly string[]
   links?: readonly GrowthGuideLink[]
+  /** article-template visual shown after this section's text (tbl-024b) */
+  visual?: Visual
 }
 
 export type GrowthGuideFaqItem = {
@@ -74,7 +77,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to improve website SEO",
-              href: "/growth-guides/how-to-improve-website-seo",
+              href: "/en/growth-guides/how-to-improve-website-seo",
             },
             {
               type: "text",
@@ -115,7 +118,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to get customers online",
-              href: "/growth-guides/how-to-get-customers-online",
+              href: "/en/growth-guides/how-to-get-customers-online",
             },
             {
               type: "text",
@@ -128,6 +131,14 @@ const growthGuideContent = [
           "Improve page hierarchy, titles, headings, and internal links.",
           "Create supporting assets that move visitors from question to inquiry.",
         ],
+        visual: {
+          kind: "trio",
+          items: [
+            { icon: "search", title: "Map intent first", text: "Start with the topics buyers already search for, before you write anything new." },
+            { icon: "layout", title: "Clear page structure", text: "Better hierarchy, titles and headings make each page easy to read and easy to rank." },
+            { icon: "link", title: "Connected pages", text: "Supporting guides and internal links lead visitors from a question to an inquiry." },
+          ],
+        },
       },
       {
         id: "guide-actions",
@@ -142,6 +153,14 @@ const growthGuideContent = [
           "Link related pages together so authority flows through the site instead of stopping on isolated pages.",
           "Track organic sessions, contact clicks, and form submissions by landing page.",
         ],
+        visual: {
+          kind: "timeline",
+          steps: [
+            { when: "Step 1", title: "Fix the basics", text: "Audit your top five pages for speed, titles, H1s and calls to action." },
+            { when: "Step 2", title: "Build and connect", text: "Give each core service its own page, add FAQ content and link related pages." },
+            { when: "Step 3", title: "Measure by page", text: "Track organic sessions, contact clicks and form submissions for each landing page." },
+          ],
+        },
       },
       {
         id: "traffic-vow-cta",
@@ -178,17 +197,17 @@ const growthGuideContent = [
           },
           {
             label: "Read: How to Improve Website SEO",
-            href: "/growth-guides/how-to-improve-website-seo",
+            href: "/en/growth-guides/how-to-improve-website-seo",
             description: "Learn how to strengthen rankings by improving your existing pages.",
           },
           {
             label: "Read: How to Get Leads",
-            href: "/growth-guides/how-to-get-leads",
+            href: "/en/growth-guides/how-to-get-leads",
             description: "See how traffic, offer clarity, and follow-up work together.",
           },
           {
             label: "Read: How to Get Customers Online",
-            href: "/growth-guides/how-to-get-customers-online",
+            href: "/en/growth-guides/how-to-get-customers-online",
             description: "Focus on turning online demand into actual sales conversations.",
           },
         ],
@@ -301,7 +320,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to rank on Google fast",
-              href: "/growth-guides/how-to-rank-on-google-fast",
+              href: "/en/growth-guides/how-to-rank-on-google-fast",
             },
             {
               type: "text",
@@ -342,7 +361,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to get traffic to your website",
-              href: "/growth-guides/how-to-get-traffic-to-my-website",
+              href: "/en/growth-guides/how-to-get-traffic-to-my-website",
             },
             {
               type: "text",
@@ -369,6 +388,17 @@ const growthGuideContent = [
           "Improve crawlability by cleaning duplicate pages, thin pages, and broken links.",
           "Measure rankings together with qualified conversions, not rankings alone.",
         ],
+        visual: {
+          kind: "table",
+          caption: "What to fix and why",
+          head: ["Problem", "What to do", "Why it helps"],
+          rows: [
+            ["Vague titles and H1s", "Rewrite them to match the real query", "Searchers and Google see the fit right away"],
+            ["No proof, FAQs or process", "Add sections for pain points, proof, FAQs and next steps", "Visitors get answers and feel safer reaching out"],
+            ["Isolated pages", "Link them from related guides and service pages", "Authority reaches the pages that matter"],
+            ["Duplicate, thin or broken pages", "Clean them up or merge them", "The site is easier to crawl and understand"],
+          ],
+        },
       },
       {
         id: "seo-vow-cta",
@@ -405,17 +435,17 @@ const growthGuideContent = [
           },
           {
             label: "Read: How to Rank on Google Fast",
-            href: "/growth-guides/how-to-rank-on-google-fast",
+            href: "/en/growth-guides/how-to-rank-on-google-fast",
             description: "Learn where fast ranking gains usually come from.",
           },
           {
             label: "Read: How to Grow Small Business Online",
-            href: "/growth-guides/how-to-grow-small-business-online",
+            href: "/en/growth-guides/how-to-grow-small-business-online",
             description: "Connect SEO improvements with broader digital growth strategy.",
           },
           {
             label: "Read: How to Get Traffic to Your Website",
-            href: "/growth-guides/how-to-get-traffic-to-my-website",
+            href: "/en/growth-guides/how-to-get-traffic-to-my-website",
             description: "Turn SEO improvements into a steady traffic engine.",
           },
         ],
@@ -474,7 +504,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to promote my business online",
-              href: "/growth-guides/how-to-promote-my-business-online",
+              href: "/en/growth-guides/how-to-promote-my-business-online",
             },
             {
               type: "text",
@@ -515,7 +545,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to get customers online",
-              href: "/growth-guides/how-to-get-customers-online",
+              href: "/en/growth-guides/how-to-get-customers-online",
             },
             {
               type: "text",
@@ -528,6 +558,14 @@ const growthGuideContent = [
           "Use proof, examples, and trust markers to reduce hesitation.",
           "Build forms and booking flows that feel like the natural next step.",
         ],
+        visual: {
+          kind: "trio",
+          items: [
+            { icon: "link", title: "Matched intent", text: "Traffic source, page promise and CTA all point to the same need." },
+            { icon: "shield", title: "Proof up front", text: "Examples and trust markers answer doubts before they stop a visitor." },
+            { icon: "chat", title: "An easy next step", text: "Forms and booking flows feel like part of the page, not a hurdle." },
+          ],
+        },
       },
       {
         id: "guide-actions",
@@ -578,17 +616,17 @@ const growthGuideContent = [
           },
           {
             label: "Read: How to Promote My Business Online",
-            href: "/growth-guides/how-to-promote-my-business-online",
+            href: "/en/growth-guides/how-to-promote-my-business-online",
             description: "Choose channels that support demand, not just visibility.",
           },
           {
             label: "Read: How to Get Clients Without Ads",
-            href: "/growth-guides/how-to-get-clients-without-ads",
+            href: "/en/growth-guides/how-to-get-clients-without-ads",
             description: "Build a lead engine that does not depend on paid budget.",
           },
           {
             label: "Read: How to Get Customers Online",
-            href: "/growth-guides/how-to-get-customers-online",
+            href: "/en/growth-guides/how-to-get-customers-online",
             description: "Move from inquiries to real customer acquisition.",
           },
         ],
@@ -647,7 +685,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to get leads",
-              href: "/growth-guides/how-to-get-leads",
+              href: "/en/growth-guides/how-to-get-leads",
             },
             {
               type: "text",
@@ -688,7 +726,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to grow small business online",
-              href: "/growth-guides/how-to-grow-small-business-online",
+              href: "/en/growth-guides/how-to-grow-small-business-online",
             },
             {
               type: "text",
@@ -715,6 +753,14 @@ const growthGuideContent = [
           "Add social proof, case studies, and FAQs to reduce friction.",
           "Review performance by lead quality, not just reach or clicks.",
         ],
+        visual: {
+          kind: "timeline",
+          steps: [
+            { when: "Step 1", title: "Pick the offers", text: "Choose the offers and audiences you want to promote this quarter." },
+            { when: "Step 2", title: "Build matching pages", text: "Create a page and supporting content for each offer, with proof and FAQs." },
+            { when: "Step 3", title: "Judge by lead quality", text: "Review each channel by the leads it brings, not by reach or clicks." },
+          ],
+        },
       },
       {
         id: "promote-vow-cta",
@@ -751,17 +797,17 @@ const growthGuideContent = [
           },
           {
             label: "Read: How to Grow Small Business Online",
-            href: "/growth-guides/how-to-grow-small-business-online",
+            href: "/en/growth-guides/how-to-grow-small-business-online",
             description: "Turn promotion into a broader digital growth model.",
           },
           {
             label: "Read: How to Get Leads",
-            href: "/growth-guides/how-to-get-leads",
+            href: "/en/growth-guides/how-to-get-leads",
             description: "Improve the pages and funnels behind your campaigns.",
           },
           {
             label: "Read: How to Get Clients Without Ads",
-            href: "/growth-guides/how-to-get-clients-without-ads",
+            href: "/en/growth-guides/how-to-get-clients-without-ads",
             description: "See how to reduce dependence on paid acquisition.",
           },
         ],
@@ -820,7 +866,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to get leads",
-              href: "/growth-guides/how-to-get-leads",
+              href: "/en/growth-guides/how-to-get-leads",
             },
             {
               type: "text",
@@ -833,6 +879,16 @@ const growthGuideContent = [
           "The offer is unclear, so buyers compare and delay action.",
           "Pages do not guide visitors from awareness to decision.",
         ],
+        visual: {
+          kind: "table",
+          caption: "What stops buyers and what to do",
+          head: ["What stops buyers", "What to do"],
+          rows: [
+            ["Pages that do not convert", "Improve the pages people visit before a sale first"],
+            ["An unclear offer", "Lead with benefits and outcome-focused proof above the fold"],
+            ["No clear path to a decision", "Add comparison, FAQ and process sections"],
+          ],
+        },
       },
       {
         id: "customers-solution",
@@ -861,7 +917,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to get traffic to your website",
-              href: "/growth-guides/how-to-get-traffic-to-my-website",
+              href: "/en/growth-guides/how-to-get-traffic-to-my-website",
             },
             {
               type: "text",
@@ -924,17 +980,17 @@ const growthGuideContent = [
           },
           {
             label: "Read: How to Get Leads",
-            href: "/growth-guides/how-to-get-leads",
+            href: "/en/growth-guides/how-to-get-leads",
             description: "Strengthen the inquiry stage before chasing more volume.",
           },
           {
             label: "Read: How to Get Traffic to Your Website",
-            href: "/growth-guides/how-to-get-traffic-to-my-website",
+            href: "/en/growth-guides/how-to-get-traffic-to-my-website",
             description: "Build a healthier top of funnel through search and content.",
           },
           {
             label: "Read: How to Grow Small Business Online",
-            href: "/growth-guides/how-to-grow-small-business-online",
+            href: "/en/growth-guides/how-to-grow-small-business-online",
             description: "Connect acquisition to a bigger long-term growth strategy.",
           },
         ],
@@ -1035,7 +1091,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to improve website SEO",
-              href: "/growth-guides/how-to-improve-website-seo",
+              href: "/en/growth-guides/how-to-improve-website-seo",
             },
             {
               type: "text",
@@ -1076,7 +1132,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to get traffic to your website",
-              href: "/growth-guides/how-to-get-traffic-to-my-website",
+              href: "/en/growth-guides/how-to-get-traffic-to-my-website",
             },
             {
               type: "text",
@@ -1103,6 +1159,14 @@ const growthGuideContent = [
           "Link from stronger pages to the target page using natural anchor text.",
           "Remove thin or duplicate content that confuses topical authority.",
         ],
+        visual: {
+          kind: "timeline",
+          steps: [
+            { when: "Step 1", title: "Find pages close to winning", text: "List the pages ranking in positions 8 to 25 and start there." },
+            { when: "Step 2", title: "Improve the page", text: "Sharpen titles and H2s, then add FAQs, examples, proof and process details." },
+            { when: "Step 3", title: "Clean up and connect", text: "Link to it from stronger pages and remove thin or duplicate content." },
+          ],
+        },
       },
       {
         id: "rank-vow-cta",
@@ -1139,17 +1203,17 @@ const growthGuideContent = [
           },
           {
             label: "Read: How to Improve Website SEO",
-            href: "/growth-guides/how-to-improve-website-seo",
+            href: "/en/growth-guides/how-to-improve-website-seo",
             description: "Upgrade the fundamentals behind faster ranking movement.",
           },
           {
             label: "Read: How to Get Traffic to Your Website",
-            href: "/growth-guides/how-to-get-traffic-to-my-website",
+            href: "/en/growth-guides/how-to-get-traffic-to-my-website",
             description: "Turn ranking gains into sustainable traffic growth.",
           },
           {
             label: "Read: How to Get Clients Without Ads",
-            href: "/growth-guides/how-to-get-clients-without-ads",
+            href: "/en/growth-guides/how-to-get-clients-without-ads",
             description: "Use organic visibility to reduce acquisition costs.",
           },
         ],
@@ -1208,7 +1272,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to promote my business online",
-              href: "/growth-guides/how-to-promote-my-business-online",
+              href: "/en/growth-guides/how-to-promote-my-business-online",
             },
             {
               type: "text",
@@ -1249,7 +1313,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to improve website SEO",
-              href: "/growth-guides/how-to-improve-website-seo",
+              href: "/en/growth-guides/how-to-improve-website-seo",
             },
             {
               type: "text",
@@ -1262,6 +1326,14 @@ const growthGuideContent = [
           "Build pages that can rank, convert, and support follow-up at the same time.",
           "Use SEO and AI visibility as long-term leverage, not side projects.",
         ],
+        visual: {
+          kind: "trio",
+          items: [
+            { icon: "check", title: "Offers that pay", text: "Focus on the services and channels that bring measurable results." },
+            { icon: "layout", title: "Pages that do three jobs", text: "Each page should rank, convert and support follow-up." },
+            { icon: "chart", title: "Long-term leverage", text: "SEO and AI visibility keep working long after the work is done." },
+          ],
+        },
       },
       {
         id: "guide-actions",
@@ -1312,17 +1384,17 @@ const growthGuideContent = [
           },
           {
             label: "Read: How to Promote My Business Online",
-            href: "/growth-guides/how-to-promote-my-business-online",
+            href: "/en/growth-guides/how-to-promote-my-business-online",
             description: "Choose channels that are realistic and profitable to maintain.",
           },
           {
             label: "Read: How to Get Customers Online",
-            href: "/growth-guides/how-to-get-customers-online",
+            href: "/en/growth-guides/how-to-get-customers-online",
             description: "Strengthen the path from visibility to revenue.",
           },
           {
             label: "Read: How to Improve Website SEO",
-            href: "/growth-guides/how-to-improve-website-seo",
+            href: "/en/growth-guides/how-to-improve-website-seo",
             description: "Upgrade the pages that support long-term organic growth.",
           },
         ],
@@ -1381,7 +1453,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to get traffic to your website",
-              href: "/growth-guides/how-to-get-traffic-to-my-website",
+              href: "/en/growth-guides/how-to-get-traffic-to-my-website",
             },
             {
               type: "text",
@@ -1394,6 +1466,17 @@ const growthGuideContent = [
           "There is not enough content or proof to create trust without campaigns.",
           "Important pages are not structured to rank or convert consistently.",
         ],
+        visual: {
+          kind: "table",
+          caption: "Paid ads vs organic growth",
+          head: ["Topic", "Paid ads", "Organic growth"],
+          rows: [
+            ["Speed", "Fast results", "Takes a few months"],
+            ["When you stop", "Inquiries stop too", "Pages keep working"],
+            ["What you build", "Rented attention", "Earned attention that compounds"],
+            ["What it needs", "Ongoing spend", "Strong pages, content and proof"],
+          ],
+        },
       },
       {
         id: "clients-solution",
@@ -1422,7 +1505,7 @@ const growthGuideContent = [
             {
               type: "link",
               text: "how to get leads",
-              href: "/growth-guides/how-to-get-leads",
+              href: "/en/growth-guides/how-to-get-leads",
             },
             {
               type: "text",
@@ -1485,17 +1568,17 @@ const growthGuideContent = [
           },
           {
             label: "Read: How to Get Traffic to Your Website",
-            href: "/growth-guides/how-to-get-traffic-to-my-website",
+            href: "/en/growth-guides/how-to-get-traffic-to-my-website",
             description: "Build the top-of-funnel visibility needed for organic client growth.",
           },
           {
             label: "Read: How to Get Leads",
-            href: "/growth-guides/how-to-get-leads",
+            href: "/en/growth-guides/how-to-get-leads",
             description: "Improve the path from organic attention to inquiry.",
           },
           {
             label: "Read: How to Rank on Google Fast",
-            href: "/growth-guides/how-to-rank-on-google-fast",
+            href: "/en/growth-guides/how-to-rank-on-google-fast",
             description: "Prioritize the ranking opportunities that can move sooner.",
           },
         ],

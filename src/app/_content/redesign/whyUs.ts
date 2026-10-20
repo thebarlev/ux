@@ -3,11 +3,9 @@ import { getLiveDictionary, type Locale } from "@/content/i18n/dictionary"
 
 export async function getWhyUsContent(locale: Locale = "he") {
   const t = (await getLiveDictionary(locale)).whyUs
-  const prefix = locale === "en" ? "/en" : ""
   const [f1, f2, f3] = t.features
-  // The Hebrew /how-it-works, /products and /included are retired (tbl-023):
-  // in Hebrew these blocks have no link.
-  const cta = (label: string, path: string) => (locale === "en" ? { label: `${label} >`, href: `${prefix}${path}` } : undefined)
+  // The blocks used to link to /how-it-works, /products and /included, which are
+  // retired in both languages (tbl-023, tbl-024), so they have no link.
 
   const hero = {
     eyebrow: t.hero.eyebrow,
@@ -22,7 +20,6 @@ export async function getWhyUsContent(locale: Locale = "he") {
       title: f1.title,
       body: f1.body,
       chips: f1.chips,
-      cta: cta(f1.ctaLabel, "/how-it-works"),
       viz: { kind: "composer", typingText: f1.vizComposerText! },
     },
     {
@@ -30,7 +27,6 @@ export async function getWhyUsContent(locale: Locale = "he") {
       title: f2.title,
       body: f2.body,
       chips: f2.chips,
-      cta: cta(f2.ctaLabel, "/products"),
       flip: true,
       viz: {
         kind: "studio",
@@ -45,7 +41,6 @@ export async function getWhyUsContent(locale: Locale = "he") {
       title: f3.title,
       body: f3.body,
       chips: f3.chips,
-      cta: cta(f3.ctaLabel, "/included"),
       viz: {
         kind: "serp",
         url: "yourname.uxellent.site",

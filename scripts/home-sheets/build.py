@@ -2,14 +2,18 @@
 """
 Builds the home pages (/ and /en) from Itzik's approved review sheets.
 
-    python3 scripts/home-sheets/build.py <sheet-dir> <contact-sheet-dir> <image-dir> <page-sheet-dir>
+    python3 scripts/home-sheets/build.py <sheet-dir> <contact-sheet-dir> <image-dir> <page-sheet-dir> <nav-sheet-dir>
 
 <sheet-dir> holds the four approved sheets (tbl-021): uxb-009-v35-home-he.html,
 uxb-010-v6-home-en.html, uxb-011-v12-pricing-he.html, uxb-012-v3-pricing-en.html;
 <contact-sheet-dir> holds uxb-013-v6-contact-he.html and uxb-014-v2-contact-en.html
 (tbl-022); <image-dir> holds hero-law.webp (tbl-019); <page-sheet-dir> holds
 uxb-015-v1-faq-he.html, uxb-016-v1-faq-en.html and the text-page templates
-uxb-017-v1-text-page-he.html, uxb-018-v1-text-page-en.html (tbl-023). The sheets are the source of truth for markup and CSS;
+uxb-017-v1-text-page-he.html, uxb-018-v1-text-page-en.html (tbl-023); <nav-sheet-dir> holds
+uxb-021-v2-navkit-reference-he.html (header, mobile menu, breadcrumbs and footer for
+every page), uxb-019-v1-blog-he.html and uxb-020-v2-article-he.html (tbl-024).
+The English blog and article pages are built from the Hebrew sheets with the
+English texts below (there is no English sheet for them). The sheets are the source of truth for markup and CSS;
 this script only:
   - drops the review chrome (.sheet-label, every .ztag),
   - wires the links (anchors, pricing/contact/legal pages, platform URLs),
@@ -35,6 +39,7 @@ HOME_SHEETS = PRICING_SHEETS = sys.argv[1]
 CONTACT_SHEETS = sys.argv[2]
 IMAGES = sys.argv[3]
 PAGE_SHEETS = sys.argv[4]
+NAV_SHEETS = sys.argv[5]
 OUT = os.path.join(ROOT, "src/app/_home")
 PUB = os.path.join(ROOT, "public/home")
 os.makedirs(OUT, exist_ok=True)
@@ -50,6 +55,7 @@ LANGS = {
         "faq_file": "uxb-015-v1-faq-he.html",
         "text_file": "uxb-017-v1-text-page-he.html",
         "home": "/",
+        "blog": "/blog",
         "pricing": "/pricing",
         "contact": "/contact",
         "faq": "/faq",
@@ -57,6 +63,9 @@ LANGS = {
         "nav": {
             "איך זה עובד": "#how",
             "מה מקבלים": "#ben",
+            "למי זה מתאים": "#who",
+            "מאמרים": "/blog",
+            "הצהרת נגישות": "/accessibility",
             "מחירים": "/pricing",
             "שאלות נפוצות": "/faq",
             "צור קשר": "/contact",
@@ -83,6 +92,7 @@ LANGS = {
         "faq_file": "uxb-016-v1-faq-en.html",
         "text_file": "uxb-018-v1-text-page-en.html",
         "home": "/en",
+        "blog": "/en/blog",
         "pricing": "/en/pricing",
         "contact": "/en/contact",
         "faq": "/en/faq",
@@ -90,6 +100,9 @@ LANGS = {
         "nav": {
             "How it works": "#how",
             "What you get": "#ben",
+            "Who it’s for": "#who",
+            "Blog": "/en/blog",
+            "Accessibility statement": "/en/accessibility",
             "Pricing": "/en/pricing",
             "FAQ": "/en/faq",
             "Contact": "/en/contact",
@@ -226,16 +239,26 @@ def build(lang, cfg, images, page="home"):
         "contact": os.path.join(CONTACT_SHEETS, cfg["contact_file"]),
         "faq": os.path.join(PAGE_SHEETS, cfg["faq_file"]),
         "text": os.path.join(PAGE_SHEETS, cfg["text_file"]),
+        "blog": os.path.join(NAV_SHEETS, BLOG_SHEET),
+        "guides": os.path.join(NAV_SHEETS, BLOG_SHEET),
+        "article": os.path.join(NAV_SHEETS, ARTICLE_SHEET),
     }[page]
     src = open(sheet, encoding="utf-8").read()
     css = re.search(r"<style[^>]*>(.*?)</style>", src, re.S).group(1)
-    body = re.search(r"<body[^>]*>(.*)</body>", src, re.S).group(1)
-    body = re.sub(r"<script.*?</script>", "", body, flags=re.S)
+    body = sheet_body(src)
 
-    # -- review chrome out
-    body = re.sub(r'<div class="sheet-label">.*?</div>\s*', "", body, flags=re.S)
-    body = re.sub(r'<span class="ztag"[^>]*>.*?</span>', "", body, flags=re.S)
-    assert "ztag" not in body and "sheet-label" not in body and "uxb-0" not in body
+    # -- one header, mobile menu and footer on every page (navkit, tbl-024)
+    head, foot = chrome(lang)
+    body, nh = re.subn(r"<header id=\"hdr\">.*?</header>", lambda m: head, body, count=1, flags=re.S)
+    body, nf = re.subn(r"<footer\b.*?</footer>", lambda m: foot, body, count=1, flags=re.S)
+    assert (nh, nf) == (1, 1), (page, nh, nf)
+    if lang == "en" and page in ("blog", "guides", "article"):
+        body = english_page(body, page)
+        css = css.replace("text-align:right", "text-align:start")
+    if page in ("blog", "guides"):
+        body = blog_markup(body, lang, cfg, page)
+    elif page == "article":
+        body = article_markup(body, lang, cfg)
 
     # -- links
     body = body.replace('<a href="#"><svg class="logo-svg"', f'<a href="{cfg["home"]}" aria-label="{cfg["logo_label"]}"><svg class="logo-svg"', 1)
@@ -246,9 +269,6 @@ def build(lang, cfg, images, page="home"):
         for k, v in nav.items():
             if v.startswith("#"):
                 nav[k] = ("/" if cfg["home"] == "/" else cfg["home"]) + v
-        body = body.replace('href="#how"', f'href="{nav[next(k for k in nav if cfg["nav"][k] == "#how")]}"')
-    # the FAQ has its own page (tbl-023): the footer link goes there from every page
-    body = body.replace('class="l" href="#faq"', f'class="l" href="{cfg["faq"]}"')
     if page == "pricing":
         # plan buttons: same platform URLs as the live pricing page, billing follows the switch
         slugs = iter(["free", "start", "business", "pro"])
@@ -272,8 +292,7 @@ def build(lang, cfg, images, page="home"):
         href = nav.get(text.strip())
         assert href, f"no target for link {text!r} ({lang})"
         attrs = attrs.replace('href="#"', 'href="' + href + '"')
-        if page in cfg and href == cfg[page] and "aria-current" not in attrs:
-            attrs += ' aria-current="page"'
+        # the current page is marked when the page renders (HomePage markCurrent)
         return "<a" + attrs + ">" + text + "</a>"
 
     body = re.sub(r"<a([^>]*)>([^<]*)</a>", link, body)
@@ -290,6 +309,8 @@ def build(lang, cfg, images, page="home"):
         body = faq_markup(body, lang, cfg)
     elif page == "text":
         body = text_markup(body, lang, cfg)
+    elif page in ("blog", "guides", "article"):
+        pass  # done before the links (see above)
     else:
         assert body.count('<div class="bill"') == 1 and body.count('class="mq"') == 1
         body = body.replace('<button role="radio"', '<button type="button" role="radio"')
@@ -299,8 +320,11 @@ def build(lang, cfg, images, page="home"):
         body = body.replace('<div class="plans">', f'<h2 class="uxh-vh">{"חבילות" if lang == "he" else "Plans"}</h2><div class="plans">')
 
     # -- footer column titles become h2 (heading order), styled as before
-    assert body.count("<h4>") == 2, "expected two footer h4"
+    assert body.count("<h4>") == 3, "expected three footer h4"
     body = body.replace("<h4>", "<h2>").replace("</h4>", "</h2>")
+
+    # -- skip link, main landmark, breadcrumbs slot (tbl-024 accessibility pass)
+    body = landmarks(body, lang, home)
 
     # -- CSS: no data URIs, scoped, Heebo from next/font, a few additions
     css = finish_css(css, lang, page)
@@ -310,7 +334,7 @@ def build(lang, cfg, images, page="home"):
         {"q": re.sub(r"<[^>]+>", "", q).strip(), "a": re.sub(r"<[^>]+>", "", a).strip()}
         for q, a in re.findall(r"<summary>(.*?)<span class=\"pm\">\+</span></summary><div class=\"ans\">(.*?)</div>", body, re.S)
     ]
-    want = {"home": 9, "pricing": 6, "contact": 0, "faq": 18, "text": 0}[page]
+    want = {"home": 9, "pricing": 6, "contact": 0, "faq": 18, "text": 0, "blog": 0, "guides": 0, "article": 0}[page]
     assert len(faq) == want, f"expected {want} FAQ entries in {page}/{lang}, got {len(faq)}"
     name = page.upper()
     ts = (
@@ -318,6 +342,10 @@ def build(lang, cfg, images, page="home"):
         f"export const {name}_HTML_{lang.upper()} = {json.dumps(body.strip(), ensure_ascii=False)}\n\n"
         f"export const {name}_FAQ_{lang.upper()} = {json.dumps(faq, ensure_ascii=False, indent=2)} as const\n"
     )
+    if page in ("blog", "guides", "article"):
+        ts += extra_parts(body, lang, page)
+    if page == "article":
+        write_chrome(body, css, lang)
     open(os.path.join(OUT, f"{'markup' if home else page + '-markup'}.{lang}.ts"), "w", encoding="utf-8").write(ts)
     print(page, lang, "markup", len(body), "css", len(css), "faq", len(faq))
 
@@ -371,7 +399,7 @@ CONTACT_CSS = """
 """
 
 
-ROOTS = {"home": "uxh", "pricing": "uxp", "contact": "uxc", "faq": "uxf", "text": "uxt"}
+ROOTS = {"home": "uxh", "pricing": "uxp", "contact": "uxc", "faq": "uxf", "text": "uxt", "blog": "uxb", "guides": "uxg", "article": "uxa"}
 
 
 def faq_markup(body, lang, cfg):
@@ -403,6 +431,7 @@ SITE_CSS = """
 {root} footer{padding-bottom:28px!important}
 {root} .lang{gap:24px!important}
 {root} .lang a{padding-inline:0!important;margin:0!important}
+{root} .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
 """
 
 # FAQ page and the text pages' table of contents (tbl-023).
@@ -427,6 +456,274 @@ TEXT_CSS = """
 {root} .lg-s p:empty{display:none}
 @media(min-width:1061px){{root} .lg .fq-nav{max-height:calc(100vh - 130px);overflow-y:auto;scrollbar-width:thin}}
 @media(max-width:1060px){{root} .lg-s h3{font-size:22px!important}{root} .lg-s h4{font-size:20px!important}{root} .lg-date{font-size:16px!important}}
+"""
+
+
+BLOG_SHEET = "uxb-019-v1-blog-he.html"
+ARTICLE_SHEET = "uxb-020-v2-article-he.html"
+NAVKIT_SHEET = "uxb-021-v2-navkit-reference-he.html"
+
+
+def sheet_body(src):
+    """The sheet's body without its scripts and review chrome."""
+    body = re.search(r"<body[^>]*>(.*)</body>", src, re.S).group(1)
+    body = re.sub(r"<script.*?</script>", "", body, flags=re.S)
+    body = re.sub(r'<div class="sheet-label">.*?</div>\s*', "", body, flags=re.S)
+    body = re.sub(r'<span class="ztag"[^>]*>.*?</span>', "", body, flags=re.S)
+    assert "ztag" not in body and "sheet-label" not in body and "uxb-0" not in body
+    return body
+
+
+# English for the navkit chrome (the reference sheet is Hebrew only), in the
+# wording the English sheets already use.
+CHROME_EN = {
+    "מה מקבלים": "What you get", "למי זה מתאים": "Who it’s for", "מחירים": "Pricing", "מאמרים": "Blog",
+    "שאלות נפוצות": "FAQ", "צור קשר": "Contact", "כניסה": "Log in", "הצטרפות חינם": "Start free",
+    "איך זה עובד": "How it works", "האתר": "Product", "חשבון": "Account", "מידע": "Info",
+    "תנאי שימוש": "Terms of use", "מדיניות פרטיות": "Privacy policy", "הצהרת נגישות": "Accessibility statement",
+}
+
+
+def chrome(lang):
+    """Header, mobile menu and footer from the navkit reference (tbl-024), for every page."""
+    body = sheet_body(open(os.path.join(NAV_SHEETS, NAVKIT_SHEET), encoding="utf-8").read())
+    head = re.search(r'<header id="hdr">.*?</header>', body, re.S).group(0)
+    foot = re.search(r"<footer\b.*?</footer>", body, re.S).group(0)
+    # the sheet marks its own page; the site marks the current page when it renders
+    head, foot = head.replace(' aria-current="page"', ""), foot.replace(' aria-current="page"', "")
+    if lang == "he":
+        return head, foot
+    for he, en in CHROME_EN.items():
+        head = head.replace(f">{he}<", f">{en}<")
+        foot = foot.replace(f">{he}<", f">{en}<")
+    head = head.replace('aria-label="ראשי"', 'aria-label="Main"').replace('aria-label="תפריט"', 'aria-label="Menu"')
+    # footer lead and points: the English sheet's
+    en_body = sheet_body(open(os.path.join(PAGE_SHEETS, LANGS["en"]["faq_file"]), encoding="utf-8").read())
+    for cls in ("ft-lead", "ft-pts"):
+        tag = "p" if cls == "ft-lead" else "ul"
+        en_part = re.search(rf'<{tag} class="{cls}">.*?</{tag}>', en_body, re.S).group(0)
+        foot, n = re.subn(rf'<{tag} class="{cls}">.*?</{tag}>', lambda m: en_part, foot, count=1, flags=re.S)
+        assert n == 1, cls
+    foot = foot.replace('hreflang="he" aria-current="true"', 'hreflang="he"').replace('hreflang="en">', 'hreflang="en" aria-current="true">')
+    assert not re.search(r"[֐-׿]", re.sub(r'lang="he"[^>]*>[^<]*<', "", foot + head)), "Hebrew left in the English chrome"
+    return head, foot
+
+
+# English texts for the blog, guides and article pages (built from the Hebrew sheets).
+BLOG_EN = {
+    'דברים שלמדנו <span class="bl">תוך כדי עבודה.</span>': 'Things we learned <span class="bl">on the job.</span>',
+    "מאמרים קצרים על אתרים, קידום ו-AI, לעסקים שמוכרים שירות.": "Short articles on websites, search and AI, for businesses that sell a service.",
+    'מדריכי <span class="bl">צמיחה.</span>': 'Growth <span class="bl">guides.</span>',
+    "מדריכים קצרים ומדויקים על SEO, תנועה, לידים וקידום דיגיטלי.": "Short, precise guides on SEO, traffic, leads and digital marketing.",
+    'aria-label="במאמר הזה"': 'aria-label="In this article"',
+}
+
+
+def english_page(body, page):
+    for he, en in BLOG_EN.items():
+        body = body.replace(he, en)
+    # closing: the English sheets' closing section
+    en_body = sheet_body(open(os.path.join(PAGE_SHEETS, LANGS["en"]["faq_file"]), encoding="utf-8").read())
+    en_close = re.search(r'<div class="closing">.*?</div></div>', en_body, re.S).group(0)
+    body, n = re.subn(r'<div class="closing">.*?</div></div>', lambda m: en_close, body, count=1, flags=re.S)
+    assert n == 1
+    return body
+
+
+PARTS = {}
+
+
+def blog_markup(body, lang, cfg, page):
+    """Blog index /blog and growth guides /growth-guides (uxb-019, tbl-024): the
+    cards become templates that HomePage fills from the articles and guides."""
+    feat = re.search(r'<a class="bl-feat" href="#">.*?</a>(?=<div class="bl-cards">)', body, re.S).group(0)
+    card = re.search(r'<a class="bl-c" href="#">.*?</a>', body, re.S).group(0)
+    guide = re.search(r'<a class="bl-g" href="#">.*?</a>', body, re.S).group(0)
+    tok = lambda html: (re.sub(r'<span class="bl-k">[^<]*</span>', '<span class="bl-k">{{K}}</span>', html)
+                        .replace('href="#"', 'href="{{HREF}}"'))
+    feat = tok(feat)
+    feat = re.sub(r"<h2>.*?</h2>", "<h2>{{T}}</h2>", feat, flags=re.S)
+    feat = re.sub(r"<p>.*?</p>", "<p>{{P}}</p>", feat, flags=re.S)
+    feat = re.sub(r'<span class="bl-m">[^<]*<i>', '<span class="bl-m">{{M}} <i aria-hidden="true">', feat)
+    card = tok(card)
+    card = re.sub(r"<h3>.*?</h3>", "<h3>{{T}}</h3>", card, flags=re.S)
+    card = re.sub(r"<p>.*?</p>", "{{P}}", card, flags=re.S)
+    card = re.sub(r'<span class="bl-m">[^<]*</span>', '<span class="bl-m">{{M}}</span>', card)
+    guide = tok(guide)
+    guide = re.sub(r'<span class="bl-n">[^<]*</span>', '<span class="bl-n">{{N}}</span>', guide)
+    guide = re.sub(r"<h3>.*?</h3>", "<h3>{{T}}</h3>", guide, flags=re.S)
+    guide = re.sub(r"<p>.*?</p>", "<p>{{P}}</p>", guide, flags=re.S)
+    PARTS[(lang, page)] = {"featured": feat, "card": card, "guide": guide}
+
+    top = '<div class="bl-top">{{FEATURED}}<div class="bl-cards">{{CARDS}}</div></div>'
+    body, n1 = re.subn(r'<div class="bl-top">.*?</a></div></div>', lambda m: top, body, count=1, flags=re.S)
+    body, n2 = re.subn(r'<div class="bl-grid">.*?</a></div>', lambda m: '<div class="bl-grid">{{GUIDES}}</div>', body, count=1, flags=re.S)
+    assert (n1, n2) == (1, 1), (n1, n2)
+    paths = ("/blog", "/en/blog") if page == "blog" else ("/growth-guides", "/en/growth-guides")
+    if page == "guides":
+        # same template with the guides only: the guides take the top of the page
+        h1, lead = ('מדריכי <span class="bl">צמיחה.</span>', "מדריכים קצרים ומדויקים על SEO, תנועה, לידים וקידום דיגיטלי.")
+        if lang == "en":
+            h1, lead = BLOG_EN[h1], BLOG_EN[lead]
+        body = re.sub(r'(<h1 class="pr-h">).*?(</h1>)', lambda m: m.group(1) + h1 + m.group(2), body, count=1, flags=re.S)
+        body = re.sub(r'(<p class="pr-lead">).*?(</p>)', lambda m: m.group(1) + lead + m.group(2), body, count=1, flags=re.S)
+        # heading order: the guide titles are h3, so a visually hidden h2 names the list
+        body = body.replace(top, f'<h2 class="uxh-vh">{"המדריכים" if lang == "he" else "The guides"}</h2><div class="bl-grid">{{{{GUIDES}}}}</div>', 1)
+        body, n = re.subn(r'<section class="sec zone" id="guides">.*?</section>\s*', "", body, count=1, flags=re.S)
+        assert n == 1
+    body = body.replace('<a href="/" lang="he"', f'<a href="{paths[0]}" lang="he"').replace('<a href="/en" lang="en"', f'<a href="{paths[1]}" lang="en"')
+    return body
+
+
+def article_markup(body, lang, cfg):
+    """Article template (uxb-020, tbl-024b): the article itself is React (MDX or
+    guide data, see ArticlePage); this keeps the related cards and the closing."""
+    i = body.index('<section class="sec zone ct-top" id="article">')
+    j = body.index('<section class="sec zone" id="related">')
+    body = body[:i] + "{{ARTICLE}}" + body[j:]
+    card = re.search(r'<div class="ar-rel">(<a class="bl-c" href="#">.*?</a>)', body, re.S).group(1)
+    card = re.sub(r'<span class="bl-k">[^<]*</span>', '<span class="bl-k">{{K}}</span>', card).replace('href="#"', 'href="{{HREF}}"')
+    card = re.sub(r"<h3>.*?</h3>", "<h3>{{T}}</h3>", card, flags=re.S)
+    card = re.sub(r'<span class="bl-m">[^<]*</span>', '<span class="bl-m">{{M}}</span>', card)
+    PARTS[(lang, "article")] = {"card": card}
+    body, n1 = re.subn(r'<div class="ar-rel">.*?</a></div>', lambda m: '<div class="ar-rel">{{RELATED}}</div>', body, count=1, flags=re.S)
+    body, n2 = re.subn(r'(<section class="sec zone" id="related"><div class="wrap">\s*<div class="sh bl-gh"><h2>).*?(</h2>)', r"\1{{REL_H}}\2", body, count=1, flags=re.S)
+    body, n3 = re.subn(r'<p class="ar-all"><a class="lnk" href="#">[^<]*</a></p>', '<p class="ar-all"><a class="lnk" href="{{ALL_HREF}}">{{ALL_LABEL}}</a></p>', body, count=1)
+    assert (n1, n2, n3) == (1, 1, 1), (n1, n2, n3)
+    body = body.replace('<a href="/" lang="he"', '<a href="{{HE_PATH}}" lang="he"').replace('<a href="/en" lang="en"', '<a href="{{EN_PATH}}" lang="en"')
+    return body
+
+
+SKIP = {"he": "דלג לתוכן", "en": "Skip to content"}
+
+
+def landmarks(body, lang, home):
+    """Skip link, <main>, and the breadcrumbs slot on inner pages (tbl-024)."""
+    body = body.replace('<header id="hdr">', f'<a class="skip" href="#main">{SKIP[lang]}</a><header id="hdr">', 1)
+    body = body.replace("</header>", '</header><main id="main" tabindex="-1">', 1)
+    k = body.rindex("<footer")
+    body = body[:k] + "</main>" + body[k:]
+    if not home and "{{ARTICLE}}" not in body:
+        if '<div class="lg-head">' in body:
+            body = body.replace('<div class="lg-head">', '<div class="lg-head">{{CRUMB}}', 1)
+        else:
+            m = body.index('<main id="main" tabindex="-1">')
+            w = body.index('<div class="wrap">', m) + len('<div class="wrap">')
+            body = body[:w] + "{{CRUMB}}" + body[w:]
+    return body
+
+
+def extra_parts(body, lang, page):
+    return (f"\nexport const {page.upper()}_PARTS_{lang.upper()} = "
+            f"{json.dumps(PARTS[(lang, page)], ensure_ascii=False, indent=1)} as const\n")
+
+
+# classes the page scripts add, kept when the chrome CSS is trimmed
+JS_CLASSES = {"open", "x", "on", "in", "uxh-off", "hot", "scrolled", "crumb"}
+
+
+def split_top(sel):
+    """Split a selector list at its top-level commas (not inside :is(), :not()...)."""
+    out, depth, cur = [], 0, ""
+    for ch in sel:
+        depth += {"(": 1, ")": -1}.get(ch, 0)
+        if ch == "," and depth == 0:
+            out.append(cur)
+            cur = ""
+        else:
+            cur += ch
+    return out + [cur]
+
+
+def prune_css(css, markup, root):
+    """Only the rules the chrome's own markup can match (for the pages that use
+    just the header and footer)."""
+    have = set(re.findall(r'class="([^"]*)"', markup))
+    have = {c for group in have for c in group.split()} | set(re.findall(r'id="([^"]*)"', markup)) | JS_CLASSES | {root[1:]}
+
+    def keep_sel(sel):
+        return all(t in have for t in re.findall(r"[.#]([A-Za-z_][\w-]*)", re.sub(r"\[[^\]]*\]", "", sel)))
+
+    def block(text):
+        res, j = [], 0
+        while j < len(text):
+            k = text.find("{", j)
+            if k == -1:
+                break
+            head = text[j:k].strip()
+            depth, m = 1, k + 1
+            while depth and m < len(text):
+                depth += {"{": 1, "}": -1}.get(text[m], 0)
+                m += 1
+            inner = text[k + 1 : m - 1]
+            if head.startswith("@media") or head.startswith("@supports"):
+                sub = block(inner)
+                if sub.strip():
+                    res.append(f"{head}{{{sub}}}")
+            elif head.startswith("@"):
+                res.append(f"{head}{{{inner}}}")
+            else:
+                sels = [x for x in split_top(head) if keep_sel(x)]
+                if sels:
+                    res.append(f"{','.join(sels)}{{{inner}}}")
+            j = m
+        return "\n".join(res)
+
+    return block(re.sub(r"/\*.*?\*/", "", css, flags=re.S))
+
+
+def write_chrome(body, css, lang):
+    """The header and footer alone, for the pages that keep their own content
+    (SiteChrome): same markup and CSS as the sheet pages, trimmed."""
+    head = body[: body.index('<main id="main" tabindex="-1">')]
+    foot = body[body.index("</main>") + len("</main>") :]
+    root = f".uxn-{lang}"
+    css = prune_css(css.replace(f".uxa-{lang}", root), head + foot, root)
+    css += f"\n{root} .uxn-crumbs{{padding-top:clamp(20px,2.4vw,32px)}}{root} .uxn-crumbs .crumb{{margin-bottom:0}}\n"
+    open(os.path.join(OUT, f"chrome.{lang}.css"), "w", encoding="utf-8").write(css)
+    ts = (f"// Generated by scripts/home-sheets/build.py (navkit chrome). Do not edit by hand.\n"
+          f"export const CHROME_HEAD_{lang.upper()} = {json.dumps(head.strip(), ensure_ascii=False)}\n\n"
+          f"export const CHROME_FOOT_{lang.upper()} = {json.dumps(foot.strip(), ensure_ascii=False)}\n")
+    open(os.path.join(OUT, f"chrome-markup.{lang}.ts"), "w", encoding="utf-8").write(ts)
+    print("chrome", lang, "css", len(css))
+
+
+# Navkit L-nav (current page, breadcrumbs, footer columns), on every page; the
+# current page is marked aria-current="page", its section (an article's Blog)
+# aria-current="true", both styled the same. Plus the skip link.
+NAV_CSS = """
+#hdr nav a[aria-current]{color:var(--ink);font-weight:700;position:relative}
+#hdr nav a[aria-current]::after{content:"";position:absolute;inset-inline:14px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,#0f72b3,#2a5fcf)}
+.menu a.m[aria-current]{color:var(--brand-d);font-weight:700}
+footer a.l[aria-current]{color:var(--ink);font-weight:700}
+.crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;color:var(--ink2);margin-bottom:clamp(24px,3vw,40px);text-align:start}
+.crumb a{color:var(--ink2)}.crumb a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.crumb svg{width:15px;height:15px;opacity:.6;flex:none}.crumb span[aria-current]{color:var(--ink);font-weight:600}
+.ft{grid-template-columns:1.5fr 1fr 1fr 1fr!important}
+@media(max-width:1060px){.crumb{font-size:16px}.ft{grid-template-columns:1fr 1fr!important}.ft>div:first-child{grid-column:1/-1}}
+@media(max-width:1180px) and (min-width:1061px){#hdr nav a{padding:8px 10px}}
+.skip{position:absolute;inset-inline-start:12px;top:-80px;z-index:200;background:var(--ink);color:#fff;font-weight:700;font-size:16px;padding:12px 18px;border-radius:12px;transition:top .15s}
+.skip:focus{top:12px;color:#fff}
+main:focus{outline:none}
+"""
+
+# Article template (tbl-024b): the text column is the MDX article or the guide's
+# sections, which come as plain headings and paragraphs.
+ARTICLE_CSS = """
+/* ---- article body (tbl-024b) ---- */
+{root} .ar-body h2,{root} .ar-body>section{scroll-margin-top:110px}
+{root} .ar-body>h2:not(:first-child),{root} .ar-body>section+section{margin-top:clamp(36px,4vw,52px)}
+{root} .ar-body :is(p,ul,ol,div,figure,aside)+:is(p,ul,ol,div,figure,aside){margin-top:16px}
+{root} .ar-body h3{font-size:20px;font-weight:700;line-height:1.4;margin-top:24px}
+{root} .ar-body :is(.ar-trio,.ar-tl) h3{margin-top:12px}
+{root} .ar-body ol:not(.ar-tl){padding-inline-start:22px;display:grid;gap:6px}
+{root} .ar-body strong{font-weight:700}
+{root} .ar-note{border-inline-start:3px solid var(--brand);background:var(--tint);border-radius:14px;padding:16px 18px}
+{root} .ar-note b{display:block;font-weight:700;margin-bottom:4px}
+{root} .ar-cap{caption-side:top;text-align:start;font-weight:700;padding:14px 16px 4px}
+{root} .ar-tbl:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+{root} .ar-meta i{display:inline-block}
+@media(max-width:1060px){{root} .ar-body h2,{root} .ar-body>section{scroll-margin-top:130px}{root} .ar-body h3{font-size:22px}}
 """
 
 
@@ -492,6 +789,8 @@ def finish_css(css, lang, page):
     css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
     css = re.sub(r"(^|[{}])[^{}@]*(?:\.ztag|\.sheet-label)[^{}]*\{[^{}]*\}", r"\1", css)
     css = css.replace('font-family:"Heebo",', 'font-family:var(--font-heebo),"Heebo",')
+    # current page, breadcrumbs, footer columns (navkit L-nav block), in every page's CSS
+    css += "\n" + NAV_CSS
     root = f".{ROOTS[page]}-{lang}"
     css = scope_css(css, root)
     # The sheets were designed on plain browser defaults. The site's globals
@@ -537,12 +836,16 @@ def finish_css(css, lang, page):
         css += FAQ_CSS.replace("{root}", root)
     elif page == "text":
         css += FAQ_CSS.replace("{root}", root) + TEXT_CSS.replace("{root}", root)
+    elif page == "article":
+        css += FAQ_CSS.replace("{root}", root) + TEXT_CSS.replace("{root}", root) + ARTICLE_CSS.replace("{root}", root)
     elif home:
         # LCP (tbl-020): the demo headline is shown from the first paint
         css += f"{root} .gs-h.rv{{opacity:1!important;transform:none!important;filter:none!important;animation:none!important}}\n"
     elif page == "pricing":
         # pricing FAQ (tbl-020): answers in black, support address on its own line
         css += f"{root} .faq .ans{{color:var(--ink)}}\n"
+        # AA (tbl-024 accessibility pass): the "-20%" badge text was 3.95:1
+        css += f"{root} .bill em{{color:#106f41}}\n"
         css += f"{root} .uxh-vh{{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}}\n"
         # blue band with prefers-reduced-motion: no movement, items wrap and stay put
         css += (f"@media (prefers-reduced-motion:reduce){{{root} #inc .mq{{-webkit-mask:none;mask:none}}"
@@ -566,6 +869,9 @@ def main():
         build(lang, cfg, images, "contact")
         build(lang, cfg, images, "faq")
         build(lang, cfg, images, "text")
+        build(lang, cfg, images, "blog")
+        build(lang, cfg, images, "guides")
+        build(lang, cfg, images, "article")
 
 
 main()

@@ -539,6 +539,16 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
       }, 0.3)
     }
 
+    // -- article charts fill once they scroll into view (CSS keeps them static with reduced motion)
+    root.querySelectorAll<HTMLElement>(".ar-chart").forEach((c) => {
+      const io = observe(c, (e) => {
+        if (e[0].isIntersecting) {
+          c.classList.add("in")
+          io.disconnect()
+        }
+      }, 0.4)
+    })
+
     // -- FAQ topics / text-page contents: the topic in view is highlighted (on
     //    mobile its chip also scrolls into the row); at the very bottom, the last one
     const topics = root.querySelector<HTMLElement>("[data-uxf-nav]")

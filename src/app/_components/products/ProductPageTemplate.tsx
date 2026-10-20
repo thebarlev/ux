@@ -1,4 +1,3 @@
-import { SiteFooter } from "@/app/_components/home/SiteFooter"
 import { LogoRow } from "@/app/_components/home/LogoRow"
 import { JsonLd, faqPageSchema } from "@/components/JsonLd"
 import { PriceSection } from "@/app/_components/home/PriceSection"
@@ -42,7 +41,8 @@ const SECTION_RENDERERS: Record<ProductSectionType, (config: ProductPageConfig) 
   FaqSection: (config) => (config.faq ? <ServiceFaqSection {...config.faq} /> : null),
   PriceSection: () => <PriceSection />,
   PackagesSection: () => <PackagesSection />,
-  SiteFooter: () => <SiteFooter />,
+  // the page's SiteChrome brings the footer (tbl-024)
+  SiteFooter: () => null,
 }
 
 export function ProductPageTemplate({ config }: { config: ProductPageConfig }) {

@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function WhyUsPageEn() {
   const { hero, features, closer } = await getWhyUsContent("en")
   return (
-    <RedesignShell locale="en">
+    <RedesignShell locale="en" path="/en/why-us" crumb="Why us">
       <main id="main">
         <InnerHero eyebrow={hero.eyebrow} title={hero.title} lede={hero.lede} stats={hero.stats} />
         <section className={`${styles.band} ${styles.whyUsWarm}`}>

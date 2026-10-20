@@ -4,17 +4,12 @@ description: "To appear in Google AI, ChatGPT, and Perplexity answers, you need 
 date: "2026-02-24"
 coverImage: "/services/d-develop.webp"
 category: "marketing"
-tags: ["AI", "SEO", "organic"]
+tags: ["AI", "SEO", "Organic"]
 locale: "en"
 slug: "seo-ai-engine"
 ---
 
-import {
-  AiReadabilityPillars,
-  ContentStructureTable,
-  ChecklistTimeline,
-  Callout,
-} from "@/components/article-visuals-en";
+import { Trio, DataTable, Callout } from "@/app/_home/article/visuals";
 
 If you want to appear in Google AI Overviews, ChatGPT, Perplexity, or Gemini today, classic SEO alone isn't enough. You need to think like both a traditional search engine and a system that answers the user's question directly. The goal is no longer just to rank - it's to be the source they cite.
 
@@ -22,7 +17,13 @@ If you want to appear in Google AI Overviews, ChatGPT, Perplexity, or Gemini tod
 
 AI systems look for three main things: a clear answer to a clear question, clean structure, and credibility that signals expertise. AI doesn't want long text - it wants a precise answer inside long text.
 
-<AiReadabilityPillars />
+<Trio
+  items={[
+    { icon: "chat", title: "Clear answer to a clear question", text: 'Headlines phrased like real queries: "What is…", "How to…", "How much…"' },
+    { icon: "layout", title: "Clean, structured layout", text: "Short paragraphs, clear H2/H3 headings, lists and FAQ. Messy content makes it hard to extract answers." },
+    { icon: "shield", title: "Credibility and expertise", text: "Who wrote it? What's their experience? Does the site focus on one area? AI looks for a source - not an anonymous writer." },
+  ]}
+/>
 
 ## What to Do to Appear in AI Answers
 
@@ -38,7 +39,15 @@ To build organic presence in AI engines, there are five main steps.
 
 **Fifth** - Keep technical foundation clean: proper heading structure, good load speed, HTTPS, Sitemap, and Schema where needed. If the site is slow or messy, it's harder to crawl and understand.
 
-<ContentStructureTable />
+<DataTable
+  head={["Content type", "Recommended structure", "Word range", "Goal"]}
+  rows={[
+    ["Pillar page", "H1 + direct answer + H2 × 5–10 + FAQ", "1,500–3,000", "Deep topic coverage"],
+    ["Support article", "H1 + focused answer + H2 × 3–5", "600–1,200", "Deep dive on specific point"],
+    ["FAQ page", "Question + answer × 8–15", "800–1,500", "Capture direct queries"],
+    ["Landing page", "H1 + CTA + 3–5 focused blocks", "300–600", "Conversion, not info"],
+  ]}
+/>
 
 ## What Not to Do
 
@@ -48,6 +57,14 @@ To build organic presence in AI engines, there are five main steps.
 
 ## 90-Day Action Plan
 
-<ChecklistTimeline />
+<DataTable
+  head={["When", "Phase", "Tasks"]}
+  rows={[
+    ["Week 1–2", "Define core topics", "Choose 3–5 services you want to be known for; List 10–20 real questions customers ask around each"],
+    ["Week 3–6", "Build pillar pages", "Clear headline + direct answer paragraph at top of each page; Sections in Q&A structure; Organized FAQ at end of each page"],
+    ["Week 7–10", "Publish support articles", "Articles that go deep on specific points; Clear internal links to pillar page; Consistent publishing - at least one article per week"],
+    ["Week 11–12", "Review and strengthen", "Search questions in your field on Perplexity / ChatGPT / Gemini; Check who gets cited - and what's missing from your content; Update and deepen pages that aren't strong enough"],
+  ]}
+/>
 
 In the end, it's not just AI optimization. It's a way to write clearer, more precise content that respects the reader's time. If your content is built so a machine can understand it easily, humans will understand it better too.

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { SHEET_PAGES } from "@/app/_home/home.config"
+import { isSheetPage } from "@/app/_home/home.config"
 import { usePathname, useRouter } from "next/navigation"
 import { counterpartPath, isEnglishPath } from "@/lib/i18n/counterpartPath"
 import { GEO_HINT_COOKIE, LANG_PREF_COOKIE, readCookie, setLangPrefCookie } from "@/lib/i18n/langPrefCookie"
@@ -59,7 +59,7 @@ export function LanguageBanner() {
   // The 2026-10 sheet pages (home, pricing) are measured for layout shift
   // (CLS <= 0.05). A banner inserted above them after load pushes the whole
   // page down, so on those pages it sits as a bar at the bottom instead.
-  const overlay = SHEET_PAGES.has(pathname)
+  const overlay = isSheetPage(pathname)
 
   return (
     <div

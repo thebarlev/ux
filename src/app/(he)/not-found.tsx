@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import { SiteFooter } from "@/app/_components/home/SiteFooter"
+import { SiteChrome } from "@/app/_home/SiteChrome"
 
 function CuteLostIcon() {
   return (
@@ -52,6 +52,7 @@ function CuteLostIcon() {
 
 export default function NotFoundPage() {
   return (
+    <SiteChrome lang="he">
     <div className="min-h-screen bg-white" dir="rtl">
       <main id="main" role="main">
         <section aria-label="404" className="py-[var(--space-section)]">
@@ -102,8 +103,8 @@ export default function NotFoundPage() {
           </div>
         </section>
       </main>
-      <SiteFooter />
     </div>
+    </SiteChrome>
   )
 }
 

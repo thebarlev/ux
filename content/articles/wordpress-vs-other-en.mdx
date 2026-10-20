@@ -9,11 +9,7 @@ locale: "en"
 slug: "wordpress-vs-other"
 ---
 
-import {
-  PlatformComparisonTable,
-  PlatformSelector,
-  Callout,
-} from "@/components/article-visuals-en";
+import { DataTable, Callout } from "@/app/_home/article/visuals";
 
 When you build a new site or consider rebuilding, the technology choice affects speed, maintenance, SEO, scale, and costs over time. It's not just a technical decision - it's a business one.
 
@@ -43,11 +39,27 @@ They fit when you want to build yourself, without dealing with hosting, security
 
 ## Compare by Need
 
-<PlatformComparisonTable />
+<DataTable
+  head={["If you care most about", "You'll likely prefer", "Why"]}
+  rows={[
+    ["Self-managed content", "WordPress", "Mature CMS, easy editing without dev"],
+    ["Performance and full control", "Next.js / modern stack", "Fast load, flexible integrations"],
+    ["Simplicity and quick setup", "Wix / closed platform", "All-in-one, no infra to manage"],
+    ["Small, very fast site", "Static site", "Minimal resources, max speed"],
+  ]}
+/>
 
 ## Common Mistakes When Choosing a Platform
 
-<PlatformSelector />
+<DataTable
+  head={["The mistake", "Why it's a problem"]}
+  rows={[
+    ["Choosing by trend, not by need", "Popular tech doesn't necessarily fit your project."],
+    ["Building SaaS on a blog-friendly stack", "Needs are completely different - plan infra for business logic."],
+    ["Building a small corporate site on overly complex stack", "Unnecessary complexity slows dev and increases maintenance cost."],
+    ["Not thinking about long-term maintenance", "Choosing a platform is also choosing who maintains it and how."],
+  ]}
+/>
 
 <Callout>
   The platform should serve your business model, not the other way around.

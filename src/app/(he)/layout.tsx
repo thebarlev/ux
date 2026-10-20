@@ -4,7 +4,6 @@ import Script from "next/script";
 import { Assistant } from "next/font/google";
 import { JsonLd, ORGANIZATION_SCHEMA, WEBSITE_SCHEMA } from "@/components/JsonLd";
 import { DeferredScripts } from "@/components/DeferredScripts";
-import { SiteHeader } from "@/app/_components/layout/SiteHeader";
 import { LanguageBanner } from "@/app/_components/LanguageBanner";
 import { TrackingProvider } from "@/app/_components/tracking/TrackingProvider";
 import { MetaPixelRouteTracker } from "@/app/_components/tracking/MetaPixelRouteTracker";
@@ -81,11 +80,8 @@ export default function RootLayout({
 
         <LanguageBanner />
 
-        {/* The language row above the header is gone: Hebrew is the focus, and
-            the switch now lives quietly in the footer. SiteHeader returns null
-            on its own for /lp, /checkout, /thanks and /en, so no route
-            conditions belong here. */}
-        <SiteHeader />
+        {/* Every page brings its own header and footer (the sheet pages, or
+            SiteChrome around the rest, tbl-024), so there is no global header. */}
         {children}
         <Suspense fallback={null}>
           <TrackingProvider />

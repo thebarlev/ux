@@ -945,6 +945,21 @@
 
 .uxf-en{letter-spacing:-.005em}.uxf-en h1,.uxf-en .pr-h,.uxf-en .sh h2{letter-spacing:-.035em!important}
 
+
+.uxf-en #hdr nav a[aria-current]{color:var(--ink);font-weight:700;position:relative}
+.uxf-en #hdr nav a[aria-current]::after{content:"";position:absolute;inset-inline:14px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,#0f72b3,#2a5fcf)}
+.uxf-en .menu a.m[aria-current]{color:var(--brand-d);font-weight:700}
+.uxf-en footer a.l[aria-current]{color:var(--ink);font-weight:700}
+.uxf-en .crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;color:var(--ink2);margin-bottom:clamp(24px,3vw,40px);text-align:start}
+.uxf-en .crumb a{color:var(--ink2)}.uxf-en .crumb a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.uxf-en .crumb svg{width:15px;height:15px;opacity:.6;flex:none}.uxf-en .crumb span[aria-current]{color:var(--ink);font-weight:600}
+.uxf-en .ft{grid-template-columns:1.5fr 1fr 1fr 1fr!important}
+@media(max-width:1060px){.uxf-en .crumb{font-size:16px}.uxf-en .ft{grid-template-columns:1fr 1fr!important}.uxf-en .ft>div:first-child{grid-column:1/-1}}
+@media(max-width:1180px) and (min-width:1061px){.uxf-en #hdr nav a{padding:8px 10px}}
+.uxf-en .skip{position:absolute;inset-inline-start:12px;top:-80px;z-index:200;background:var(--ink);color:#fff;font-weight:700;font-size:16px;padding:12px 18px;border-radius:12px;transition:top .15s}
+.uxf-en .skip:focus{top:12px;color:#fff}
+.uxf-en main:focus{outline:none}
+
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxf-en .gs-img,.uxf-en .a2-img{isolation:isolate}
 .uxf-en .uxh-bg,.uxf-en .uxh-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;display:block}
@@ -972,6 +987,7 @@
 .uxf-en footer{padding-bottom:28px!important}
 .uxf-en .lang{gap:24px!important}
 .uxf-en .lang a{padding-inline:0!important;margin:0!important}
+.uxf-en .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
 
 /* ---- topic menu (tbl-023) ---- */
 .uxf-en .fq-nav a[aria-current=true]{background:var(--tint);color:var(--brand-d)}

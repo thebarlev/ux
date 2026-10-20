@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function WhyUsPage() {
   const { hero, features, closer } = await getWhyUsContent("he")
   return (
-    <RedesignShell>
+    <RedesignShell path="/why-us" crumb="למה אנחנו">
       <main id="main">
         <InnerHero eyebrow={hero.eyebrow} title={hero.title} lede={hero.lede} stats={hero.stats} />
         <section className={`${styles.band} ${styles.whyUsWarm}`}>

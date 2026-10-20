@@ -15,3 +15,8 @@ export const SHEET_PAGES: ReadonlySet<string> = new Set([
   "/", "/en", "/pricing", "/en/pricing", "/contact", "/en/contact", "/faq", "/en/faq",
   ...TEXT_PAGES.flatMap((p) => [`/${p}`, `/en/${p}`]),
 ])
+
+/** A page in the new design: the sheet pages, plus the blog and growth guides with their articles (tbl-024). */
+export function isSheetPage(path: string) {
+  return SHEET_PAGES.has(path) || /^(\/en)?\/(blog|growth-guides)(\/|$)/.test(path)
+}
