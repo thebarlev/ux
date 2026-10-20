@@ -4,36 +4,11 @@ import Image from "next/image"
 import { useState, useRef, useEffect } from "react"
 import { EnLink } from "./EnLink"
 
-const DEV_DROPDOWN = [
-  { href: "/en/develop", label: "Web Development" },
-  { href: "/en/develop-ai", label: "Software Development" },
-] as const
-
-const MARKETING_DROPDOWN = [
-  { href: "/en/marketing/ppc", label: "PPC Marketing" },
-  { href: "/en/seo-ai", label: "Google & AI Search Optimization" },
-] as const
-
 const MOBILE_SECTIONS = [
   {
     title: "Uxellent Services",
     items: [
-      { href: "/en/design", label: "Design & Branding" },
-      { href: "/en/idea-to-product", label: "Idea to Product" },
-      { href: "/en/develop", label: "Web Development" },
-      { href: "/en/develop-ai", label: "Software Development" },
       { href: "/en/pricing", label: "Pricing" },
-      { href: "/en/marketing/ppc", label: "PPC Marketing" },
-      { href: "/en/seo-ai", label: "Google & AI Search Optimization" },
-      { href: "/en/portfolio", label: "Portfolio" },
-    ],
-  },
-  {
-    title: "Uxellent Products",
-    items: [
-      { href: "/en/account-ai", label: "AI Accountant" },
-      { href: "/en/invoice", label: "Digital Invoice" },
-      { href: "/en/seo-ai", label: "Google & AI Search Optimization" },
     ],
   },
 ] as const
@@ -134,78 +109,6 @@ export function HeaderEN() {
                   className="link-standard text-[18px] leading-normal px-3 py-2 hover:text-[#5389BB] transition-colors no-underline hover:underline"
                 >
                   Contact
-                </EnLink>
-              </li>
-              <li className="relative group">
-                <button
-                  type="button"
-                  dir="ltr"
-                  className="link-standard text-[18px] leading-normal px-3 py-2 hover:text-[#5389BB] transition-colors no-underline hover:underline inline-flex items-center gap-1 "
-                  aria-haspopup="menu"
-                >
-                  Development
-                  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true" className="mt-[2px]">
-                    <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-                <div dir="ltr" className="pointer-events-none absolute left-0 top-full z-50 mt-0 w-[220px] rounded-xl border border-black/10 bg-white shadow-lg opacity-0 translate-y-1 transition-all duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-focus-within:translate-y-0">
-                  <ul role="menu" className="py-2 text-left items-start">
-                    {DEV_DROPDOWN.map((item) => (
-                      <li key={item.href} role="none">
-                        <EnLink
-                          role="menuitem"
-                          href={item.href}
-                          className="block px-4 py-2 text-[16px] font-semibold text-black hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--vow-accent)] rounded-md mx-2 text-left items-start"
-                        >
-                          {item.label}
-                        </EnLink>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
-              <li className="relative group">
-                <button
-                  type="button"
-                  dir="ltr"
-                  className="link-standard text-[18px] leading-normal px-3 py-2 hover:text-[#5389BB] transition-colors no-underline hover:underline inline-flex items-center gap-1  "
-                  aria-haspopup="menu"
-                >
-                  Marketing
-                  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true" className="mt-[2px]">
-                    <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-                <div dir="ltr" className="pointer-events-none absolute left-0 top-full z-50 mt-0 w-[240px] rounded-xl border border-black/10 bg-white shadow-lg opacity-0 translate-y-1 transition-all duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-focus-within:translate-y-0">
-                  <ul role="menu" className="py-2 text-left" dir="ltr">
-                    {MARKETING_DROPDOWN.map((item) => (
-                      <li key={item.href} role="none">
-                        <EnLink
-                          role="menuitem"
-                          href={item.href}
-                          className="block px-4 py-2 text-[16px] font-semibold text-black hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--vow-accent)] rounded-md mx-2 text-left items-start"
-                        >
-                          {item.label}
-                        </EnLink>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
-              <li>
-                <EnLink
-                  href="/en/design"
-                  className="link-standard text-[18px] leading-normal px-3 py-2 hover:text-[#5389BB] transition-colors no-underline hover:underline "
-                >
-                  Design
-                </EnLink>
-              </li>
-              <li className="hidden md:flex md:items-center">
-                <EnLink
-                  href="/en/idea-to-product"
-                  className="link-standard text-[18px] leading-normal px-3 py-2 hover:text-[#5389BB] transition-colors no-underline hover:underline"
-                >
-                  Idea to Product
                 </EnLink>
               </li>
             </ul>

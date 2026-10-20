@@ -5,13 +5,12 @@ import { FeatureBlock } from "@/app/_components/redesign/FeatureBlock"
 import { PCloseCta } from "@/app/_components/redesign/PCloseCta"
 import styles from "@/app/_components/redesign/redesign.module.css"
 import { getIncludedContent } from "@/app/_content/redesign/included"
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
 export async function generateMetadata(): Promise<Metadata> {
   const { hero } = await getIncludedContent("en")
   return {
     metadataBase: new URL("https://uxellent.com"),
-    alternates: { canonical: "/en/included", languages: heEnAlternateLanguages("/included", "/en/included") },
+    alternates: { canonical: "/en/included" }, // the Hebrew /included is retired (tbl-023)
     title: "What's included | Uxellent | AI-built business websites in Hebrew",
     description: hero.lede,
     openGraph: {
@@ -29,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function IncludedPageEn() {
   const { hero, features, notIncludedLabel, notIncluded, closer } = await getIncludedContent("en")
   return (
-    <RedesignShell locale="en">
+    <RedesignShell locale="en" langSwitchHref="/">
       <main id="main">
         <InnerHero eyebrow={hero.eyebrow} title={hero.title} lede={hero.lede} />
         <section className={styles.band} style={{ paddingBlockStart: "clamp(30px,4vw,50px)" }}>

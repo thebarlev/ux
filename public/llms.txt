@@ -24,7 +24,6 @@ Includes:
 - online visibility
 
 https://uxellent.com/seo-ai
-https://uxellent.com/en/seo-ai
 
 ---
 
@@ -38,7 +37,6 @@ Includes:
 - marketing design
 
 https://uxellent.com/design
-https://uxellent.com/en/design
 
 ---
 
@@ -52,7 +50,6 @@ Includes:
 - performance optimization
 
 https://uxellent.com/develop
-https://uxellent.com/en/develop
 
 ---
 

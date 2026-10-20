@@ -58,9 +58,10 @@ const nextConfig: NextConfig = {
       permanent: true,
     },
     {
+      // /en/seo-ai is retired (tbl-023), so this goes straight to /en, no chain
       source: "/en/seo",
-      destination: "/en/seo-ai",
-      permanent: true,
+      destination: "/en",
+      statusCode: 301,
     },
     // ── redesign/marketing-2026-08 (design-review/approved-2026-08/redirect-map.html) ──
     // Old agency-service pages, folded into the new site. 301, not `permanent: true`
@@ -85,6 +86,25 @@ const nextConfig: NextConfig = {
     { source: "/lp/ecommerce", destination: "/", statusCode: 301 },
     { source: "/lp/services", destination: "/", statusCode: 301 },
     { source: "/lp/thank-you", destination: "/", statusCode: 301 },
+    // Old agency pages retired (tbl-023, Itzik 20.10.2026): each goes to the home
+    // page of its own language. `:path*` also covers anything below them
+    // (/en/seo-ai/pricing). Relative destinations: nothing leaves uxellent.com.
+    { source: "/about/:path*", destination: "/", statusCode: 301 },
+    { source: "/portfolio/:path*", destination: "/", statusCode: 301 },
+    { source: "/invoice/:path*", destination: "/", statusCode: 301 },
+    { source: "/products/:path*", destination: "/", statusCode: 301 },
+    { source: "/how-it-works/:path*", destination: "/", statusCode: 301 },
+    { source: "/included/:path*", destination: "/", statusCode: 301 },
+    { source: "/en/about/:path*", destination: "/en", statusCode: 301 },
+    { source: "/en/portfolio/:path*", destination: "/en", statusCode: 301 },
+    { source: "/en/invoice/:path*", destination: "/en", statusCode: 301 },
+    { source: "/en/idea-to-product/:path*", destination: "/en", statusCode: 301 },
+    { source: "/en/design/:path*", destination: "/en", statusCode: 301 },
+    { source: "/en/develop/:path*", destination: "/en", statusCode: 301 },
+    { source: "/en/develop-ai/:path*", destination: "/en", statusCode: 301 },
+    { source: "/en/account-ai/:path*", destination: "/en", statusCode: 301 },
+    { source: "/en/marketing/ppc/:path*", destination: "/en", statusCode: 301 },
+    { source: "/en/seo-ai/:path*", destination: "/en", statusCode: 301 },
   ],
   headers: async () => [
     {

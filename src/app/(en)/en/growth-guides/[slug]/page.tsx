@@ -276,7 +276,7 @@ export default async function GrowthGuidePage({
           subtitle: guide.ctaSubtitle,
           buttonLabel: "Explore AI SEO services",
           buttonSource: "digital_marketing",
-          buttonHref: "/en/seo-ai",
+          buttonHref: "/en",
         }}
         faq={{
           title: `FAQ: ${guide.keyword}`,

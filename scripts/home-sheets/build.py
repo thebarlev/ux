@@ -2,12 +2,14 @@
 """
 Builds the home pages (/ and /en) from Itzik's approved review sheets.
 
-    python3 scripts/home-sheets/build.py <sheet-dir> <contact-sheet-dir> <image-dir>
+    python3 scripts/home-sheets/build.py <sheet-dir> <contact-sheet-dir> <image-dir> <page-sheet-dir>
 
 <sheet-dir> holds the four approved sheets (tbl-021): uxb-009-v35-home-he.html,
 uxb-010-v6-home-en.html, uxb-011-v12-pricing-he.html, uxb-012-v3-pricing-en.html;
 <contact-sheet-dir> holds uxb-013-v6-contact-he.html and uxb-014-v2-contact-en.html
-(tbl-022); <image-dir> holds hero-law.webp (tbl-019). The sheets are the source of truth for markup and CSS;
+(tbl-022); <image-dir> holds hero-law.webp (tbl-019); <page-sheet-dir> holds
+uxb-015-v1-faq-he.html, uxb-016-v1-faq-en.html and the text-page templates
+uxb-017-v1-text-page-he.html, uxb-018-v1-text-page-en.html (tbl-023). The sheets are the source of truth for markup and CSS;
 this script only:
   - drops the review chrome (.sheet-label, every .ztag),
   - wires the links (anchors, pricing/contact/legal pages, platform URLs),
@@ -17,8 +19,8 @@ this script only:
   - adds the aria wiring the sheets leave out (tabs, carousel, menu),
   - leaves out the sheets' copy of the mobile type rule: the site keeps it in
     one place, src/app/mobile-type.css, for these pages and every inner page.
-Outputs: src/app/_home/{markup,pricing-markup,contact-markup}.{he,en}.ts and
-{home,pricing,contact}.{he,en}.css, plus public/home/*.{webp,avif}. Image variants need sharp (from node_modules).
+Outputs: src/app/_home/{markup,pricing-markup,contact-markup,faq-markup,text-markup}.{he,en}.ts and
+{home,pricing,contact,faq,text}.{he,en}.css, plus public/home/*.{webp,avif}. Image variants need sharp (from node_modules).
 """
 import base64
 import glob
@@ -32,6 +34,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 HOME_SHEETS = PRICING_SHEETS = sys.argv[1]
 CONTACT_SHEETS = sys.argv[2]
 IMAGES = sys.argv[3]
+PAGE_SHEETS = sys.argv[4]
 OUT = os.path.join(ROOT, "src/app/_home")
 PUB = os.path.join(ROOT, "public/home")
 os.makedirs(OUT, exist_ok=True)
@@ -44,15 +47,18 @@ LANGS = {
         "file": "uxb-009-v35-home-he.html",
         "pricing_file": "uxb-011-v12-pricing-he.html",
         "contact_file": "uxb-013-v6-contact-he.html",
+        "faq_file": "uxb-015-v1-faq-he.html",
+        "text_file": "uxb-017-v1-text-page-he.html",
         "home": "/",
         "pricing": "/pricing",
         "contact": "/contact",
+        "faq": "/faq",
         "pre": "",
         "nav": {
             "איך זה עובד": "#how",
             "מה מקבלים": "#ben",
             "מחירים": "/pricing",
-            "שאלות נפוצות": "#faq",
+            "שאלות נפוצות": "/faq",
             "צור קשר": "/contact",
             "כניסה": PLATFORM,
             "הצטרפות חינם": PLATFORM,
@@ -60,8 +66,12 @@ LANGS = {
             "בנו לי אתר": PLATFORM,
             "תנאי שימוש": "/terms",
             "מדיניות פרטיות": "/privacy",
+            "עמוד המחירים": "/pricing",
         },
         "logo_label": "Uxellent, לעמוד הבית",
+        # home FAQ, own domain (tbl-023): only on Business and Pro, same text as the FAQ page
+        "domain_q": "אפשר לחבר דומיין משלי?",
+        "domain_a": "כן, בחבילות עסקי ומקצועי. קונים דומיין אצל רשם, ואנחנו מחברים אותו. בלי דומיין, האתר עולה על כתובת חינמית שאנחנו נותנים.",
         "carousel": "מה מקבלים",
         "slide": "{n} מתוך {t}",
         "hero_alt": "",
@@ -70,15 +80,18 @@ LANGS = {
         "file": "uxb-010-v6-home-en.html",
         "pricing_file": "uxb-012-v3-pricing-en.html",
         "contact_file": "uxb-014-v2-contact-en.html",
+        "faq_file": "uxb-016-v1-faq-en.html",
+        "text_file": "uxb-018-v1-text-page-en.html",
         "home": "/en",
         "pricing": "/en/pricing",
         "contact": "/en/contact",
+        "faq": "/en/faq",
         "pre": "/en",
         "nav": {
             "How it works": "#how",
             "What you get": "#ben",
             "Pricing": "/en/pricing",
-            "FAQ": "#faq",
+            "FAQ": "/en/faq",
             "Contact": "/en/contact",
             "Log in": PLATFORM,
             "Start free": PLATFORM,
@@ -86,8 +99,11 @@ LANGS = {
             "Build my site": PLATFORM,
             "Terms of use": "/en/terms",
             "Privacy policy": "/en/privacy",
+            "pricing page": "/en/pricing",
         },
         "logo_label": "Uxellent, home",
+        "domain_q": "Can I use my own domain?",
+        "domain_a": "Yes, on Business and Pro. Buy a domain from any registrar and we’ll connect it for you. Without one, your site goes live on a free address we give you.",
         "carousel": "What you get",
         "slide": "{n} of {t}",
         "hero_alt": "",
@@ -208,6 +224,8 @@ def build(lang, cfg, images, page="home"):
         "home": os.path.join(HOME_SHEETS, cfg["file"]),
         "pricing": os.path.join(PRICING_SHEETS, cfg["pricing_file"]),
         "contact": os.path.join(CONTACT_SHEETS, cfg["contact_file"]),
+        "faq": os.path.join(PAGE_SHEETS, cfg["faq_file"]),
+        "text": os.path.join(PAGE_SHEETS, cfg["text_file"]),
     }[page]
     src = open(sheet, encoding="utf-8").read()
     css = re.search(r"<style[^>]*>(.*?)</style>", src, re.S).group(1)
@@ -229,7 +247,8 @@ def build(lang, cfg, images, page="home"):
             if v.startswith("#"):
                 nav[k] = ("/" if cfg["home"] == "/" else cfg["home"]) + v
         body = body.replace('href="#how"', f'href="{nav[next(k for k in nav if cfg["nav"][k] == "#how")]}"')
-        body = body.replace('class="l" href="#faq"', f'class="l" href="{nav[next(k for k in nav if cfg["nav"][k] == "#faq")]}"')
+    # the FAQ has its own page (tbl-023): the footer link goes there from every page
+    body = body.replace('class="l" href="#faq"', f'class="l" href="{cfg["faq"]}"')
     if page == "pricing":
         # plan buttons: same platform URLs as the live pricing page, billing follows the switch
         slugs = iter(["free", "start", "business", "pro"])
@@ -253,7 +272,7 @@ def build(lang, cfg, images, page="home"):
         href = nav.get(text.strip())
         assert href, f"no target for link {text!r} ({lang})"
         attrs = attrs.replace('href="#"', 'href="' + href + '"')
-        if not home and href == cfg[page] and "aria-current" not in attrs:
+        if page in cfg and href == cfg[page] and "aria-current" not in attrs:
             attrs += ' aria-current="page"'
         return "<a" + attrs + ">" + text + "</a>"
 
@@ -267,6 +286,10 @@ def build(lang, cfg, images, page="home"):
         body = home_markup(body, cfg, images)
     elif page == "contact":
         body = contact_markup(body, lang, cfg)
+    elif page == "faq":
+        body = faq_markup(body, lang, cfg)
+    elif page == "text":
+        body = text_markup(body, lang, cfg)
     else:
         assert body.count('<div class="bill"') == 1 and body.count('class="mq"') == 1
         body = body.replace('<button role="radio"', '<button type="button" role="radio"')
@@ -287,7 +310,7 @@ def build(lang, cfg, images, page="home"):
         {"q": re.sub(r"<[^>]+>", "", q).strip(), "a": re.sub(r"<[^>]+>", "", a).strip()}
         for q, a in re.findall(r"<summary>(.*?)<span class=\"pm\">\+</span></summary><div class=\"ans\">(.*?)</div>", body, re.S)
     ]
-    want = {"home": 9, "pricing": 6, "contact": 0}[page]
+    want = {"home": 9, "pricing": 6, "contact": 0, "faq": 18, "text": 0}[page]
     assert len(faq) == want, f"expected {want} FAQ entries in {page}/{lang}, got {len(faq)}"
     name = page.upper()
     ts = (
@@ -348,7 +371,71 @@ CONTACT_CSS = """
 """
 
 
+ROOTS = {"home": "uxh", "pricing": "uxp", "contact": "uxc", "faq": "uxf", "text": "uxt"}
+
+
+def faq_markup(body, lang, cfg):
+    """FAQ page (tbl-023): 18 questions in 4 topics; the topic menu is driven by HomeBehaviors."""
+    body = body.replace('<a href="/" lang="he"', '<a href="/faq" lang="he"').replace('<a href="/en" lang="en"', '<a href="/en/faq" lang="en"')
+    assert body.count('<details>') == 18 and body.count('class="fq-g"') == 4 and body.count('class="fq-nav"') == 1
+    body = body.replace('<nav class="fq-nav"', '<nav class="fq-nav" data-uxf-nav', 1)
+    return body
+
+
+def text_markup(body, lang, cfg):
+    """Text-page template (tbl-023): one chrome per language; HomePage fills in the
+    title, the date, the table of contents and the page's own text."""
+    body = body.replace('<a href="/" lang="he"', '<a href="{{HE_PATH}}" lang="he"').replace('<a href="/en" lang="en"', '<a href="{{EN_PATH}}" lang="en"')
+    body, n1 = re.subn(r'<h1 class="pr-h">.*?</h1>', '<h1 class="pr-h">{{TITLE}}</h1>', body, count=1, flags=re.S)
+    body, n2 = re.subn(r'<p class="lg-date">.*?</p>', '<p class="lg-date">{{DATE}}</p>', body, count=1, flags=re.S)
+    body, n3 = re.subn(r'(<nav class="fq-nav" aria-label="[^"]*")>.*?</nav>', r'\1 data-uxf-nav>{{TOC}}</nav>', body, count=1, flags=re.S)
+    body, n4 = re.subn(r'<div class="lg-body">.*?</section></div>', '<div class="lg-body">{{BODY}}</div>', body, count=1, flags=re.S)
+    assert (n1, n2, n3, n4) == (1, 1, 1, 1), (n1, n2, n3, n4)
+    assert "closing" not in body and "<details" not in body
+    return body
+
+
+# Site-wide (tbl-023), on every sheet page: the blue words in headings use the
+# button blue, and the footer's language links sit on the grid edge.
+SITE_CSS = """
+/* ---- one blue in headings, footer edge (tbl-023) ---- */
+{root} :is(h1,h2) .bl{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+{root} footer{padding-bottom:28px!important}
+{root} .lang{gap:24px!important}
+{root} .lang a{padding-inline:0!important;margin:0!important}
+"""
+
+# FAQ page and the text pages' table of contents (tbl-023).
+FAQ_CSS = """
+/* ---- topic menu (tbl-023) ---- */
+{root} .fq-nav a[aria-current=true]{background:var(--tint);color:var(--brand-d)}
+{root} .fq-list,{root} .lg-body{min-width:0}
+"""
+
+# Text pages (tbl-023): the live texts also have sub-headings, labels and bold
+# words, which the template's sample section does not show.
+TEXT_CSS = """
+/* ---- text pages (tbl-023) ---- */
+{root} .lg-body{overflow-wrap:break-word}
+{root} .lg-s h3{font-size:20px;font-weight:700;line-height:1.4;letter-spacing:-.01em;margin-top:24px}
+{root} .lg-s h4{font-size:18px;font-weight:700;line-height:1.5;margin-top:16px}
+{root} .lg-s h2+h3{margin-top:4px}
+{root} .lg-s :is(h3,h4)+:is(p,ul){margin-top:6px}
+{root} .lg-s ul+ul,{root} .lg-s p+h4,{root} .lg-s ul+h4{margin-top:12px}
+{root} .lg-s strong{font-weight:700}
+{root} .lg-s ul.lg-plain{list-style:none;padding-inline-start:0}
+{root} .lg-s p:empty{display:none}
+@media(min-width:1061px){{root} .lg .fq-nav{max-height:calc(100vh - 130px);overflow-y:auto;scrollbar-width:thin}}
+@media(max-width:1060px){{root} .lg-s h3{font-size:22px!important}{root} .lg-s h4{font-size:20px!important}{root} .lg-date{font-size:16px!important}}
+"""
+
+
 def home_markup(body, cfg, images):
+    # -- FAQ, own domain: the FAQ page's answer (tbl-023)
+    body, nd = re.subn(rf'(<summary>{re.escape(cfg["domain_q"])}<span class="pm">\+</span></summary><div class="ans">)[^<]*(</div>)',
+                       lambda m: m.group(1) + cfg["domain_a"] + m.group(2), body, count=1)
+    assert nd == 1, "domain answer not found"
+
     # -- hero and closing are a single sign-up button each (tbl-021): no field
     assert 'class="prompt"' not in body and "<input" not in body and body.count('class="go-btn"') == 2
 
@@ -397,15 +484,15 @@ def home_markup(body, cfg, images):
 def finish_css(css, lang, page):
     home = page == "home"
     # the sheets' copy of the mobile type rule; the site has it once, in src/app/mobile-type.css
-    css, nmt = re.subn(r"/\* L-mobile-type.*?(?=/\* v35|/\* uxb-013 contact|\Z)", "", css, count=1, flags=re.S)
-    assert nmt == 1 and "font-size:20px!important" not in css
+    css, nmt = re.subn(r"/\* L-mobile-type.*?(?=/\* v35|/\* uxb-013 contact|/\* uxb-015 faq|\Z)", "", css, count=1, flags=re.S)
+    assert nmt == 1 and "/* L-mobile-type" not in css and "body .sub,body .sh p" not in css
     css = re.sub(r"url\(data:image/[a-z+]+;base64,[A-Za-z0-9+/=]+\)", "none", css)
     # review chrome out of the CSS too: comments (they carry "uxb-0xx" version
     # notes) and every rule that targets .ztag / .sheet-label
     css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
     css = re.sub(r"(^|[{}])[^{}@]*(?:\.ztag|\.sheet-label)[^{}]*\{[^{}]*\}", r"\1", css)
     css = css.replace('font-family:"Heebo",', 'font-family:var(--font-heebo),"Heebo",')
-    root = f".{ {'home': 'uxh', 'pricing': 'uxp', 'contact': 'uxc'}[page] }-{lang}"
+    root = f".{ROOTS[page]}-{lang}"
     css = scope_css(css, root)
     # The sheets were designed on plain browser defaults. The site's globals
     # (Tailwind preflight, base h2/li/ul rules) would otherwise leak in, so
@@ -443,12 +530,17 @@ def finish_css(css, lang, page):
 {root} .gs-k{{color:#93712f}}
 """
     css += brand_blue_css(root)
+    css += SITE_CSS.replace("{root}", root)
     if page == "contact":
         css += CONTACT_CSS.replace("{root}", root)
+    elif page == "faq":
+        css += FAQ_CSS.replace("{root}", root)
+    elif page == "text":
+        css += FAQ_CSS.replace("{root}", root) + TEXT_CSS.replace("{root}", root)
     elif home:
         # LCP (tbl-020): the demo headline is shown from the first paint
         css += f"{root} .gs-h.rv{{opacity:1!important;transform:none!important;filter:none!important;animation:none!important}}\n"
-    else:
+    elif page == "pricing":
         # pricing FAQ (tbl-020): answers in black, support address on its own line
         css += f"{root} .faq .ans{{color:var(--ink)}}\n"
         css += f"{root} .uxh-vh{{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}}\n"
@@ -472,6 +564,8 @@ def main():
         build(lang, cfg, images, "home")
         build(lang, cfg, images, "pricing")
         build(lang, cfg, images, "contact")
+        build(lang, cfg, images, "faq")
+        build(lang, cfg, images, "text")
 
 
 main()

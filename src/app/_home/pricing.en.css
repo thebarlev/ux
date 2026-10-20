@@ -948,6 +948,12 @@
 .uxp-en #inc.sec{background:linear-gradient(100deg,var(--blue-a),var(--blue-b))!important}
 .uxp-en .pl.pop .pl-cta{border-color:var(--blue-a)!important;color:var(--blue-a)!important}
 .uxp-en .pl.pop .pl-cta:hover,.uxp-en .pl.pop .pl-cta:focus-visible{color:#fff!important}
+
+/* ---- one blue in headings, footer edge (tbl-023) ---- */
+.uxp-en :is(h1,h2) .bl{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+.uxp-en footer{padding-bottom:28px!important}
+.uxp-en .lang{gap:24px!important}
+.uxp-en .lang a{padding-inline:0!important;margin:0!important}
 .uxp-en .faq .ans{color:var(--ink)}
 .uxp-en .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
 @media (prefers-reduced-motion:reduce){.uxp-en #inc .mq{-webkit-mask:none;mask:none}.uxp-en #inc .mq .inc{flex-wrap:wrap!important;justify-content:center!important;width:auto!important;gap:10px 0!important;transform:none!important}.uxp-en #inc .mq .in-c{transform:none!important}}

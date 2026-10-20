@@ -840,4 +840,10 @@
 .uxh-en #inc.sec{background:linear-gradient(100deg,var(--blue-a),var(--blue-b))!important}
 .uxh-en .pl.pop .pl-cta{border-color:var(--blue-a)!important;color:var(--blue-a)!important}
 .uxh-en .pl.pop .pl-cta:hover,.uxh-en .pl.pop .pl-cta:focus-visible{color:#fff!important}
+
+/* ---- one blue in headings, footer edge (tbl-023) ---- */
+.uxh-en :is(h1,h2) .bl{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+.uxh-en footer{padding-bottom:28px!important}
+.uxh-en .lang{gap:24px!important}
+.uxh-en .lang a{padding-inline:0!important;margin:0!important}
 .uxh-en .gs-h.rv{opacity:1!important;transform:none!important;filter:none!important;animation:none!important}

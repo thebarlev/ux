@@ -34,7 +34,7 @@ export async function generateMetadata({
     description: campaign.metaDescription,
     robots: { index: false, follow: true },
     alternates: {
-      canonical: "/en/seo-ai",
+      canonical: `/en/lp/${campaign.slug}`, // /en/seo-ai is retired (tbl-023)
     },
     openGraph: {
       title: campaign.metaTitle,

@@ -4,9 +4,14 @@
  * before launch without touching the generated markup.
  */
 export const A11Y_COPY = {
-  he: "בנוי לפי תקן הנגישות הישראלי: ניווט במקלדת, קורא מסך, טקסט חלופי לתמונות.",
-  en: "Built to WCAG accessibility guidelines: keyboard navigation, screen reader support, alt text on every image.",
+  // tbl-023: nothing after this sentence until the platform sites have been tested
+  he: "נבנה עם נגישות בראש.",
+  en: "Built with accessibility in mind.",
 } as const
 
-/** Routes rendered from the approved sheets (home tbl-019, pricing tbl-020, contact tbl-022). */
-export const SHEET_PAGES: ReadonlySet<string> = new Set(["/", "/en", "/pricing", "/en/pricing", "/contact", "/en/contact"])
+/** Routes rendered from the approved sheets (home tbl-019, pricing tbl-020, contact tbl-022, FAQ and text pages tbl-023). */
+export const TEXT_PAGES = ["privacy", "terms", "accessibility", "account-deletion"] as const
+export const SHEET_PAGES: ReadonlySet<string> = new Set([
+  "/", "/en", "/pricing", "/en/pricing", "/contact", "/en/contact", "/faq", "/en/faq",
+  ...TEXT_PAGES.flatMap((p) => [`/${p}`, `/en/${p}`]),
+])

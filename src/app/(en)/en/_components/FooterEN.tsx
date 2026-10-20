@@ -11,22 +11,8 @@ const LEGAL_LINKS = [
   { href: "/en/accessibility", label: "Accessibility" },
 ] as const
 
-const PRODUCTS_LINKS = [
-  { href: "/en/seo-ai", label: "Google & AI Search Optimization" },
-] as const
-
-const SERVICES_LINKS = [
-  { href: "/en/design", label: "Design & Branding" },
-  { href: "/en/idea-to-product", label: "Idea to Product" },
-  { href: "/en/develop", label: "Web Development" },
-  { href: "/en/develop-ai", label: "Software Development" },
-  { href: "/en/marketing/ppc", label: "PPC Marketing" },
-  { href: "/en/portfolio", label: "Portfolio" },
-] as const
-
 const VOW_LINKS = [
   { href: "/en/blog", label: "Blog" },
-  { href: "/en/about", label: "About" },
   { href: "/en/contact", label: "Contact" },
 ] as const
 
@@ -39,8 +25,6 @@ type FooterColumn = {
 
 const FOOTER_COLUMNS: FooterColumn[] = [
   { title: "Legal", items: LEGAL_LINKS },
-  { title: "Services", items: SERVICES_LINKS },
-  { title: "Products", items: PRODUCTS_LINKS },
   { title: "Growth Guides", items: GROWTH_GUIDE_LINKS },
   { title: "Uxellent", items: VOW_LINKS },
 ]
@@ -51,7 +35,7 @@ export function FooterEN() {
       <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-8">
           {/* Left: Navigation columns */}
-          <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:grid-cols-5 md:flex-1">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:grid-cols-3 md:flex-1">
             {FOOTER_COLUMNS.map((col) => (
               <div key={col.title} className="text-left" dir="ltr">
                 <p className="text-left text-[18px] font-semibold text-[#A1A1A1] mb-4 leading-[20px]">

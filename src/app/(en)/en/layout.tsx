@@ -12,6 +12,8 @@ const REDESIGN_EN_PATTERNS = [
   /^\/en$/,
   /^\/en\/pricing(\/|$)/,
   /^\/en\/contact(\/|$)/,
+  /^\/en\/faq(\/|$)/,
+  /^\/en\/(privacy|terms|accessibility|account-deletion)(\/|$)/,
   /^\/en\/products(\/|$)/,
   /^\/en\/how-it-works(\/|$)/,
   /^\/en\/included(\/|$)/,

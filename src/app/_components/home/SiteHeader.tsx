@@ -33,14 +33,12 @@ const MOBILE_MENU_SECTIONS = [
       { href: "/pricing", label: "מחירים" },
       { href: "/marketing/ppc", label: "שיווק PPC" },
       { href: "/seo-ai", label: "קידום עסקים בגוגל וב-AI" },
-      { href: "/portfolio", label: "פרויקטים נבחרים" },
     ],
   },
   {
     title: "מוצרים של Uxellent",
     items: [
       { href: "/account-ai", label: "רואה חשבון AI" },
-      { href: "/invoice", label: "חשבונית דיגיטלית מאובטחת" },
     ],
   },
 ] as const

@@ -134,7 +134,7 @@ export default function GrowthGuidesIndexPageEn() {
           subtitle="Use Uxellent to turn SEO, content, and AI visibility into a structured growth plan."
           buttonLabel="Explore AI SEO services"
           buttonSource="digital_marketing"
-          buttonHref="/en/seo-ai"
+          buttonHref="/en"
           dir="ltr"
         />
       </div>

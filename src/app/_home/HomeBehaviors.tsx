@@ -539,6 +539,39 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
       }, 0.3)
     }
 
+    // -- FAQ topics / text-page contents: the topic in view is highlighted (on
+    //    mobile its chip also scrolls into the row); at the very bottom, the last one
+    const topics = root.querySelector<HTMLElement>("[data-uxf-nav]")
+    if (topics) {
+      const links = [...topics.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')]
+      const targets = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
+      let current = -1
+      let raf = 0
+      const pick = () => {
+        raf = 0
+        const line = window.innerHeight * 0.35
+        let k = 0
+        targets.forEach((t, i) => { if (t && t.getBoundingClientRect().top <= line) k = i })
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) k = links.length - 1
+        if (k === current) return
+        current = k
+        links.forEach((a, i) => {
+          a.classList.toggle("on", i === k)
+          if (i === k) a.setAttribute("aria-current", "true")
+          else a.removeAttribute("aria-current")
+        })
+        if (topics.scrollWidth > topics.clientWidth) {
+          const r = links[k].getBoundingClientRect(), n = topics.getBoundingClientRect()
+          topics.scrollBy({ left: r.left + r.width / 2 - (n.left + n.width / 2), behavior: reduced ? "auto" : "smooth" })
+        }
+      }
+      const queue = () => { if (!raf) raf = requestAnimationFrame(pick) }
+      on(window, "scroll", queue)
+      on(window, "resize", queue)
+      cleanups.push(() => cancelAnimationFrame(raf))
+      pick()
+    }
+
     return () => cleanups.forEach((c) => c())
   }, [lang, rootId])
 

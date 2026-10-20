@@ -978,6 +978,12 @@
 .uxc-he .pl.pop .pl-cta{border-color:var(--blue-a)!important;color:var(--blue-a)!important}
 .uxc-he .pl.pop .pl-cta:hover,.uxc-he .pl.pop .pl-cta:focus-visible{color:#fff!important}
 
+/* ---- one blue in headings, footer edge (tbl-023) ---- */
+.uxc-he :is(h1,h2) .bl{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+.uxc-he footer{padding-bottom:28px!important}
+.uxc-he .lang{gap:24px!important}
+.uxc-he .lang a{padding-inline:0!important;margin:0!important}
+
 /* ---- contact form (tbl-022) ---- */
 .uxc-he [hidden]{display:none!important}
 .uxc-he .uxc-hp{position:absolute!important;inset-inline-start:-10000px;width:1px;height:1px;overflow:hidden}

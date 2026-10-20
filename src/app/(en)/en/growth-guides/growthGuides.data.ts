@@ -47,7 +47,7 @@ export type GrowthGuide = {
 }
 
 export const AUDITOR_URL = "https://app.uxellent.com/en/auditor"
-export const SEO_AI_MARKETING_URL = "/en/seo-ai"
+export const SEO_AI_MARKETING_URL = "/en" // /en/seo-ai is retired (tbl-023)
 
 const growthGuideContent = [
   {

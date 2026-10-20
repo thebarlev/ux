@@ -93,7 +93,7 @@ export const OUR_PACKAGES_EN = [
     toppopup: "Limited to 100 | Fewer than 10 spots left",
     kicker: "Your business appears in AI answers",
     buttonLabel: "Learn more",
-    ctaHref: "/en/seo-ai",
+    ctaHref: "/en", // /en/seo-ai is retired (tbl-023)
     bullets: [
       "Optimized for AI search",
       "Structured content AI engines",
