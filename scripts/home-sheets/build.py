@@ -881,7 +881,8 @@ def legal_fixes(body, lang, legal):
 # or that the platform code shows is not so, goes ("drop" removes its paragraph,
 # list item or table row). Facts checked on 21.10.2026 in uxellent-platform
 # (agent5-otpw), in DNS (Cloudflare NS; Resend's eu-west-1 MX) and on the Preview
-# (cookies, the marketing site's iad1 functions). Nothing is left half empty.
+# (cookies, the marketing site's iad1 functions, PostHog's us.i.posthog.com host).
+# Nothing is left half empty.
 EFFECTIVE = {"he": "בתוקף מ-21 באוקטובר 2026", "en": "Effective from 21 October 2026"}
 LEGAL_PUBLISH = {
     ("he", "terms"): [
@@ -949,7 +950,7 @@ LEGAL_PUBLISH = {
         ("sub", "<mark class=\"flag\">‼️ לאמת: לפי מסמכי הפרויקט האיחוד האירופי (אירלנד)</mark>", "האיחוד האירופי (אירלנד)"),
         ("sub", "<mark class=\"flag\">‼️ לאמת: לפי מסמכי הפרויקט ארצות הברית</mark>", "ארצות הברית"),
         ("sub", "<td>ניהול DNS</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td>", "<td>ניהול DNS</td><td>רשת עולמית</td>"),
-        ("sub", "<td>מדידת צפיות בעמודים באתר uxellent.com</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td>", "<td>מדידת צפיות בעמודים באתר uxellent.com</td><td>האיחוד האירופי</td>"),
+        ("sub", "<td>מדידת צפיות בעמודים באתר uxellent.com</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td>", "<td>מדידת צפיות בעמודים באתר uxellent.com</td><td>ארצות הברית</td>"),
         ("sub", "<td>מדידת ביקורים באתר uxellent.com: עמודים שנצפו ומקור ההגעה</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td>", "<td>מדידת ביקורים באתר uxellent.com: עמודים שנצפו ומקור ההגעה</td><td>ארצות הברית</td>"),
         ("sub", "<tr><td>Google Ads</td><td>פרסום ומדידת קמפיינים באתר uxellent.com</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td>", "<tr><td>Google Ads</td><td>פרסום ומדידת קמפיינים באתר uxellent.com</td><td>ארצות הברית</td>"),
         ("sub", "<tr><td>Meta (פייסבוק ואינסטגרם)</td><td>פרסום ומדידת קמפיינים באתר uxellent.com</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td>", "<tr><td>Meta (פייסבוק ואינסטגרם)</td><td>פרסום ומדידת קמפיינים באתר uxellent.com</td><td>ארצות הברית</td>"),
@@ -976,7 +977,7 @@ LEGAL_PUBLISH = {
         ("sub", "<mark class=\"flag\">‼️ Verify: per project documents, European Union (Ireland)</mark>", "European Union (Ireland)"),
         ("sub", "<mark class=\"flag\">‼️ Verify: per project documents, United States</mark>", "United States"),
         ("sub", "<td>DNS management</td><td><mark class=\"flag\">‼️ Fill in country</mark></td>", "<td>DNS management</td><td>A worldwide network</td>"),
-        ("sub", "<td>Measuring page views on uxellent.com</td><td><mark class=\"flag\">‼️ Fill in country</mark></td>", "<td>Measuring page views on uxellent.com</td><td>European Union</td>"),
+        ("sub", "<td>Measuring page views on uxellent.com</td><td><mark class=\"flag\">‼️ Fill in country</mark></td>", "<td>Measuring page views on uxellent.com</td><td>United States</td>"),
         ("sub", "<td>Measuring visits to uxellent.com: pages viewed and where visitors came from</td><td><mark class=\"flag\">‼️ Fill in country</mark></td>", "<td>Measuring visits to uxellent.com: pages viewed and where visitors came from</td><td>United States</td>"),
         ("sub", "<tr><td>Google Ads</td><td>Advertising and campaign measurement on uxellent.com</td><td><mark class=\"flag\">‼️ Fill in country</mark></td>", "<tr><td>Google Ads</td><td>Advertising and campaign measurement on uxellent.com</td><td>United States</td>"),
         ("sub", "<tr><td>Meta (Facebook and Instagram)</td><td>Advertising and campaign measurement on uxellent.com</td><td><mark class=\"flag\">‼️ Fill in country</mark></td>", "<tr><td>Meta (Facebook and Instagram)</td><td>Advertising and campaign measurement on uxellent.com</td><td>United States</td>"),
