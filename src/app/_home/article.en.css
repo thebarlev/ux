@@ -1080,6 +1080,8 @@
 .uxa-en .skip:focus{top:12px;color:#fff}
 .uxa-en main:focus{outline:none}
 
+@media(max-width:1060px){.uxa-en .ft-pts li{align-items:flex-start}.uxa-en .ft-pts li::before{margin-top:.62em}}
+
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxa-en .gs-img,.uxa-en .a2-img{isolation:isolate}
 .uxa-en .uxh-bg,.uxa-en .uxh-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;display:block}

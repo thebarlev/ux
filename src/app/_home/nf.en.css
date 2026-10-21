@@ -1148,6 +1148,8 @@
 .uxz-en .skip:focus{top:12px;color:#fff}
 .uxz-en main:focus{outline:none}
 
+@media(max-width:1060px){.uxz-en .ft-pts li{align-items:flex-start}.uxz-en .ft-pts li::before{margin-top:.62em}}
+
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxz-en .gs-img,.uxz-en .a2-img{isolation:isolate}
 .uxz-en .uxh-bg,.uxz-en .uxh-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;display:block}

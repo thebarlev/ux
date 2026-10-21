@@ -979,6 +979,8 @@
 .uxt-en .skip:focus{top:12px;color:#fff}
 .uxt-en main:focus{outline:none}
 
+@media(max-width:1060px){.uxt-en .ft-pts li{align-items:flex-start}.uxt-en .ft-pts li::before{margin-top:.62em}}
+
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxt-en .gs-img,.uxt-en .a2-img{isolation:isolate}
 .uxt-en .uxh-bg,.uxt-en .uxh-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;display:block}

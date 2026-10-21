@@ -477,6 +477,32 @@ def build(lang, cfg, images, page="home", legal=None):
 PLAN_IDS = ["free", "start", "business", "pro"]
 PLAN_SAVE_ANSWER = {"he": "20% על כל החבילות בתשלום, לעומת חיוב חודשי.", "en": "20% on every paid plan, compared with monthly billing."}
 PLAN_FROM = {"he": "<span>מ-₪0 לחודש</span>", "en": "<span>From $0 a month</span>"}
+# tbl-035: the card lines, in the order every card shows them, and which plans have each
+_ALL, _PAID = ("free", "start", "business", "pro"), ("start", "business", "pro")
+PLAN_FEATURES = {
+    "he": [
+        ('כתובת באוויר: <bdi dir="ltr">yourname.uxellent.site</bdi>', _ALL),
+        ("צ'אט AI שמעצב וכותב", _ALL),
+        ("עורך ייעודי בקליק", _ALL),
+        ("מתאים לעדכונים שוטפים", _PAID),
+        ("דומיין משלכם, ואנחנו מחברים אותו", ("business", "pro")),
+        ('בלי הקרדיט "נבנה ב-UXellent"', ("pro",)),
+        ("בלי כרטיס אשראי", ("free",)),
+    ],
+    "en": [
+        ('Live address: <bdi dir="ltr">yourname.uxellent.site</bdi>', _ALL),
+        ("AI chat that designs and writes", _ALL),
+        ("Click-to-edit editor", _ALL),
+        ("Made for ongoing updates", _PAID),
+        ("Your own domain, connected for you", ("business", "pro")),
+        ("No “Built with UXellent” credit", ("pro",)),
+        ("No credit card", ("free",)),
+    ],
+}
+PLAN_MUST = {
+    "he": [("אחסון האתר כלול", ()), ("עריכה ידנית ללא הגבלה<small>המכסה סופרת רק פעולות AI</small>", ())],
+    "en": [("Hosting included", ()), ("Unlimited manual editing<small>The quota counts AI actions only</small>", ())],
+}
 
 
 def plan_tokens(body, lang, page):
@@ -491,7 +517,22 @@ def plan_tokens(body, lang, page):
             assert (n1, n2, n3) == (1, 0 if pid == "free" else 1, 1), (lang, pid, n1, n2, n3)
             a, nx = re.subn(r'<li>(?:(?!</li>).)*?(?:פי [23] פעולות AI|[23]× the AI actions)</span></li>', "", a, flags=re.S)
             assert nx == (0 if pid == "free" else 1), (lang, pid, nx)
+            # tbl-035: no "Everything in X, plus:"; each card lists all it has, in one order for every card
+            a, nl = re.subn(r'\s*<p class="pl-lead">[^<]*</p>', "", a)
+            assert nl == (0 if pid == "free" else 1), (lang, pid, nl)
+            a, nu = re.subn(r"<ul>.*?</ul>", lambda m: "<ul>" + "".join(li(x) for x in PLAN_FEATURES[lang] if pid in x[1]) + "</ul>", a, count=1, flags=re.S)
+            assert nu == 1, (lang, pid)
+            # tbl-035: two lines on every card, right after the AI actions line
+            a = a.replace("{{PLAN_ACT:%s}}" % pid, "{{PLAN_ACT:%s}}" % pid + '<ul class="pl-must">' + "".join(li(x) for x in PLAN_MUST[lang]) + "</ul>", 1)
             return a
+        check = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+        assert body.count(check) >= 10, lang
+        def li(x):
+            return f"<li>{check}<span>{x[0]}</span></li>"
+        # every list line the sheet has, so none is lost when the lists are rebuilt
+        sheet_lines = set(re.findall(r'<li><svg viewBox="0 0 24 24"><path d="M5 12\.5l4\.5 4\.5L19 7\.5"/></svg><span>(.*?)</span></li>', body))
+        kept = {x[0] for x in PLAN_FEATURES[lang]}
+        assert sheet_lines - kept <= {"פי 2 פעולות AI", "פי 3 פעולות AI", "2× the AI actions", "3× the AI actions"} and kept <= sheet_lines, (lang, sheet_lines ^ kept)
         body, n = re.subn(r'<article class="pl[^"]*">.*?</article>', card, body, flags=re.S)
         assert n == 4 and next(ids, None) is None, n
         body, nb = re.subn(r'<em>(?:20%-|Save 20%)</em>', "{{PLAN_SAVE_BADGE}}", body)
@@ -963,6 +1004,8 @@ LEGAL_PUBLISH = {
         ("sub", "<a href=\"#t-end\">סיום וייצוא</a>", "<a href=\"#t-end\">סיום ההתקשרות</a>"),
         ("sub", "<p>אתם רשאים לבטל את המנוי בכל עת, כמפורט למעלה. אחרי הביטול האתר עובר לחבילת חינם והתוכן נשמר.</p><p>אתם רשאים גם לסגור את החשבון. סגירת החשבון מוחקת אותו ואת התוכן מיד. רישומי תשלום נשמרים כפי שהדין מחייב.</p><p>עותקים בגיבוי נמחקים כשהגיבוי מתחלף, בתוך 30 לילות. נשמור",
          "<p><b>ביטול מנוי.</b> אתם רשאים לבטל את המנוי בכל עת, כמפורט למעלה. החבילה בתשלום ממשיכה לפעול עד סוף התקופה ששולמה. אחר כך האתר נשאר באוויר בחבילת חינם, בכתובת שלנו, והתוכן נשמר. הדומיין האישי מתנתק, ומתחבר שוב אם תרכשו חבילה מחדש. ביטול לא מוחק דבר.</p><p><b>סגירת חשבון.</b> זה צעד נפרד מביטול. כדי לסגור את החשבון, כתבו לנו ל-<a class=\"lnk\" href=\"mailto:support@uxellent.com\"><bdi>support@uxellent.com</bdi></a>. אם יש מנוי בתשלום, הוא מבוטל קודם. סגירת החשבון מוחקת אותו ואת התוכן מיד. רישומי תשלום נשמרים כפי שהדין מחייב.</p><p>עותקים בגיבוי נמחקים אוטומטית 30 יום אחרי סגירת החשבון. נשמור"),
+        # tbl-036: the yearly saving is computed from the plans data (src/app/_home/plan-fill.ts)
+        ("sub", "בתשלום שנתי המחיר החודשי נמוך ב-20 אחוז,", "בתשלום שנתי המחיר החודשי {{PLAN_SAVE_TERMS}},"),
     ],
     ("en", "terms"): [
         ("sub", "The platform builds websites for service businesses: brand and company sites, marketing sites and landing pages, and portfolio and gallery sites. The platform does not offer an online store.",
@@ -999,6 +1042,8 @@ LEGAL_PUBLISH = {
         ("sub", "<a href=\"#t-end\">Ending and export</a>", "<a href=\"#t-end\">Ending the agreement</a>"),
         ("sub", "<p>You may cancel your subscription at any time, as described above. After cancelling, the site moves to the Free plan and your content is kept.</p><p>You may also close your account. Closing the account deletes it and its content right away. Payment records are kept as the law requires.</p><p>Copies in backups are deleted when the backup is replaced, within 30 nights. We will",
          "<p><b>Cancelling the subscription.</b> You may cancel your subscription at any time, as described above. The paid plan keeps running until the end of the paid period. After that the site stays online on the Free plan, at our address, and your content is kept. The custom domain is disconnected, and connects again if you buy a plan again. Cancelling deletes nothing.</p><p><b>Closing the account.</b> This is a separate step from cancelling. To close your account, write to us at <a class=\"lnk\" href=\"mailto:support@uxellent.com\">support@uxellent.com</a>. A paid subscription, if there is one, is cancelled first. Closing the account deletes it and its content right away. Payment records are kept as the law requires.</p><p>Copies in backups are deleted automatically 30 days after the account is closed. We will"),
+        # tbl-036: the yearly saving is computed from the plans data (src/app/_home/plan-fill.ts)
+        ("sub", "With annual billing the monthly price is 20 percent lower,", "With annual billing the monthly price {{PLAN_SAVE_TERMS}},"),
     ],
     ("he", "privacy"): [
         ("strip", "‼️ לעו״ד: האם חלה עלינו חובה למנות ממונה"),
@@ -1030,7 +1075,9 @@ LEGAL_PUBLISH = {
         # policy: outside the EEA the controller is Black Forest Labs Inc, San Francisco
         ("sub", "<tr><td>Vercel</td><td>אחסון האתרים והאפליקציה, הפצת תוכן, תעודות SSL</td>", "<tr><td>Vercel</td><td>אחסון האתרים והאפליקציה, הפצת תוכן, תעודות SSL, ו-Vercel AI Gateway, שדרכו נשלחות הבקשות ליצירת תמונות</td>"),
         ("sub", "<tr><td>Anthropic</td><td>מודל ה-AI שמעצב וכותב את האתר</td><td>ארצות הברית</td></tr>",
-         "<tr><td>Anthropic</td><td>מודל ה-AI שכותב ומעצב את האתר: טקסט ועיצוב</td><td>ארצות הברית</td></tr><tr><td>Black Forest Labs (Flux)</td><td>יצירת תמונות לאתר</td><td>ארצות הברית</td></tr>"),
+         "<tr><td>Anthropic</td><td>מודל ה-AI שכותב ומעצב את האתר: טקסט ועיצוב</td><td>ארצות הברית</td></tr><tr><td>Black Forest Labs (Flux)</td><td>יצירת תמונות לאתר</td><td>ארצות הברית</td></tr>"
+         # tbl-036: Pexels (stock photos); its policy: Canva Germany GmbH, Berlin, processing also in the US, Australia, Singapore and more
+         "<tr><td>Pexels</td><td>מאגר תמונות. נשלחות אליו מילות חיפוש לתמונות לאתר, בלי מידע אישי</td><td>גרמניה. לפי המדיניות שלהם, העיבוד גם בארצות הברית, באוסטרליה, בסינגפור ובמדינות נוספות.</td></tr>"),
         ("sub", "ההנחיה ותוכן רלוונטי מהאתר נשלחים לספק המודל.</p>", "ההנחיה ותוכן רלוונטי מהאתר נשלחים לספקי ה-AI: Anthropic לטקסט ולעיצוב, ו-Black Forest Labs (Flux) לתמונות, דרך Vercel AI Gateway.</p>"),
         ("sub", "<td>נמחקים מיד. רישומי תשלום נשמרים כפי שהדין מחייב.</td>", "<td>נמחקים מיד. עותקים בגיבוי נמחקים 30 יום אחרי הסגירה. רישומי תשלום נשמרים כפי שהדין מחייב.</td>"),
         ("sub", "<tr><td>גיבויים</td><td>עד 30 לילות.</td></tr>", "<tr><td>גיבויים</td><td>עד 30 יום.</td></tr>"),
@@ -1064,7 +1111,8 @@ LEGAL_PUBLISH = {
         # tbl-032: both AI providers (see the Hebrew)
         ("sub", "<tr><td>Vercel</td><td>Hosting the sites and the app, content delivery, SSL certificates</td>", "<tr><td>Vercel</td><td>Hosting the sites and the app, content delivery, SSL certificates, and Vercel AI Gateway, through which image requests are sent</td>"),
         ("sub", "<tr><td>Anthropic</td><td>The AI model that designs and writes the site</td><td>United States</td></tr>",
-         "<tr><td>Anthropic</td><td>The AI model that writes and designs the site: text and design</td><td>United States</td></tr><tr><td>Black Forest Labs (Flux)</td><td>Creating images for the site</td><td>United States</td></tr>"),
+         "<tr><td>Anthropic</td><td>The AI model that writes and designs the site: text and design</td><td>United States</td></tr><tr><td>Black Forest Labs (Flux)</td><td>Creating images for the site</td><td>United States</td></tr>"
+         "<tr><td>Pexels</td><td>A stock photo library. It receives search words for the site's photos, with no personal information</td><td>Germany. Under its policy, processing also takes place in the United States, Australia, Singapore and other countries.</td></tr>"),
         ("sub", "the prompt and relevant content from the site are sent to the model provider.</p>", "the prompt and relevant content from the site are sent to the AI providers: Anthropic for text and design, and Black Forest Labs (Flux) for images, through Vercel AI Gateway.</p>"),
         ("sub", "<td>Deleted right away. Payment records are kept as the law requires.</td>", "<td>Deleted right away. Copies in backups are deleted 30 days after closing. Payment records are kept as the law requires.</td>"),
         ("sub", "<tr><td>Backups</td><td>Up to 30 nights.</td></tr>", "<tr><td>Backups</td><td>Up to 30 days.</td></tr>"),
@@ -1453,6 +1501,12 @@ ONE_LEVEL_PRICING = """
 @media(max-width:1060px){{root} .pl-act{background:none;border-radius:0;padding:14px 0;border-block:1px solid var(--line)}}
 /* tbl-034: the actions line is built from the plans data (a trial line is longer), so it wraps when it must */
 {root} .pl-act span{white-space:normal;min-width:0}
+/* tbl-035: the two lines every card has, right under the AI actions line */
+{root} .pl ul.pl-must{margin-top:14px;padding-top:0;border-top:0;gap:9px}
+{root} .pl-must li span{display:grid}
+{root} .pl-must small{font-size:12.5px;font-weight:500;color:var(--ink2)}
+/* the cards side by side share their rows (the free plan's AI line is longer), so the AI line, the two lines and the button align */
+@media(min-width:761px){{root} .pl{display:grid;grid-row:span 8;grid-template-rows:subgrid;row-gap:0;align-content:start}{root} .pl ul{align-content:start}}
 """
 
 
@@ -1520,6 +1574,8 @@ def finish_css(css, lang, page):
     css = css.replace('font-family:"Heebo",', 'font-family:var(--font-heebo),"Heebo",')
     # current page, breadcrumbs, footer columns (navkit L-nav block), in every page's CSS
     css += "\n" + NAV_CSS
+    # the footer bullets on a phone, as in the current designs (עיצובים/, 21.10.2026): a wrapped point keeps its dot on the first line
+    css += "\n@media(max-width:1060px){.ft-pts li{align-items:flex-start}.ft-pts li::before{margin-top:.62em}}\n"
     root = f".{ROOTS[page]}-{lang}"
     css = scope_css(css, root)
     # The sheets were designed on plain browser defaults. The site's globals

@@ -39,8 +39,14 @@ const amount = (v: unknown) => (typeof v === "number" && Number.isFinite(v) && v
 const count = (v: unknown) => (typeof v === "number" && Number.isInteger(v) && v > 0 ? v : undefined)
 const countOrNull = (v: unknown) => (v === null ? null : count(v))
 
-/** The endpoint's answer (or the snapshot) as plans; null when it is not a plans list at all. */
-export function parsePlans(data: unknown): Plans | null {
+/**
+ * The endpoint's answer (or the snapshot) as plans; null when it is not a plans
+ * list at all. tbl-035: the endpoint answers price_usd_* = null until the dollar
+ * prices are in the platform's database; Itzik approved the English site's
+ * dollar prices (uxb-012), so a null there takes the snapshot's value, and a
+ * value from the endpoint, once it comes, wins.
+ */
+export function parsePlans(data: unknown, usdFallback?: Plans): Plans | null {
   const list = (data as { plans?: unknown } | null)?.plans
   if (!Array.isArray(list)) return null
   const plans: Plans = {}
@@ -52,8 +58,8 @@ export function parsePlans(data: unknown): Plans | null {
       id,
       priceIlsMonth: amount(p.price_ils_month),
       priceIlsYear: amount(p.price_ils_year),
-      priceUsdMonth: amount(p.price_usd_month),
-      priceUsdYear: amount(p.price_usd_year),
+      priceUsdMonth: p.price_usd_month === null ? usdFallback?.[id]?.priceUsdMonth : amount(p.price_usd_month),
+      priceUsdYear: p.price_usd_year === null ? usdFallback?.[id]?.priceUsdYear : amount(p.price_usd_year),
       aiActionsMonth: count(p.ai_actions_month),
       aiActionsDay: countOrNull(p.ai_actions_day),
       trialDays: countOrNull(p.trial_days),
@@ -69,7 +75,7 @@ export async function getPlans(): Promise<Plans> {
   try {
     const res = await fetch(PLANS_ENDPOINT, { next: { revalidate: PLANS_REVALIDATE }, signal: AbortSignal.timeout(5000) })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const plans = parsePlans(await res.json())
+    const plans = parsePlans(await res.json(), SNAPSHOT!)
     if (!plans) throw new Error("not a plans list")
     return plans
   } catch (err) {
