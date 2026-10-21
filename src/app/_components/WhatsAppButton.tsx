@@ -1,10 +1,19 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
+
+import { isSheetPage } from "@/app/_home/home.config"
 
 export function WhatsAppButton() {
   const pathname = usePathname()
-  if (pathname?.startsWith("/admin")) return null
+  // the 404 (tbl-028) is a sheet page at any address, so it is found by its root
+  const [notFound, setNotFound] = useState(false)
+  useEffect(() => setNotFound(Boolean(document.querySelector(".uxz-he,.uxz-en"))), [pathname])
+  if (pathname?.startsWith("/admin") || notFound) return null
+  // The 2026-10 pages built from the approved sheets (home tbl-019, pricing
+  // tbl-020) have no floating WhatsApp button.
+  if (pathname && isSheetPage(pathname)) return null
 
   const isEn = pathname?.startsWith("/en")
   const positionClass = isEn ? "right-6" : "left-6"

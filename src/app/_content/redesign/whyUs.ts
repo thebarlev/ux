@@ -3,8 +3,9 @@ import { getLiveDictionary, type Locale } from "@/content/i18n/dictionary"
 
 export async function getWhyUsContent(locale: Locale = "he") {
   const t = (await getLiveDictionary(locale)).whyUs
-  const prefix = locale === "en" ? "/en" : ""
   const [f1, f2, f3] = t.features
+  // The blocks used to link to /how-it-works, /products and /included, which are
+  // retired in both languages (tbl-023, tbl-024), so they have no link.
 
   const hero = {
     eyebrow: t.hero.eyebrow,
@@ -19,7 +20,6 @@ export async function getWhyUsContent(locale: Locale = "he") {
       title: f1.title,
       body: f1.body,
       chips: f1.chips,
-      cta: { label: `${f1.ctaLabel} >`, href: `${prefix}/how-it-works` },
       viz: { kind: "composer", typingText: f1.vizComposerText! },
     },
     {
@@ -27,7 +27,6 @@ export async function getWhyUsContent(locale: Locale = "he") {
       title: f2.title,
       body: f2.body,
       chips: f2.chips,
-      cta: { label: `${f2.ctaLabel} >`, href: `${prefix}/products` },
       flip: true,
       viz: {
         kind: "studio",
@@ -42,7 +41,6 @@ export async function getWhyUsContent(locale: Locale = "he") {
       title: f3.title,
       body: f3.body,
       chips: f3.chips,
-      cta: { label: `${f3.ctaLabel} >`, href: `${prefix}/included` },
       viz: {
         kind: "serp",
         url: "yourname.uxellent.site",

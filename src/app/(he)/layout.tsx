@@ -1,0 +1,98 @@
+import type { Metadata } from "next";
+import dynamic from "next/dynamic";
+import Script from "next/script";
+import { Assistant } from "next/font/google";
+import { JsonLd, ORGANIZATION_SCHEMA, WEBSITE_SCHEMA } from "@/components/JsonLd";
+import { DeferredScripts } from "@/components/DeferredScripts";
+import { LanguageBanner } from "@/app/_components/LanguageBanner";
+import { ConsentBanner } from "@/app/_home/ConsentBanner";
+import { TrackingProvider } from "@/app/_components/tracking/TrackingProvider";
+import { MetaPixelRouteTracker } from "@/app/_components/tracking/MetaPixelRouteTracker";
+import { getPixelId, metaPixelBootstrapScript } from "@/lib/analytics/meta-pixel";
+import { Suspense } from "react";
+import "../globals.css";
+import "../mobile-type.css";
+import "../text-links.css";
+
+const LeadPopupHost = dynamic(
+  () => import("@/app/_components/home/LeadPopupHost").then((m) => m.LeadPopupHost),
+)
+
+const WhatsAppButton = dynamic(
+  () => import("@/app/_components/WhatsAppButton").then((m) => m.WhatsAppButton),
+)
+
+const assistant = Assistant({
+  variable: "--font-assistant",
+  subsets: ["hebrew", "latin"],
+  weight: ["400", "600", "700"],
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://uxellent.com"),
+  title: "Uxellent | SEO, AI ופיתוח לעסקים",
+  description: "Uxellent מספקת קידום אתרים, פיתוח מערכות AI ושיווק דיגיטלי לעסקים שרוצים יותר נוכחות, לידים וצמיחה.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico?v=2" },
+      { url: "/favicon-32x32.png?v=2", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png?v=2", sizes: "16x16", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico?v=2",
+    apple: [
+      { url: "/apple-touch-icon.png?v=2", sizes: "180x180", type: "image/png" },
+    ],
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const metaPixelId = getPixelId();
+
+  return (
+    <html lang="he" dir="rtl" className={assistant.variable}>
+      <head>
+        {/* No preconnect to Google, Meta or PostHog: even a warmed connection
+            reaches them before the visitor has chosen in the cookie banner (tbl-031). */}
+      </head>
+      <body className="antialiased font-sans">
+        <JsonLd data={ORGANIZATION_SCHEMA} />
+        <JsonLd data={WEBSITE_SCHEMA} />
+
+        {/*
+          Meta Pixel bootstrap. Split out of DeferredScripts on purpose: that
+          loader waits for interaction or idle, so a visitor who landed from an
+          ad and bounced within a few seconds never fired PageView. Campaign
+          landing pages need the arrival recorded, so this runs afterInteractive
+          and the heavier tags (Ads, PostHog) stay deferred.
+        */}
+        {metaPixelId ? (
+          <Script id="meta-pixel" strategy="afterInteractive">
+            {metaPixelBootstrapScript(metaPixelId)}
+          </Script>
+        ) : null}
+
+        <LanguageBanner />
+
+        {/* Every page brings its own header and footer (the sheet pages, or
+            SiteChrome around the rest, tbl-024), so there is no global header. */}
+        {children}
+        <Suspense fallback={null}>
+          <TrackingProvider />
+        </Suspense>
+        <Suspense fallback={null}>
+          <MetaPixelRouteTracker />
+        </Suspense>
+        <LeadPopupHost />
+        <WhatsAppButton />
+        <DeferredScripts />
+        {/* cookie banner and settings, on every page (tbl-027) */}
+        <ConsentBanner lang="he" />
+      </body>
+    </html>
+  );
+}

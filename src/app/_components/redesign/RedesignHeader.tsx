@@ -7,6 +7,8 @@ import { useState } from "react"
 import styles from "./redesign.module.css"
 import { getDictionary, type Locale } from "@/content/i18n/dictionary"
 
+const RETIRED_HE = new Set(["/products", "/how-it-works", "/included"])
+
 export function RedesignHeader({ locale = "he" }: { locale?: Locale }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
@@ -14,13 +16,16 @@ export function RedesignHeader({ locale = "he" }: { locale?: Locale }) {
   const prefix = locale === "en" ? "/en" : ""
   const homeHref = locale === "en" ? "/en" : "/"
 
+  // The Hebrew /products, /how-it-works and /included are retired (tbl-023);
+  // the FAQ has its own page.
+  const live = (l: { href: string }) => locale === "en" || !RETIRED_HE.has(l.href)
   const navLinks = [
     { href: `${prefix}/why-us`, label: t.whyUs },
     { href: `${prefix}/pricing`, label: t.pricing },
     { href: `${prefix}/how-it-works`, label: t.howItWorks },
     { href: `${prefix}/blog`, label: t.blog },
-    { href: `${homeHref}#faq`, label: t.faq },
-  ]
+    { href: `${prefix}/faq`, label: t.faq },
+  ].filter(live)
   const mobileLinks = [
     { href: `${prefix}/why-us`, label: t.whyUs },
     { href: `${prefix}/products`, label: t.products },
@@ -28,8 +33,8 @@ export function RedesignHeader({ locale = "he" }: { locale?: Locale }) {
     { href: `${prefix}/how-it-works`, label: t.howItWorks },
     { href: `${prefix}/included`, label: t.included },
     { href: `${prefix}/blog`, label: t.blog },
-    { href: `${homeHref}#faq`, label: t.faqMobile },
-  ]
+    { href: `${prefix}/faq`, label: t.faqMobile },
+  ].filter(live)
 
   return (
     <header className={styles.hdr} dir={locale === "en" ? "ltr" : "rtl"}>

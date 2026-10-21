@@ -1,88 +1,30 @@
-# Uxellent
+# UXellent
 
-Uxellent is a digital agency specializing in marketing, design, and web development for modern businesses.
+UXellent is an AI website builder for businesses and professionals. The AI builds a complete site for the business, with its own content and design, and the owner makes changes in a chat or by clicking on the page.
 
-We help companies grow online by combining marketing strategy, SEO optimization, UX/UI design, and custom website and system development.
+Main website (Hebrew): https://uxellent.com
+English: https://uxellent.com/en
 
-Main website:
-https://uxellent.com
+## What every site includes
 
-English version:
-https://uxellent.com/en
+- Every page is built with SEO and structured business data, and is ready for AI search
+- Fast on every device; hosting and SSL included
+- A contact form and a WhatsApp button; every enquiry is saved in the system and emailed to the owner, and it is saved even if the email fails
+- The enquiries address is verified by email
+- Automatic nightly backup, 30 nights back
+- Changes in the chat or click-to-edit; import from an existing site
+- Own domain on the Business and Pro plans
+- Built with accessibility in mind
 
----
+## Pages
 
-## Core Services
+What you get: https://uxellent.com/features · https://uxellent.com/en/features
+Who it's for: https://uxellent.com/for-who · https://uxellent.com/en/for-who
+Pricing: https://uxellent.com/pricing · https://uxellent.com/en/pricing
+FAQ: https://uxellent.com/faq · https://uxellent.com/en/faq
+Blog and growth guides: https://uxellent.com/blog · https://uxellent.com/en/blog
+Contact: https://uxellent.com/contact · https://uxellent.com/en/contact
 
-### Marketing
-Marketing strategy and search visibility services helping businesses grow online.
+## Company
 
-Includes:
-- SEO optimization
-- AI search optimization
-- content strategy
-- online visibility
-
-https://uxellent.com/seo-ai
-https://uxellent.com/en/seo-ai
-
----
-
-### Design & Branding
-UX/UI design and branding services for businesses and startups.
-
-Includes:
-- visual identity
-- UX/UI design
-- branding systems
-- marketing design
-
-https://uxellent.com/design
-https://uxellent.com/en/design
-
----
-
-### Website & System Development
-Custom websites, web applications, and digital systems built with modern technologies.
-
-Includes:
-- business websites
-- SaaS platforms
-- custom systems
-- performance optimization
-
-https://uxellent.com/develop
-https://uxellent.com/en/develop
-
----
-
-## Additional Pages
-
-Blog
-https://uxellent.com/blog
-https://uxellent.com/en/blog
-
-Contact
-https://uxellent.com/en/contact
-
----
-
-## Company Information
-
-Company: Uxellent Technology LTD 
-Company Number: 515960508  
-Website: https://uxellent.com
 Email: support@uxellent.com
-
----
-
-## Topics Covered
-
-digital marketing  
-SEO optimization  
-AI search visibility  
-UX/UI design  
-branding  
-website development  
-web applications  
-business systems

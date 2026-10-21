@@ -1,0 +1,16 @@
+/*
+ * Links inside running text (tbl-022): one look for the whole site.
+ * The dark brand blue (#0f72b3, the darker end of the button blue), underlined,
+ * black on hover. Covers paragraphs, FAQ answers, article lists and tables,
+ * and links already marked as underlined text;
+ * menus, header, footer and button-like links keep their own look.
+ */
+:is(:where(p, dd, blockquote, td, figcaption, .ans, .prose li, article li) a, main a.underline):not([class*="btn"], [class*="button"], [class*="cta"], [role="button"], [class*="bg-"]):not(header *, nav *, footer *, [aria-hidden="true"] *) {
+  color: #0f72b3 !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+:is(:where(p, dd, blockquote, td, figcaption, .ans, .prose li, article li) a, main a.underline):not([class*="btn"], [class*="button"], [class*="cta"], [role="button"], [class*="bg-"]):not(header *, nav *, footer *, [aria-hidden="true"] *):hover {
+  color: #0b1220 !important;
+}

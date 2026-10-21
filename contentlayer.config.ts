@@ -14,6 +14,9 @@ export const Article = defineDocumentType(() => ({
     tags: { type: "json", required: false },
     locale: { type: "string", required: false },
     slug: { type: "string", required: false },
+    // tbl-028 articles: the page title for search, and the reading time as written
+    metaTitle: { type: "string", required: false },
+    readingTime: { type: "string", required: false },
   },
   computedFields: {
     slug: {

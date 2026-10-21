@@ -7,21 +7,25 @@ import { getDictionary, type Locale } from "@/content/i18n/dictionary"
 
 type FooterItem = { label: string; href: string }
 
+const RETIRED_HE = new Set(["/products", "/how-it-works", "/included"])
+
 export function RedesignFooter({ locale = "he", langSwitchHref }: { locale?: Locale; langSwitchHref?: string }) {
   const t = getDictionary(locale).footer
   const navT = getDictionary(locale).nav
   const prefix = locale === "en" ? "/en" : ""
   const homeHref = locale === "en" ? "/en" : "/"
 
+  // Retired (tbl-023): /about in both languages; /products, /how-it-works and
+  // /included in Hebrew. Their links go too.
+  const live = (i: FooterItem) => locale === "en" || !RETIRED_HE.has(i.href)
   const f1: FooterItem[] = [
     { label: t.product.products, href: `${prefix}/products` },
     { label: t.product.howItWorks, href: `${prefix}/how-it-works` },
     { label: t.product.included, href: `${prefix}/included` },
     { label: t.product.pricing, href: `${prefix}/pricing` },
     { label: t.product.platform, href: "https://ai.uxellent.com" },
-  ]
+  ].filter(live)
   const f2: FooterItem[] = [
-    { label: t.company.about, href: `${prefix}/about` },
     { label: t.company.contact, href: `${prefix}/contact` },
     { label: t.company.growthGuides, href: `${prefix}/growth-guides` },
     { label: t.company.blog, href: `${prefix}/blog` },

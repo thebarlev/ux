@@ -1,5 +1,5 @@
-import { HeaderEN } from "@/app/en/_components/HeaderEN"
-import { FooterEN } from "@/app/en/_components/FooterEN"
+import { HeaderEN } from "@/app/(en)/en/_components/HeaderEN"
+import { FooterEN } from "@/app/(en)/en/_components/FooterEN"
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
 
 type BlogShellProps = {

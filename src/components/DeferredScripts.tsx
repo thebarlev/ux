@@ -2,6 +2,9 @@
 
 import { useEffect, useRef } from "react"
 
+import { getPixelId, metaPixelBootstrapScript } from "@/lib/analytics/meta-pixel"
+import { CONSENT_EVENT, type Consent, hasConsentFor, onConsent } from "@/lib/consent"
+
 /**
  * The Meta Pixel is deliberately not loaded here.
  *
@@ -28,11 +31,13 @@ import { useEffect, useRef } from "react"
 const GA_MEASUREMENT_ID = "G-HEX0NQF4WM"
 const GOOGLE_ADS_ID = "AW-17972291188"
 
-/** Safe env access - process.env can be undefined in some bundling contexts. */
-const env = typeof process !== "undefined" ? process.env : ({} as NodeJS.ProcessEnv)
-
-const POSTHOG_KEY = env.NEXT_PUBLIC_POSTHOG_KEY
-const POSTHOG_HOST = env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com"
+/**
+ * Spelled out as process.env.NEXT_PUBLIC_…: Next inlines only that exact form
+ * into the browser bundle. Read through an alias (env.X) the key was undefined
+ * in the browser, so PostHog never loaded (found in tbl-031).
+ */
+const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY
+const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://eu.i.posthog.com"
 
 function injectScript(
   src: string,
@@ -59,22 +64,46 @@ function injectInline(code: string, id: string) {
 }
 
 /**
- * One gtag.js load serves both GA4 and Google Ads — they share the library, so
- * this is a single request with two config calls. It also defines window.gtag,
- * which is what the lead form's generate_lead event calls.
+ * One gtag.js for both Google IDs, the way Google recommends it (tbl-032).
+ * Google serves the library per ID, and G-HEX0NQF4WM answers 404 there
+ * (checked 21.10.2026), so the library loads under the Google Ads ID and both
+ * IDs are configured on it. Consent Mode v2: everything starts denied, and an
+ * update follows the banner (now and whenever the visitor changes it). The
+ * library loads only once a category is allowed, and each ID is configured
+ * only with its own category: GA4 is measurement, Google Ads is marketing.
+ * window.gtag is also what the lead form's generate_lead event calls.
  */
-function loadGoogleTags() {
-  const ga = JSON.stringify(GA_MEASUREMENT_ID)
-  const ads = JSON.stringify(GOOGLE_ADS_ID)
-  injectScript(
-    `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`,
-    "gtag-script",
-  )
+const GTAG_LIBRARY_ID = GOOGLE_ADS_ID
+
+function consentState(c: { analytics: boolean; marketing: boolean }) {
+  const ads = c.marketing ? "granted" : "denied"
+  return { analytics_storage: c.analytics ? "granted" : "denied", ad_storage: ads, ad_user_data: ads, ad_personalization: ads }
+}
+
+function loadGoogleTag() {
   injectInline(
-    `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}` +
-      `gtag('js',new Date());gtag('config',${ga});gtag('config',${ads});`,
+    "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}" +
+      `gtag('consent','default',${JSON.stringify({ ...consentState({ analytics: false, marketing: false }), wait_for_update: 500 })});` +
+      `gtag('consent','update',${JSON.stringify(consentState({ analytics: hasConsentFor("analytics"), marketing: hasConsentFor("marketing") }))});` +
+      "gtag('js',new Date());",
     "gtag-inline",
   )
+  injectScript(`https://www.googletagmanager.com/gtag/js?id=${GTAG_LIBRARY_ID}`, "gtag-script")
+  window.addEventListener(CONSENT_EVENT, (e) => {
+    const c = (e as CustomEvent<Consent>).detail
+    if (c) window.gtag?.("consent", "update", consentState(c))
+  })
+}
+
+function configGoogleTag(id: string) {
+  injectInline(`gtag('config',${JSON.stringify(id)});`, `gtag-config-${id}`)
+}
+
+/** The Meta Pixel, when marketing is allowed after the page loaded (the layout's snippet covers arrival). */
+function loadMetaPixel() {
+  const id = getPixelId()
+  if (!id || window.fbq) return
+  injectInline(metaPixelBootstrapScript(id), "meta-pixel-late")
 }
 
 function loadPostHog() {
@@ -84,7 +113,10 @@ function loadPostHog() {
     if (typeof window !== "undefined" && (window as unknown as { posthog?: { init: (k: string, o: object) => void } }).posthog?.init) {
       ;(window as unknown as { posthog: { init: (k: string, o: object) => void } }).posthog.init(POSTHOG_KEY, {
         api_host: POSTHOG_HOST,
+        // tbl-031: no session recordings, every input masked, and no identify on the marketing site
         disable_session_recording: true,
+        session_recording: { maskAllInputs: true },
+        mask_all_text: false,
         disable_surveys: true,
         autocapture: false,
         capture_pageview: true,
@@ -94,20 +126,31 @@ function loadPostHog() {
   })
 }
 
-/** Phase 1: GA4 + Google Ads. Phase 2: PostHog (heaviest, last). */
+/** Phase 1: GA4 + Google Ads. Phase 2: PostHog (heaviest, last). Each only with its consent. */
 function runDeferredLoad() {
-  loadGoogleTags()
+  let google = false
+  const googleTag = (id: string) => () => {
+    if (!google) {
+      google = true
+      loadGoogleTag()
+    }
+    configGoogleTag(id)
+  }
+  onConsent("analytics", googleTag(GA_MEASUREMENT_ID))
+  onConsent("marketing", googleTag(GOOGLE_ADS_ID))
+  onConsent("marketing", loadMetaPixel)
 
+  const posthog = () => onConsent("analytics", loadPostHog)
   if (typeof requestAnimationFrame !== "undefined") {
     requestAnimationFrame(() => {
       if (typeof requestIdleCallback !== "undefined") {
-        requestIdleCallback(() => loadPostHog(), { timeout: 2000 })
+        requestIdleCallback(posthog, { timeout: 2000 })
       } else {
-        setTimeout(loadPostHog, 500)
+        setTimeout(posthog, 500)
       }
     })
   } else {
-    setTimeout(loadPostHog, 500)
+    setTimeout(posthog, 500)
   }
 }
 

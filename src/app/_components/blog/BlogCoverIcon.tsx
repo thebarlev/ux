@@ -41,30 +41,6 @@ function IconSpeed() {
   )
 }
 
-function IconInvoice() {
-  return (
-    <>
-      <path {...strokeProps} d="M98 58h96l28 28v126H98z" />
-      <path {...strokeProps} d="M194 58v33h33" />
-      <path {...strokeProps} d="M124 123h72M124 152h72M124 181h40" />
-      <path {...strokeProps} d="m124 214 18 18 34-39" />
-      <rect x="112" y="203" width="88" height="42" rx="16" fill="#5389BB" fillOpacity="0.1" />
-    </>
-  )
-}
-
-function IconNegativeReceipt() {
-  return (
-    <>
-      <path {...strokeProps} d="M100 56h100v164l-16-10-16 10-16-10-16 10-16-10-16 10-16-10-16 10Z" />
-      <path {...strokeProps} d="M124 104h52M124 132h52" />
-      <path {...strokeProps} d="M116 176h68" />
-      <circle cx="150" cy="176" r="44" fill="#111827" fillOpacity="0.06" />
-      <path {...strokeProps} d="M122 176h56" />
-    </>
-  )
-}
-
 function IconSeoAi() {
   return (
     <>
@@ -100,10 +76,6 @@ function renderIcon(slug?: string) {
       return <IconAutomation />
     case "fast-slow-web":
       return <IconSpeed />
-    case "green-invoice":
-      return <IconInvoice />
-    case "negative-receipt":
-      return <IconNegativeReceipt />
     case "seo-ai-engine":
       return <IconSeoAi />
     case "wordpress-vs-other":

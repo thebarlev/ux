@@ -1,86 +1,53 @@
 import type { MetadataRoute } from "next"
 import { allArticles } from "contentlayer/generated"
 
-import { growthGuides } from "@/lib/growth-guides/topics"
-
 const BASE_URL = "https://uxellent.com"
 
-const staticRoutes = [
-  // Hebrew
+// Every page in both languages (tbl-028); each entry names its twin (hreflang he / en / x-default).
+// The 404 is not here.
+const PAGES = [
   "",
-  "/invoice",
+  "/features",
+  "/for-who",
   "/pricing",
-  "/privacy",
-  "/terms",
+  "/faq",
   "/contact",
-  "/accessibility",
-  "/account-deletion",
-  "/about",
   "/blog",
-  "/growth-guides",
-  "/portfolio",
-  "/en/idea-to-product",
-  // redesign/marketing-2026-08 (agent5-brief.md)
-  "/products",
-  "/how-it-works",
-  "/included",
-  // English
-  "/en",
-  "/en/invoice",
-  "/en/pricing",
-  "/en/privacy",
-  "/en/terms",
-  "/en/contact",
-  "/en/accessibility",
-  "/en/account-deletion",
-  "/en/about",
-  "/en/blog",
-  "/en/design",
-  "/en/develop",
-  "/en/develop-ai",
-  "/en/account-ai",
-  "/en/portfolio",
-  "/en/marketing/ppc",
-  "/en/seo-ai",
-  "/en/growth-guides",
+  "/terms",
+  "/privacy",
+  "/cookies",
+  "/accessibility",
+  "/cancel",
+  "/acceptable-use",
+  "/account-deletion",
 ] as const
+
+const he = (p: string) => `${BASE_URL}${p || "/"}`
+const en = (p: string) => `${BASE_URL}/en${p}`
+const languages = (p: string, twin = true) => (twin ? { he: he(p), en: en(p), "x-default": he(p) } : undefined)
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
-
-  const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
-    url: `${BASE_URL}${path || "/"}`,
-    lastModified: now,
-    changeFrequency: path === "" || path === "/en" ? "weekly" : "monthly",
-    priority: path === "" ? 1 : path === "/en" ? 0.95 : 0.8,
-  }))
-
-  const blogEntries: MetadataRoute.Sitemap = allArticles.map((article) => {
-    const slug = article.slug ?? ""
-    const isEn = (article.locale as string | undefined) === "en"
-    const path = isEn ? `/en/blog/${slug}` : `/blog/${slug}`
+  const pages: MetadataRoute.Sitemap = PAGES.flatMap((p) =>
+    [he(p), en(p)].map((url) => ({
+      url,
+      lastModified: now,
+      changeFrequency: p === "" || p === "/blog" ? ("weekly" as const) : ("monthly" as const),
+      priority: p === "" ? 1 : 0.8,
+      alternates: { languages: languages(p) },
+    })),
+  )
+  const articles: MetadataRoute.Sitemap = allArticles.map((a) => {
+    const isEn = (a.locale as string | undefined) === "en"
+    const p = `/blog/${a.slug}`
+    const twin = allArticles.some((b) => b.slug === a.slug && ((b.locale as string | undefined) === "en") !== isEn)
     return {
-      url: `${BASE_URL}${path}`,
-      lastModified: new Date(article.date),
+      url: isEn ? en(p) : he(p),
+      lastModified: new Date(a.date),
       changeFrequency: "monthly" as const,
       priority: 0.7,
+      alternates: { languages: languages(p, twin) },
     }
   })
-
-  const growthGuideEntries: MetadataRoute.Sitemap = growthGuides.flatMap((guide) => [
-    {
-      url: `${BASE_URL}/en/growth-guides/${guide.slug}`,
-      lastModified: now,
-      changeFrequency: "monthly" as const,
-      priority: 0.75,
-    },
-    {
-      url: `${BASE_URL}/growth-guides/${guide.slug}`,
-      lastModified: now,
-      changeFrequency: "monthly" as const,
-      priority: 0.75,
-    },
-  ])
-
-  return [...staticEntries, ...blogEntries, ...growthGuideEntries]
+  return [...pages, ...articles]
 }

@@ -3,17 +3,16 @@
  *
  * Every export is a guarded no-op unless BOTH hold:
  *   1. NEXT_PUBLIC_META_PIXEL_ID is set
- *   2. the visitor has not explicitly rejected cookies
+ *   2. the visitor allowed marketing cookies (`ux_consent`, src/lib/consent)
  *
- * Consent is opt-out: tags load by default and only an explicit "rejected"
- * in `vow_cookie_consent` (written by CookieBanner) blocks them. An undecided
- * visitor is treated as consenting.
+ * Consent is opt-in (tbl-027): nothing loads until marketing is allowed in the
+ * cookie banner. An undecided visitor is treated as not consenting.
  *
  * Analytics must never break a business flow, so nothing here throws — every
  * entry point swallows its own errors.
  */
 
-const CONSENT_KEY = "vow_cookie_consent"
+import { MARKETING_CONSENT_CHECK, hasConsentFor } from "@/lib/consent"
 
 type FbqParams = Record<string, unknown>
 type FbqOptions = { eventID?: string }
@@ -30,15 +29,10 @@ export function getPixelId(): string {
   return (process.env.NEXT_PUBLIC_META_PIXEL_ID || "").trim()
 }
 
-/** Opt-out model: only an explicit rejection blocks tracking. */
+/** Opt-in: only an explicit "marketing allowed" lets the pixel run. */
 export function hasConsent(): boolean {
   if (typeof window === "undefined") return false
-  try {
-    return localStorage.getItem(CONSENT_KEY) !== "rejected"
-  } catch {
-    // Private mode / blocked storage: fall back to the opt-out default.
-    return true
-  }
+  return hasConsentFor("marketing")
 }
 
 export function isPixelEnabled(): boolean {
@@ -70,9 +64,8 @@ export function newEventId(): string {
  */
 export function metaPixelBootstrapScript(pixelId: string): string {
   const id = JSON.stringify(pixelId)
-  const key = JSON.stringify(CONSENT_KEY)
   return (
-    `try{if(localStorage.getItem(${key})==='rejected'){}else{` +
+    `try{if(${MARKETING_CONSENT_CHECK}){` +
     `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?` +
     `n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;` +
     `n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;` +

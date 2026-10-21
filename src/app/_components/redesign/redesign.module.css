@@ -455,7 +455,7 @@
 .vzSiteHr { height: 64px; background: linear-gradient(118deg, #DCEDF9, #EDF4FA 52%, #DCF1EE); margin: 10px 12px; border-radius: 7px; }
 .vzSiteRw { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 12px 12px; }
 .vzSiteRw i { height: 34px; border-radius: 6px; background: #F0F6FA; border: 1px solid #E2EBF2; display: block; }
-.vzBa { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; }
+.vzBa { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 10px; align-items: center; }
 .vzBaOld { filter: grayscale(1); opacity: .6; transform: scale(.94); }
 .vzBaArr { color: var(--accent-tx); }
 .vzBaArr svg { width: 22px; height: 22px; }
@@ -563,8 +563,8 @@
 .tags span { font-size: 12px; font-weight: 700; color: #CFE9F4; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .16); border-radius: 99px; padding: 5px 13px; }
 .tagRt { color: #5FE7D0; border-color: rgba(95, 231, 208, .35); background: rgba(95, 231, 208, .08); }
 
-.artWrap { display: grid; grid-template-columns: 1fr; gap: clamp(28px, 4vw, 60px); align-items: start; }
-@media (min-width: 1100px) { .artWrap { grid-template-columns: 210px 1fr; } .toc { position: sticky; top: 90px; } }
+.artWrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(28px, 4vw, 60px); align-items: start; }
+@media (min-width: 1100px) { .artWrap { grid-template-columns: 210px minmax(0, 1fr); } .toc { position: sticky; top: 90px; } }
 .toc { border-inline-start: 2px solid var(--rule); padding-inline-start: 18px; }
 .tocTt { font-size: 12px; font-weight: 700; letter-spacing: .12em; color: var(--ink-3); margin-bottom: 12px; }
 .toc a { display: block; font-size: 13.5px; font-weight: 600; color: var(--ink-2); padding-block: 6px; line-height: 1.4; text-decoration: none; }
@@ -572,6 +572,8 @@
 @media (max-width: 1099px) { .toc { display: none; } }
 
 .prose { max-width: 66ch; }
+/* a wide table scrolls inside its own box on a phone instead of pushing the article off screen */
+.prose div:has(> table) { overflow-x: auto !important; }
 .prose > p { margin: 0 0 20px; font-size: 16.5px; color: var(--ink-2); line-height: 1.95; }
 .prose > p:first-child { font-size: 18px; color: var(--ink); line-height: 1.9; }
 .prose h2 { display: flex; align-items: baseline; gap: 13px; margin: clamp(34px, 4.4vw, 54px) 0 16px; font-size: clamp(20px, 2.5vw, 26px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); scroll-margin-top: 90px; }
@@ -676,3 +678,6 @@
 .prNote p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.85; }
 .pnSep { display: grid; place-items: center; padding: clamp(34px, 4.4vw, 48px) 0; }
 .pnSepSvg { width: 22px; height: 22px; display: block; opacity: .5; }
+
+/* mobile law (tbl-025b): one container level, so the illustration panel drops and its cards take the full width */
+@media (max-width: 1060px) { .featViz, .whyUsWarm .featViz { background: none; border: 0; border-radius: 0; padding: 0; min-height: 0; overflow: visible; } .featViz .vz { width: 100%; } }
