@@ -441,6 +441,8 @@ def build(lang, cfg, images, page="home", legal=None):
     css = finish_css(css, lang, page)
     open(os.path.join(OUT, f"{page}.{lang}.css"), "w", encoding="utf-8").write(css)
 
+    body = plan_tokens(body, lang, page)
+
     faq = [
         {"q": re.sub(r"<[^>]+>", "", q).strip(), "a": re.sub(r"<[^>]+>", "", a).strip()}
         for q, a in re.findall(r"<summary>(.*?)<span class=\"pm\">\+</span></summary><div class=\"ans\">(.*?)</div>", body, re.S)
@@ -464,6 +466,47 @@ def build(lang, cfg, images, page="home", legal=None):
         return
     open(os.path.join(OUT, f"{'markup' if home else page + '-markup'}.{lang}.ts"), "w", encoding="utf-8").write(ts)
     print(page, lang, "markup", len(body), "css", len(css), "faq", len(faq))
+
+
+
+# tbl-034: prices and AI action counts come from the platform (src/lib/plans.ts),
+# never from the sheet. The sheet's numbers become placeholders that HomePage
+# fills from the plans data when the page renders; a value the data lacks
+# leaves its line out. The 2x / 3x lines go: they compared numbers that now
+# live in the data.
+PLAN_IDS = ["free", "start", "business", "pro"]
+PLAN_SAVE_ANSWER = {"he": "20% על כל החבילות בתשלום, לעומת חיוב חודשי.", "en": "20% on every paid plan, compared with monthly billing."}
+PLAN_FROM = {"he": "<span>מ-₪0 לחודש</span>", "en": "<span>From $0 a month</span>"}
+
+
+def plan_tokens(body, lang, page):
+    if page == "pricing":
+        ids = iter(PLAN_IDS)
+        def card(m):
+            pid = next(ids)
+            a = m.group(0)
+            a, n1 = re.subn(r'<div class="pl-price">.*?</div>', "{{PLAN_PRICE:%s}}" % pid, a, count=1, flags=re.S)
+            a, n2 = re.subn(r'<span class="pl-yr"[^>]*>[^<]*</span>', "{{PLAN_YEAR:%s}}" % pid, a, count=1)
+            a, n3 = re.subn(r'<div class="pl-act">.*?</div>', "{{PLAN_ACT:%s}}" % pid, a, count=1, flags=re.S)
+            assert (n1, n2, n3) == (1, 0 if pid == "free" else 1, 1), (lang, pid, n1, n2, n3)
+            a, nx = re.subn(r'<li>(?:(?!</li>).)*?(?:פי [23] פעולות AI|[23]× the AI actions)</span></li>', "", a, flags=re.S)
+            assert nx == (0 if pid == "free" else 1), (lang, pid, nx)
+            return a
+        body, n = re.subn(r'<article class="pl[^"]*">.*?</article>', card, body, flags=re.S)
+        assert n == 4 and next(ids, None) is None, n
+        body, nb = re.subn(r'<em>(?:20%-|Save 20%)</em>', "{{PLAN_SAVE_BADGE}}", body)
+        assert nb == 1, nb
+    if page in ("pricing", "faq"):
+        assert body.count(PLAN_SAVE_ANSWER[lang]) == 1, (lang, page)
+        body = body.replace(PLAN_SAVE_ANSWER[lang], "{{PLAN_SAVE_ANSWER}}")
+    if page == "features":
+        assert body.count(PLAN_FROM[lang]) == 1, lang
+        body = body.replace(PLAN_FROM[lang], "<span>{{PLAN_FROM}}</span>")
+    left = re.findall(r"₪\s?\d|\$\d|\d[\d,]* (?:פעולות|AI actions)|פי [23] פעולות|[23]× the AI|\d+%", re.sub(r"<[^>]+>", " ", re.sub(r"<(style|script)\b.*?</\1>", "", body, flags=re.S)))
+    # what stays written by hand: the credit add-on and a registrar's domain price (not plan data)
+    left = [x for x in left if x not in ("₪1", "₪8", "$5", "$1")]
+    assert not left or page not in ("pricing", "faq", "features", "home"), (lang, page, left)
+    return body
 
 
 def contact_markup(body, lang, cfg):
@@ -910,6 +953,16 @@ LEGAL_PUBLISH = {
         ("strip", "‼️ תלוי מימוש: בקשת אישור מחדש"),
         ("strip", "‼️ תלוי מימוש: ארכיון גרסאות גלוי"),
         ("sub", "לבתי המשפט המוסמכים במחוז <mark class=\"flag\">‼️ מחוז לבחירת עו״ד. משרד החברה במודיעין-מכבים-רעות</mark>,", "לבתי המשפט המוסמכים בישראל,"),
+        # tbl-032: both AI providers, as the platform code calls them (Anthropic directly; Flux through Vercel AI Gateway)
+        ("sub", "<p>אתם כותבים הנחיה, וה-AI מייצר טקסט, עיצוב ומבנה.", "<p>אתם כותבים הנחיה, וה-AI מייצר טקסט, עיצוב, מבנה ותמונות."),
+        ("sub", "<p>הבקשות שלכם והתוכן הרלוונטי נשלחים לספק המודל (Anthropic) כדי לבצע את הפעולה.</p>",
+         "<p>הבקשות שלכם והתוכן הרלוונטי נשלחים לספקי ה-AI כדי לבצע את הפעולה: Anthropic לטקסט ולעיצוב, ו-Black Forest Labs (Flux) לתמונות, דרך Vercel AI Gateway.</p>"),
+        # tbl-032: cancelling and closing are two things, as in the platform code: cancelling keeps everything
+        # (free plan at the end of the paid period, the domain detached and kept); closing deletes, on request,
+        # after a paid subscription is cancelled; deleted accounts leave the backup 30 days later
+        ("sub", "<a href=\"#t-end\">סיום וייצוא</a>", "<a href=\"#t-end\">סיום ההתקשרות</a>"),
+        ("sub", "<p>אתם רשאים לבטל את המנוי בכל עת, כמפורט למעלה. אחרי הביטול האתר עובר לחבילת חינם והתוכן נשמר.</p><p>אתם רשאים גם לסגור את החשבון. סגירת החשבון מוחקת אותו ואת התוכן מיד. רישומי תשלום נשמרים כפי שהדין מחייב.</p><p>עותקים בגיבוי נמחקים כשהגיבוי מתחלף, בתוך 30 לילות. נשמור",
+         "<p><b>ביטול מנוי.</b> אתם רשאים לבטל את המנוי בכל עת, כמפורט למעלה. החבילה בתשלום ממשיכה לפעול עד סוף התקופה ששולמה. אחר כך האתר נשאר באוויר בחבילת חינם, בכתובת שלנו, והתוכן נשמר. הדומיין האישי מתנתק, ומתחבר שוב אם תרכשו חבילה מחדש. ביטול לא מוחק דבר.</p><p><b>סגירת חשבון.</b> זה צעד נפרד מביטול. כדי לסגור את החשבון, כתבו לנו ל-<a class=\"lnk\" href=\"mailto:support@uxellent.com\"><bdi>support@uxellent.com</bdi></a>. אם יש מנוי בתשלום, הוא מבוטל קודם. סגירת החשבון מוחקת אותו ואת התוכן מיד. רישומי תשלום נשמרים כפי שהדין מחייב.</p><p>עותקים בגיבוי נמחקים אוטומטית 30 יום אחרי סגירת החשבון. נשמור"),
     ],
     ("en", "terms"): [
         ("sub", "The platform builds websites for service businesses: brand and company sites, marketing sites and landing pages, and portfolio and gallery sites. The platform does not offer an online store.",
@@ -939,6 +992,13 @@ LEGAL_PUBLISH = {
         # "store" as a verb, in the translation only (the Hebrew is binding): the page names no store at all (tbl-031)
         ("sub", "We do not store the full card number.", "We do not keep the full card number."),
         ("sub", "permission to store, copy, adapt and display", "permission to keep, copy, adapt and display"),
+        # tbl-032: both AI providers; cancelling and closing (see the Hebrew)
+        ("sub", "<p>You write a prompt, and the AI produces text, design and structure.", "<p>You write a prompt, and the AI produces text, design, structure and images."),
+        ("sub", "<p>Your requests and the relevant content are sent to the model provider (Anthropic) to carry out the action.</p>",
+         "<p>Your requests and the relevant content are sent to the AI providers to carry out the action: Anthropic for text and design, and Black Forest Labs (Flux) for images, through Vercel AI Gateway.</p>"),
+        ("sub", "<a href=\"#t-end\">Ending and export</a>", "<a href=\"#t-end\">Ending the agreement</a>"),
+        ("sub", "<p>You may cancel your subscription at any time, as described above. After cancelling, the site moves to the Free plan and your content is kept.</p><p>You may also close your account. Closing the account deletes it and its content right away. Payment records are kept as the law requires.</p><p>Copies in backups are deleted when the backup is replaced, within 30 nights. We will",
+         "<p><b>Cancelling the subscription.</b> You may cancel your subscription at any time, as described above. The paid plan keeps running until the end of the paid period. After that the site stays online on the Free plan, at our address, and your content is kept. The custom domain is disconnected, and connects again if you buy a plan again. Cancelling deletes nothing.</p><p><b>Closing the account.</b> This is a separate step from cancelling. To close your account, write to us at <a class=\"lnk\" href=\"mailto:support@uxellent.com\">support@uxellent.com</a>. A paid subscription, if there is one, is cancelled first. Closing the account deletes it and its content right away. Payment records are kept as the law requires.</p><p>Copies in backups are deleted automatically 30 days after the account is closed. We will"),
     ],
     ("he", "privacy"): [
         ("strip", "‼️ לעו״ד: האם חלה עלינו חובה למנות ממונה"),
@@ -966,6 +1026,14 @@ LEGAL_PUBLISH = {
         ("sub", "<td>תיעוד הסכמה לתנאים ולדיוור</td>", "<td>תיעוד ההסכמה לתנאים</td>"),
         ("drop", "<td>לוגים טכניים</td>"),
         ("strip", "‼️ הבאנר עוצב (uxb-026)"),
+        # tbl-032: both AI providers (Flux through Vercel AI Gateway); BFL's country from its public privacy
+        # policy: outside the EEA the controller is Black Forest Labs Inc, San Francisco
+        ("sub", "<tr><td>Vercel</td><td>אחסון האתרים והאפליקציה, הפצת תוכן, תעודות SSL</td>", "<tr><td>Vercel</td><td>אחסון האתרים והאפליקציה, הפצת תוכן, תעודות SSL, ו-Vercel AI Gateway, שדרכו נשלחות הבקשות ליצירת תמונות</td>"),
+        ("sub", "<tr><td>Anthropic</td><td>מודל ה-AI שמעצב וכותב את האתר</td><td>ארצות הברית</td></tr>",
+         "<tr><td>Anthropic</td><td>מודל ה-AI שכותב ומעצב את האתר: טקסט ועיצוב</td><td>ארצות הברית</td></tr><tr><td>Black Forest Labs (Flux)</td><td>יצירת תמונות לאתר</td><td>ארצות הברית</td></tr>"),
+        ("sub", "ההנחיה ותוכן רלוונטי מהאתר נשלחים לספק המודל.</p>", "ההנחיה ותוכן רלוונטי מהאתר נשלחים לספקי ה-AI: Anthropic לטקסט ולעיצוב, ו-Black Forest Labs (Flux) לתמונות, דרך Vercel AI Gateway.</p>"),
+        ("sub", "<td>נמחקים מיד. רישומי תשלום נשמרים כפי שהדין מחייב.</td>", "<td>נמחקים מיד. עותקים בגיבוי נמחקים 30 יום אחרי הסגירה. רישומי תשלום נשמרים כפי שהדין מחייב.</td>"),
+        ("sub", "<tr><td>גיבויים</td><td>עד 30 לילות.</td></tr>", "<tr><td>גיבויים</td><td>עד 30 יום.</td></tr>"),
     ],
     ("en", "privacy"): [
         ("strip", "‼️ For the lawyer: are we required to appoint"),
@@ -993,6 +1061,13 @@ LEGAL_PUBLISH = {
         ("sub", "<td>Record of consent to the terms and to marketing email</td>", "<td>Record of consent to the terms</td>"),
         ("drop", "<td>Technical logs</td>"),
         ("strip", "‼️ The banner has been designed (uxb-026)"),
+        # tbl-032: both AI providers (see the Hebrew)
+        ("sub", "<tr><td>Vercel</td><td>Hosting the sites and the app, content delivery, SSL certificates</td>", "<tr><td>Vercel</td><td>Hosting the sites and the app, content delivery, SSL certificates, and Vercel AI Gateway, through which image requests are sent</td>"),
+        ("sub", "<tr><td>Anthropic</td><td>The AI model that designs and writes the site</td><td>United States</td></tr>",
+         "<tr><td>Anthropic</td><td>The AI model that writes and designs the site: text and design</td><td>United States</td></tr><tr><td>Black Forest Labs (Flux)</td><td>Creating images for the site</td><td>United States</td></tr>"),
+        ("sub", "the prompt and relevant content from the site are sent to the model provider.</p>", "the prompt and relevant content from the site are sent to the AI providers: Anthropic for text and design, and Black Forest Labs (Flux) for images, through Vercel AI Gateway.</p>"),
+        ("sub", "<td>Deleted right away. Payment records are kept as the law requires.</td>", "<td>Deleted right away. Copies in backups are deleted 30 days after closing. Payment records are kept as the law requires.</td>"),
+        ("sub", "<tr><td>Backups</td><td>Up to 30 nights.</td></tr>", "<tr><td>Backups</td><td>Up to 30 days.</td></tr>"),
     ],
     ("he", "cookies"): [
         ("sub", "<th scope=\"col\">צריך הסכמה?</th>", "<th scope=\"col\">עוגיות ותוקף</th><th scope=\"col\">צריך הסכמה?</th>"),
@@ -1039,6 +1114,9 @@ LEGAL_PUBLISH = {
         ("drop", "‼️ לעו״ד: החוק מאפשר הודעת ביטול גם בעל פה"),
         ("sub", "<li>נשלח לכם אישור במייל עם מועד הביטול. <mark class=\"flag\">‼️ תלוי מימוש</mark></li>", "<li>נשלח לכם אישור במייל, עם התאריך שעד אליו החבילה ממשיכה לפעול.</li>"),
         ("drop", "<b>הערה לבעלים, לא לפרסום:</b> החוק מחייב"),
+        # tbl-032: the same as the terms: cancelling keeps the site on the Free plan; closing is separate
+        ("sub", "<li>התוכן שלכם נשמר בחבילת חינם. אם תרצו לסגור את החשבון לגמרי, כתבו לנו.</li>",
+         "<li>בסוף התקופה ששולמה האתר נשאר באוויר בחבילת חינם, והתוכן נשמר. הדומיין האישי מתנתק, ומתחבר שוב אם תרכשו חבילה מחדש. ביטול לא מוחק דבר.</li><li>סגירת חשבון היא צעד נפרד: כתבו לנו ל-<a class=\"lnk\" href=\"mailto:support@uxellent.com\"><bdi>support@uxellent.com</bdi></a>. הסגירה מוחקת את החשבון ואת התוכן מיד, ועותקים בגיבוי נמחקים 30 יום אחריה.</li>"),
     ],
     ("en", "cancel"): [
         ("strip", "‼️ For the lawyer: does a conversation with the AI chat"),
@@ -1047,6 +1125,9 @@ LEGAL_PUBLISH = {
         ("drop", "‼️ For the lawyer: the law also allows a cancellation notice by phone"),
         ("sub", "<li>We will email you a confirmation with the cancellation date. <mark class=\"flag\">‼️ Depends on implementation</mark></li>", "<li>We will email you a confirmation, with the date until which your plan keeps running.</li>"),
         ("drop", "<b>Note for the owner, not for publication:</b> The law requires"),
+        # tbl-032: the same as the terms
+        ("sub", "<li>Your content is kept on the Free plan. If you want to close the account completely, write to us.</li>",
+         "<li>At the end of the paid period the site stays online on the Free plan, and your content is kept. The custom domain is disconnected, and connects again if you buy a plan again. Cancelling deletes nothing.</li><li>Closing the account is a separate step: write to us at <a class=\"lnk\" href=\"mailto:support@uxellent.com\">support@uxellent.com</a>. Closing deletes the account and its content right away, and copies in backups are deleted 30 days later.</li>"),
     ],
     ("he", "aup"): [
         ("sub", "אישור קבלה ורישום ההודעה עם תאריך ושעה. <mark class=\"flag\">‼️ תלוי מימוש: יומן הודעות</mark>", "אישור קבלת ההודעה."),

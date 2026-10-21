@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 
 import { getPixelId, metaPixelBootstrapScript } from "@/lib/analytics/meta-pixel"
-import { onConsent } from "@/lib/consent"
+import { CONSENT_EVENT, type Consent, hasConsentFor, onConsent } from "@/lib/consent"
 
 /**
  * The Meta Pixel is deliberately not loaded here.
@@ -64,16 +64,38 @@ function injectInline(code: string, id: string) {
 }
 
 /**
- * GA4 and Google Ads share window.gtag, but each loads gtag.js under its own
- * ID: Google serves the library per ID, and an ID it doesn't know answers 404
- * (G-HEX0NQF4WM did on 21.10.2026), which must not take the other tag down
- * with it (tbl-029). Each is configured only once its consent category is
- * allowed (tbl-027): GA4 is measurement, Google Ads is marketing. window.gtag
- * is also what the lead form's generate_lead event calls.
+ * One gtag.js for both Google IDs, the way Google recommends it (tbl-032).
+ * Google serves the library per ID, and G-HEX0NQF4WM answers 404 there
+ * (checked 21.10.2026), so the library loads under the Google Ads ID and both
+ * IDs are configured on it. Consent Mode v2: everything starts denied, and an
+ * update follows the banner (now and whenever the visitor changes it). The
+ * library loads only once a category is allowed, and each ID is configured
+ * only with its own category: GA4 is measurement, Google Ads is marketing.
+ * window.gtag is also what the lead form's generate_lead event calls.
  */
-function loadGoogleTag(id: string) {
-  injectScript(`https://www.googletagmanager.com/gtag/js?id=${id}`, `gtag-script-${id}`)
-  injectInline(`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());`, "gtag-inline")
+const GTAG_LIBRARY_ID = GOOGLE_ADS_ID
+
+function consentState(c: { analytics: boolean; marketing: boolean }) {
+  const ads = c.marketing ? "granted" : "denied"
+  return { analytics_storage: c.analytics ? "granted" : "denied", ad_storage: ads, ad_user_data: ads, ad_personalization: ads }
+}
+
+function loadGoogleTag() {
+  injectInline(
+    "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}" +
+      `gtag('consent','default',${JSON.stringify({ ...consentState({ analytics: false, marketing: false }), wait_for_update: 500 })});` +
+      `gtag('consent','update',${JSON.stringify(consentState({ analytics: hasConsentFor("analytics"), marketing: hasConsentFor("marketing") }))});` +
+      "gtag('js',new Date());",
+    "gtag-inline",
+  )
+  injectScript(`https://www.googletagmanager.com/gtag/js?id=${GTAG_LIBRARY_ID}`, "gtag-script")
+  window.addEventListener(CONSENT_EVENT, (e) => {
+    const c = (e as CustomEvent<Consent>).detail
+    if (c) window.gtag?.("consent", "update", consentState(c))
+  })
+}
+
+function configGoogleTag(id: string) {
   injectInline(`gtag('config',${JSON.stringify(id)});`, `gtag-config-${id}`)
 }
 
@@ -106,8 +128,16 @@ function loadPostHog() {
 
 /** Phase 1: GA4 + Google Ads. Phase 2: PostHog (heaviest, last). Each only with its consent. */
 function runDeferredLoad() {
-  onConsent("analytics", () => loadGoogleTag(GA_MEASUREMENT_ID))
-  onConsent("marketing", () => loadGoogleTag(GOOGLE_ADS_ID))
+  let google = false
+  const googleTag = (id: string) => () => {
+    if (!google) {
+      google = true
+      loadGoogleTag()
+    }
+    configGoogleTag(id)
+  }
+  onConsent("analytics", googleTag(GA_MEASUREMENT_ID))
+  onConsent("marketing", googleTag(GOOGLE_ADS_ID))
   onConsent("marketing", loadMetaPixel)
 
   const posthog = () => onConsent("analytics", loadPostHog)

@@ -3,6 +3,8 @@ import { crumbHtml, crumbLd, fill, markCurrent, type Crumb } from "./chrome"
 import { heebo } from "./font"
 import { HomeBehaviors } from "./HomeBehaviors"
 import { A11Y_COPY } from "./home.config"
+import { fillPlans, fillPlanText, offersLd } from "./plan-fill"
+import { getPlans } from "@/lib/plans"
 import { HOME_FAQ_EN, HOME_HTML_EN } from "./markup.en"
 import { HOME_FAQ_HE, HOME_HTML_HE } from "./markup.he"
 import { PRICING_FAQ_EN, PRICING_HTML_EN } from "./pricing-markup.en"
@@ -137,7 +139,7 @@ function fillText(html: string, legal: LegalText, paths: { he: string; en: strin
  * server-rendered HTML, so it shows before any JS runs; HomeBehaviors then adds
  * the motion and interactions.
  */
-export function HomePage({
+export async function HomePage({
   lang,
   page = "home",
   legal,
@@ -171,6 +173,10 @@ export function HomePage({
     if (page === "blog") html = fillBlog(html, lang)
   }
   html = markCurrent(html, current).replace("{{CRUMB}}", current ? crumbHtml(lang, crumbs) : "")
+  // tbl-034: plan prices and AI action counts, from the platform (src/lib/plans.ts)
+  const plans = html.includes("{{PLAN_") ? await getPlans() : null
+  if (plans) html = fillPlans(html, lang, plans)
+  const offers = plans && page === "pricing" ? offersLd(lang, plans) : null
   const rootId = `${ROOT[page]}-${lang}`
   const faqLd = {
     "@context": "https://schema.org",
@@ -179,7 +185,7 @@ export function HomePage({
     mainEntity: faq.map((f) => ({
       "@type": "Question",
       name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
+      acceptedAnswer: { "@type": "Answer", text: plans ? fillPlanText(f.a, lang, plans) : f.a },
     })),
   }
   return (
@@ -192,6 +198,7 @@ export function HomePage({
         dangerouslySetInnerHTML={{ __html: html.replace("{{A11Y}}", A11Y_COPY[lang]) }}
       />
       {faq.length > 0 && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
+      {offers && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(offers) }} />}
       {current && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd(lang, crumbs, current)) }} />}
       <HomeBehaviors lang={lang} rootId={rootId} />
     </>

@@ -6,7 +6,7 @@
 declare global {
   interface Window {
     gtag?: (
-      command: "event" | "config" | "js",
+      command: "event" | "config" | "js" | "consent",
       target: string,
       params?: Record<string, unknown>
     ) => void
