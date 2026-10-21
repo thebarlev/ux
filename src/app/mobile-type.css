@@ -68,8 +68,9 @@
 @media(max-width:1060px){
  div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) :is(.sh,.closing,#inc,.ou,.bhead,.who2) h2{font-size:min(40px,8.6vw)!important}
  div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) .ben h3{font-size:min(28px,7vw)!important}
- /* an article's title is 36px up to 1060px, so its section titles stay under it on a tablet too (tbl-031) */
- div:is(.uxa-he,.uxa-en) :is(.sh,.closing,.ou) h2{font-size:min(32px,8.6vw)!important}
+ /* an article's title is 36px up to 1060px, so its section titles stay under it on a tablet too (tbl-031); the ids
+    outweigh the rule above, whose :is() carries #inc */
+ div:is(.uxa-he,.uxa-en) main :is(#ours,#related,.closing) h2{font-size:min(32px,8.6vw)!important}
 }
 
 /* ---------- tbl-029: no breadcrumbs at 768px and below ----------
