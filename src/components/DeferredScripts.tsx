@@ -62,13 +62,15 @@ function injectInline(code: string, id: string) {
 }
 
 /**
- * One gtag.js load serves both GA4 and Google Ads — they share the library.
- * Each is configured only once its consent category is allowed (tbl-027):
- * GA4 is measurement, Google Ads is marketing. It also defines window.gtag,
- * which is what the lead form's generate_lead event calls.
+ * GA4 and Google Ads share window.gtag, but each loads gtag.js under its own
+ * ID: Google serves the library per ID, and an ID it doesn't know answers 404
+ * (G-HEX0NQF4WM did on 21.10.2026), which must not take the other tag down
+ * with it (tbl-029). Each is configured only once its consent category is
+ * allowed (tbl-027): GA4 is measurement, Google Ads is marketing. window.gtag
+ * is also what the lead form's generate_lead event calls.
  */
 function loadGoogleTag(id: string) {
-  injectScript(`https://www.googletagmanager.com/gtag/js?id=${id}`, "gtag-script")
+  injectScript(`https://www.googletagmanager.com/gtag/js?id=${id}`, `gtag-script-${id}`)
   injectInline(`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());`, "gtag-inline")
   injectInline(`gtag('config',${JSON.stringify(id)});`, `gtag-config-${id}`)
 }
