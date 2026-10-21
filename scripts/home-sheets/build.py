@@ -1451,6 +1451,8 @@ ONE_LEVEL_HOME = """
 ONE_LEVEL_PRICING = """
 /* ---- mobile: one container level (tbl-025b) ---- */
 @media(max-width:1060px){{root} .pl-act{background:none;border-radius:0;padding:14px 0;border-block:1px solid var(--line)}}
+/* tbl-034: the actions line is built from the plans data (a trial line is longer), so it wraps when it must */
+{root} .pl-act span{white-space:normal;min-width:0}
 """
 
 
