@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 
 import { readConsent, saveConsent } from "@/lib/consent"
+import { LANG_DONE_EVENT, langToOffer } from "@/lib/i18n/langPrompt"
 
 import { CONSENT_HTML_EN } from "./consent-markup.en"
 import { CONSENT_HTML_HE } from "./consent-markup.he"
@@ -22,6 +23,7 @@ const HTML = { he: CONSENT_HTML_HE, en: CONSENT_HTML_EN } as const
  * non-modal dialog; the window is modal: focus moves in, Tab stays inside, Esc
  * closes it and focus returns to what opened it. While the banner is shown,
  * the page gets room at the bottom so it never covers a form's send button.
+ * While the language prompt is open (039) the banner waits for it.
  */
 export function ConsentBanner({ lang }: { lang: Lang }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -116,8 +118,12 @@ export function ConsentBanner({ lang }: { lang: Lang }) {
     }
     document.addEventListener("click", onClick)
     document.addEventListener("keydown", onKey)
-    if (!readConsent()) showBanner()
+    // 039: the language prompt comes first; the banner waits until it closes
+    const waiting = !readConsent() && Boolean(langToOffer(window.location.pathname))
+    if (waiting) document.addEventListener(LANG_DONE_EVENT, showBanner, { once: true })
+    else if (!readConsent()) showBanner()
     return () => {
+      document.removeEventListener(LANG_DONE_EVENT, showBanner)
       document.removeEventListener("click", onClick)
       document.removeEventListener("keydown", onKey)
       ro?.disconnect()
