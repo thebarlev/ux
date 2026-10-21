@@ -2,7 +2,7 @@
 """
 Builds the home pages (/ and /en) from Itzik's approved review sheets.
 
-    python3 scripts/home-sheets/build.py <sheet-dir> <contact-sheet-dir> <image-dir> <page-sheet-dir> <nav-sheet-dir> <features-sheet-dir> <tbl-028-dir> <who-he-dir> <consent-dir>
+    python3 scripts/home-sheets/build.py <sheet-dir> <contact-sheet-dir> <image-dir> <page-sheet-dir> <nav-sheet-dir> <features-sheet-dir> <tbl-028-dir> <who-he-dir> <consent-dir> <tbl-029-dir>
 
 <sheet-dir> holds the four approved sheets (tbl-021): uxb-009-v35-home-he.html,
 uxb-010-v6-home-en.html, uxb-011-v12-pricing-he.html, uxb-012-v3-pricing-en.html;
@@ -16,7 +16,8 @@ every page), uxb-019-v1-blog-he.html and uxb-020-v2-article-he.html (tbl-024);
 <tbl-028-dir> holds what you get uxb-021-v10 / uxb-022-v2, who it's for in English uxb-028-v1, the blog
 indexes uxb-019-v3 / uxb-029-v2, the 404 pages uxb-030-v2 / uxb-031-v2 and legal-pages/ (HE) and
 legal-pages/en/ (EN); <who-he-dir> holds uxb-024-v4-who-uxellent.html (who it's for, Hebrew);
-<consent-dir> holds the cookie banner sheets uxb-026-v2 / uxb-027-v2 (tbl-027).
+<consent-dir> holds the cookie banner sheets uxb-026-v2 / uxb-027-v2 (tbl-027);
+<tbl-029-dir> holds the Hebrew article template uxb-020-v5-article-uxellent.html (tbl-029).
 The sheets are the source of truth for markup and CSS;
 this script only:
   - drops the review chrome (.sheet-label, every .ztag),
@@ -48,6 +49,7 @@ FEATURES_SHEETS = sys.argv[6]
 NEW_SHEETS = sys.argv[7]
 WHO_HE_SHEETS = sys.argv[8]
 CONSENT_SHEETS = sys.argv[9]
+FIXES_SHEETS = sys.argv[10]
 OUT = os.path.join(ROOT, "src/app/_home")
 PUB = os.path.join(ROOT, "public/home")
 os.makedirs(OUT, exist_ok=True)
@@ -63,7 +65,7 @@ LANGS = {
         "faq_file": "uxb-015-v1-faq-he.html",
         "text_file": "uxb-017-v1-text-page-he.html",
         "features_file": "uxb-021-v10-features-uxellent.html",
-        "article_file": "uxb-020-v4-article-he.html",
+        "article_file": os.path.join(FIXES_SHEETS, "uxb-020-v5-article-uxellent.html"),
         "blog_file": "uxb-019-v3-blog-uxellent.html",
         "who_file": os.path.join(WHO_HE_SHEETS, "uxb-024-v4-who-uxellent.html"),
         "nf_file": "uxb-030-v2-404-uxellent.html",
@@ -714,11 +716,104 @@ LEGAL = {"terms": "terms", "privacy": "privacy", "cookies": "cookies", "accessib
 LEGAL_OUT = {}
 
 
+# tbl-029: the legal texts follow what actually runs on the site. The trackers
+# in the code are PostHog and GA4 (measurement), Google Ads and the Meta Pixel
+# (marketing), each loaded only after its category is approved; there is no
+# Clarity, TikTok or Taboola. The cancellation form lives in the account on the
+# platform, so the page links there (the header's "Log in" address).
+MEASURE = {
+    "he": ("<tr><td>מדידה</td><td>PostHog</td><td>מדידת צפיות בעמודים באתר</td><td>כן</td></tr>"
+           "<tr><td>מדידה</td><td>Google Analytics 4</td><td>מדידת ביקורים באתר: עמודים שנצפו ומקור ההגעה</td><td>כן</td></tr>"),
+    "en": ("<tr><td>Measurement</td><td>PostHog</td><td>Measuring page views on the site</td><td>Yes</td></tr>"
+           "<tr><td>Measurement</td><td>Google Analytics 4</td><td>Measuring visits to the site: pages viewed and where visitors came from</td><td>Yes</td></tr>"),
+}
+VENDORS = {
+    "he": ("<tr><td>PostHog</td><td>מדידת צפיות בעמודים באתר uxellent.com</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td></tr>"
+           "<tr><td>Google Analytics 4</td><td>מדידת ביקורים באתר uxellent.com: עמודים שנצפו ומקור ההגעה</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td></tr>"),
+    "en": ("<tr><td>PostHog</td><td>Measuring page views on uxellent.com</td><td><mark class=\"flag\">‼️ Fill in country</mark></td></tr>"
+           "<tr><td>Google Analytics 4</td><td>Measuring visits to uxellent.com: pages viewed and where visitors came from</td><td><mark class=\"flag\">‼️ Fill in country</mark></td></tr>"),
+}
+CANCEL_LINK = {
+    "he": (f'<div class="lg-cancel"><a class="ct-btn" href="{PLATFORM}">לטופס הביטול בחשבון</a>'
+           '<p class="ct-note">אפשר לבטל גם במייל ל-<a class="lnk" href="mailto:support@uxellent.com"><bdi>support@uxellent.com</bdi></a>.</p></div>'),
+    "en": (f'<div class="lg-cancel"><a class="ct-btn" href="{PLATFORM}">Go to the cancellation form in your account</a>'
+           '<p class="ct-note">You can also cancel by email at <a class="lnk" href="mailto:support@uxellent.com">support@uxellent.com</a>.</p></div>'),
+}
+LEGAL_FIXES = {
+    ("he", "cookies"): [
+        ("<p>כרגע פועלות באתר רק עוגיות הכרחיות. כלי מדידה ושיווק יתווספו בקרוב, והם ייטענו רק אחרי שתאשרו אותם בבאנר. אלה הכלים שאנחנו מתכננים להפעיל:</p>",
+         "<p>כלי מדידה ושיווק נטענים רק אחרי שאישרתם אותם בבאנר. אלה הכלים שפועלים באתר:</p>"),
+        ("<tr><td>מדידה</td><td>Microsoft Clarity</td><td>להבין איך גולשים באתר: קליקים, גלילה והקלטות גלישה</td><td>כן</td></tr>", MEASURE["he"]),
+        ("<tr><td>שיווק</td><td>TikTok</td><td>מדידת קמפיינים ופרסום מותאם</td><td>כן</td></tr>", ""),
+        ("<tr><td>שיווק</td><td>Taboola</td><td>מדידת קמפיינים ופרסום מותאם</td><td>כן</td></tr>", ""),
+        ('<p><mark class="flag">‼️ כרגע אין באתר כלי מדידה או שיווק. כשיתווספו, הבאנר חייב לחסום אותם עד אישור</mark></p>', ""),
+    ],
+    ("en", "cookies"): [
+        ("<p>Right now only necessary cookies run on the site. Measurement and marketing tools will be added soon, and they will load only after you approve them in the banner. These are the tools we plan to use:</p>",
+         "<p>Measurement and marketing tools load only after you approve them in the banner. These are the tools on the site:</p>"),
+        ("<tr><td>Measurement</td><td>Microsoft Clarity</td><td>Understanding how people browse the site: clicks, scrolling and session recordings (coming soon, only with consent)</td><td>Yes</td></tr>", MEASURE["en"]),
+        ("<tr><td>Marketing</td><td>TikTok</td><td>Campaign measurement and personalised ads</td><td>Yes</td></tr>", ""),
+        ("<tr><td>Marketing</td><td>Taboola</td><td>Campaign measurement and personalised ads</td><td>Yes</td></tr>", ""),
+        ('<p><mark class="flag">‼️ There are currently no measurement or marketing tools on the site. When they are added, the banner must block them until approved</mark></p>', ""),
+    ],
+    ("he", "privacy"): [
+        ("<tr><td>Google Ads</td><td>פרסום ומדידת קמפיינים באתר uxellent.com (יתווסף בקרוב, רק בהסכמה)</td>", VENDORS["he"] + "<tr><td>Google Ads</td><td>פרסום ומדידת קמפיינים באתר uxellent.com</td>"),
+        ("<tr><td>Meta (פייסבוק ואינסטגרם)</td><td>פרסום ומדידת קמפיינים באתר uxellent.com (יתווסף בקרוב, רק בהסכמה)</td>", "<tr><td>Meta (פייסבוק ואינסטגרם)</td><td>פרסום ומדידת קמפיינים באתר uxellent.com</td>"),
+        ('<tr><td>TikTok</td><td>פרסום ומדידת קמפיינים באתר uxellent.com (יתווסף בקרוב, רק בהסכמה)</td><td><mark class="flag">‼️ להשלים מדינה</mark></td></tr>', ""),
+        ('<tr><td>Taboola</td><td>פרסום ומדידת קמפיינים באתר uxellent.com (יתווסף בקרוב, רק בהסכמה)</td><td><mark class="flag">‼️ להשלים מדינה</mark></td></tr>', ""),
+        ('<tr><td>Microsoft Clarity</td><td>מדידת שימוש באתר uxellent.com: קליקים, גלילה והקלטות גלישה (יתווסף בקרוב, רק בהסכמה)</td><td><mark class="flag">‼️ להשלים מדינה</mark></td></tr>', ""),
+        ("<p>כרגע פועלות באתר uxellent.com רק עוגיות הכרחיות. כלי מדידה ופרסום יתווספו בקרוב, וייטענו רק אחרי שתאשרו אותם. הרשימה",
+         "<p>כלי מדידה ושיווק נטענים רק אחרי שאישרתם אותם בבאנר. הרשימה"),
+    ],
+    ("en", "privacy"): [
+        ("<tr><td>Google Ads</td><td>Advertising and campaign measurement on uxellent.com (coming soon, only with consent)</td>", VENDORS["en"] + "<tr><td>Google Ads</td><td>Advertising and campaign measurement on uxellent.com</td>"),
+        ("<tr><td>Meta (Facebook and Instagram)</td><td>Advertising and campaign measurement on uxellent.com (coming soon, only with consent)</td>", "<tr><td>Meta (Facebook and Instagram)</td><td>Advertising and campaign measurement on uxellent.com</td>"),
+        ('<tr><td>TikTok</td><td>Advertising and campaign measurement on uxellent.com (coming soon, only with consent)</td><td><mark class="flag">‼️ Fill in country</mark></td></tr>', ""),
+        ('<tr><td>Taboola</td><td>Advertising and campaign measurement on uxellent.com (coming soon, only with consent)</td><td><mark class="flag">‼️ Fill in country</mark></td></tr>', ""),
+        ('<tr><td>Microsoft Clarity</td><td>Usage measurement on uxellent.com: clicks, scrolling and session recordings (coming soon, only with consent)</td><td><mark class="flag">‼️ Fill in country</mark></td></tr>', ""),
+        ("<p>Right now only necessary cookies run on uxellent.com. Measurement and advertising tools will be added soon, and they will load only after you allow them. The list",
+         "<p>Measurement and marketing tools load only after you approve them in the banner. The list"),
+    ],
+    ("he", "accessibility"): [
+        ('<li>אין עדיין קישור "דלגו לתוכן" בראש העמוד.</li>', ""),
+    ],
+    ("en", "accessibility"): [
+        ('<li>There is no "Skip to content" link at the top of the page yet.</li>', ""),
+    ],
+    ("he", "cancel"): [
+        ("<li>הדרך הכי פשוטה לבטל: הטופס בתחתית העמוד.</li>", "<li>הדרך הכי פשוטה לבטל: טופס הביטול בחשבון.</li>"),
+        ("<tr><td>טופס ביטול</td><td>בתחתית העמוד הזה. הדרך הכי מהירה.</td></tr>", ""),
+        ('<td>בהגדרות החשבון בפלטפורמה. <mark class="flag">‼️ אושר: טופס הביטול קיים באזור החשבון</mark></td>', "<td>טופס הביטול בהגדרות החשבון בפלטפורמה. הדרך הכי מהירה.</td>"),
+    ],
+    ("en", "cancel"): [
+        ("<li>The simplest way to cancel: the form at the bottom of this page.</li>", "<li>The simplest way to cancel: the cancellation form in your account.</li>"),
+        ("<tr><td>Cancellation form</td><td>At the bottom of this page. The fastest way.</td></tr>", ""),
+        ('<td>In the account settings on the platform. <mark class="flag">‼️ Confirmed: the cancellation form exists in the account area</mark></td>', "<td>The cancellation form in the account settings on the platform. The fastest way.</td>"),
+    ],
+}
+
+
+def legal_fixes(body, lang, legal):
+    for old, new in LEGAL_FIXES.get((lang, legal), []):
+        assert body.count(old) == 1, (lang, legal, old[:60])
+        body = body.replace(old, new)
+    if legal == "cancel":
+        # the form is in the account: a button there instead of the sheet's unconnected form (and its ‼️ marks)
+        body, n = re.subn(r'<form class="ct-form lg-form".*?</form>', lambda m: CANCEL_LINK[lang], body, count=1, flags=re.S)
+        assert n == 1 and "<form" not in body
+    if legal in ("cookies", "privacy"):
+        assert not re.search(r"Clarity|TikTok|Taboola|יתווסף בקרוב|coming soon|רק עוגיות הכרחיות|only necessary cookies", body), (lang, legal)
+    if legal == "accessibility":
+        assert "דלגו לתוכן" not in body and "Skip to content" not in body
+    return body
+
+
 def legal_markup(body, lang, cfg, legal):
     """A legal page (uxb-025, tbl-027 / tbl-028) on the text-page template. The
     yellow ‼️ marks stay on Preview, so the open points are visible (tbl-027)."""
     pre = cfg["pre"]
     route = LEGAL[legal]
+    body = legal_fixes(body, lang, legal)
     body = body.replace('<a href="/" lang="he"', f'<a href="/{route}" lang="he"').replace('<a href="/en" lang="en"', f'<a href="/en/{route}" lang="en"')
     body, n1 = re.subn(r'<main id="main">(.*?)</main>', r"\1", body, count=1, flags=re.S)
     body, n2 = re.subn(r'<nav class="crumb"[^>]*>.*?</nav>', "", body, count=1, flags=re.S)
@@ -745,6 +840,10 @@ LEGAL_CSS = """
 /* tables keep whole words (the page's overflow-wrap:anywhere would split "קטגוריה" in a narrow column) */
 {root} .tw{overflow-wrap:normal}
 {root} .tw:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+/* cancellation (tbl-029): a link to the form in the account, styled as the form's button */
+{root} .lg-cancel{display:grid;gap:14px;justify-items:start;margin-top:8px}
+{root} .lg-cancel .ct-btn{display:inline-block;text-decoration:none;text-align:center}
+@media(max-width:1060px){{root} .lg-cancel{justify-items:stretch}}
 """
 
 

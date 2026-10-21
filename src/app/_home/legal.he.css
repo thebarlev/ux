@@ -1256,3 +1256,7 @@
 /* tables keep whole words (the page's overflow-wrap:anywhere would split "קטגוריה" in a narrow column) */
 .uxl-he .tw{overflow-wrap:normal}
 .uxl-he .tw:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+/* cancellation (tbl-029): a link to the form in the account, styled as the form's button */
+.uxl-he .lg-cancel{display:grid;gap:14px;justify-items:start;margin-top:8px}
+.uxl-he .lg-cancel .ct-btn{display:inline-block;text-decoration:none;text-align:center}
+@media(max-width:1060px){.uxl-he .lg-cancel{justify-items:stretch}}

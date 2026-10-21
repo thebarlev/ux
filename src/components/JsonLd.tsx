@@ -15,6 +15,7 @@ export function articleSchema(params: {
   inLanguage?: string;
   datePublished?: string;
   dateModified?: string;
+  articleSection?: string;
 }) {
   const pageUrl = params.url
   const mainEntityOfPage = pageUrl
@@ -33,6 +34,7 @@ export function articleSchema(params: {
     image: params.image,
     ...(mainEntityOfPage ? { mainEntityOfPage } : {}),
     inLanguage: params.inLanguage,
+    ...(params.articleSection ? { articleSection: params.articleSection } : {}),
     datePublished: params.datePublished,
     dateModified: params.dateModified ?? params.datePublished,
     author: { "@type": "Organization", name: "Uxellent" },

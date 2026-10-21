@@ -106,6 +106,9 @@ const nextConfig: NextConfig = {
     { source: "/lp/ecommerce", destination: "/", statusCode: 301 },
     { source: "/lp/services", destination: "/", statusCode: 301 },
     { source: "/lp/thank-you", destination: "/", statusCode: 301 },
+    // tbl-029: the old lead forms are gone, so the English campaign pages, which still
+    // carried them, go too (no live /lp campaigns, as above)
+    { source: "/en/lp/:path*", destination: "/en", statusCode: 301 },
     // Old agency pages retired (tbl-023, Itzik 20.10.2026): each goes to the home
     // page of its own language. `:path*` also covers anything below them
     // (/en/seo-ai/pricing). Relative destinations: nothing leaves uxellent.com.

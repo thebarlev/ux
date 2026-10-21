@@ -52,6 +52,7 @@ export function BlogArticle({ slug, lang }: { slug: string; lang: Lang }) {
           url: SITE + path(slug, lang),
           inLanguage: lang === "en" ? "en" : "he",
           datePublished: post.date,
+          articleSection: topic,
         })}
       />
       <ArticlePage

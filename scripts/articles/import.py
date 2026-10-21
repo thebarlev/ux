@@ -24,6 +24,15 @@ PLATFORM = "https://ai.uxellent.com"
 CTA = {"he": "בנו לי אתר בחינם", "en": "Build my site, free"}
 DATE = "2026-10-20"
 COVER = "/services/d-develop.webp"
+# one category for all eight guides (tbl-029); the md files mix "מדריך" / "Guide" in
+GUIDE_CATEGORY = {"he": "מדריכי צמיחה", "en": "Growth guides"}
+# tbl-029: a claim that is not on the facts list, in Itzik's words
+REPLACE = {
+    ("slow-site", "he"): ("האחסון וה-SSL כלולים בכל חבילה, האתר מותאם למובייל ולמחשב, והעיצוב נבנה רק ממה שהעסק שלכם צריך, בלי תבנית כבדה ובלי תוספים.",
+                          "האחסון וה-SSL כלולים בכל חבילה, והאתר מותאם למובייל ולמחשב. האתרים ב-UXellent בנויים להיות מהירים ויציבים."),
+    ("slow-site", "en"): ("Hosting and SSL come with every plan, every site works well on mobile and desktop, and the design is built only from what your business needs, with no heavy template and no plugins.",
+                          "Hosting and SSL come with every plan, and every site works well on mobile and desktop. Sites on UXellent are built to be fast and stable."),
+}
 
 
 def front(text):
@@ -103,6 +112,12 @@ def main():
         slug, lang = os.path.basename(f)[:-3].rsplit(".", 1)
         meta, body = front(open(f, encoding="utf-8").read())
         assert meta["slug"] == slug, (meta["slug"], slug)
+        if (slug, lang) in REPLACE:
+            old, new = REPLACE[(slug, lang)]
+            assert body.count(old) == 1, (slug, lang)
+            body = body.replace(old, new)
+        if slug.startswith("guide-"):
+            meta["category"] = GUIDE_CATEGORY[lang]
         fm = {
             "title": meta["title"],
             "description": meta["meta_description"],

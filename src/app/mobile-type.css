@@ -69,3 +69,12 @@
  div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) :is(.sh,.closing,#inc,.ou,.bhead,.who2) h2{font-size:min(40px,8.6vw)!important}
  div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) .ben h3{font-size:min(28px,7vw)!important}
 }
+
+/* ---------- tbl-029: no breadcrumbs at 768px and below ----------
+   Only the visible trail goes; the BreadcrumbList JSON-LD stays at every width.
+   Without them the page title opens the page: it sits as far below the header
+   as the first line of the home hero does (the section's own top padding). */
+@media(max-width:768px){
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) .crumb{display:none!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) main h1:is(:first-child,.crumb+h1,:has(>.crumb)+h1){margin-top:0!important}
+}
