@@ -31,11 +31,13 @@ import { onConsent } from "@/lib/consent"
 const GA_MEASUREMENT_ID = "G-HEX0NQF4WM"
 const GOOGLE_ADS_ID = "AW-17972291188"
 
-/** Safe env access - process.env can be undefined in some bundling contexts. */
-const env = typeof process !== "undefined" ? process.env : ({} as NodeJS.ProcessEnv)
-
-const POSTHOG_KEY = env.NEXT_PUBLIC_POSTHOG_KEY
-const POSTHOG_HOST = env.NEXT_PUBLIC_POSTHOG_HOST || "https://eu.i.posthog.com"
+/**
+ * Spelled out as process.env.NEXT_PUBLIC_…: Next inlines only that exact form
+ * into the browser bundle. Read through an alias (env.X) the key was undefined
+ * in the browser, so PostHog never loaded (found in tbl-031).
+ */
+const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY
+const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://eu.i.posthog.com"
 
 function injectScript(
   src: string,
