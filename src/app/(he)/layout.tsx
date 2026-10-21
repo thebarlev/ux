@@ -56,11 +56,8 @@ export default function RootLayout({
   return (
     <html lang="he" dir="rtl" className={assistant.variable}>
       <head>
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        {/* Pixel now loads on arrival rather than on idle, so warm the connection. */}
-        <link rel="preconnect" href="https://connect.facebook.net" />
-        <link rel="dns-prefetch" href="https://www.google.com" />
-        <link rel="dns-prefetch" href="https://us-assets.i.posthog.com" />
+        {/* No preconnect to Google, Meta or PostHog: even a warmed connection
+            reaches them before the visitor has chosen in the cookie banner (tbl-031). */}
       </head>
       <body className="antialiased font-sans">
         <JsonLd data={ORGANIZATION_SCHEMA} />

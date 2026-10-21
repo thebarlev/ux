@@ -6,7 +6,7 @@ import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 import "@/app/_home/blog.en.css"
 
 const TITLE = "Blog | Uxellent"
-const DESCRIPTION = "Short articles on websites, search and AI, for businesses that sell a service."
+const DESCRIPTION = "Short articles on websites, search and AI, for businesses, companies and professionals."
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),

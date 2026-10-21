@@ -265,6 +265,71 @@ def brand_blue_css(root):
 """
 
 
+# tbl-031: UXellent is for every business, not only for those that sell a
+# service: companies and manufacturers, offices and clinics, studios and
+# freelancers. Stores are not mentioned at all. Applied to the sheets as they
+# are read, so the page, its FAQ data and its JSON-LD all follow.
+FAQ_ANY = {
+    "he": ("לאילו עסקים זה מתאים?", "לכל עסק וארגון שצריך אתר: חברות ומפעלים, משרדים וקליניקות, סטודיואים ועצמאים. אפשר לבנות אתר תדמית, אתר שיווקי, דף נחיתה או אתר תיק עבודות."),
+    "en": ("What kind of businesses is it for?", "Any business or organization that needs a website: companies and manufacturers, offices and clinics, studios and freelancers. You can build a brand site, a marketing site, a landing page or a portfolio site."),
+}
+ORB_CO = '<path d="M4 21V5.5L12 3v18M12 8.5l8 2.5v10M2.5 21h19"/><path d="M7.5 8.5h1.5M7.5 12h1.5M7.5 15.5h1.5M15 13.5h1.5M15 17h1.5"/>'
+POSITIONING = {
+    ("he", "home"): [
+        ('<h2>לכל עסק <span class="bl">שמוכר שירות.</span></h2>', '<h2>לכל עסק <span class="bl">ולכל חברה.</span></h2>'),
+        ("<p>משרד, קליניקה, סטודיו או עצמאי בתחילת הדרך. אם אתם מוכרים ידע, ניסיון או מקצועיות, האתר הזה נבנה בשבילכם.</p>",
+         "<p>חברות ומפעלים, משרדים וקליניקות, סטודיואים ועצמאים. כל מי שצריך אתר תדמית, אתר שיווקי או דף נחיתה, האתר הזה נבנה בשבילכם.</p>"),
+    ],
+    ("en", "home"): [
+        ("AI websites for service businesses", "AI websites for every business"),
+        ('<h2>For every business <span class="bl">that sells a service.</span></h2>', '<h2>For every business <span class="bl">and every company.</span></h2>'),
+        ("<p>An office, a clinic, a studio, or a freelancer just starting out. If you sell knowledge, experience or expertise, this was built for you.</p>",
+         "<p>Companies and manufacturers, offices and clinics, studios and freelancers. If you need a brand site, a marketing site or a landing page, this was built for you.</p>"),
+    ],
+    ("he", "blog"): [("לעסקים ולבעלי מקצוע.</p>", "לעסקים, לחברות ולבעלי מקצוע.</p>")],
+    ("en", "blog"): [("for businesses and professionals.</p>", "for businesses, companies and professionals.</p>")],
+    ("he", "who"): [('<h2>שלושה סוגי אתרים, <span class="bl">אחד בשבילכם.</span></h2>', '<h2>כל סוג של אתר, <span class="bl">לכל עסק.</span></h2>')],
+    ("en", "who"): [('<h2>Three types of website, <span class="bl">one for you.</span></h2>', '<h2>Every kind of website, <span class="bl">for every business.</span></h2>')],
+}
+# for-who: two cards at the start of the site types (uxb-024c)
+WHO_CARDS = {
+    "he": [("חברות ומפעלים", "אתר תדמית שמציג את החברה, את המוצרים ואת היכולות, ברמה של חברה גדולה.", ORB_CO),
+           ("ארגונים", "אתר ברור לארגון, לעמותה או למוסד, עם כל המידע במקום אחד.",
+            '<circle cx="12" cy="7" r="2.6"/><circle cx="5.5" cy="10.5" r="2"/><circle cx="18.5" cy="10.5" r="2"/><path d="M7.5 20v-1.5a4.5 4.5 0 0 1 9 0V20M2.5 20v-1a3 3 0 0 1 4.2-2.8M21.5 20v-1a3 3 0 0 0-4.2-2.8"/>')],
+    "en": [("Companies and manufacturers", "A brand site that presents the company, its products and its capabilities, at a big-company level.", ORB_CO),
+           ("Organizations", "A clear site for an organization, nonprofit or institution, with everything in one place.",
+            '<circle cx="12" cy="7" r="2.6"/><circle cx="5.5" cy="10.5" r="2"/><circle cx="18.5" cy="10.5" r="2"/><path d="M7.5 20v-1.5a4.5 4.5 0 0 1 9 0V20M2.5 20v-1a3 3 0 0 1 4.2-2.8M21.5 20v-1a3 3 0 0 0-4.2-2.8"/>')],
+}
+ORB_LABEL = {"he": "חברות", "en": "Companies"}
+
+
+def positioning(body, css, lang, page):
+    for old, new in POSITIONING.get((lang, page), []):
+        assert body.count(old) == 1, (lang, page, old[:60])
+        body = body.replace(old, new)
+    if page in ("home", "faq"):
+        # the "why not online stores" question becomes "what kind of businesses is it for"
+        q, a = FAQ_ANY[lang]
+        body, n = re.subn(r"<details><summary>(?:למה לא חנויות אונליין\?|Why not online stores\?|Why no online stores\?)(<span class=\"pm\">\+</span></summary><div class=\"ans\">).*?(</div></details>)",
+                          lambda m: f"<details><summary>{q}{m.group(1)}{a}{m.group(2)}", body, count=1, flags=re.S)
+        assert n == 1, (lang, page)
+    if page == "home":
+        # no "except online stores" line, and the struck-out stores icon becomes companies (same spot, the line style of the others)
+        body, n1 = re.subn(r'\s*<span class="no"><i>✕</i>[^<]*</span>', "", body, count=1)
+        body, n2 = re.subn(r'<span class="orb no-orb"( style="[^"]*")><svg ([^>]*)>.*?</svg><em>[^<]*</em></span>',
+                           lambda m: f'<span class="orb co-orb"{m.group(1)}><svg {m.group(2)}>{ORB_CO}</svg><em>{ORB_LABEL[lang]}</em></span>', body, count=1, flags=re.S)
+        assert (n1, n2) == (1, 1), (lang, n1, n2)
+        # on a phone the extra icons hide, but this one stays where the stores icon stood
+        assert ":not(.no-orb)" in css
+        css = css.replace(":not(.no-orb)", ":not(.co-orb)")
+    if page == "who":
+        cards = "".join(f'<article class="ty"><span class="ty-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">{ic}</svg></span><h3>{t}</h3><p>{p}</p></article>'
+                        for t, p, ic in WHO_CARDS[lang])
+        assert body.count('<div class="ty-grid">') == 1
+        body = body.replace('<div class="ty-grid">', '<div class="ty-grid">' + cards, 1)
+    return body, css
+
+
 def build(lang, cfg, images, page="home", legal=None):
     home = page == "home"
     sheet = {
@@ -283,6 +348,7 @@ def build(lang, cfg, images, page="home", legal=None):
     src = open(sheet, encoding="utf-8").read()
     css = re.search(r"<style[^>]*>(.*?)</style>", src, re.S).group(1)
     body = sheet_body(src)
+    body, css = positioning(body, css, lang, page)
 
     # -- one header, mobile menu and footer on every page (navkit, tbl-024)
     head, foot = chrome(lang)
@@ -695,7 +761,7 @@ def who_markup(body, lang):
     types and the professions band (HomeBehaviors drives the band, as on pricing)."""
     body = body.replace('<a href="/" lang="he"', '<a href="/for-who" lang="he"').replace('<a href="/en" lang="en"', '<a href="/en/for-who" lang="en"')
     body, n = re.subn(r'<nav class="crumb"[^>]*>.*?</nav>', "", body, count=1, flags=re.S)
-    assert n == 1 and body.count('<span class="ty-ic">') == 3 and body.count('class="mq"') == 1
+    assert n == 1 and body.count('<span class="ty-ic">') == 5 and body.count('class="mq"') == 1
     body = body.replace('<span class="ty-ic">', '<span class="ty-ic" aria-hidden="true">')
     return body
 
@@ -808,12 +874,253 @@ def legal_fixes(body, lang, legal):
     return body
 
 
+# tbl-031: the legal pages go live without review marks (Itzik's decision). Each
+# ‼️ is handled on purpose: a question for the lawyer or the owner whose sentence
+# is complete loses only the mark ("strip"); a missing fact that the code, the
+# settings or DNS confirm is filled in ("sub"); a claim that cannot be confirmed,
+# or that the platform code shows is not so, goes ("drop" removes its paragraph,
+# list item or table row). Facts checked on 21.10.2026 in uxellent-platform
+# (agent5-otpw), in DNS (Cloudflare NS; Resend's eu-west-1 MX) and on the Preview
+# (cookies, the marketing site's iad1 functions). Nothing is left half empty.
+EFFECTIVE = {"he": "בתוקף מ-21 באוקטובר 2026", "en": "Effective from 21 October 2026"}
+LEGAL_PUBLISH = {
+    ("he", "terms"): [
+        ("sub", "הפלטפורמה בונה אתרים לעסקי שירות: אתרי תדמית ומותג, אתרי שיווק ודפי נחיתה, ואתרי תיק עבודות וגלריה. הפלטפורמה אינה מציעה חנות מקוונת.",
+         "הפלטפורמה בונה אתרים לעסקים ולארגונים: אתרי תדמית ומותג, אתרי שיווק ודפי נחיתה, ואתרי תיק עבודות וגלריה."),
+        ("strip", "‼️ לאמת מול המערכת שהשמירה פועלת כך"),
+        ("strip", "‼️ לעו״ד: האם המחיר בדולר"),
+        ("strip", "‼️ לאמת מה בדיוק נשמר אצלנו"),
+        ("sub", "בכל חבילה יש מכסה חודשית של פעולות AI ותקרה יומית. למכסה אין ערך כספי ואי אפשר להמיר אותה לכסף או להעביר אותה. <mark class=\"flag\">‼️ לאשר: מכסה שלא נוצלה אינה עוברת לחודש הבא</mark>",
+         "בכל חבילה יש מכסה חודשית של פעולות AI. מכסה שלא נוצלה אינה עוברת לחודש הבא. למכסה אין ערך כספי ואי אפשר להמיר אותה לכסף או להעביר אותה."),
+        ("strip", "‼️ לבעלים: כמה ימים מראש"),
+        ("drop", "<b>מנוי שנתי.</b> לפני סוף השנה נשלח לכם מייל"),
+        ("sub", "מתחילה תקופה שנתית ומחויבת. <mark class=\"flag\">‼️ לאשר איך מזכים את יתרת החודש</mark>",
+         "מתחילה תקופה שנתית חדשה מאותו יום. מהחיוב מנכים את החלק שלא נוצל מהחודש הנוכחי, לפי ימים."),
+        ("strip", "‼️ תלוי מימוש: החזרה אוטומטית של פעולה שנכשלה"),
+        ("sub", " לפי ההסכם איתו, המידע הזה לא משמש לאימון המודלים שלו. <mark class=\"flag\">‼️ לאמת מול תנאי Anthropic העדכניים</mark>", ""),
+        ("strip", "‼️ לעו״ד: האם נדרש נספח עיבוד מידע"),
+        ("strip", "‼️ החלטת בעלים: האם להתחייב לזמינות"),
+        ("strip", "‼️ לבעלים: האם לקוח יכול לבקש שחזור"),
+        ("strip", "‼️ לעו״ד: לאשר את גובה הרצפה"),
+        ("strip", "‼️ לעו״ד: האם פטור לאירוע אבטחה"),
+        ("strip", "‼️ לעו״ד: האם להשאיר את קיצור ההתיישנות"),
+        ("sub", "אחרי סגירה יהיו לכם 30 יום לצפות בתוכן ובפניות ולהוריד אותם. אחרי 30 יום הם יימחקו. <mark class=\"flag\">‼️ תלוי מימוש: כלי ייצוא תוכן ופניות, ומחיקה אוטומטית אחרי 30 יום</mark>",
+         "סגירת החשבון מוחקת אותו ואת התוכן מיד. רישומי תשלום נשמרים כפי שהדין מחייב."),
+        ("strip", "‼️ תלוי מימוש: בקשת אישור מחדש"),
+        ("strip", "‼️ תלוי מימוש: ארכיון גרסאות גלוי"),
+        ("sub", "לבתי המשפט המוסמכים במחוז <mark class=\"flag\">‼️ מחוז לבחירת עו״ד. משרד החברה במודיעין-מכבים-רעות</mark>,", "לבתי המשפט המוסמכים בישראל,"),
+    ],
+    ("en", "terms"): [
+        ("sub", "The platform builds websites for service businesses: brand and company sites, marketing sites and landing pages, and portfolio and gallery sites. The platform does not offer an online store.",
+         "The platform builds websites for businesses and organizations: brand and company sites, marketing sites and landing pages, and portfolio and gallery sites."),
+        ("strip", "‼️ Verify against the system that it is saved this way"),
+        ("strip", "‼️ For the lawyer: does the dollar price"),
+        ("strip", "‼️ Verify exactly what we store"),
+        ("sub", "Every plan has a monthly quota of AI actions and a daily cap. The quota has no cash value and cannot be converted to money or transferred. <mark class=\"flag\">‼️ Confirm: unused quota does not roll over to the next month</mark>",
+         "Every plan has a monthly quota of AI actions. Unused quota does not roll over to the next month. The quota has no cash value and cannot be converted to money or transferred."),
+        ("strip", "‼️ For the owner: how many days in advance"),
+        ("drop", "<b>Annual subscription.</b> Before the year ends we will email you"),
+        ("sub", "An annual period starts and is charged. <mark class=\"flag\">‼️ Confirm how the rest of the month is credited</mark>",
+         "A new annual period starts that day. The unused part of the current month is deducted from the charge, by days."),
+        ("strip", "‼️ Depends on implementation: automatic return of a failed action"),
+        ("sub", " Under our agreement with them, this information is not used to train their models. <mark class=\"flag\">‼️ Verify against Anthropic's current terms</mark>", ""),
+        ("strip", "‼️ For the lawyer: is a full data processing appendix"),
+        ("strip", "‼️ Owner decision: whether to commit to availability"),
+        ("strip", "‼️ For the owner: can a customer ask for a restore"),
+        ("strip", "‼️ For the lawyer: confirm the floor amount"),
+        ("strip", "‼️ For the lawyer: will the exemption for a security incident"),
+        ("strip", "‼️ For the lawyer: whether to keep the shortened limitation period"),
+        ("sub", "After closing it you will have 30 days to view and download your content and enquiries. After 30 days they will be deleted. <mark class=\"flag\">‼️ Depends on implementation: export tool for content and enquiries, and automatic deletion after 30 days</mark>",
+         "Closing the account deletes it and its content right away. Payment records are kept as the law requires."),
+        ("strip", "‼️ Depends on implementation: asking for acceptance again"),
+        ("strip", "‼️ Depends on implementation: visible version archive"),
+        ("sub", "the competent courts of the <mark class=\"flag\">‼️ District to be chosen by the lawyer. The company's office is in Modi'in-Maccabim-Re'ut</mark> district.", "the competent courts in Israel."),
+        # "store" as a verb, in the translation only (the Hebrew is binding): the page names no store at all (tbl-031)
+        ("sub", "We do not store the full card number.", "We do not keep the full card number."),
+        ("sub", "permission to store, copy, adapt and display", "permission to keep, copy, adapt and display"),
+    ],
+    ("he", "privacy"): [
+        ("strip", "‼️ לעו״ד: האם חלה עלינו חובה למנות ממונה"),
+        ("sub", "פרטי הכרטיס נמסרים ישירות ל-Cardcom. <mark class=\"flag\">‼️ לאמת מה אנחנו מקבלים מ-Cardcom</mark>",
+         "פרטי הכרטיס נמסרים ישירות ל-Cardcom. אנחנו שומרים רק אסימון מוצפן לחיוב החודשי ואת תוקף הכרטיס, בלי מספר הכרטיס."),
+        ("sub", "<td>אחסון האתרים והאפליקציה, הפצת תוכן, תעודות SSL</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td>",
+         "<td>אחסון האתרים והאפליקציה, הפצת תוכן, תעודות SSL</td><td>הפלטפורמה ואתרי הלקוחות: האיחוד האירופי (פרנקפורט). האתר uxellent.com: ארצות הברית. הפצת התוכן: רשת עולמית.</td>"),
+        ("sub", "<mark class=\"flag\">‼️ לאמת: לפי מסמכי הפרויקט האיחוד האירופי (פרנקפורט)</mark>", "האיחוד האירופי (פרנקפורט)"),
+        ("sub", "<mark class=\"flag\">‼️ לאמת: לפי מסמכי הפרויקט האיחוד האירופי (אירלנד)</mark>", "האיחוד האירופי (אירלנד)"),
+        ("sub", "<mark class=\"flag\">‼️ לאמת: לפי מסמכי הפרויקט ארצות הברית</mark>", "ארצות הברית"),
+        ("sub", "<td>ניהול DNS</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td>", "<td>ניהול DNS</td><td>רשת עולמית</td>"),
+        ("sub", "<td>מדידת צפיות בעמודים באתר uxellent.com</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td>", "<td>מדידת צפיות בעמודים באתר uxellent.com</td><td>האיחוד האירופי</td>"),
+        ("sub", "<td>מדידת ביקורים באתר uxellent.com: עמודים שנצפו ומקור ההגעה</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td>", "<td>מדידת ביקורים באתר uxellent.com: עמודים שנצפו ומקור ההגעה</td><td>ארצות הברית</td>"),
+        ("sub", "<tr><td>Google Ads</td><td>פרסום ומדידת קמפיינים באתר uxellent.com</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td>", "<tr><td>Google Ads</td><td>פרסום ומדידת קמפיינים באתר uxellent.com</td><td>ארצות הברית</td>"),
+        ("sub", "<tr><td>Meta (פייסבוק ואינסטגרם)</td><td>פרסום ומדידת קמפיינים באתר uxellent.com</td><td><mark class=\"flag\">‼️ להשלים מדינה</mark></td>", "<tr><td>Meta (פייסבוק ואינסטגרם)</td><td>פרסום ומדידת קמפיינים באתר uxellent.com</td><td>ארצות הברית</td>"),
+        ("drop", "‼️ לעו״ד: לאשר את הבסיס להעברה"),
+        ("sub", " לפי ההסכם איתו, המידע לא משמש לאימון המודלים שלו. <mark class=\"flag\">‼️ לאמת מול תנאי Anthropic העדכניים</mark>", ""),
+        ("sub", "נשלח לכם דיוור שיווקי רק אם הסכמתם מראש, בתיבה נפרדת שאינה מסומנת מראש. <mark class=\"flag\">‼️ תלוי מימוש: תיבת הסכמה נפרדת ושמירת תיעוד ההסכמה</mark>",
+         "נשלח לכם דיוור שיווקי רק אם הסכמתם לכך מראש."),
+        ("strip", "‼️ לאמת</mark></li>"),
+        ("drop", "ספקי תשתית מוכרים, שמחויבים בהסכם"),
+        ("drop", "אנחנו מנהלים מסמך הגדרות מאגר ונוהל אבטחה"),
+        ("sub", "<td>30 יום לצפייה והורדה, ואז מחיקה. <mark class=\"flag\">‼️ תלוי מימוש</mark></td>", "<td>נמחקים מיד. רישומי תשלום נשמרים כפי שהדין מחייב.</td>"),
+        ("strip", "‼️ לעו״ד: לאשר את התקופה"),
+        ("sub", "<td>תיעוד הסכמה לתנאים ולדיוור</td>", "<td>תיעוד ההסכמה לתנאים</td>"),
+        ("drop", "<td>לוגים טכניים</td>"),
+        ("strip", "‼️ הבאנר עוצב (uxb-026)"),
+    ],
+    ("en", "privacy"): [
+        ("strip", "‼️ For the lawyer: are we required to appoint"),
+        ("sub", "Card details go directly to Cardcom. <mark class=\"flag\">‼️ Verify what we receive from Cardcom</mark>",
+         "Card details go directly to Cardcom. We keep only an encrypted token for the recurring charge and the card's expiry date, never the card number."),
+        ("sub", "<td>Hosting the sites and the app, content delivery, SSL certificates</td><td><mark class=\"flag\">‼️ Fill in country</mark></td>",
+         "<td>Hosting the sites and the app, content delivery, SSL certificates</td><td>The platform and customers' sites: European Union (Frankfurt). The uxellent.com site: United States. Content delivery: a worldwide network.</td>"),
+        ("sub", "<mark class=\"flag\">‼️ Verify: per project documents, European Union (Frankfurt)</mark>", "European Union (Frankfurt)"),
+        ("sub", "<mark class=\"flag\">‼️ Verify: per project documents, European Union (Ireland)</mark>", "European Union (Ireland)"),
+        ("sub", "<mark class=\"flag\">‼️ Verify: per project documents, United States</mark>", "United States"),
+        ("sub", "<td>DNS management</td><td><mark class=\"flag\">‼️ Fill in country</mark></td>", "<td>DNS management</td><td>A worldwide network</td>"),
+        ("sub", "<td>Measuring page views on uxellent.com</td><td><mark class=\"flag\">‼️ Fill in country</mark></td>", "<td>Measuring page views on uxellent.com</td><td>European Union</td>"),
+        ("sub", "<td>Measuring visits to uxellent.com: pages viewed and where visitors came from</td><td><mark class=\"flag\">‼️ Fill in country</mark></td>", "<td>Measuring visits to uxellent.com: pages viewed and where visitors came from</td><td>United States</td>"),
+        ("sub", "<tr><td>Google Ads</td><td>Advertising and campaign measurement on uxellent.com</td><td><mark class=\"flag\">‼️ Fill in country</mark></td>", "<tr><td>Google Ads</td><td>Advertising and campaign measurement on uxellent.com</td><td>United States</td>"),
+        ("sub", "<tr><td>Meta (Facebook and Instagram)</td><td>Advertising and campaign measurement on uxellent.com</td><td><mark class=\"flag\">‼️ Fill in country</mark></td>", "<tr><td>Meta (Facebook and Instagram)</td><td>Advertising and campaign measurement on uxellent.com</td><td>United States</td>"),
+        ("drop", "‼️ For the lawyer: confirm the basis for transfers"),
+        ("sub", " Under our agreement with them, the information is not used to train their models. <mark class=\"flag\">‼️ Verify against Anthropic's current terms</mark>", ""),
+        ("sub", "We will send you marketing email only if you agreed in advance, in a separate box that is not pre-ticked. <mark class=\"flag\">‼️ Depends on implementation: separate consent box and record of consent</mark>",
+         "We will send you marketing email only if you agreed to it in advance."),
+        ("strip", "‼️ Verify</mark></li>"),
+        ("drop", "Established infrastructure providers, bound by contract"),
+        ("drop", "We maintain a database definitions document and a security procedure"),
+        ("sub", "<td>30 days to view and download, then deletion. <mark class=\"flag\">‼️ Depends on implementation</mark></td>", "<td>Deleted right away. Payment records are kept as the law requires.</td>"),
+        ("strip", "‼️ For the lawyer: confirm the period"),
+        ("sub", "<td>Record of consent to the terms and to marketing email</td>", "<td>Record of consent to the terms</td>"),
+        ("drop", "<td>Technical logs</td>"),
+        ("strip", "‼️ The banner has been designed (uxb-026)"),
+    ],
+    ("he", "cookies"): [
+        ("sub", "<th scope=\"col\">צריך הסכמה?</th>", "<th scope=\"col\">עוגיות ותוקף</th><th scope=\"col\">צריך הסכמה?</th>"),
+        ("sub", "<td>עוגיות של הפלטפורמה <mark class=\"flag\">‼️ להשלים שמות ותוקף</mark></td><td>שמירת ההתחברות, אבטחה, ושמירת בחירת העוגיות שלכם</td>",
+         "<td>עוגיות של UXellent</td><td>שמירת ההתחברות, אבטחה, ושמירת בחירת העוגיות שלכם</td><td>{COOKIES_NEC}</td>"),
+        ("sub", "<td>מדידת צפיות בעמודים באתר</td>", "<td>מדידת צפיות בעמודים באתר</td><td>{COOKIES_PH}</td>"),
+        ("sub", "<td>מדידת ביקורים באתר: עמודים שנצפו ומקור ההגעה</td>", "<td>מדידת ביקורים באתר: עמודים שנצפו ומקור ההגעה</td><td>{COOKIES_GA}</td>"),
+        ("sub", "<td>Google Ads</td><td>מדידת קמפיינים ופרסום מותאם</td>", "<td>Google Ads</td><td>מדידת קמפיינים ופרסום מותאם</td><td>{COOKIES_ADS}</td>"),
+        ("sub", "<td>Meta (פייסבוק ואינסטגרם)</td><td>מדידת קמפיינים ופרסום מותאם</td>", "<td>Meta (פייסבוק ואינסטגרם)</td><td>מדידת קמפיינים ופרסום מותאם</td><td>{COOKIES_META}</td>"),
+        ("drop", "‼️ לאמת שזו הרשימה המלאה"),
+        ("sub", "<p><mark class=\"flag\">‼️ לבעלים: אילו עוגיות הפלטפורמה עצמה מפעילה באתרי הלקוחות, אם בכלל</mark></p>",
+         "<p>הפלטפורמה עצמה כותבת באתר של לקוח עוגייה טכנית אחת, <bdi>__Host-ux_pl</bdi>, שמגינה על הטפסים מספאם ונשמרת 6 שעות. אם בעל האתר מציג באנר עוגיות, הבחירה של הגולש נשמרת בעוגייה <bdi>uxellent_consent</bdi> ל-12 חודשים.</p>"),
+    ],
+    ("en", "cookies"): [
+        ("sub", "<th scope=\"col\">Needs consent?</th>", "<th scope=\"col\">Cookies and duration</th><th scope=\"col\">Needs consent?</th>"),
+        ("sub", "<td>Platform cookies <mark class=\"flag\">‼️ Fill in names and duration</mark></td><td>Keeping you logged in, security, and remembering your cookie choice</td>",
+         "<td>UXellent cookies</td><td>Keeping you logged in, security, and remembering your cookie choice</td><td>{COOKIES_NEC}</td>"),
+        ("sub", "<td>Measuring page views on the site</td>", "<td>Measuring page views on the site</td><td>{COOKIES_PH}</td>"),
+        ("sub", "<td>Measuring visits to the site: pages viewed and where visitors came from</td>", "<td>Measuring visits to the site: pages viewed and where visitors came from</td><td>{COOKIES_GA}</td>"),
+        ("sub", "<td>Google Ads</td><td>Campaign measurement and personalised ads</td>", "<td>Google Ads</td><td>Campaign measurement and personalised ads</td><td>{COOKIES_ADS}</td>"),
+        ("sub", "<td>Meta (Facebook and Instagram)</td><td>Campaign measurement and personalised ads</td>", "<td>Meta (Facebook and Instagram)</td><td>Campaign measurement and personalised ads</td><td>{COOKIES_META}</td>"),
+        ("drop", "‼️ Verify that this is the full, current list"),
+        ("sub", "<p><mark class=\"flag\">‼️ For the owner: which cookies, if any, the platform itself sets on customers' sites</mark></p>",
+         "<p>The platform itself sets one technical cookie on a customer's site, <bdi>__Host-ux_pl</bdi>, which protects the forms from spam and is kept for 6 hours. If the site owner shows a cookie banner, the visitor's choice is kept in the <bdi>uxellent_consent</bdi> cookie for 12 months.</p>"),
+    ],
+    ("he", "accessibility"): [
+        ("drop", "‼️ לאמת כל שורה באתר החי"),
+        ("drop", "לחברה אין משרד שמקבל קהל."),
+        ("drop", "<b>הערה לבעלים, לא לפרסום:</b> לא כותבים"),
+        ("sub", "<mark class=\"flag\">‼️ למלא ביום הפרסום</mark>", "21 באוקטובר 2026"),
+        ("sub", "<li>כשנוסיף לאתר כלי מדידה ופרסום של צד שלישי, לא תהיה לנו שליטה על הנגישות שלהם.</li>", "<li>לכלי המדידה והפרסום של צד שלישי באתר אין לנו שליטה על הנגישות שלהם.</li>"),
+    ],
+    ("en", "accessibility"): [
+        ("drop", "‼️ Verify every line on the live site"),
+        ("drop", "The company has no office that receives the public."),
+        ("drop", "<b>Note for the owner, not for publication:</b> Do not write"),
+        ("sub", "<mark class=\"flag\">‼️ Fill in on the day of publication</mark>", "21 October 2026"),
+        ("sub", "<li>When we add third-party measurement and advertising tools to the site, we will have no control over their accessibility.</li>", "<li>We have no control over the accessibility of the third-party measurement and advertising tools on the site.</li>"),
+    ],
+    ("he", "cancel"): [
+        ("strip", "‼️ לעו״ד: האם שיחה עם צ׳אט ה-AI"),
+        ("strip", "‼️ לעו״ד: מנוי שנתי ששולם מראש"),
+        ("drop", "‼️ לעו״ד: האם להעניק את זכויות הביטול"),
+        ("drop", "‼️ לעו״ד: החוק מאפשר הודעת ביטול גם בעל פה"),
+        ("sub", "<li>נשלח לכם אישור במייל עם מועד הביטול. <mark class=\"flag\">‼️ תלוי מימוש</mark></li>", "<li>נשלח לכם אישור במייל, עם התאריך שעד אליו החבילה ממשיכה לפעול.</li>"),
+        ("drop", "<b>הערה לבעלים, לא לפרסום:</b> החוק מחייב"),
+    ],
+    ("en", "cancel"): [
+        ("strip", "‼️ For the lawyer: does a conversation with the AI chat"),
+        ("strip", "‼️ For the lawyer: annual subscription paid in advance"),
+        ("drop", "‼️ For the lawyer: whether to give the cancellation rights"),
+        ("drop", "‼️ For the lawyer: the law also allows a cancellation notice by phone"),
+        ("sub", "<li>We will email you a confirmation with the cancellation date. <mark class=\"flag\">‼️ Depends on implementation</mark></li>", "<li>We will email you a confirmation, with the date until which your plan keeps running.</li>"),
+        ("drop", "<b>Note for the owner, not for publication:</b> The law requires"),
+    ],
+    ("he", "aup"): [
+        ("sub", "אישור קבלה ורישום ההודעה עם תאריך ושעה. <mark class=\"flag\">‼️ תלוי מימוש: יומן הודעות</mark>", "אישור קבלת ההודעה."),
+        ("strip", "‼️ לעו״ד: לאשר את ההתחייבות"),
+    ],
+    ("en", "aup"): [
+        ("sub", "Confirming receipt and logging the notice with date and time. <mark class=\"flag\">‼️ Depends on implementation: notice log</mark>", "Confirming receipt of the notice."),
+        ("strip", "‼️ For the lawyer: confirm this commitment"),
+    ],
+}
+# the cookie column (cookies and how long they are kept), as measured on the Preview
+LEGAL_COOKIES = {
+    "he": {
+        "NEC": "באתר הזה: <bdi>ux_consent</bdi> (בחירת העוגיות, 12 חודשים), <bdi>lang_pref</bdi> (שפת האתר, 12 חודשים), <bdi>geo_country</bdi> (הצעת שפה, יום אחד). בפלטפורמה: <bdi>__Host-ux-auth</bdi> (ההתחברות, עד 400 יום) ועוגיות עזר שנשמרות עד 30 יום.",
+        "PH": "<bdi>ph_…_posthog</bdi>, 12 חודשים",
+        "GA": "<bdi>_ga</bdi>, <bdi>_ga_HEX0NQF4WM</bdi>, עד 400 יום",
+        "ADS": "<bdi>_gcl_au</bdi>, 90 יום. <bdi>IDE</bdi> (בדומיין doubleclick.net), עד 400 יום",
+        "META": "<bdi>_fbp</bdi>, 90 יום. <bdi>_fbc</bdi>, 90 יום, רק כשמגיעים מפרסומת",
+    },
+    "en": {
+        "NEC": "On this site: <bdi>ux_consent</bdi> (your cookie choice, 12 months), <bdi>lang_pref</bdi> (site language, 12 months), <bdi>geo_country</bdi> (language suggestion, 1 day). On the platform: <bdi>__Host-ux-auth</bdi> (login, up to 400 days) and helper cookies kept up to 30 days.",
+        "PH": "<bdi>ph_…_posthog</bdi>, 12 months",
+        "GA": "<bdi>_ga</bdi>, <bdi>_ga_HEX0NQF4WM</bdi>, up to 400 days",
+        "ADS": "<bdi>_gcl_au</bdi>, 90 days. <bdi>IDE</bdi> (on doubleclick.net), up to 400 days",
+        "META": "<bdi>_fbp</bdi>, 90 days. <bdi>_fbc</bdi>, 90 days, only when arriving from an ad",
+    },
+}
+LEGAL_LOG = []
+
+
+def legal_publish(body, lang, legal):
+    """Publishes a legal page without review marks (tbl-031); see LEGAL_PUBLISH."""
+    body, n = re.subn(r'<p class="lg-date">.*?</p>', f'<p class="lg-date">{EFFECTIVE[lang]}</p>', body, count=1, flags=re.S)
+    assert n == 1, (lang, legal)
+    LEGAL_LOG.append((lang, legal, "fill", "effective date", EFFECTIVE[lang]))
+    for op in LEGAL_PUBLISH.get((lang, legal), []):
+        kind, a = op[0], op[1]
+        if kind == "strip":
+            # a prefix of the mark's text, or (ending in </mark>) the whole of it
+            needle = '<mark class="flag">' + a.split("</mark>")[0] + ("</mark>" if "</mark>" in a else "")
+            assert body.count(needle) == 1, (lang, legal, a)
+            m = re.search(r"\s*" + re.escape(needle) + ("" if "</mark>" in a else r"[^<]*</mark>"), body)
+            body = body[:m.start()] + body[m.end():]
+            LEGAL_LOG.append((lang, legal, "mark removed, text kept", re.sub(r"<[^>]+>", "", m.group(0)).strip(), ""))
+        elif kind == "sub":
+            new = op[2].format(**{f"COOKIES_{k}": v for k, v in LEGAL_COOKIES[lang].items()}) if "{COOKIES_" in op[2] else op[2]
+            assert body.count(a) == 1, (lang, legal, a[:70])
+            body = body.replace(a, new)
+            LEGAL_LOG.append((lang, legal, "filled" if new else "removed", re.sub(r"<[^>]+>", "", a).strip(), re.sub(r"<[^>]+>", "", new).strip()))
+        elif kind == "drop":
+            i = body.index(a)
+            assert body.count(a) == 1, (lang, legal, a)
+            s = max(body.rfind(t, 0, i) for t in ("<p>", "<p ", "<li>", "<tr>"))
+            tag = re.match(r"<(p|li|tr)", body[s:]).group(1)
+            e = body.index(f"</{tag}>", i) + len(f"</{tag}>")
+            LEGAL_LOG.append((lang, legal, "removed", re.sub(r"<[^>]+>", " ", body[s:e]).strip(), ""))
+            body = body[:s] + body[e:]
+    if legal == "privacy":
+        # "Short text to show next to forms" is drafting material for the forms, not part of the policy
+        body, n = re.subn(r'<section class="lg-s" id="p-forms">.*?</section>', "", body, count=1, flags=re.S)
+        body, n2 = re.subn(r'<a href="#p-forms">[^<]*</a>', "", body, count=1)
+        assert (n, n2) == (1, 1), (lang, n, n2)
+        LEGAL_LOG.append((lang, legal, "removed", "the section of short texts to place next to forms (drafting material, with its contents link)", ""))
+    left = re.findall(r"‼️|הערה לבעלים|Note for the owner|<mark", body)
+    assert not left, (lang, legal, left)
+    return body
+
+
 def legal_markup(body, lang, cfg, legal):
     """A legal page (uxb-025, tbl-027 / tbl-028) on the text-page template. The
     yellow ‼️ marks stay on Preview, so the open points are visible (tbl-027)."""
     pre = cfg["pre"]
     route = LEGAL[legal]
     body = legal_fixes(body, lang, legal)
+    body = legal_publish(body, lang, legal)
     body = body.replace('<a href="/" lang="he"', f'<a href="/{route}" lang="he"').replace('<a href="/en" lang="en"', f'<a href="/en/{route}" lang="en"')
     body, n1 = re.subn(r'<main id="main">(.*?)</main>', r"\1", body, count=1, flags=re.S)
     body, n2 = re.subn(r'<nav class="crumb"[^>]*>.*?</nav>', "", body, count=1, flags=re.S)
@@ -848,6 +1155,11 @@ LEGAL_CSS = """
 
 
 def write_legal():
+    # what the publish step removed and filled in, for the lawyer (LEGAL_LOG=<file> to keep it)
+    if os.environ.get("LEGAL_LOG"):
+        with open(os.environ["LEGAL_LOG"], "w", encoding="utf-8") as f:
+            for lang, legal, kind, was, now in LEGAL_LOG:
+                f.write(f"{lang}\t{LEGAL[legal]}\t{kind}\t{was}\t{now}\n")
     for lang, pages in LEGAL_OUT.items():
         assert sorted(pages) == sorted(LEGAL), pages.keys()
         ts = (f"// Generated by scripts/home-sheets/build.py from the legal sheets (uxb-025, tbl-028). Do not edit by hand.\n"

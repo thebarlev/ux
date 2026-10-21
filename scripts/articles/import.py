@@ -26,8 +26,13 @@ DATE = "2026-10-20"
 COVER = "/services/d-develop.webp"
 # one category for all eight guides (tbl-029); the md files mix "מדריך" / "Guide" in
 GUIDE_CATEGORY = {"he": "מדריכי צמיחה", "en": "Growth guides"}
-# tbl-029: a claim that is not on the facts list, in Itzik's words
+# tbl-029: a claim that is not on the facts list, in Itzik's words;
+# tbl-031: every business, not only service businesses
+META_REPLACE = {
+    ("wordpress-vs", "en"): ("an AI platform for service businesses.", "an AI platform for businesses."),
+}
 REPLACE = {
+    ("guide-small-business", "en"): ('| Client referrals | Any service business |', '| Client referrals | Any business |'),
     ("slow-site", "he"): ("האחסון וה-SSL כלולים בכל חבילה, האתר מותאם למובייל ולמחשב, והעיצוב נבנה רק ממה שהעסק שלכם צריך, בלי תבנית כבדה ובלי תוספים.",
                           "האחסון וה-SSL כלולים בכל חבילה, והאתר מותאם למובייל ולמחשב. האתרים ב-UXellent בנויים להיות מהירים ויציבים."),
     ("slow-site", "en"): ("Hosting and SSL come with every plan, every site works well on mobile and desktop, and the design is built only from what your business needs, with no heavy template and no plugins.",
@@ -112,6 +117,10 @@ def main():
         slug, lang = os.path.basename(f)[:-3].rsplit(".", 1)
         meta, body = front(open(f, encoding="utf-8").read())
         assert meta["slug"] == slug, (meta["slug"], slug)
+        if (slug, lang) in META_REPLACE:
+            old, new = META_REPLACE[(slug, lang)]
+            assert meta["meta_description"].count(old) == 1, (slug, lang)
+            meta["meta_description"] = meta["meta_description"].replace(old, new)
         if (slug, lang) in REPLACE:
             old, new = REPLACE[(slug, lang)]
             assert body.count(old) == 1, (slug, lang)

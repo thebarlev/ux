@@ -6,7 +6,7 @@ import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 import "@/app/_home/blog.he.css"
 
 const TITLE = "מאמרים | Uxellent"
-const DESCRIPTION = "מאמרים קצרים על אתרים, קידום ו-AI, לעסקים שמוכרים שירות."
+const DESCRIPTION = "מאמרים קצרים על אתרים, קידום ו-AI, לעסקים, לחברות ולבעלי מקצוע."
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),

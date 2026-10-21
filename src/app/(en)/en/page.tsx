@@ -5,7 +5,7 @@ import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
 
 import "@/app/_home/home.en.css"
 
-const TITLE = "Uxellent | AI website builder for service businesses"
+const TITLE = "Uxellent | AI website builder for every business"
 const DESCRIPTION =
   "A beautifully designed website for your business, built by AI in minutes. Tell us what you do and watch it come together. Free, no technical skills needed."
 

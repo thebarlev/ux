@@ -78,3 +78,29 @@
  div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) .crumb{display:none!important}
  div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) main h1:is(:first-child,.crumb+h1,:has(>.crumb)+h1){margin-top:0!important}
 }
+
+/* ---------- tbl-031: site-wide ----------
+   The header logo is 30% larger (30px -> 39px, 26px -> 34px on a phone). */
+div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) #hdr .logo-svg{height:39px!important}
+@media(max-width:1060px){div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) #hdr .logo-svg{height:34px!important}}
+
+/* Everything that can be clicked shows the hand, on every page */
+a[href],button:not(:disabled),[role=button],summary,label:has(input[type=checkbox],input[type=radio]),select,[data-ck-open],footer a,nav a{cursor:pointer}
+
+/* One rhythm between sections: about 120px from the end of a section's content
+   to the next section's heading on desktop, 72px on a phone. Each section takes
+   half above and half below; the page's first section keeps its own top. */
+div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) main .sec{padding-top:60px!important;padding-bottom:60px!important}
+div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) main .sec.ct-top{padding-top:clamp(48px,6vw,96px)!important}
+/* the blue "included" band and the closing follow the same rhythm; the benefits
+   slider keeps 32px (16px on a phone) under its cards for their shadow, so its
+   section gives that back */
+div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) main #inc.sec{padding-top:60px!important;padding-bottom:60px!important}
+div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) main .closing{padding-top:60px!important}
+div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) main #ben.sec{padding-bottom:28px!important}
+@media(max-width:1060px){
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) main .sec,div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) main #inc.sec{padding-top:36px!important;padding-bottom:36px!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) main .sec.ct-top{padding-top:36px!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) main .closing{padding-top:36px!important}
+ div:is(.uxh-he,.uxh-en,.uxp-he,.uxp-en,.uxc-he,.uxc-en,.uxf-he,.uxf-en,.uxt-he,.uxt-en,.uxb-he,.uxb-en,.uxa-he,.uxa-en,.uxw-he,.uxw-en,.uxo-he,.uxo-en,.uxz-he,.uxz-en,.uxl-he,.uxl-en) main #ben.sec{padding-bottom:20px!important}
+}

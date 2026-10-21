@@ -32,11 +32,16 @@ const SUPPORT = "support@uxellent.com"
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
 /** New professions that pop into "who it's for", with their icons (from the sheets). */
+// tbl-031: manufacturers, organizations and tech companies come first ("companies" is one of the fixed icons)
 const NEW_ORBS: Record<Lang, readonly string[]> = {
-  he: ["רופאי שיניים", "מורים פרטיים", "וטרינרים", "שמאים", "מתורגמנים", "קוסמטיקאיות", "מאמני כושר", "גני אירועים"],
-  en: ["Dentists", "Tutors", "Vets", "Appraisers", "Translators", "Beauticians", "Fitness trainers", "Event venues"],
+  he: ["מפעלים", "ארגונים", "חברות טכנולוגיה", "רופאי שיניים", "מורים פרטיים", "וטרינרים", "שמאים", "מתורגמנים", "קוסמטיקאיות", "מאמני כושר", "גני אירועים"],
+  en: ["Manufacturers", "Organizations", "Tech companies", "Dentists", "Tutors", "Vets", "Appraisers", "Translators", "Beauticians", "Fitness trainers", "Event venues"],
 }
 const ORB_ICONS = [
+  // factory, organization (people), tech company (chip)
+  '<path d="M3 21V11l5 3v-3l5 3v-3l5 3V5h3v16z"/><path d="M6.5 18h2M11.5 18h2M16.5 18h2"/>',
+  '<circle cx="12" cy="7" r="2.6"/><circle cx="5.5" cy="10.5" r="2"/><circle cx="18.5" cy="10.5" r="2"/><path d="M7.5 20v-1.5a4.5 4.5 0 0 1 9 0V20M2.5 20v-1a3 3 0 0 1 4.2-2.8M21.5 20v-1a3 3 0 0 0-4.2-2.8"/>',
+  '<rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 10h4v4h-4zM9.5 3v4M14.5 3v4M9.5 17v4M14.5 17v4M3 9.5h4M3 14.5h4M17 9.5h4M17 14.5h4"/>',
   '<path d="M7 4c-2 0-3 1.6-3 3.6 0 3 1.5 4.4 2 8 .3 2.4 1 4.4 2 4.4s1.4-2 1.7-4c.2-1.2.7-2 1.3-2s1.1.8 1.3 2c.3 2 .7 4 1.7 4s1.7-2 2-4.4c.5-3.6 2-5 2-8C20 5.6 19 4 17 4c-1.8 0-2.6 1-5 1S8.8 4 7 4z"/>',
   '<path d="M3 8l9-4 9 4-9 4z"/><path d="M7 10v5c0 1.5 2.2 3 5 3s5-1.5 5-3v-5"/>',
   '<circle cx="7" cy="9" r="1.8"/><circle cx="12" cy="6.5" r="1.8"/><circle cx="17" cy="9" r="1.8"/><path d="M12 12c-3 0-5 3-5 5s2 2.5 5 2.5 5-.5 5-2.5-2-5-5-5z"/>',

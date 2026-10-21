@@ -35,7 +35,7 @@ const GOOGLE_ADS_ID = "AW-17972291188"
 const env = typeof process !== "undefined" ? process.env : ({} as NodeJS.ProcessEnv)
 
 const POSTHOG_KEY = env.NEXT_PUBLIC_POSTHOG_KEY
-const POSTHOG_HOST = env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com"
+const POSTHOG_HOST = env.NEXT_PUBLIC_POSTHOG_HOST || "https://eu.i.posthog.com"
 
 function injectScript(
   src: string,
@@ -89,7 +89,10 @@ function loadPostHog() {
     if (typeof window !== "undefined" && (window as unknown as { posthog?: { init: (k: string, o: object) => void } }).posthog?.init) {
       ;(window as unknown as { posthog: { init: (k: string, o: object) => void } }).posthog.init(POSTHOG_KEY, {
         api_host: POSTHOG_HOST,
+        // tbl-031: no session recordings, every input masked, and no identify on the marketing site
         disable_session_recording: true,
+        session_recording: { maskAllInputs: true },
+        mask_all_text: false,
         disable_surveys: true,
         autocapture: false,
         capture_pageview: true,
