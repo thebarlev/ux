@@ -4,9 +4,7 @@ import Link from "next/link"
 import { setLangPrefCookie } from "@/lib/i18n/langPrefCookie"
 
 /** Sets lang_pref to the destination locale before the browser navigates, so
- *  a manual switch never gets fought by the middleware's own lang_pref
- *  redirect (e.g. a visitor who dismissed the geo banner on Hebrew, then
- *  deliberately clicks through to English from the footer). */
+ *  the language prompt is not offered again after a manual switch. */
 export function LangSwitchLink({
   href,
   target,

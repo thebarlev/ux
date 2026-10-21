@@ -22,6 +22,18 @@ export function LanguageBanner() {
   const isEn = isEnglishPath(pathname)
   const [suggestion, setSuggestion] = useState<Suggestion>(null)
 
+  // 039: the sheet pages' language switch is plain markup (nav.lang a[hreflang]);
+  // a click on it records the choice, like LangSwitchLink does elsewhere
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>("nav.lang a[hreflang]")
+      const target = a?.getAttribute("hreflang")
+      if (target === "he" || target === "en") setLangPrefCookie(target)
+    }
+    document.addEventListener("click", onClick)
+    return () => document.removeEventListener("click", onClick)
+  }, [])
+
   useEffect(() => {
     if (pathname.startsWith("/admin")) return
     if (readCookie(LANG_PREF_COOKIE)) return
