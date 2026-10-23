@@ -1141,7 +1141,7 @@
 
 @media(max-width:1060px){.uxw-en .ft-pts li{align-items:flex-start}.uxw-en .ft-pts li::before{margin-top:.62em}}
 
-.uxw-en .mk-e{display:grid;gap:12px;height:392px;align-content:start;overflow:hidden}
+.uxw-en .mk-e{display:grid;gap:12px;height:426px;box-sizing:border-box;align-content:start;overflow:hidden}
 .uxw-en .mke-form,.uxw-en .mke-row{background:#fff;border:1px solid var(--line);border-radius:16px;box-sizing:border-box}
 .uxw-en .mke-form{height:196px;padding:16px;display:grid;gap:10px;align-content:start}
 .uxw-en .mke-form b{font-size:16px}
@@ -1166,7 +1166,7 @@
 @keyframes mke-r2{0%,42%{opacity:0;transform:translateY(-12px)}48%,90%{opacity:1;transform:none}96%,100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.uxw-en .mke-t1,.uxw-en .mke-t2,.uxw-en .mke-btn,.uxw-en .mke-r1,.uxw-en .mke-r2{animation:none}}
 @media(max-width:1060px){
-.uxw-en .mk-e{height:auto}
+.uxw-en .mk-e{height:auto;padding-bottom:2px}
 .uxw-en .mke-form{height:auto;padding:16px}
 .uxw-en .mke-in{font-size:16px;height:44px;line-height:44px}
 .uxw-en .mke-btn{font-size:16px}

@@ -620,8 +620,8 @@ LEADS_FEATURE = {
     },
 }
 HOME_LEADS_CARD = {
-    "he": ("לידים ודיוור", "לידים, רשימת תפוצה ודיוור, בתוך האתר.", "האתר אוסף פניות, בונה רשימת תפוצה ושולח את המיילים בשבילכם. ואנחנו אלה שדואגים שזה יעבוד.", "5 מתוך 5"),
-    "en": ("Leads and email", "Leads, mailing list and email, built into your site.", "Your site collects enquiries, builds your mailing list and sends the emails for you. And we’re the ones who make sure it works.", "5 of 5"),
+    "he": ("לידים ודיוור", "לידים, רשימת תפוצה ודיוור, בתוך האתר.", "ואנחנו אלה שדואגים שזה יעבוד.", "5 מתוך 5"),
+    "en": ("Leads and email", "Leads, mailing list and email, built into your site.", "And we’re the ones who make sure it works.", "5 of 5"),
 }
 _ART = '<svg viewBox="0 0 100 100" fill="none" stroke="#0b1220" stroke-width="4" stroke-linejoin="round"><rect x="12" y="24" width="76" height="54" rx="9" fill="#1990d8"/><path d="M15 29l35 27 35-27" stroke="#fff"/></svg>'
 AUP_MAILING = {
@@ -700,7 +700,7 @@ def check_renames():
 # then the address joins the mailing list; fixed height, so nothing below moves
 SITE040_CSS = {
     "features": """
-.mk-e{display:grid;gap:12px;height:392px;align-content:start;overflow:hidden}
+.mk-e{display:grid;gap:12px;height:426px;box-sizing:border-box;align-content:start;overflow:hidden}
 .mke-form,.mke-row{background:#fff;border:1px solid var(--line);border-radius:16px;box-sizing:border-box}
 .mke-form{height:196px;padding:16px;display:grid;gap:10px;align-content:start}
 .mke-form b{font-size:16px}
@@ -725,7 +725,7 @@ SITE040_CSS = {
 @keyframes mke-r2{0%,42%{opacity:0;transform:translateY(-12px)}48%,90%{opacity:1;transform:none}96%,100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.mke-t1,.mke-t2,.mke-btn,.mke-r1,.mke-r2{animation:none}}
 @media(max-width:1060px){
-.mk-e{height:auto}
+.mk-e{height:auto;padding-bottom:2px}
 .mke-form{height:auto;padding:16px}
 .mke-in{font-size:16px;height:44px;line-height:44px}
 .mke-btn{font-size:16px}
