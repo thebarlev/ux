@@ -442,6 +442,7 @@ def build(lang, cfg, images, page="home", legal=None):
     open(os.path.join(OUT, f"{page}.{lang}.css"), "w", encoding="utf-8").write(css)
 
     body = plan_tokens(body, lang, page)
+    body = site_040(body, lang, page)
 
     faq = [
         {"q": re.sub(r"<[^>]+>", "", q).strip(), "a": re.sub(r"<[^>]+>", "", a).strip()}
@@ -479,11 +480,14 @@ PLAN_SAVE_ANSWER = {"he": "20% על כל החבילות בתשלום, לעומת
 PLAN_FROM = {"he": "<span>מ-₪0 לחודש</span>", "en": "<span>From $0 a month</span>"}
 # tbl-035: the card lines, in the order every card shows them, and which plans have each
 _ALL, _PAID = ("free", "start", "business", "pro"), ("start", "business", "pro")
+# 042: the leads and email lines, from the plans data (plan-fill.ts, leadsHtml), right after the editor
+LEADS = "{{LEADS}}"
 PLAN_FEATURES = {
     "he": [
         ('כתובת באוויר: <bdi dir="ltr">yourname.uxellent.site</bdi>', _ALL),
         ("צ'אט AI שמעצב וכותב", _ALL),
         ("עורך ייעודי בקליק", _ALL),
+        (LEADS, _ALL),
         ("מתאים לעדכונים שוטפים", _PAID),
         ("דומיין משלכם, ואנחנו מחברים אותו", ("business", "pro")),
         ('בלי הקרדיט "נבנה ב-UXellent"', ("pro",)),
@@ -493,6 +497,7 @@ PLAN_FEATURES = {
         ('Live address: <bdi dir="ltr">yourname.uxellent.site</bdi>', _ALL),
         ("AI chat that designs and writes", _ALL),
         ("Click-to-edit editor", _ALL),
+        (LEADS, _ALL),
         ("Made for ongoing updates", _PAID),
         ("Your own domain, connected for you", ("business", "pro")),
         ("No “Built with UXellent” credit", ("pro",)),
@@ -520,7 +525,7 @@ def plan_tokens(body, lang, page):
             # tbl-035: no "Everything in X, plus:"; each card lists all it has, in one order for every card
             a, nl = re.subn(r'\s*<p class="pl-lead">[^<]*</p>', "", a)
             assert nl == (0 if pid == "free" else 1), (lang, pid, nl)
-            a, nu = re.subn(r"<ul>.*?</ul>", lambda m: "<ul>" + "".join(li(x) for x in PLAN_FEATURES[lang] if pid in x[1]) + "</ul>", a, count=1, flags=re.S)
+            a, nu = re.subn(r"<ul>.*?</ul>", lambda m: "<ul>" + "".join(("{{PLAN_LEADS:%s}}" % pid) if x[0] == LEADS else li(x) for x in PLAN_FEATURES[lang] if pid in x[1]) + "</ul>", a, count=1, flags=re.S)
             assert nu == 1, (lang, pid)
             # tbl-035: two lines on every card, right after the AI actions line
             a = a.replace("{{PLAN_ACT:%s}}" % pid, "{{PLAN_ACT:%s}}" % pid + '<ul class="pl-must">' + "".join(li(x) for x in PLAN_MUST[lang]) + "</ul>", 1)
@@ -531,7 +536,7 @@ def plan_tokens(body, lang, page):
             return f"<li>{check}<span>{x[0]}</span></li>"
         # every list line the sheet has, so none is lost when the lists are rebuilt
         sheet_lines = set(re.findall(r'<li><svg viewBox="0 0 24 24"><path d="M5 12\.5l4\.5 4\.5L19 7\.5"/></svg><span>(.*?)</span></li>', body))
-        kept = {x[0] for x in PLAN_FEATURES[lang]}
+        kept = {x[0] for x in PLAN_FEATURES[lang] if x[0] != LEADS}
         assert sheet_lines - kept <= {"פי 2 פעולות AI", "פי 3 פעולות AI", "2× the AI actions", "3× the AI actions"} and kept <= sheet_lines, (lang, sheet_lines ^ kept)
         body, n = re.subn(r'<article class="pl[^"]*">.*?</article>', card, body, flags=re.S)
         assert n == 4 and next(ids, None) is None, n
@@ -548,6 +553,192 @@ def plan_tokens(body, lang, page):
     left = [x for x in left if x not in ("₪1", "₪8", "$5", "$1")]
     assert not left or page not in ("pricing", "faq", "features", "home"), (lang, page, left)
     return body
+
+
+# 040 / 041 / 042: plan names, the leads and email parts, and yearly billing.
+# - Names: התחלה is מתחילים, מקצועי is צומח, Pro is Growth, wherever a plan is named.
+# - Parts that show only on a condition are marked <!--name-->…<!--/name-->, and
+#   HomePage keeps or drops them when the page renders (src/app/_home/plan-fill.ts,
+#   gate): "yearly" while the plans data has yearly prices (042: none until Itzik
+#   approves), "mailing" while MAILING_LIVE=true (042: preview yes, production no).
+PLAN_RENAMES = {
+    "he": [
+        ("<h3>התחלה</h3>", "<h3>מתחילים</h3>"),
+        ("<h3>מקצועי</h3>", "<h3>צומח</h3>"),
+        ("בחבילה המקצועית היא לא מופיעה. בהתחלה ובעסקי", "בחבילת צומח היא לא מופיעה. במתחילים ובעסקי"),
+        ("בחבילות עסקי ומקצועי", "בחבילות עסקי וצומח"),
+        ("חינם, התחלה, עסקי ומקצועי", "חינם, מתחילים, עסקי וצומח"),
+        ("בחבילות חינם, התחלה ועסקי", "בחבילות חינם, מתחילים ועסקי"),
+        ("בחבילות התחלה ועסקי", "בחבילות מתחילים ועסקי"),
+        ("בחבילה מקצועי הקרדיט", "בחבילת צומח הקרדיט"),
+    ],
+    "en": [
+        ("<h3>Pro</h3>", "<h3>Growth</h3>"),
+        ("Business and Pro", "Business and Growth"),
+        ("doesn’t appear on Pro.", "doesn’t appear on Growth."),
+        ("On the Pro plan", "On the Growth plan"),
+    ],
+}
+PLAN_RENAMED = set()  # (lang, old) seen on some page; every rename must be used
+
+YEARLY = ("<!--yearly-->", "<!--/yearly-->")
+MAILING = ("<!--mailing-->", "<!--/mailing-->")
+
+PRICING_ALL = {
+    "he": '<p class="pr-all">בכל חבילה: אחסון, עורך בקליק וטופס לידים.</p>',
+    "en": '<p class="pr-all">On every plan: hosting, the click editor and a lead form.</p>',
+}
+
+_CK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+_SV = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"'
+_PERSON = f'<svg {_SV}><circle cx="12" cy="8.5" r="3.5"/><path d="M5 19.5c1.2-3.6 4-5.5 7-5.5s5.8 1.9 7 5.5"/></svg>'
+_LIST = f'<svg {_SV}><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg>'
+LEADS_FEATURE = {
+    "he": {
+        "kick": "לידים ודיוור",
+        "h2": 'לקוחות חדשים, <span class="bl">גם כשאתם עסוקים.</span>',
+        "p": "האתר לא רק מציג את העסק. הוא אוסף פניות, בונה רשימת תפוצה ושולח את המיילים בשבילכם, בלי לחבר שום כלי חיצוני.",
+        "li": ["טופס שמייצר ליד אמיתי. כל פנייה נשמרת אצלכם בחשבון, ולא נעלמת בתיבת המייל.",
+               "רשימת תפוצה שנבנית מהאתר עצמו, מכל מי שנרשם.",
+               "דיוור ואוטומציות מתוך החשבון שלכם, בלי להיכנס לשום מערכת אחרת.",
+               "<b>ואנחנו אלה שדואגים שזה יעבוד.</b>"],
+        "form": "השאירו פרטים", "name": "דנה כהן", "send": "שליחה",
+        "lead": ("ליד חדש", "דנה כהן · מהטופס באתר"), "new": "חדש",
+        "list": ("נוספה לרשימת התפוצה", "dana@gmail.com"),
+    },
+    "en": {
+        "kick": "Leads and email",
+        "h2": 'New clients, <span class="bl">even when you’re busy.</span>',
+        "p": "Your site doesn’t just present your business. It collects enquiries, builds your mailing list and sends the emails for you, with no outside tools to connect.",
+        "li": ["A form that creates a real lead. Every enquiry is saved in your account, not lost in your inbox.",
+               "A mailing list that builds itself from your site, from everyone who signs up.",
+               "Email campaigns and automations from your own account, without logging in to any other system.",
+               "<b>And we’re the ones who make sure it works.</b>"],
+        "form": "Leave your details", "name": "Dana Cohen", "send": "Send",
+        "lead": ("New lead", "Dana Cohen · from your site’s form"), "new": "New",
+        "list": ("Added to your mailing list", "dana@gmail.com"),
+    },
+}
+HOME_LEADS_CARD = {
+    "he": ("לידים ודיוור", "לידים, רשימת תפוצה ודיוור, בתוך האתר.", "האתר אוסף פניות, בונה רשימת תפוצה ושולח את המיילים בשבילכם. ואנחנו אלה שדואגים שזה יעבוד.", "5 מתוך 5"),
+    "en": ("Leads and email", "Leads, mailing list and email, built into your site.", "Your site collects enquiries, builds your mailing list and sends the emails for you. And we’re the ones who make sure it works.", "5 of 5"),
+}
+_ART = '<svg viewBox="0 0 100 100" fill="none" stroke="#0b1220" stroke-width="4" stroke-linejoin="round"><rect x="12" y="24" width="76" height="54" rx="9" fill="#1990d8"/><path d="M15 29l35 27 35-27" stroke="#fff"/></svg>'
+AUP_MAILING = {
+    "he": ('<a href="#u-mail">דיוור</a>',
+           '<section class="lg-s" id="u-mail"><h2>דיוור</h2><p>מי ששולח דיוור מהחשבון שלו אחראי לשלוח אותו רק למי שהסכים לקבל אותו, כפי שדורש סעיף 30א לחוק התקשורת (בזק ושידורים). בכל דיוור צריכה להיות דרך פשוטה להסיר את עצמכם מהרשימה.</p><p>אם דיוור נשלח בלי הסכמה, אנחנו רשאים להשעות את הדיוור מהחשבון.</p></section>'),
+    "en": ('<a href="#u-mail">Email campaigns</a>',
+           '<section class="lg-s" id="u-mail"><h2>Email campaigns</h2><p>If you send email from your account, you are responsible for sending it only to people who agreed to receive it, as section 30A of Israel’s Communications (Telecommunications and Broadcasting) Law requires. Every email must include a simple way to unsubscribe.</p><p>If email is sent without consent, we may suspend sending from your account.</p></section>'),
+}
+PRIVACY_MAILING = {
+    "he": ("<p>במילים פשוטות: פנייה שהגיעה לאתר של לקוח שייכת ללקוח. אנחנו לא משתמשים בה לשום מטרה שלנו.</p>",
+           "<p>כך גם רשימת התפוצה של לקוח: אנשי הקשר ברשימה הם מידע של הלקוח, ואנחנו מעבדים אותו בשבילו, כדי לשלוח את הדיוור שהוא שולח. אנחנו לא משתמשים בו לשום מטרה שלנו.</p>"),
+    "en": ("<p>Put simply: an enquiry that arrives on a customer's site belongs to the customer. We don't use it for any purpose of our own.</p>",
+           "<p>The same goes for a customer's mailing list: the contacts on it are the customer's information, and we process it on their behalf, to send the email they send. We don't use it for any purpose of our own.</p>"),
+}
+
+
+def leads_fr(lang):
+    t = LEADS_FEATURE[lang]
+    lis = "".join(f"<li>{_CK}<span>{x}</span></li>" for x in t["li"])
+    mock = (f'<div class="mk mk-e"><div class="mke-form"><b>{t["form"]}</b>'
+            f'<span class="mke-in"><i class="mke-t1">{t["name"]}</i></span><span class="mke-in"><i class="mke-t2" dir="ltr">{t["list"][1]}</i></span>'
+            f'<span class="mke-btn">{t["send"]}</span></div>'
+            f'<div class="mke-row mke-r1">{_PERSON}<span><b>{t["lead"][0]}</b><em>{t["lead"][1]}</em></span><small class="mke-new">{t["new"]}</small></div>'
+            f'<div class="mke-row mke-r2">{_LIST}<span><b>{t["list"][0]}</b><em dir="ltr">{t["list"][1]}</em></span></div></div>')
+    return (f'{MAILING[0]}<div class="fr"><div class="fr-t"><span class="kick">{t["kick"]}</span><h2>{t["h2"]}</h2><p>{t["p"]}</p>'
+            f'<ul class="ft-ck">{lis}</ul></div><div class="fr-v" aria-hidden="true">{mock}</div></div>{MAILING[1]}')
+
+
+def site_040(body, lang, page):
+    for old, new in PLAN_RENAMES[lang]:
+        if old in body:
+            PLAN_RENAMED.add((lang, old))
+            body = body.replace(old, new)
+    if page == "pricing":
+        body, n = re.subn(r'<div class="bill" role="radiogroup".*?</div>', lambda m: YEARLY[0] + m.group(0) + YEARLY[1], body, count=1, flags=re.S)
+        assert n == 1, lang
+        foot = re.search(r'<p class="pr-foot">', body)
+        assert foot, lang
+        body = body[:foot.start()] + PRICING_ALL[lang] + "\n " + body[foot.start():]
+    if page in ("pricing", "faq"):
+        body, n = re.subn(r'<details>(?:(?!</details>).)*?\{\{PLAN_SAVE_ANSWER\}\}.*?</details>', lambda m: YEARLY[0] + m.group(0) + YEARLY[1], body, count=1, flags=re.S)
+        assert n == 1, (lang, page)
+    if page == "legal" and "{{PLAN_SAVE_TERMS}}" in body:
+        body, n = re.subn(r'<li>(?:(?!</li>).)*?\{\{PLAN_SAVE_TERMS\}\}.*?</li>', lambda m: YEARLY[0] + m.group(0) + YEARLY[1], body, count=1, flags=re.S)
+        assert n == 1, lang
+    if page == "features":
+        i = body.index('<section class="sec zone" id="pillars">')
+        j = body.index('</div></section>', i)
+        body = body[:j] + leads_fr(lang) + body[j:]
+    if page == "home":
+        i = body.index('id="ben"')
+        j = body.index(" </div></section>", i)
+        kick, h3, p, lab = HOME_LEADS_CARD[lang]
+        card = (f'{MAILING[0]}<div class="ben" role="group" aria-roledescription="slide" aria-label="{lab}" tabindex="0"><span class="pbar"></span>'
+                f'<div class="art">{_ART}</div><span class="kick">{kick}</span><h3>{h3}</h3><p>{p}</p></div>{MAILING[1]}\n')
+        body = body[:j] + card + body[j:]
+    if page == "legal" and 'id="u-banned"' in body:
+        nav, sec = AUP_MAILING[lang]
+        link = re.search(r'<a href="#u-banned">[^<]*</a>', body)
+        body = body[:link.end()] + MAILING[0] + nav + MAILING[1] + body[link.end():]
+        k = body.index('<section class="lg-s" id="u-enforce">')
+        body = body[:k] + MAILING[0] + sec + MAILING[1] + body[k:]
+    if page == "legal" and 'id="p-roles"' in body:
+        old, new = PRIVACY_MAILING[lang]
+        assert body.count(old) == 1, lang
+        body = body.replace(old, old + MAILING[0] + new + MAILING[1])
+    return body
+
+
+def check_renames():
+    missing = [(l, o) for l in PLAN_RENAMES for o, _ in PLAN_RENAMES[l] if (l, o) not in PLAN_RENAMED]
+    assert not missing, missing
+
+
+# the leads mockup on "what you get" (040): a form fills, a new lead drops in,
+# then the address joins the mailing list; fixed height, so nothing below moves
+SITE040_CSS = {
+    "features": """
+.mk-e{display:grid;gap:12px;height:392px;align-content:start;overflow:hidden}
+.mke-form,.mke-row{background:#fff;border:1px solid var(--line);border-radius:16px;box-sizing:border-box}
+.mke-form{height:196px;padding:16px;display:grid;gap:10px;align-content:start}
+.mke-form b{font-size:16px}
+.mke-in{display:block;height:38px;border:1px solid var(--line);border-radius:10px;padding:0 12px;line-height:38px;font-size:14.5px;color:var(--ink);overflow:hidden;white-space:nowrap}
+.mke-in i{font-style:normal;display:inline-block}
+.mke-btn{justify-self:start;background:linear-gradient(90deg,#0f72b3,#2a5fcf);color:#fff;font-weight:700;font-size:14.5px;border-radius:10px;padding:8px 18px}
+.mke-row{height:84px;display:flex;gap:12px;align-items:center;padding:14px}
+.mke-row svg{width:40px;height:40px;padding:9px;border-radius:12px;background:var(--tint);color:var(--brand-d);flex:none}
+.mke-row span{min-width:0}
+.mke-row b{display:block;font-size:15px}
+.mke-row em{display:block;font-style:normal;font-size:14px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mke-new{margin-inline-start:auto;align-self:flex-start;font-size:12px;font-weight:700;color:#1fae63;background:#e8f7ef;border-radius:99px;padding:3px 9px}
+.mke-t1{animation:mke-t1 9s infinite}
+.mke-t2{animation:mke-t2 9s infinite}
+.mke-btn{animation:mke-btn 9s infinite}
+.mke-r1{animation:mke-r1 9s cubic-bezier(.16,1,.3,1) infinite}
+.mke-r2{animation:mke-r2 9s cubic-bezier(.16,1,.3,1) infinite}
+@keyframes mke-t1{0%,4%{opacity:0;transform:translateX(6px)}9%,90%{opacity:1;transform:none}96%,100%{opacity:0}}
+@keyframes mke-t2{0%,12%{opacity:0;transform:translateX(6px)}17%,90%{opacity:1;transform:none}96%,100%{opacity:0}}
+@keyframes mke-btn{0%,20%,25%,100%{filter:none;transform:none}22%{filter:brightness(.85);transform:scale(.95)}}
+@keyframes mke-r1{0%,26%{opacity:0;transform:translateY(-12px)}32%,90%{opacity:1;transform:none}96%,100%{opacity:0}}
+@keyframes mke-r2{0%,42%{opacity:0;transform:translateY(-12px)}48%,90%{opacity:1;transform:none}96%,100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.mke-t1,.mke-t2,.mke-btn,.mke-r1,.mke-r2{animation:none}}
+@media(max-width:1060px){
+.mk-e{height:auto}
+.mke-form{height:auto;padding:16px}
+.mke-in{font-size:16px;height:44px;line-height:44px}
+.mke-btn{font-size:16px}
+.mke-row{height:92px;padding:14px 16px}
+.mke-row b{font-size:17px}
+.mke-row em{font-size:15.5px}
+}
+""",
+    "pricing": """
+.pr-all{text-align:center;font-size:16px;font-weight:600;color:var(--ink);margin-top:30px}
+.pr-all+.pr-foot{margin-top:8px}
+""",
+}
 
 
 def contact_markup(body, lang, cfg):
@@ -1576,6 +1767,7 @@ def finish_css(css, lang, page):
     css += "\n" + NAV_CSS
     # the footer bullets on a phone, as in the current designs (עיצובים/, 21.10.2026): a wrapped point keeps its dot on the first line
     css += "\n@media(max-width:1060px){.ft-pts li{align-items:flex-start}.ft-pts li::before{margin-top:.62em}}\n"
+    css += SITE040_CSS.get(page, "")
     root = f".{ROOTS[page]}-{lang}"
     css = scope_css(css, root)
     # The sheets were designed on plain browser defaults. The site's globals
@@ -1670,6 +1862,7 @@ def main():
         build(lang, cfg, images, "nf")
         for legal in LEGAL:
             build(lang, cfg, images, "legal", legal)
+    check_renames()
     write_legal()
     write_consent()
 

@@ -3,8 +3,9 @@ import { crumbHtml, crumbLd, fill, markCurrent, type Crumb } from "./chrome"
 import { heebo } from "./font"
 import { HomeBehaviors } from "./HomeBehaviors"
 import { A11Y_COPY } from "./home.config"
-import { fillPlans, fillPlanText, offersLd } from "./plan-fill"
+import { fillGates, fillPlans, fillPlanText, hasYearly, offersLd } from "./plan-fill"
 import { getPlans } from "@/lib/plans"
+import { MAILING_LIVE } from "@/lib/flags"
 import { HOME_FAQ_EN, HOME_HTML_EN } from "./markup.en"
 import { HOME_FAQ_HE, HOME_HTML_HE } from "./markup.he"
 import { PRICING_FAQ_EN, PRICING_HTML_EN } from "./pricing-markup.en"
@@ -173,16 +174,21 @@ export async function HomePage({
     if (page === "blog") html = fillBlog(html, lang)
   }
   html = markCurrent(html, current).replace("{{CRUMB}}", current ? crumbHtml(lang, crumbs) : "")
-  // tbl-034: plan prices and AI action counts, from the platform (src/lib/plans.ts)
-  const plans = html.includes("{{PLAN_") ? await getPlans() : null
-  if (plans) html = fillPlans(html, lang, plans)
+  // tbl-034: plan prices and AI action counts, from the platform (src/lib/plans.ts);
+  // 042: the yearly parts follow the data, the mailing parts MAILING_LIVE
+  const gated = html.includes("<!--yearly-->")
+  const plans = html.includes("{{PLAN_") || gated ? await getPlans() : null
+  const yearly = plans ? hasYearly(plans, lang) : false
+  if (plans) html = fillPlans(html, lang, plans, MAILING_LIVE)
+  html = fillGates(html, lang, { yearly, mailing: MAILING_LIVE })
   const offers = plans && page === "pricing" ? offersLd(lang, plans) : null
   const rootId = `${ROOT[page]}-${lang}`
   const faqLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     inLanguage: lang,
-    mainEntity: faq.map((f) => ({
+    // the yearly saving question goes with the yearly billing it answers about
+    mainEntity: faq.filter((f) => yearly || !f.a.includes("{{PLAN_SAVE_ANSWER}}")).map((f) => ({
       "@type": "Question",
       name: f.q,
       acceptedAnswer: { "@type": "Answer", text: plans ? fillPlanText(f.a, lang, plans) : f.a },

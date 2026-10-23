@@ -1141,6 +1141,40 @@
 
 @media(max-width:1060px){.uxw-en .ft-pts li{align-items:flex-start}.uxw-en .ft-pts li::before{margin-top:.62em}}
 
+.uxw-en .mk-e{display:grid;gap:12px;height:392px;align-content:start;overflow:hidden}
+.uxw-en .mke-form,.uxw-en .mke-row{background:#fff;border:1px solid var(--line);border-radius:16px;box-sizing:border-box}
+.uxw-en .mke-form{height:196px;padding:16px;display:grid;gap:10px;align-content:start}
+.uxw-en .mke-form b{font-size:16px}
+.uxw-en .mke-in{display:block;height:38px;border:1px solid var(--line);border-radius:10px;padding:0 12px;line-height:38px;font-size:14.5px;color:var(--ink);overflow:hidden;white-space:nowrap}
+.uxw-en .mke-in i{font-style:normal;display:inline-block}
+.uxw-en .mke-btn{justify-self:start;background:linear-gradient(90deg,#0f72b3,#2a5fcf);color:#fff;font-weight:700;font-size:14.5px;border-radius:10px;padding:8px 18px}
+.uxw-en .mke-row{height:84px;display:flex;gap:12px;align-items:center;padding:14px}
+.uxw-en .mke-row svg{width:40px;height:40px;padding:9px;border-radius:12px;background:var(--tint);color:var(--brand-d);flex:none}
+.uxw-en .mke-row span{min-width:0}
+.uxw-en .mke-row b{display:block;font-size:15px}
+.uxw-en .mke-row em{display:block;font-style:normal;font-size:14px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.uxw-en .mke-new{margin-inline-start:auto;align-self:flex-start;font-size:12px;font-weight:700;color:#1fae63;background:#e8f7ef;border-radius:99px;padding:3px 9px}
+.uxw-en .mke-t1{animation:mke-t1 9s infinite}
+.uxw-en .mke-t2{animation:mke-t2 9s infinite}
+.uxw-en .mke-btn{animation:mke-btn 9s infinite}
+.uxw-en .mke-r1{animation:mke-r1 9s cubic-bezier(.16,1,.3,1) infinite}
+.uxw-en .mke-r2{animation:mke-r2 9s cubic-bezier(.16,1,.3,1) infinite}
+@keyframes mke-t1{0%,4%{opacity:0;transform:translateX(6px)}9%,90%{opacity:1;transform:none}96%,100%{opacity:0}}
+@keyframes mke-t2{0%,12%{opacity:0;transform:translateX(6px)}17%,90%{opacity:1;transform:none}96%,100%{opacity:0}}
+@keyframes mke-btn{0%,20%,25%,100%{filter:none;transform:none}22%{filter:brightness(.85);transform:scale(.95)}}
+@keyframes mke-r1{0%,26%{opacity:0;transform:translateY(-12px)}32%,90%{opacity:1;transform:none}96%,100%{opacity:0}}
+@keyframes mke-r2{0%,42%{opacity:0;transform:translateY(-12px)}48%,90%{opacity:1;transform:none}96%,100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.uxw-en .mke-t1,.uxw-en .mke-t2,.uxw-en .mke-btn,.uxw-en .mke-r1,.uxw-en .mke-r2{animation:none}}
+@media(max-width:1060px){
+.uxw-en .mk-e{height:auto}
+.uxw-en .mke-form{height:auto;padding:16px}
+.uxw-en .mke-in{font-size:16px;height:44px;line-height:44px}
+.uxw-en .mke-btn{font-size:16px}
+.uxw-en .mke-row{height:92px;padding:14px 16px}
+.uxw-en .mke-row b{font-size:17px}
+.uxw-en .mke-row em{font-size:15.5px}
+}
+
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxw-en .gs-img,.uxw-en .a2-img{isolation:isolate}
 .uxw-en .uxh-bg,.uxw-en .uxh-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;display:block}
