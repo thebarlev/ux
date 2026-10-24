@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-10-21T12:00:00Z",
+  "updated_at": "2026-10-24T12:00:00Z",
   "plans": [
-    { "id": "free", "order": 1, "price_ils_month": 0, "price_ils_year": 0, "price_usd_month": 0, "price_usd_year": 0, "ai_actions_month": 20, "ai_actions_day": 10, "trial_days": 14 },
-    { "id": "start", "order": 2, "price_ils_month": 60, "price_ils_year": 48, "price_usd_month": 15, "price_usd_year": 12, "ai_actions_month": 100, "ai_actions_day": null, "trial_days": null },
-    { "id": "business", "order": 3, "price_ils_month": 147, "price_ils_year": 118, "price_usd_month": 40, "price_usd_year": 32, "ai_actions_month": 400, "ai_actions_day": null, "trial_days": null },
-    { "id": "pro", "order": 4, "price_ils_month": 257, "price_ils_year": 206, "price_usd_month": 70, "price_usd_year": 56, "ai_actions_month": 1500, "ai_actions_day": null, "trial_days": null }
+    { "id": "free", "order": 1, "price_ils_month": 0, "price_ils_year": 0, "price_usd_month": 0, "price_usd_year": 0, "ai_actions_month": 20, "ai_actions_day": 10, "trial_days": 14, "lead_form": true, "mailing_list": false, "email_automations": false, "emails_month": null },
+    { "id": "start", "order": 2, "price_ils_month": 60, "price_ils_year": 48, "price_usd_month": 15, "price_usd_year": 12, "ai_actions_month": 100, "ai_actions_day": null, "trial_days": null, "lead_form": true, "mailing_list": true, "email_automations": false, "emails_month": null },
+    { "id": "business", "order": 3, "price_ils_month": 100, "price_ils_year": 80, "price_usd_month": 25, "price_usd_year": 20, "ai_actions_month": 400, "ai_actions_day": null, "trial_days": null, "lead_form": true, "mailing_list": true, "email_automations": true, "emails_month": 2000 },
+    { "id": "pro", "order": 4, "price_ils_month": 200, "price_ils_year": 160, "price_usd_month": 50, "price_usd_year": 40, "ai_actions_month": 1500, "ai_actions_day": null, "trial_days": null, "lead_form": true, "mailing_list": true, "email_automations": true, "emails_month": 10000 }
   ]
 }

@@ -810,6 +810,12 @@
 
 @media(max-width:1060px){.uxh-he .ft-pts li{align-items:flex-start}.uxh-he .ft-pts li::before{margin-top:.62em}}
 
+@media(max-width:1060px){
+.uxh-he #ben .ben,.uxh-he #ben .ben.on{height:auto;min-height:330px}
+.uxh-he #ben .ben .art,.uxh-he #ben .ben.on .art{position:relative;top:auto!important;left:auto!important;right:auto!important;flex:none;margin-bottom:auto}
+.uxh-he #ben .ben .art+.kick{margin-top:20px}
+}
+
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxh-he .gs-img,.uxh-he .a2-img{isolation:isolate}
 .uxh-he .uxh-bg,.uxh-he .uxh-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;display:block}

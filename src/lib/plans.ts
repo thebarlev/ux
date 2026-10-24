@@ -32,19 +32,27 @@ export type Plan = {
   readonly aiActionsDay?: number | null
   /** null: no trial */
   readonly trialDays?: number | null
+  /** tbl-042: leads and email, per plan */
+  readonly leadForm?: boolean
+  readonly mailingList?: boolean
+  readonly emailAutomations?: boolean
+  /** null: no monthly email count to show */
+  readonly emailsMonth?: number | null
 }
 export type Plans = Partial<Record<PlanId, Plan>>
 
 const amount = (v: unknown) => (typeof v === "number" && Number.isFinite(v) && v >= 0 ? v : undefined)
 const count = (v: unknown) => (typeof v === "number" && Number.isInteger(v) && v > 0 ? v : undefined)
 const countOrNull = (v: unknown) => (v === null ? null : count(v))
+const flag = (v: unknown) => (typeof v === "boolean" ? v : undefined)
 
 /**
  * The endpoint's answer (or the snapshot) as plans; null when it is not a plans
  * list at all. tbl-035: the endpoint answers price_usd_* = null until the dollar
  * prices are in the platform's database; Itzik approved the English site's
- * dollar prices (uxb-012), so a null there takes the snapshot's value, and a
- * value from the endpoint, once it comes, wins.
+ * dollar prices (041), so a null there takes the snapshot's value, and a value
+ * from the endpoint, once it comes, wins. A yearly price that is null in both
+ * (042: yearly billing waits for Itzik) leaves everything yearly off the site.
  */
 export function parsePlans(data: unknown, usdFallback?: Plans): Plans | null {
   const list = (data as { plans?: unknown } | null)?.plans
@@ -63,6 +71,10 @@ export function parsePlans(data: unknown, usdFallback?: Plans): Plans | null {
       aiActionsMonth: count(p.ai_actions_month),
       aiActionsDay: countOrNull(p.ai_actions_day),
       trialDays: countOrNull(p.trial_days),
+      leadForm: flag(p.lead_form),
+      mailingList: flag(p.mailing_list),
+      emailAutomations: flag(p.email_automations),
+      emailsMonth: countOrNull(p.emails_month),
     }
   }
   return Object.keys(plans).length ? plans : null
