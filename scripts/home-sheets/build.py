@@ -734,6 +734,15 @@ SITE040_CSS = {
 .mke-row em{font-size:15.5px}
 }
 """,
+    # 043: on a phone the carousel icon gets its own row above the title, and the
+    # card grows with its text, so a long title never runs into the icon
+    "home": """
+@media(max-width:1060px){
+#ben .ben,#ben .ben.on{height:auto;min-height:330px}
+#ben .ben .art,#ben .ben.on .art{position:relative;top:auto!important;left:auto!important;right:auto!important;flex:none;margin-bottom:auto}
+#ben .ben .art+.kick{margin-top:20px}
+}
+""",
     "pricing": """
 .pr-all{text-align:center;font-size:16px;font-weight:600;color:var(--ink);margin-top:30px}
 .pr-all+.pr-foot{margin-top:8px}
