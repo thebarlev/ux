@@ -179,7 +179,7 @@ export async function HomePage({
   const gated = html.includes("<!--yearly-->")
   const plans = html.includes("{{PLAN_") || gated ? await getPlans() : null
   const yearly = plans ? hasYearly(plans, lang) : false
-  if (plans) html = fillPlans(html, lang, plans, MAILING_LIVE)
+  if (plans) html = fillPlans(html, lang, plans)
   html = fillGates(html, lang, { yearly, mailing: MAILING_LIVE })
   const offers = plans && page === "pricing" ? offersLd(lang, plans) : null
   const rootId = `${ROOT[page]}-${lang}`

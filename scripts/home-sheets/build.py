@@ -478,35 +478,35 @@ def build(lang, cfg, images, page="home", legal=None):
 PLAN_IDS = ["free", "start", "business", "pro"]
 PLAN_SAVE_ANSWER = {"he": "20% על כל החבילות בתשלום, לעומת חיוב חודשי.", "en": "20% on every paid plan, compared with monthly billing."}
 PLAN_FROM = {"he": "<span>מ-₪0 לחודש</span>", "en": "<span>From $0 a month</span>"}
-# tbl-035: the card lines, in the order every card shows them, and which plans have each
+# 044 (pricing list of 04.11): one list under the button, in this order, and which plans have each.
+# The lead form and the email lines come from the plans data (plan-fill.ts, leadsHtml / mailHtml).
 _ALL, _PAID = ("free", "start", "business", "pro"), ("start", "business", "pro")
-# 042: the leads and email lines, from the plans data (plan-fill.ts, leadsHtml), right after the editor
-LEADS = "{{LEADS}}"
+LEADS, MAIL = "{{LEADS}}", "{{MAIL}}"
 PLAN_FEATURES = {
     "he": [
-        ('כתובת באוויר: <bdi dir="ltr">yourname.uxellent.site</bdi>', _ALL),
-        ("צ'אט AI שמעצב וכותב", _ALL),
-        ("עורך ייעודי בקליק", _ALL),
+        ("אחסון האתר כלול", _ALL),
+        ("עריכה ידנית ללא הגבלה", _ALL),
+        ("עורך ייעודי", _ALL),
+        ("גיבוי יומי, 7 ימים אחורה", _ALL),
         (LEADS, _ALL),
-        ("מתאים לעדכונים שוטפים", _PAID),
-        ("דומיין משלכם, ואנחנו מחברים אותו", ("business", "pro")),
-        ('בלי הקרדיט "נבנה ב-UXellent"', ("pro",)),
+        ('כתובת באוויר: <bdi dir="ltr">yourname.uxellent.site</bdi>', ("free", "start")),
+        ("דומיין משלכם", _PAID),
+        (MAIL, _ALL),
+        ('חיבור טפסים ל-<bdi dir="ltr">Zapier / Make</bdi>', ("business", "pro")),
         ("בלי כרטיס אשראי", ("free",)),
     ],
     "en": [
-        ('Live address: <bdi dir="ltr">yourname.uxellent.site</bdi>', _ALL),
-        ("AI chat that designs and writes", _ALL),
-        ("Click-to-edit editor", _ALL),
+        ("Hosting included", _ALL),
+        ("Unlimited manual editing", _ALL),
+        ("Dedicated editor", _ALL),
+        ("Daily backup, 7 days back", _ALL),
         (LEADS, _ALL),
-        ("Made for ongoing updates", _PAID),
-        ("Your own domain, connected for you", ("business", "pro")),
-        ("No “Built with UXellent” credit", ("pro",)),
+        ('Live address: <bdi dir="ltr">yourname.uxellent.site</bdi>', ("free", "start")),
+        ("Your own domain", _PAID),
+        (MAIL, _ALL),
+        ("Connect forms to Zapier / Make", ("business", "pro")),
         ("No credit card", ("free",)),
     ],
-}
-PLAN_MUST = {
-    "he": [("אחסון האתר כלול", ()), ("עריכה ידנית ללא הגבלה<small>המכסה סופרת רק פעולות AI</small>", ())],
-    "en": [("Hosting included", ()), ("Unlimited manual editing<small>The quota counts AI actions only</small>", ())],
 }
 
 
@@ -525,19 +525,15 @@ def plan_tokens(body, lang, page):
             # tbl-035: no "Everything in X, plus:"; each card lists all it has, in one order for every card
             a, nl = re.subn(r'\s*<p class="pl-lead">[^<]*</p>', "", a)
             assert nl == (0 if pid == "free" else 1), (lang, pid, nl)
-            a, nu = re.subn(r"<ul>.*?</ul>", lambda m: "<ul>" + "".join(("{{PLAN_LEADS:%s}}" % pid) if x[0] == LEADS else li(x) for x in PLAN_FEATURES[lang] if pid in x[1]) + "</ul>", a, count=1, flags=re.S)
+            def line(x):
+                return {LEADS: "{{PLAN_LEADS:%s}}" % pid, MAIL: "{{PLAN_MAIL:%s}}" % pid}.get(x[0]) or li(x)
+            a, nu = re.subn(r"<ul>.*?</ul>", lambda m: "<ul>" + "".join(line(x) for x in PLAN_FEATURES[lang] if pid in x[1]) + "</ul>", a, count=1, flags=re.S)
             assert nu == 1, (lang, pid)
-            # tbl-035: two lines on every card, right after the AI actions line
-            a = a.replace("{{PLAN_ACT:%s}}" % pid, "{{PLAN_ACT:%s}}" % pid + '<ul class="pl-must">' + "".join(li(x) for x in PLAN_MUST[lang]) + "</ul>", 1)
             return a
         check = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
         assert body.count(check) >= 10, lang
         def li(x):
             return f"<li>{check}<span>{x[0]}</span></li>"
-        # every list line the sheet has, so none is lost when the lists are rebuilt
-        sheet_lines = set(re.findall(r'<li><svg viewBox="0 0 24 24"><path d="M5 12\.5l4\.5 4\.5L19 7\.5"/></svg><span>(.*?)</span></li>', body))
-        kept = {x[0] for x in PLAN_FEATURES[lang] if x[0] != LEADS}
-        assert sheet_lines - kept <= {"פי 2 פעולות AI", "פי 3 פעולות AI", "2× the AI actions", "3× the AI actions"} and kept <= sheet_lines, (lang, sheet_lines ^ kept)
         body, n = re.subn(r'<article class="pl[^"]*">.*?</article>', card, body, flags=re.S)
         assert n == 4 and next(ids, None) is None, n
         body, nb = re.subn(r'<em>(?:20%-|Save 20%)</em>', "{{PLAN_SAVE_BADGE}}", body)
@@ -556,7 +552,8 @@ def plan_tokens(body, lang, page):
 
 
 # 040 / 041 / 042: plan names, the leads and email parts, and yearly billing.
-# - Names: התחלה is מתחילים, מקצועי is צומח, Pro is Growth, wherever a plan is named.
+# - Names: התחלה is מתחילים, מקצועי is פרו (044: Pro stays Pro; צומח / Growth are gone).
+# - 044: the credit, domain and backup wording of the 04.11 pricing list, everywhere.
 # - Parts that show only on a condition are marked <!--name-->…<!--/name-->, and
 #   HomePage keeps or drops them when the page renders (src/app/_home/plan-fill.ts,
 #   gate): "yearly" while the plans data has yearly prices (042: none until Itzik
@@ -564,19 +561,49 @@ def plan_tokens(body, lang, page):
 PLAN_RENAMES = {
     "he": [
         ("<h3>התחלה</h3>", "<h3>מתחילים</h3>"),
-        ("<h3>מקצועי</h3>", "<h3>צומח</h3>"),
-        ("בחבילה המקצועית היא לא מופיעה. בהתחלה ובעסקי", "בחבילת צומח היא לא מופיעה. במתחילים ובעסקי"),
-        ("בחבילות עסקי ומקצועי", "בחבילות עסקי וצומח"),
-        ("חינם, התחלה, עסקי ומקצועי", "חינם, מתחילים, עסקי וצומח"),
-        ("בחבילות חינם, התחלה ועסקי", "בחבילות חינם, מתחילים ועסקי"),
-        ("בחבילות התחלה ועסקי", "בחבילות מתחילים ועסקי"),
-        ("בחבילה מקצועי הקרדיט", "בחבילת צומח הקרדיט"),
+        ("<h3>מקצועי</h3>", "<h3>פרו</h3>"),
+        ("חינם, התחלה, עסקי ומקצועי", "חינם, מתחילים, עסקי ופרו"),
+        # 044: the credit can be removed on any plan, at no cost; the customer connects a domain, from מתחילים up
+        ("שורה קטנה בתחתית האתר. בחבילה המקצועית היא לא מופיעה. בהתחלה ובעסקי אפשר להסיר אותה בתוספת ₪19 לחודש.", "שורה קטנה בתחתית האתר. אפשר להסיר אותה בכל חבילה, בלי תשלום."),
+        ("כן, בחבילות עסקי ומקצועי. קונים דומיין אצל רשם, ואנחנו מחברים אותו.", "כן. מי שרכש דומיין מחבר אותו בעצמו לאתר, מחבילת מתחילים ומעלה."),
+        ("(בערך ₪82 בשנה), ואנחנו מחברים אותו בחבילות עסקי ומקצועי.", "(בערך ₪82 בשנה), ומחבר אותו בעצמו לאתר, מחבילת מתחילים ומעלה."),
+        ("חיבור דומיין אישי, בחבילות עסקי ומקצועי.", "חיבור דומיין אישי, מחבילת מתחילים ומעלה. את הדומיין מחברים בעצמכם."),
+        ("בחבילות חינם, התחלה ועסקי מופיע באתר קרדיט קטן. בחבילות התחלה ועסקי אפשר להסיר אותו בתוספת של 19 ₪ לחודש (5 דולר באתר באנגלית). בחבילה מקצועי הקרדיט לא מופיע.", "באתר מופיע קרדיט קטן. אפשר להסיר אותו בכל חבילה, בלי תשלום."),
+        (' הקרדיט "Built with UXellent" חוזר לאתר.', ""),
+        # 044: backups are daily and kept 7 days
+        ("גיבוי אוטומטי כל לילה, שנשמר 30 לילות.", "גיבוי אוטומטי כל יום, שנשמר 7 ימים."),
+        ("אנחנו מגבים את המערכת כל לילה, ושומרים כל גיבוי 30 לילות.", "אנחנו מגבים את המערכת כל יום, ושומרים כל גיבוי 7 ימים."),
+        ("עותקים בגיבוי נמחקים אוטומטית 30 יום אחרי סגירת החשבון.", "עותקים בגיבוי נמחקים אוטומטית 7 ימים אחרי סגירת החשבון."),
+        ("עותקים בגיבוי נמחקים 30 יום אחרי הסגירה.", "עותקים בגיבוי נמחקים 7 ימים אחרי הסגירה."),
+        ("ועותקים בגיבוי נמחקים 30 יום אחריה.", "ועותקים בגיבוי נמחקים 7 ימים אחריה."),
+        ("<td>עד 30 יום.</td>", "<td>עד 7 ימים.</td>"),
+        ("<li>גיבוי כל לילה.</li>", "<li>גיבוי יומי.</li>"),
+        ("גיבוי יומי, 30 יום אחורה", "גיבוי יומי, 7 ימים אחורה"),
+        # 044, privacy: Brevo, and forms the customer connects elsewhere
+        ("<tr><td>Resend</td><td>שליחת מיילים: קודי כניסה, התראות, פניות מהאתר</td><td>האיחוד האירופי (אירלנד)</td></tr>",
+         "<tr><td>Resend</td><td>שליחת מיילים: קודי כניסה, התראות, פניות מהאתר</td><td>האיחוד האירופי (אירלנד)</td></tr><tr><td>Brevo</td><td>שליחת דיוור ואוטומציות בשם הלקוח, בחבילות עסקי ופרו</td><td>האיחוד האירופי</td></tr>"),
+        ("<p>במילים פשוטות: פנייה שהגיעה לאתר של לקוח שייכת ללקוח. אנחנו לא משתמשים בה לשום מטרה שלנו.</p>",
+         "<p>במילים פשוטות: פנייה שהגיעה לאתר של לקוח שייכת ללקוח. אנחנו לא משתמשים בה לשום מטרה שלנו.</p><p>לקוח שמחבר את הטפסים שלו לשירות חיצוני (כמו Zapier או Make) קובע לאן המידע נשלח, והוא האחראי לכך.</p>"),
     ],
     "en": [
-        ("<h3>Pro</h3>", "<h3>Growth</h3>"),
-        ("Business and Pro", "Business and Growth"),
-        ("doesn’t appear on Pro.", "doesn’t appear on Growth."),
-        ("On the Pro plan", "On the Growth plan"),
+        ("A small line at the bottom of your site. It doesn’t appear on Pro. On Starter and Business you can remove it for $5 a month.", "A small line at the bottom of your site. You can remove it on any plan, at no cost."),
+        ("Yes, on Business and Pro. Buy a domain from any registrar and we’ll connect it for you.", "Yes. If you bought a domain, you connect it to your site yourself, from the Starter plan up."),
+        ("(usually around $15 a year) and we’ll connect it for you on Business and Pro.", "(usually around $15 a year) and connect it to your site yourself, from the Starter plan up."),
+        ("Connecting a custom domain, on the Business and Pro plans.", "Connecting a custom domain, from the Starter plan up. You connect the domain yourself."),
+        ("On the Free, Starter and Business plans a small credit appears on the site. On Starter and Business you can remove it for an extra $5 per month on the English site (19 ILS on the Hebrew site). On the Pro plan the credit does not appear.", "A small credit appears on the site. You can remove it on any plan, at no cost."),
+        (' The "Built with UXellent" credit returns to the site.', ""),
+        ("An automatic nightly backup, kept for 30 nights.", "An automatic daily backup, kept for 7 days."),
+        ("We back up the system every night and keep each backup for 30 nights.", "We back up the system every day and keep each backup for 7 days."),
+        ("Copies in backups are deleted automatically 30 days after the account is closed.", "Copies in backups are deleted automatically 7 days after the account is closed."),
+        ("Copies in backups are deleted 30 days after closing.", "Copies in backups are deleted 7 days after closing."),
+        ("and copies in backups are deleted 30 days later.", "and copies in backups are deleted 7 days later."),
+        ("<td>Up to 30 days.</td>", "<td>Up to 7 days.</td>"),
+        ("<li>A nightly backup.</li>", "<li>A daily backup.</li>"),
+        ("Daily backups, 30 days back", "Daily backups, 7 days back"),
+        ("<tr><td>Resend</td><td>Sending email: login codes, notifications, site enquiries</td><td>European Union (Ireland)</td></tr>",
+         "<tr><td>Resend</td><td>Sending email: login codes, notifications, site enquiries</td><td>European Union (Ireland)</td></tr><tr><td>Brevo</td><td>Sending email campaigns and automations on the customer’s behalf, on the Business and Pro plans</td><td>European Union</td></tr>"),
+        ("<p>Put simply: an enquiry that arrives on a customer's site belongs to the customer. We don't use it for any purpose of our own.</p>",
+         "<p>Put simply: an enquiry that arrives on a customer's site belongs to the customer. We don't use it for any purpose of our own.</p><p>A customer who connects their forms to an outside service (such as Zapier or Make) decides where the information is sent, and is responsible for it.</p>"),
     ],
 }
 PLAN_RENAMED = set()  # (lang, old) seen on some page; every rename must be used
@@ -585,8 +612,8 @@ YEARLY = ("<!--yearly-->", "<!--/yearly-->")
 MAILING = ("<!--mailing-->", "<!--/mailing-->")
 
 PRICING_ALL = {
-    "he": '<p class="pr-all">בכל חבילה: אחסון, עורך בקליק וטופס לידים.</p>',
-    "en": '<p class="pr-all">On every plan: hosting, the click editor and a lead form.</p>',
+    "he": '<p class="pr-all">בכל חבילה: אחסון, עורך ייעודי, גיבוי יומי וטופס לידים.</p>',
+    "en": '<p class="pr-all">On every plan: hosting, a dedicated editor, daily backup and a lead form.</p>',
 }
 
 _CK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'

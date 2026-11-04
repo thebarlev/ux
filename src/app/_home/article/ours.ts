@@ -6,13 +6,13 @@ import type { Lang } from "../chrome"
  * only from the facts Itzik listed (tbl-025b); nothing else, no other numbers:
  *  - every enquiry is saved in the system and emailed; saved even if the email fails
  *  - the enquiries address is verified by email
- *  - automatic nightly backup, 30 nights back
+ *  - automatic daily backup, 7 days back
  *  - subscription renews automatically; invoices in the account; if it does not
  *    renew, the site moves to the free plan and the content is kept
  *  - every page built with SEO, structured business data, ready for AI search
  *  - fast on every device; hosting and SSL included
  *  - changes in the chat or click-to-edit; import from an existing site;
- *    WhatsApp button; contact form; own domain on Business and Growth; built with
+ *    WhatsApp button; contact form; own domain from Starter up, connected by the customer; built with
  *    accessibility in mind
  */
 
@@ -71,7 +71,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       h: "מה שבוורדפרס דורש תוסף, |כאן כבר בפנים.",
       p: "אצלנו לא צריך לבחור תוספים או לחפש מפתח לכל שינוי.",
       points: [
-        ["גיבוי כל לילה", "גיבוי אוטומטי כל לילה, 30 לילות אחורה."],
+        ["גיבוי יומי", "גיבוי אוטומטי כל יום, 7 ימים אחורה."],
         ["SEO, אחסון ו-SSL", "כל עמוד נבנה עם SEO, והאחסון וה-SSL כלולים."],
         ["ייבוא מהאתר הקיים", "עוברים מוורדפרס? מייבאים את התוכן מהאתר הקיים."],
       ],
@@ -80,7 +80,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       h: "What WordPress needs a plugin for |is built in here.",
       p: "With us there are no plugins to pick and no developer to chase for every change.",
       points: [
-        ["Backed up every night", "Automatic nightly backup, 30 nights back."],
+        ["Backed up every day", "Automatic daily backup, 7 days back."],
         ["SEO, hosting and SSL", "Every page is built with SEO, and hosting and SSL are included."],
         ["Import your current site", "Moving from WordPress? Import the content from your existing site."],
       ],
@@ -166,7 +166,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
     he: {
       p: "קידום עובד טוב יותר כשיש לאן לשלוח אנשים. האתר הזה כבר מוכן.",
       points: [
-        ["דומיין משלכם", "בחבילות עסקי וצומח מחברים דומיין משלכם."],
+        ["דומיין משלכם", "מחבילת מתחילים ומעלה מחברים דומיין משלכם."],
         ["מוכן לגוגל ול-AI", "כל עמוד נבנה עם SEO ונתוני עסק מובנים."],
         ["פניות במקום אחד", "טופס פניות וכפתור וואטסאפ, וכל פנייה נשמרת."],
       ],
@@ -174,7 +174,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
     en: {
       p: "Promotion works better when there’s somewhere to send people. This site is ready.",
       points: [
-        ["Your own domain", "On Business and Growth, you connect a domain of your own."],
+        ["Your own domain", "From the Starter plan up, you connect a domain of your own."],
         ["Ready for Google and AI", "Every page is built with SEO and structured business data."],
         ["Enquiries in one place", "A contact form and a WhatsApp button, and every enquiry is saved."],
       ],
@@ -221,7 +221,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       p: "עסק קטן צריך אתר שלא גוזל ממנו זמן. זה מה שבנינו.",
       points: [
         ["שינויים בלי מפתח", "כותבים בצ'אט מה לשנות, או לוחצים ומשנים בעורך."],
-        ["גיבוי כל לילה", "גיבוי אוטומטי כל לילה, 30 לילות אחורה."],
+        ["גיבוי יומי", "גיבוי אוטומטי כל יום, 7 ימים אחורה."],
         ["התוכן נשמר", "אם המנוי לא מתחדש, האתר עובר לחבילה החינמית והתוכן נשאר."],
       ],
     },
@@ -229,7 +229,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       p: "A small business needs a site that doesn’t eat its time. That’s what we built.",
       points: [
         ["Changes without a developer", "Write what to change in the chat, or click and edit."],
-        ["Backed up every night", "Automatic nightly backup, 30 nights back."],
+        ["Backed up every day", "Automatic daily backup, 7 days back."],
         ["Your content stays", "If your subscription doesn’t renew, the site moves to the free plan and your content is kept."],
       ],
     },

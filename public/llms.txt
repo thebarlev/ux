@@ -11,9 +11,9 @@ English: https://uxellent.com/en
 - Fast on every device; hosting and SSL included
 - A contact form and a WhatsApp button; every enquiry is saved in the system and emailed to the owner, and it is saved even if the email fails
 - The enquiries address is verified by email
-- Automatic nightly backup, 30 nights back
+- Automatic daily backup, 7 days back
 - Changes in the chat or click-to-edit; import from an existing site
-- Own domain on the Business and Growth plans
+- Own domain from the Starter plan up (the customer connects it)
 - Built with accessibility in mind
 
 ## Pages
