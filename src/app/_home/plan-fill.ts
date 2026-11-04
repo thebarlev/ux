@@ -8,10 +8,10 @@ import { PLAN_IDS, type Plan, type PlanId, type Plans } from "@/lib/plans"
  */
 type Lang = "he" | "en"
 
-// 040: Starter is מתחילים, Pro is צומח / Growth (the ids stay)
+// 040: Starter is מתחילים; 044: the fourth plan is פרו / Pro (the ids stay)
 const NAME: Record<Lang, Record<PlanId, string>> = {
-  he: { free: "חינם", start: "מתחילים", business: "עסקי", pro: "צומח" },
-  en: { free: "Free", start: "Starter", business: "Business", pro: "Growth" },
+  he: { free: "חינם", start: "מתחילים", business: "עסקי", pro: "פרו" },
+  en: { free: "Free", start: "Starter", business: "Business", pro: "Pro" },
 }
 
 const num = (n: number) => n.toLocaleString("en-US", { maximumFractionDigits: 2 })
@@ -77,22 +77,17 @@ const CHECK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
 const li = (text: string) => `<li>${CHECK}<span>${text}</span></li>`
 
 /**
- * 042: the card's leads and email lines, from the plan's fields, in the place
- * the generator left (after the editor line, the same in every card). The lead
- * form is live today; the mailing list and email lines show only when
- * MAILING_LIVE is on, in full or not at all.
+ * 044: the card's lead form and email lines, from the plan's fields, in the
+ * places the generator left (pricing list of 04.11). Both are sold today, so
+ * neither depends on MAILING_LIVE; a mailing list line and an email count are
+ * not part of this list.
  */
-function leadsHtml(p: Plan | undefined, lang: Lang, mailing: boolean) {
-  const he = lang === "he"
-  let out = p?.leadForm ? li(he ? "טופס שמייצר לידים" : "Lead form") : ""
-  if (!mailing) return out
-  if (p?.mailingList) out += li(he ? "רשימת תפוצה מהאתר" : "Mailing list from your site")
-  if (p?.emailAutomations) {
-    const n = p.emailsMonth
-    const count = typeof n === "number" ? (he ? ` · ${num(n)} מיילים בחודש` : ` · ${num(n)} emails a month`) : ""
-    out += li((he ? "דיוור ואוטומציות" : "Email and automations") + count)
-  }
-  return out
+function leadsHtml(p: Plan | undefined, lang: Lang) {
+  return p?.leadForm ? li(lang === "he" ? "טופס שמייצר לידים" : "Lead form") : ""
+}
+
+function mailHtml(p: Plan | undefined, lang: Lang) {
+  return p?.emailAutomations ? li(lang === "he" ? "דיוור ואוטומציות (Brevo)" : "Email and automations (Brevo)") : ""
 }
 
 /** The yearly saving, when it is the same (rounded) on every paid plan; otherwise none. */
@@ -142,7 +137,7 @@ export function fillGates(html: string, lang: Lang, opts: { yearly: boolean; mai
   return out
 }
 
-export function fillPlans(html: string, lang: Lang, plans: Plans, mailing: boolean) {
+export function fillPlans(html: string, lang: Lang, plans: Plans) {
   const yearly = hasYearly(plans, lang)
   const save = savePct(plans, lang)
   const from = PLAN_IDS.map((id) => prices(plans[id], lang)?.m).filter((m): m is number => m !== undefined)
@@ -150,7 +145,8 @@ export function fillPlans(html: string, lang: Lang, plans: Plans, mailing: boole
     .replace(/\{\{PLAN_PRICE:(\w+)\}\}/g, (_, id: PlanId) => priceHtml(plans[id], lang, yearly))
     .replace(/\{\{PLAN_YEAR:(\w+)\}\}/g, (_, id: PlanId) => yearHtml(plans[id], lang, yearly))
     .replace(/\{\{PLAN_ACT:(\w+)\}\}/g, (_, id: PlanId) => actHtml(plans[id], lang))
-    .replace(/\{\{PLAN_LEADS:(\w+)\}\}/g, (_, id: PlanId) => leadsHtml(plans[id], lang, mailing))
+    .replace(/\{\{PLAN_LEADS:(\w+)\}\}/g, (_, id: PlanId) => leadsHtml(plans[id], lang))
+    .replace(/\{\{PLAN_MAIL:(\w+)\}\}/g, (_, id: PlanId) => mailHtml(plans[id], lang))
     .replace("{{PLAN_SAVE_BADGE}}", save === null ? (lang === "he" ? "<em>חיסכון</em>" : "<em>Save</em>") : lang === "he" ? `<em>${save}%-</em>` : `<em>Save ${save}%</em>`)
     .replace(/\{\{PLAN_SAVE_TERMS\}\}/g, saveTerms(plans, lang))
     .replace(/\{\{PLAN_SAVE_ANSWER\}\}/g, saveAnswer(plans, lang))
