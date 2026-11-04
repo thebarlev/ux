@@ -87,7 +87,7 @@ function leadsHtml(p: Plan | undefined, lang: Lang) {
 }
 
 function mailHtml(p: Plan | undefined, lang: Lang) {
-  return p?.emailAutomations ? li(lang === "he" ? "דיוור ואוטומציות (Brevo)" : "Email and automations (Brevo)") : ""
+  return p?.emailAutomations ? li(lang === "he" ? "ניהול רשומים, דיוור ואוטומציות שנבנות בעזרת AI" : "Subscriber management, email and AI-built automations") : ""
 }
 
 /** The yearly saving, when it is the same (rounded) on every paid plan; otherwise none. */

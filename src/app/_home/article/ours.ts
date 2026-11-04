@@ -12,7 +12,7 @@ import type { Lang } from "../chrome"
  *  - every page built with SEO, structured business data, ready for AI search
  *  - fast on every device; hosting and SSL included
  *  - changes in the chat or click-to-edit; import from an existing site;
- *    WhatsApp button; contact form; own domain from Starter up, connected by the customer; built with
+ *    WhatsApp button; contact form; connection to the customer's domain from Starter up, made by the customer; built with
  *    accessibility in mind
  */
 
@@ -166,7 +166,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
     he: {
       p: "קידום עובד טוב יותר כשיש לאן לשלוח אנשים. האתר הזה כבר מוכן.",
       points: [
-        ["דומיין משלכם", "מחבילת מתחילים ומעלה מחברים דומיין משלכם."],
+        ["חיבור לדומיין שלכם", "מחבילת מתחילים ומעלה מחברים את האתר לדומיין שלכם."],
         ["מוכן לגוגל ול-AI", "כל עמוד נבנה עם SEO ונתוני עסק מובנים."],
         ["פניות במקום אחד", "טופס פניות וכפתור וואטסאפ, וכל פנייה נשמרת."],
       ],
@@ -174,7 +174,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
     en: {
       p: "Promotion works better when there’s somewhere to send people. This site is ready.",
       points: [
-        ["Your own domain", "From the Starter plan up, you connect a domain of your own."],
+        ["Connection to your domain", "From the Starter plan up, you connect your site to your domain."],
         ["Ready for Google and AI", "Every page is built with SEO and structured business data."],
         ["Enquiries in one place", "A contact form and a WhatsApp button, and every enquiry is saved."],
       ],

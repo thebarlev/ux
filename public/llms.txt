@@ -13,7 +13,7 @@ English: https://uxellent.com/en
 - The enquiries address is verified by email
 - Automatic daily backup, 7 days back
 - Changes in the chat or click-to-edit; import from an existing site
-- Own domain from the Starter plan up (the customer connects it)
+- Connection to your domain from the Starter plan up (the customer connects it; no domain is included)
 - Built with accessibility in mind
 
 ## Pages

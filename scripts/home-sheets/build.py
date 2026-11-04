@@ -479,6 +479,7 @@ PLAN_IDS = ["free", "start", "business", "pro"]
 PLAN_SAVE_ANSWER = {"he": "20% על כל החבילות בתשלום, לעומת חיוב חודשי.", "en": "20% on every paid plan, compared with monthly billing."}
 PLAN_FROM = {"he": "<span>מ-₪0 לחודש</span>", "en": "<span>From $0 a month</span>"}
 # 044 (pricing list of 04.11): one list under the button, in this order, and which plans have each.
+# 045: no vendor names on the cards (they stay in the privacy vendors table), and a domain is connected, not given.
 # The lead form and the email lines come from the plans data (plan-fill.ts, leadsHtml / mailHtml).
 _ALL, _PAID = ("free", "start", "business", "pro"), ("start", "business", "pro")
 LEADS, MAIL = "{{LEADS}}", "{{MAIL}}"
@@ -490,9 +491,9 @@ PLAN_FEATURES = {
         ("גיבוי יומי, 7 ימים אחורה", _ALL),
         (LEADS, _ALL),
         ('כתובת באוויר: <bdi dir="ltr">yourname.uxellent.site</bdi>', ("free", "start")),
-        ("דומיין משלכם", _PAID),
+        ("חיבור מהיר לדומיין שלכם", _PAID),
         (MAIL, _ALL),
-        ('חיבור טפסים ל-<bdi dir="ltr">Zapier / Make</bdi>', ("business", "pro")),
+        ("חיבור הטפסים למערכות שאתם כבר עובדים איתן", ("business", "pro")),
         ("בלי כרטיס אשראי", ("free",)),
     ],
     "en": [
@@ -502,9 +503,9 @@ PLAN_FEATURES = {
         ("Daily backup, 7 days back", _ALL),
         (LEADS, _ALL),
         ('Live address: <bdi dir="ltr">yourname.uxellent.site</bdi>', ("free", "start")),
-        ("Your own domain", _PAID),
+        ("Quick connection to your own domain", _PAID),
         (MAIL, _ALL),
-        ("Connect forms to Zapier / Make", ("business", "pro")),
+        ("Connect your forms to the tools you already use", ("business", "pro")),
         ("No credit card", ("free",)),
     ],
 }
@@ -584,6 +585,12 @@ PLAN_RENAMES = {
          "<tr><td>Resend</td><td>שליחת מיילים: קודי כניסה, התראות, פניות מהאתר</td><td>האיחוד האירופי (אירלנד)</td></tr><tr><td>Brevo</td><td>שליחת דיוור ואוטומציות בשם הלקוח, בחבילות עסקי ופרו</td><td>האיחוד האירופי</td></tr>"),
         ("<p>במילים פשוטות: פנייה שהגיעה לאתר של לקוח שייכת ללקוח. אנחנו לא משתמשים בה לשום מטרה שלנו.</p>",
          "<p>במילים פשוטות: פנייה שהגיעה לאתר של לקוח שייכת ללקוח. אנחנו לא משתמשים בה לשום מטרה שלנו.</p><p>לקוח שמחבר את הטפסים שלו לשירות חיצוני (כמו Zapier או Make) קובע לאן המידע נשלח, והוא האחראי לכך.</p>"),
+        # 045: a domain is connected, not given ("חיבור לדומיין שלכם"); the Business description
+        ("אפשר לחבר דומיין משלי?", "אפשר לחבר את האתר לדומיין שלי?"),
+        ("מי שרוצה דומיין משלו קונה אותו אצל רשם", "מי שרוצה דומיין קונה אותו אצל רשם"),
+        ("או מחברים דומיין משלכם.", "או מחברים את האתר לדומיין שלכם."),
+        ("חיבור דומיין משלכם", "חיבור לדומיין שלכם"),
+        ("לעסק שרוצה דומיין משלו ונוכחות מלאה.", "לעסק שרוצה לשווק בעצמו: דיוור, אוטומציות וחיבור טפסים."),
     ],
     "en": [
         ("A small line at the bottom of your site. It doesn’t appear on Pro. On Starter and Business you can remove it for $5 a month.", "A small line at the bottom of your site. You can remove it on any plan, at no cost."),
@@ -604,6 +611,11 @@ PLAN_RENAMES = {
          "<tr><td>Resend</td><td>Sending email: login codes, notifications, site enquiries</td><td>European Union (Ireland)</td></tr><tr><td>Brevo</td><td>Sending email campaigns and automations on the customer’s behalf, on the Business and Pro plans</td><td>European Union</td></tr>"),
         ("<p>Put simply: an enquiry that arrives on a customer's site belongs to the customer. We don't use it for any purpose of our own.</p>",
          "<p>Put simply: an enquiry that arrives on a customer's site belongs to the customer. We don't use it for any purpose of our own.</p><p>A customer who connects their forms to an outside service (such as Zapier or Make) decides where the information is sent, and is responsible for it.</p>"),
+        ("Can I use my own domain?", "Can I connect my site to my domain?"),
+        ("If you want your own domain, buy it from any registrar", "If you want a domain, buy one from any registrar"),
+        ("or connect your own domain.", "or connect your site to your domain."),
+        ("Connect your own domain", "Connect to your domain"),
+        ("For businesses that want their own domain and a full presence.", "For a business that wants to do its own marketing: email, automations and connected forms."),
     ],
 }
 PLAN_RENAMED = set()  # (lang, old) seen on some page; every rename must be used
@@ -708,13 +720,13 @@ def site_040(body, lang, page):
     if page == "legal" and 'id="u-banned"' in body:
         nav, sec = AUP_MAILING[lang]
         link = re.search(r'<a href="#u-banned">[^<]*</a>', body)
-        body = body[:link.end()] + MAILING[0] + nav + MAILING[1] + body[link.end():]
+        body = body[:link.end()] + nav + body[link.end():]
         k = body.index('<section class="lg-s" id="u-enforce">')
-        body = body[:k] + MAILING[0] + sec + MAILING[1] + body[k:]
+        body = body[:k] + sec + body[k:]
     if page == "legal" and 'id="p-roles"' in body:
         old, new = PRIVACY_MAILING[lang]
         assert body.count(old) == 1, lang
-        body = body.replace(old, old + MAILING[0] + new + MAILING[1])
+        body = body.replace(old, old + new)
     return body
 
 
