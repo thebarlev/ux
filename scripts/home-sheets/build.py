@@ -503,7 +503,7 @@ PLAN_FEATURES = {
         (BACKUP, _ALL),
         (LEADS, _ALL),
         ('Live address: <bdi dir="ltr">yourname.uxellent.site</bdi>', ("free", "start")),
-        ("Quick connection to your own domain", _PAID),
+        ("Quick connection to your domain", _PAID),
         (MAIL, _ALL),
         ("Connect your forms to the tools you already use", ("business", "pro")),
         ("No credit card", ("free",)),
@@ -692,6 +692,10 @@ def site_040(body, lang, page):
         foot = re.search(r'<p class="pr-foot">', body)
         assert foot, lang
         body = body[:foot.start()] + PRICING_ALL[lang] + "\n " + body[foot.start():]
+    if page == "pricing":
+        # 047: backup is on the paid plans only, so it leaves the "included in every plan" strip here (the cards show it)
+        body, n = re.subn(r'<span class="in-c">(?:(?!<span class="in-c">).)*?(?:גיבוי יומי ושחזור|Daily backup and restore).*?</span></span>', "", body, flags=re.S)
+        assert n >= 1, (lang, n)
     if page in ("pricing", "faq"):
         body, n = re.subn(r'<details>(?:(?!</details>).)*?\{\{PLAN_SAVE_ANSWER\}\}.*?</details>', lambda m: YEARLY[0] + m.group(0) + YEARLY[1], body, count=1, flags=re.S)
         assert n == 1, (lang, page)
