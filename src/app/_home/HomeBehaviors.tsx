@@ -307,8 +307,11 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
       if (!reduced) {
         let alive = true
         cleanups.push(() => { alive = false })
-        // the sheet's spots first, then a few spare ones for widths where they are taken
-        const spotsDesk: Array<[number, number]> = [[60, 5], [2, 38], [30, 94], [94, 6], [44, 96], [92, 88], [48, 3], [14, 62], [84, 64], [70, 92], [24, 10]]
+        // 048: each new icon lands on a random free spot, a new one every time: at least
+        // POP_GAP from every icon (fixed, popped or fading) and from the text, inside
+        // the section, and away from the last spot; no free spot, no pop (mobile too)
+        const POP_GAP = 24
+        let last: Rect | null = null
         let n = 0
         let visible = false
         const live: HTMLElement[] = []
@@ -354,16 +357,23 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
           box.appendChild(o)
           const taken = [...placed.values(), ...[...live, ...fading].map((x) => rectOf(x))]
           const text = textRects()
-          // try the sheet's spots in turn (mobile: bottom centre), each with a small nudge
-          const tries: Array<[number, number]> = mob ? [[52, H - 64]] : spotsDesk.map(([x, y]) => [x, (y / 100) * H])
-          let f: ReturnType<typeof findSpot> = null
-          for (let k = 0; k < tries.length && !f; k++) {
-            const [x, y] = tries[(n + k) % tries.length]
-            o.style.cssText = `visibility:hidden;right:${(x / 100) * W}px;top:${y}px;--mr:${(x / 100) * W}px;--mt:${y}px`
-            f = findSpot(o, taken, text, 72)
+          o.style.cssText = "visibility:hidden;right:0;top:0"
+          const w = o.offsetWidth
+          const h = o.offsetHeight + FLOAT
+          const edge = mob ? 6 : 24
+          let f: { q: Rect } | null = null
+          for (let k = 0; k < 240 && !f; k++) {
+            const l = edge + Math.random() * (W - 2 * edge - w)
+            const t = 6 + Math.random() * (H - 12 - h)
+            const q = { l, r: l + w, t, b: t + h }
+            if (q.l < edge || q.r > W - edge || q.t < 6 || q.b > H - 6) continue
+            if (text.some((x) => hit(q, x, POP_GAP)) || taken.some((x) => hit(q, x, POP_GAP))) continue
+            if (last && Math.hypot((q.l + q.r - last.l - last.r) / 2, (q.t + q.b - last.t - last.b) / 2) < 2 * Math.max(w, h)) continue
+            f = { q }
           }
           n++
           if (!f) { o.remove(); return } // no free spot right now: skip this pop
+          last = f.q
           const right = W - f.q.r
           const top = f.q.t + FLOAT
           o.style.cssText = `right:${right}px;top:${top}px;--mr:${right}px;--mt:${top}px`
