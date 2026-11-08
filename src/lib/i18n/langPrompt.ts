@@ -16,15 +16,13 @@ export function visitorCountry(): string | null {
   return readCookie(GEO_HINT_COOKIE)
 }
 
-/** The language to offer, or null: a visitor outside Israel on a Hebrew page,
- *  or in Israel on an English page, who has not chosen a language yet. */
+/** The language to offer, or null. 050: the proxy now serves the browser's
+ *  language on the first visit, so one case is left: a visitor in Israel, with
+ *  no lang_pref, on an English page (an English browser), is offered Hebrew. */
 export function langToOffer(pathname: string): "he" | "en" | null {
   if (typeof document === "undefined" || pathname.startsWith("/admin")) return null
   if (readCookie(LANG_PREF_COOKIE)) return null
   const country = visitorCountry()
   if (!country) return null
-  const isEn = isEnglishPath(pathname)
-  if (!isEn && country !== "IL") return "en"
-  if (isEn && country === "IL") return "he"
-  return null
+  return isEnglishPath(pathname) && country === "IL" ? "he" : null
 }

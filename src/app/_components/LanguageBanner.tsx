@@ -55,8 +55,8 @@ function hrefFor(lang: "he" | "en", pathname: string): string {
   return own?.getAttribute("href") || counterpartPath(pathname)
 }
 
-/** 039: the language prompt. A visitor outside Israel on a Hebrew page, or in
- *  Israel on an English page, with no lang_pref, gets a modal choice before
+/** 039: the language prompt. 050: only a visitor in Israel on an English page,
+ *  with no lang_pref, gets it now (langToOffer); it comes as a modal choice before
  *  the cookie banner (which waits for LANG_DONE_EVENT). Choosing saves
  *  lang_pref and opens the same page in that language; Esc or the backdrop
  *  keeps the current one and saves it. Built on the client only, so the page
@@ -75,8 +75,14 @@ export function LanguageBanner() {
       const target = a?.getAttribute("hreflang")
       if (target === "he" || target === "en") setLangPrefCookie(target)
     }
+    // auxclick: a middle-click opens the other language in a new tab, which must
+    // not be sent back by the proxy (050)
     document.addEventListener("click", onClick)
-    return () => document.removeEventListener("click", onClick)
+    document.addEventListener("auxclick", onClick)
+    return () => {
+      document.removeEventListener("click", onClick)
+      document.removeEventListener("auxclick", onClick)
+    }
   }, [])
 
   useEffect(() => {
