@@ -38,6 +38,8 @@ export type Plan = {
   readonly emailAutomations?: boolean
   /** null: no monthly email count to show */
   readonly emailsMonth?: number | null
+  /** 046: days of daily backup and restore; null: no backup line */
+  readonly backupDays?: number | null
 }
 export type Plans = Partial<Record<PlanId, Plan>>
 
@@ -75,6 +77,7 @@ export function parsePlans(data: unknown, usdFallback?: Plans): Plans | null {
       mailingList: flag(p.mailing_list),
       emailAutomations: flag(p.email_automations),
       emailsMonth: countOrNull(p.emails_month),
+      backupDays: countOrNull(p.backup_days),
     }
   }
   return Object.keys(plans).length ? plans : null

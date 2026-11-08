@@ -6,7 +6,7 @@ import type { Lang } from "../chrome"
  * only from the facts Itzik listed (tbl-025b); nothing else, no other numbers:
  *  - every enquiry is saved in the system and emailed; saved even if the email fails
  *  - the enquiries address is verified by email
- *  - automatic daily backup, 7 days back
+ *  - daily backup and restore, 30 days back, on paid plans
  *  - subscription renews automatically; invoices in the account; if it does not
  *    renew, the site moves to the free plan and the content is kept
  *  - every page built with SEO, structured business data, ready for AI search
@@ -71,7 +71,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       h: "מה שבוורדפרס דורש תוסף, |כאן כבר בפנים.",
       p: "אצלנו לא צריך לבחור תוספים או לחפש מפתח לכל שינוי.",
       points: [
-        ["גיבוי יומי", "גיבוי אוטומטי כל יום, 7 ימים אחורה."],
+        ["גיבוי יומי", "גיבוי יומי ושחזור, 30 יום אחורה, בחבילות בתשלום."],
         ["SEO, אחסון ו-SSL", "כל עמוד נבנה עם SEO, והאחסון וה-SSL כלולים."],
         ["ייבוא מהאתר הקיים", "עוברים מוורדפרס? מייבאים את התוכן מהאתר הקיים."],
       ],
@@ -80,7 +80,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       h: "What WordPress needs a plugin for |is built in here.",
       p: "With us there are no plugins to pick and no developer to chase for every change.",
       points: [
-        ["Backed up every day", "Automatic daily backup, 7 days back."],
+        ["Backed up every day", "Daily backup and restore, 30 days back, on paid plans."],
         ["SEO, hosting and SSL", "Every page is built with SEO, and hosting and SSL are included."],
         ["Import your current site", "Moving from WordPress? Import the content from your existing site."],
       ],
@@ -221,7 +221,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       p: "עסק קטן צריך אתר שלא גוזל ממנו זמן. זה מה שבנינו.",
       points: [
         ["שינויים בלי מפתח", "כותבים בצ'אט מה לשנות, או לוחצים ומשנים בעורך."],
-        ["גיבוי יומי", "גיבוי אוטומטי כל יום, 7 ימים אחורה."],
+        ["גיבוי יומי", "גיבוי יומי ושחזור, 30 יום אחורה, בחבילות בתשלום."],
         ["התוכן נשמר", "אם המנוי לא מתחדש, האתר עובר לחבילה החינמית והתוכן נשאר."],
       ],
     },
@@ -229,7 +229,7 @@ export const OURS: Record<string, Record<Lang, Ours>> = {
       p: "A small business needs a site that doesn’t eat its time. That’s what we built.",
       points: [
         ["Changes without a developer", "Write what to change in the chat, or click and edit."],
-        ["Backed up every day", "Automatic daily backup, 7 days back."],
+        ["Backed up every day", "Daily backup and restore, 30 days back, on paid plans."],
         ["Your content stays", "If your subscription doesn’t renew, the site moves to the free plan and your content is kept."],
       ],
     },
