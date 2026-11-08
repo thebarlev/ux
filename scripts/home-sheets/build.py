@@ -692,8 +692,8 @@ def site_040(body, lang, page):
         foot = re.search(r'<p class="pr-foot">', body)
         assert foot, lang
         body = body[:foot.start()] + PRICING_ALL[lang] + "\n " + body[foot.start():]
-    if page == "pricing":
-        # 047: backup is on the paid plans only, so it leaves the "included in every plan" strip here (the cards show it)
+    if page in ("pricing", "features"):
+        # 047 (pricing), 049 (features): backup is on the paid plans only, so it leaves the "included in every plan" strip (the cards show it)
         body, n = re.subn(r'<span class="in-c">(?:(?!<span class="in-c">).)*?(?:גיבוי יומי ושחזור|Daily backup and restore).*?</span></span>', "", body, flags=re.S)
         assert n >= 1, (lang, n)
     if page in ("pricing", "faq"):
