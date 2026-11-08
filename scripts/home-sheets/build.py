@@ -482,13 +482,13 @@ PLAN_FROM = {"he": "<span>מ-₪0 לחודש</span>", "en": "<span>From $0 a mon
 # 045: no vendor names on the cards (they stay in the privacy vendors table), and a domain is connected, not given.
 # The lead form and the email lines come from the plans data (plan-fill.ts, leadsHtml / mailHtml).
 _ALL, _PAID = ("free", "start", "business", "pro"), ("start", "business", "pro")
-LEADS, MAIL = "{{LEADS}}", "{{MAIL}}"
+LEADS, MAIL, BACKUP = "{{LEADS}}", "{{MAIL}}", "{{BACKUP}}"  # 046: the backup line comes from backup_days
 PLAN_FEATURES = {
     "he": [
         ("אחסון האתר כלול", _ALL),
         ("עריכה ידנית ללא הגבלה", _ALL),
         ("עורך ייעודי", _ALL),
-        ("גיבוי יומי, 7 ימים אחורה", _ALL),
+        (BACKUP, _ALL),
         (LEADS, _ALL),
         ('כתובת באוויר: <bdi dir="ltr">yourname.uxellent.site</bdi>', ("free", "start")),
         ("חיבור מהיר לדומיין שלכם", _PAID),
@@ -500,7 +500,7 @@ PLAN_FEATURES = {
         ("Hosting included", _ALL),
         ("Unlimited manual editing", _ALL),
         ("Dedicated editor", _ALL),
-        ("Daily backup, 7 days back", _ALL),
+        (BACKUP, _ALL),
         (LEADS, _ALL),
         ('Live address: <bdi dir="ltr">yourname.uxellent.site</bdi>', ("free", "start")),
         ("Quick connection to your own domain", _PAID),
@@ -527,7 +527,7 @@ def plan_tokens(body, lang, page):
             a, nl = re.subn(r'\s*<p class="pl-lead">[^<]*</p>', "", a)
             assert nl == (0 if pid == "free" else 1), (lang, pid, nl)
             def line(x):
-                return {LEADS: "{{PLAN_LEADS:%s}}" % pid, MAIL: "{{PLAN_MAIL:%s}}" % pid}.get(x[0]) or li(x)
+                return {LEADS: "{{PLAN_LEADS:%s}}" % pid, MAIL: "{{PLAN_MAIL:%s}}" % pid, BACKUP: "{{PLAN_BACKUP:%s}}" % pid}.get(x[0]) or li(x)
             a, nu = re.subn(r"<ul>.*?</ul>", lambda m: "<ul>" + "".join(line(x) for x in PLAN_FEATURES[lang] if pid in x[1]) + "</ul>", a, count=1, flags=re.S)
             assert nu == 1, (lang, pid)
             return a
@@ -571,15 +571,11 @@ PLAN_RENAMES = {
         ("חיבור דומיין אישי, בחבילות עסקי ומקצועי.", "חיבור דומיין אישי, מחבילת מתחילים ומעלה. את הדומיין מחברים בעצמכם."),
         ("בחבילות חינם, התחלה ועסקי מופיע באתר קרדיט קטן. בחבילות התחלה ועסקי אפשר להסיר אותו בתוספת של 19 ₪ לחודש (5 דולר באתר באנגלית). בחבילה מקצועי הקרדיט לא מופיע.", "באתר מופיע קרדיט קטן. אפשר להסיר אותו בכל חבילה, בלי תשלום."),
         (' הקרדיט "Built with UXellent" חוזר לאתר.', ""),
-        # 044: backups are daily and kept 7 days
-        ("גיבוי אוטומטי כל לילה, שנשמר 30 לילות.", "גיבוי אוטומטי כל יום, שנשמר 7 ימים."),
-        ("אנחנו מגבים את המערכת כל לילה, ושומרים כל גיבוי 30 לילות.", "אנחנו מגבים את המערכת כל יום, ושומרים כל גיבוי 7 ימים."),
-        ("עותקים בגיבוי נמחקים אוטומטית 30 יום אחרי סגירת החשבון.", "עותקים בגיבוי נמחקים אוטומטית 7 ימים אחרי סגירת החשבון."),
-        ("עותקים בגיבוי נמחקים 30 יום אחרי הסגירה.", "עותקים בגיבוי נמחקים 7 ימים אחרי הסגירה."),
-        ("ועותקים בגיבוי נמחקים 30 יום אחריה.", "ועותקים בגיבוי נמחקים 7 ימים אחריה."),
-        ("<td>עד 30 יום.</td>", "<td>עד 7 ימים.</td>"),
+        # 046: daily backup and restore, kept 30 days, on the paid plans (044 had 7 days)
+        ("גיבוי אוטומטי כל לילה, שנשמר 30 לילות.", "גיבוי יומי שנשמר 30 יום, בחבילות בתשלום."),
+        ("אנחנו מגבים את המערכת כל לילה, ושומרים כל גיבוי 30 לילות.", "אנחנו מגבים את המערכת כל יום, ושומרים כל גיבוי 30 יום."),
         ("<li>גיבוי כל לילה.</li>", "<li>גיבוי יומי.</li>"),
-        ("גיבוי יומי, 30 יום אחורה", "גיבוי יומי, 7 ימים אחורה"),
+        ("גיבוי יומי, 30 יום אחורה", "גיבוי יומי ושחזור, 30 יום אחורה, בחבילות בתשלום"),
         # 044, privacy: Brevo, and forms the customer connects elsewhere
         ("<tr><td>Resend</td><td>שליחת מיילים: קודי כניסה, התראות, פניות מהאתר</td><td>האיחוד האירופי (אירלנד)</td></tr>",
          "<tr><td>Resend</td><td>שליחת מיילים: קודי כניסה, התראות, פניות מהאתר</td><td>האיחוד האירופי (אירלנד)</td></tr><tr><td>Brevo</td><td>שליחת דיוור ואוטומציות בשם הלקוח, בחבילות עסקי ופרו</td><td>האיחוד האירופי</td></tr>"),
@@ -599,14 +595,10 @@ PLAN_RENAMES = {
         ("Connecting a custom domain, on the Business and Pro plans.", "Connecting a custom domain, from the Starter plan up. You connect the domain yourself."),
         ("On the Free, Starter and Business plans a small credit appears on the site. On Starter and Business you can remove it for an extra $5 per month on the English site (19 ILS on the Hebrew site). On the Pro plan the credit does not appear.", "A small credit appears on the site. You can remove it on any plan, at no cost."),
         (' The "Built with UXellent" credit returns to the site.', ""),
-        ("An automatic nightly backup, kept for 30 nights.", "An automatic daily backup, kept for 7 days."),
-        ("We back up the system every night and keep each backup for 30 nights.", "We back up the system every day and keep each backup for 7 days."),
-        ("Copies in backups are deleted automatically 30 days after the account is closed.", "Copies in backups are deleted automatically 7 days after the account is closed."),
-        ("Copies in backups are deleted 30 days after closing.", "Copies in backups are deleted 7 days after closing."),
-        ("and copies in backups are deleted 30 days later.", "and copies in backups are deleted 7 days later."),
-        ("<td>Up to 30 days.</td>", "<td>Up to 7 days.</td>"),
+        ("An automatic nightly backup, kept for 30 nights.", "A daily backup, kept for 30 days, on the paid plans."),
+        ("We back up the system every night and keep each backup for 30 nights.", "We back up the system every day and keep each backup for 30 days."),
         ("<li>A nightly backup.</li>", "<li>A daily backup.</li>"),
-        ("Daily backups, 30 days back", "Daily backups, 7 days back"),
+        ("Daily backups, 30 days back", "Daily backup and restore, 30 days back, on paid plans"),
         ("<tr><td>Resend</td><td>Sending email: login codes, notifications, site enquiries</td><td>European Union (Ireland)</td></tr>",
          "<tr><td>Resend</td><td>Sending email: login codes, notifications, site enquiries</td><td>European Union (Ireland)</td></tr><tr><td>Brevo</td><td>Sending email campaigns and automations on the customer’s behalf, on the Business and Pro plans</td><td>European Union</td></tr>"),
         ("<p>Put simply: an enquiry that arrives on a customer's site belongs to the customer. We don't use it for any purpose of our own.</p>",
@@ -624,8 +616,8 @@ YEARLY = ("<!--yearly-->", "<!--/yearly-->")
 MAILING = ("<!--mailing-->", "<!--/mailing-->")
 
 PRICING_ALL = {
-    "he": '<p class="pr-all">בכל חבילה: אחסון, עורך ייעודי, גיבוי יומי וטופס לידים.</p>',
-    "en": '<p class="pr-all">On every plan: hosting, a dedicated editor, daily backup and a lead form.</p>',
+    "he": '<p class="pr-all">בכל חבילה: אחסון, עורך ייעודי וטופס לידים.</p>',
+    "en": '<p class="pr-all">On every plan: hosting, a dedicated editor and a lead form.</p>',
 }
 
 _CK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'

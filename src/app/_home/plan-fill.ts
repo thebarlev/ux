@@ -82,6 +82,12 @@ const li = (text: string) => `<li>${CHECK}<span>${text}</span></li>`
  * neither depends on MAILING_LIVE; a mailing list line and an email count are
  * not part of this list.
  */
+/** 046: daily backup and restore, on the plans that have it (paid plans, 30 days) */
+function backupHtml(p: Plan | undefined, lang: Lang) {
+  const d = p?.backupDays
+  return d ? li(lang === "he" ? `גיבוי יומי ושחזור, ${d} יום אחורה` : `Daily backup and restore, ${d} days back`) : ""
+}
+
 function leadsHtml(p: Plan | undefined, lang: Lang) {
   return p?.leadForm ? li(lang === "he" ? "טופס שמייצר לידים" : "Lead form") : ""
 }
@@ -145,6 +151,7 @@ export function fillPlans(html: string, lang: Lang, plans: Plans) {
     .replace(/\{\{PLAN_PRICE:(\w+)\}\}/g, (_, id: PlanId) => priceHtml(plans[id], lang, yearly))
     .replace(/\{\{PLAN_YEAR:(\w+)\}\}/g, (_, id: PlanId) => yearHtml(plans[id], lang, yearly))
     .replace(/\{\{PLAN_ACT:(\w+)\}\}/g, (_, id: PlanId) => actHtml(plans[id], lang))
+    .replace(/\{\{PLAN_BACKUP:(\w+)\}\}/g, (_, id: PlanId) => backupHtml(plans[id], lang))
     .replace(/\{\{PLAN_LEADS:(\w+)\}\}/g, (_, id: PlanId) => leadsHtml(plans[id], lang))
     .replace(/\{\{PLAN_MAIL:(\w+)\}\}/g, (_, id: PlanId) => mailHtml(plans[id], lang))
     .replace("{{PLAN_SAVE_BADGE}}", save === null ? (lang === "he" ? "<em>חיסכון</em>" : "<em>Save</em>") : lang === "he" ? `<em>${save}%-</em>` : `<em>Save ${save}%</em>`)
