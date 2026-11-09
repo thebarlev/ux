@@ -1,0 +1,8 @@
+{
+  "name": "uxellent-site-checks",
+  "private": true,
+  "description": "Checks run against production or a preview (see README.md). Not part of the site build.",
+  "devDependencies": {
+    "playwright": "1.48.2"
+  }
+}
