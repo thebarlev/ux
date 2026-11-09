@@ -21,6 +21,9 @@ export type LocaleInfo = {
 export const LOCALES: readonly LocaleInfo[] = [
   { code: "he", name: "עברית", short: "עב", dir: "rtl", prefix: "" },
   { code: "en", name: "English", short: "EN", dir: "ltr", prefix: "/en" },
+  // PREVIEW ONLY (051): two dummy languages to show state B; they lead to the English pages. Never merged.
+  { code: "fr", name: "Français", short: "FR", dir: "ltr", prefix: "/en" },
+  { code: "es", name: "Español", short: "ES", dir: "ltr", prefix: "/en" },
 ]
 
 /** The root language (no prefix) and the one for everyone else: x-default, and
