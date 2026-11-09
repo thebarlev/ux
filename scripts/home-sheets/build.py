@@ -445,11 +445,15 @@ def build(lang, cfg, images, page="home", legal=None):
     body = site_040(body, lang, page)
     body = lang_slots(body)
 
+    # a question inside a gated part (048: mailing) carries the gate, so its
+    # FAQPage entry shows only when the part does (HomePage)
+    gated = [(m.start(), m.end()) for m in re.finditer(r"<!--mailing-->.*?<!--/mailing-->", body, re.S)]
     faq = [
-        {"q": re.sub(r"<[^>]+>", "", q).strip(), "a": re.sub(r"<[^>]+>", "", a).strip()}
-        for q, a in re.findall(r"<summary>(.*?)<span class=\"pm\">\+</span></summary><div class=\"ans\">(.*?)</div>", body, re.S)
+        {"q": re.sub(r"<[^>]+>", "", m.group(1)).strip(), "a": re.sub(r"<[^>]+>", "", m.group(2)).strip(),
+         **({"gate": "mailing"} if any(a <= m.start() < b for a, b in gated) else {})}
+        for m in re.finditer(r"<summary>(.*?)<span class=\"pm\">\+</span></summary><div class=\"ans\">(.*?)</div>", body, re.S)
     ]
-    want = {"home": 9, "pricing": 6, "contact": 0, "faq": 18, "text": 0, "blog": 0, "article": 0, "features": 0, "who": 0, "nf": 0, "legal": 0}[page]
+    want = {"home": 11, "pricing": 6, "contact": 0, "faq": 20, "text": 0, "blog": 0, "article": 0, "features": 0, "who": 0, "nf": 0, "legal": 0}[page]
     assert len(faq) == want, f"expected {want} FAQ entries in {page}/{lang}, got {len(faq)}"
     name = page.upper()
     ts = (
@@ -651,11 +655,78 @@ LEADS_FEATURE = {
         "list": ("Added to your mailing list", "dana@gmail.com"),
     },
 }
+# 048: the carousel's fifth card, as in עיצובים/לאישור-דף-הבית-דיוור-ואוטומציות.html (an envelope with a clock)
 HOME_LEADS_CARD = {
-    "he": ("לידים ודיוור", "לידים, רשימת תפוצה ודיוור, בתוך האתר.", "ואנחנו אלה שדואגים שזה יעבוד.", "5 מתוך 5"),
-    "en": ("Leads and email", "Leads, mailing list and email, built into your site.", "And we’re the ones who make sure it works.", "5 of 5"),
+    "he": ("דיוור", "דיוור ואוטומציות, מאותו חשבון.", "ניהול נרשמים, דיוור ואוטומציות שה-AI בונה. חלק מניהול האתר, בלי עוד מערכת.", "5 מתוך 5"),
+    "en": ("Email", "Email and automations, from the same account.", "Subscriber management, email and automations the AI builds. Part of running your site, with no extra system.", "5 of 5"),
 }
-_ART = '<svg viewBox="0 0 100 100" fill="none" stroke="#0b1220" stroke-width="4" stroke-linejoin="round"><rect x="12" y="24" width="76" height="54" rx="9" fill="#1990d8"/><path d="M15 29l35 27 35-27" stroke="#fff"/></svg>'
+_ART = '<svg viewBox="0 0 100 100" fill="none" stroke="#0b1220" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="24" width="62" height="46" rx="8" fill="#fff"/><path d="M12 28l29 22 29-22"/><circle cx="74" cy="70" r="16" fill="#1990d8" stroke="none"/><path d="M74 62v8l5 4" stroke="#fff" stroke-width="4"/></svg>'
+
+# 048: the home "email and automations" section (#mail), between "how it works" and
+# "built right", from the same design file. The account mockup builds its sequence
+# once the section is in view (HomeBehaviors), at a fixed height.
+_MLI = f'<svg {_SV}>'
+HOME_MAIL = {
+    "he": {
+        "h2": 'דיוור ואוטומציות. <span class="bl">בלי עוד מערכת.</span>',
+        "lead": "מעבר לאתר, אתם מנהלים מאותו חשבון את הנרשמים, את הדיוור ואת האוטומציות. ה-AI בונה אותן בשבילכם.",
+        "tag": "בחבילות עסקי ופרו",
+        "app": "דיוור", "stats": [("1,248", "נרשמים"), ("+36", "החודש"), ("52%", "פתחו")],
+        "ai": "כל מי שנרשם יקבל מייל ברוכים הבאים, ואחרי שבוע מאמר עם טיפים לשיקום",
+        "steps": [("נרשם חדש באתר", "טריגר"), ("מייל ברוכים הבאים", "מיד"), ("מאמר: 5 טיפים לשיקום", "אחרי 7 ימים")],
+        "ok": "✓ האוטומציה פעילה. 36 נרשמים חדשים כבר בתוכה.",
+        "p": [("ניהול נרשמים חכם", "כל מי שנרשם באתר נכנס לרשימה, עם המקור וההסכמה שלו. בלי ייבוא ובלי טבלאות."),
+              ("אוטומציות שה-AI בונה", "כותבים במילים מה רוצים שיקרה, וה-AI בונה את הרצף. משנים באותה דרך."),
+              ("דיוור מתוך החשבון", "כותבים, שולחים ורואים מי פתח ומי לחץ. בלי להיכנס לשום מערכת אחרת."),
+              ("ואנחנו דואגים שזה יעבוד", "הסרה בכל מייל, הסכמה לפי החוק, ומשלוח שמגיע לתיבה ולא לספאם.")],
+    },
+    "en": {
+        "h2": 'Email and automations. <span class="bl">No extra system.</span>',
+        "lead": "Beyond your site, you manage subscribers, email and automations from the same account. The AI builds them for you.",
+        "tag": "On Business and Pro",
+        "app": "Email", "stats": [("1,248", "Subscribers"), ("+36", "This month"), ("52%", "Opened")],
+        "ai": "Everyone who signs up gets a welcome email, and a week later an article with recovery tips",
+        "steps": [("New sign-up on the site", "Trigger"), ("Welcome email", "Right away"), ("Article: 5 recovery tips", "After 7 days")],
+        "ok": "✓ The automation is live. 36 new subscribers are already in it.",
+        "p": [("Smart subscriber management.", "Everyone who signs up on your site joins your list, with where they came from and their consent. No imports, no spreadsheets."),
+              ("Automations the AI builds.", "Write what you want to happen, and the AI builds the sequence. Change it the same way."),
+              ("Email from your account.", "Write, send and see who opened and clicked. No other system to log in to."),
+              ("And we make sure it works.", "An unsubscribe link in every email, consent by the law, and delivery to the inbox, not to spam.")],
+    },
+}
+_ML_IC = [
+    '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 010 7M18 14.5c2 .7 3.2 2.6 3.5 5.5"/>',
+    '<path d="M12 2.5l2 5.6 5.6 2-5.6 2-2 5.6-2-5.6-5.6-2 5.6-2z"/><path d="M19 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/>',
+    '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/>',
+    '<path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+]
+
+
+def home_mail(lang):
+    t = HOME_MAIL[lang]
+    stats = "".join(f"<div><b>{b}</b><span>{l}</span></div>" for b, l in t["stats"])
+    steps = "".join(f'<div class="ml-s" style="--d:{d}s"><span class="n">{k + 1}</span><b>{b}</b><span>{w}</span></div>'
+                    for k, ((b, w), d) in enumerate(zip(t["steps"], (".6", "1.3", "2"))))
+    ps = "".join(f'<div class="ml-p"><span class="bq-ic">{_MLI}{ic}</svg></span><h3>{h}</h3><p>{x}</p></div>' for (h, x), ic in zip(t["p"], _ML_IC))
+    return (f'{MAILING[0]}<section class="sec zone" id="mail"><div class="wrap">\n'
+            f' <div class="sh c"><h2>{t["h2"]}</h2><p class="bq-lead">{t["lead"]}</p><span class="ml-tag">{t["tag"]}</span></div>\n'
+            f' <div class="ml">\n'
+            f'  <div class="ml-app" aria-hidden="true"><div class="ml-h"><span class="dot"></span>{t["app"]} · <span dir="ltr">physio-rehovot.uxellent.site</span></div>'
+            f'<div class="ml-st">{stats}</div>'
+            f'<div class="ml-ai"><i>AI</i><div>{t["ai"]}<span class="tw">&nbsp;</span></div></div>'
+            f'<div class="ml-fl">{steps}</div><div class="ml-ok">{t["ok"]}</div></div>\n'
+            f'  <div class="ml-grid">{ps}</div>\n'
+            f' </div>\n</div></section>{MAILING[1]}\n\n')
+
+
+# 048: two questions before the domain question (home FAQ and the FAQ page), behind MAILING_LIVE
+FAQ_MAILING = {
+    "he": [("אפשר לשלוח דיוור ללקוחות מהאתר?", "כן, בחבילות עסקי ופרו. הדיוור הוא חלק מניהול האתר: מי שנרשם באתר נכנס לרשימה, ואתם שולחים מיילים מאותו חשבון. בלי לחבר מערכת אחרת."),
+           ("איך בונים אוטומציה, ואפשר לשנות אותה?", "כותבים במילים מה רוצים שיקרה, למשל \"מייל ברוכים הבאים לכל נרשם, ואחרי שבוע מאמר\", וה-AI בונה את הרצף. את התבניות ואת האוטומציות אפשר לערוך ולשנות מתי שרוצים.")],
+    "en": [("Can I send emails to my customers from the site?", "Yes, on Business and Pro. Email is part of running your site: everyone who signs up joins your list, and you send emails from the same account. No other system to connect."),
+           ("How do I build an automation, and can I change it?", "Write what you want to happen, for example \"a welcome email for every new subscriber, and an article a week later\", and the AI builds the sequence. You can edit the templates and automations whenever you like.")],
+}
+FAQ_DOMAIN_Q = {"he": "אפשר לחבר את האתר לדומיין שלי?", "en": "Can I connect my site to my domain?"}
 AUP_MAILING = {
     "he": ('<a href="#u-mail">דיוור</a>',
            '<section class="lg-s" id="u-mail"><h2>דיוור</h2><p>מי ששולח דיוור מהחשבון שלו אחראי לשלוח אותו רק למי שהסכים לקבל אותו, כפי שדורש סעיף 30א לחוק התקשורת (בזק ושידורים). בכל דיוור צריכה להיות דרך פשוטה להסיר את עצמכם מהרשימה.</p><p>אם דיוור נשלח בלי הסכמה, אנחנו רשאים להשעות את הדיוור מהחשבון.</p></section>'),
@@ -714,6 +785,18 @@ def site_040(body, lang, page):
         card = (f'{MAILING[0]}<div class="ben" role="group" aria-roledescription="slide" aria-label="{lab}" tabindex="0"><span class="pbar"></span>'
                 f'<div class="art">{_ART}</div><span class="kick">{kick}</span><h3>{h3}</h3><p>{p}</p></div>{MAILING[1]}\n')
         body = body[:j] + card + body[j:]
+        k = body.index('<section class="sec zone" id="bq">')
+        body = body[:k] + home_mail(lang) + body[k:]
+    if page in ("home", "faq"):
+        # on the FAQ page the domain question opens "domain and publishing", so the two
+        # go at the end of the topic before it: still right before the domain question
+        qs = "".join(f'<details><summary>{q}<span class="pm">+</span></summary><div class="ans">{a}</div></details>' for q, a in FAQ_MAILING[lang])
+        dq = f"<details><summary>{FAQ_DOMAIN_Q[lang]}<span"
+        assert body.count(dq) == 1, (lang, page)
+        k = body.index(dq)
+        if page == "faq":
+            k = body.rindex("</div></div>", 0, k)
+        body = body[:k] + MAILING[0] + qs + MAILING[1] + body[k:]
     if page == "legal" and 'id="u-banned"' in body:
         nav, sec = AUP_MAILING[lang]
         link = re.search(r'<a href="#u-banned">[^<]*</a>', body)
@@ -778,6 +861,35 @@ SITE040_CSS = {
 #ben .ben .art,#ben .ben.on .art{position:relative;top:auto!important;left:auto!important;right:auto!important;flex:none;margin-bottom:auto}
 #ben .ben .art+.kick{margin-top:20px}
 }
+.ml{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,4vw,64px);align-items:center;margin-top:clamp(36px,4vw,56px)}
+.ml-app{background:#fff;border-radius:28px;padding:clamp(22px,2.4vw,30px);box-shadow:0 1px 2px rgba(11,18,32,.05),0 30px 60px -30px rgba(11,18,32,.28);text-align:start;height:470px;display:flex;flex-direction:column;gap:16px;overflow:hidden}
+.ml-h{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2)}
+.ml-h .dot{width:8px;height:8px;border-radius:50%;background:#1fae63;box-shadow:0 0 0 4px rgba(31,174,99,.15)}
+.ml-st{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ml-st div{background:#f5f8fb;border-radius:14px;padding:12px}
+.ml-st b{display:block;font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.ml-st span{font-size:12.5px;color:var(--ink2)}
+.ml-ai{background:#f1f6fd;border-radius:16px;padding:12px 14px;font-size:14.5px;line-height:1.5;color:var(--ink);display:flex;gap:10px;align-items:flex-start}
+.ml-ai i{flex:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(90deg,#0f72b3,#2a5fcf);display:grid;place-items:center;color:#fff;font-style:normal;font-size:12px;font-weight:800}
+.ml-ai .tw{border-inline-end:2px solid var(--brand);animation:mlcar 1s steps(1) infinite}
+.ml-fl{display:grid;gap:8px}
+.ml-s{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:14px;padding:11px 14px;font-size:14.5px;opacity:0;transform:translateY(8px)}
+#mail.in .ml-s{animation:mlin .5s cubic-bezier(.16,1,.3,1) var(--d) forwards}
+.ml-s .n{flex:none;width:26px;height:26px;border-radius:8px;background:#e6f3fc;color:var(--brand-d);display:grid;place-items:center;font-weight:800;font-size:13px}
+.ml-s b{font-weight:700}
+.ml-s span{color:var(--ink2);font-size:13px;margin-inline-start:auto;white-space:nowrap}
+.ml-ok{margin-top:auto;border-top:1px solid var(--line);padding-top:14px;font-size:14.5px;font-weight:600;color:#1a7f4b;opacity:0}
+#mail.in .ml-ok{animation:mlin .5s ease 3.2s forwards}
+.ml-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(22px,2.4vw,36px) clamp(20px,2.4vw,40px)}
+.ml-p{text-align:start}
+.ml-p .bq-ic svg{width:30px;height:30px}
+.ml-p h3{font-size:clamp(18px,1.4vw,21px);font-weight:800;letter-spacing:-.02em;margin-top:10px}
+.ml-p p{font-size:15px;line-height:1.6;color:var(--ink2);margin-top:6px}
+.ml-tag{display:inline-block;margin-top:14px;font-size:14px;font-weight:700;color:var(--brand-d);background:#eaf3fc;border-radius:99px;padding:6px 14px}
+@keyframes mlin{to{opacity:1;transform:none}}
+@keyframes mlcar{50%{border-color:transparent}}
+@media(prefers-reduced-motion:reduce){.ml-s,.ml-ok,#mail.in .ml-s,#mail.in .ml-ok{animation:none;opacity:1;transform:none}.ml-ai .tw{animation:none}}
+@media(max-width:1060px){.ml{grid-template-columns:1fr;gap:32px;margin-top:28px}.ml-app{height:500px}.ml-grid{grid-template-columns:1fr;gap:26px}.ml-p h3{font-size:22px}.ml-p p{font-size:20px}.ml-st b{font-size:20px}.ml-s{font-size:15px}}
 """,
     "pricing": """
 .pr-all{text-align:center;font-size:16px;font-weight:600;color:var(--ink);margin-top:30px}

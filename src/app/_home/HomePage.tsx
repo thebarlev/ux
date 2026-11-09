@@ -196,11 +196,15 @@ export async function HomePage({
     "@type": "FAQPage",
     inLanguage: lang,
     // the yearly saving question goes with the yearly billing it answers about
-    mainEntity: faq.filter((f) => yearly || !f.a.includes("{{PLAN_SAVE_ANSWER}}")).map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: plans ? fillPlanText(f.a, lang, plans) : f.a },
-    })),
+    // and 048's email questions with MAILING_LIVE, as on the page
+    mainEntity: faq
+      .filter((f) => yearly || !f.a.includes("{{PLAN_SAVE_ANSWER}}"))
+      .filter((f) => MAILING_LIVE || !("gate" in f && f.gate === "mailing"))
+      .map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: plans ? fillPlanText(f.a, lang, plans) : f.a },
+      })),
   }
   return (
     <>
