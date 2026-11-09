@@ -30,11 +30,7 @@ const [P, OUT] = process.argv.slice(2); const K = process.env.VERCEL_BYPASS;
     await pg.evaluate(() => { const d = [...document.querySelectorAll('#faq details')]; d.forEach(x => x.open = false); const i = d.findIndex(x => /דומיין|domain/.test(x.querySelector('summary').textContent)); d[i - 2].open = true; d[i - 1].open = true });
     await faq.scrollIntoViewIfNeeded(); await pg.waitForTimeout(400);
     await faq.screenshot({ path: `${OUT}/faq-home-${lang}-${w}.png` });
-    if (w === 1440) {
-      await pg.goto(P + (lang === 'en' ? '/en/faq' : '/faq'), { waitUntil: 'networkidle' });
-      await pg.evaluate(() => { const d = [...document.querySelectorAll('details')]; const i = d.findIndex(x => /דומיין שלי|to my domain/.test(x.querySelector('summary').textContent)); d[i - 2].open = true; d[i - 1].open = true; d[i - 2].scrollIntoView({ block: 'center' }) });
-      await pg.waitForTimeout(400); await pg.addStyleTag({ content: '#hdr{visibility:hidden!important}' }); await pg.screenshot({ path: `${OUT}/faq-page-${lang}-1440.png` });
-    }
+    // the FAQ page's email topic: faq-topic.cjs (054)
     await ctx.close();
   }
   await b.close(); console.log('FAILS', fails);
