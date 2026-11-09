@@ -25,10 +25,17 @@ for p in ["/", "/pricing"]: ok(st(B + p, {"cookie": "lang_pref=en", "accept-lang
 for p in ["/en", "/en/pricing"]: ok(st(B + p, {"cookie": "lang_pref=he", "accept-language": "he-IL"})[0] == 200, f"{p} with lang_pref=he: 200, no redirect")
 def vis(h):
     h = re.sub(r"<(script|style)\b.*?</\1>", " ", h, flags=re.S); h = re.sub(r"<!--.*?-->", " ", h, flags=re.S); return " ".join(re.sub(r"<[^>]+>", " ", h).split())
+# MAILING_LIVE: on in production since 054 (MAILING=off checks a build without it)
+import os, json
+ON = os.environ.get("MAILING", "on") == "on"
+WANT = {"he": {"": "דיוור ואוטומציות. בלי עוד מערכת.", "/features": "לקוחות חדשים, גם כשאתם עסוקים", "/faq": "באילו חבילות יש דיוור ואוטומציות?"},
+        "en": {"": "Email and automations. No extra system.", "/features": "New clients, even when", "/faq": "Which plans include email and automations?"}}
 for lang in ["he", "en"]:
     pre = "" if lang == "he" else "/en"
-    for p in ["", "/features"]:
+    for p, w in WANT[lang].items():
         _, _, h = st(B + (pre + p or "/")); t = vis(h)
-        mw = [w for w in (["רשימת תפוצה", "לקוחות חדשים, גם כשאתם עסוקים"] if lang == "he" else ["mailing list", "New clients, even when"]) if w in t]
-        ok(not mw and "{{" not in t, f"{lang} {pre + p or '/'}: MAILING_LIVE parts off {mw}")
+        qs = [q["name"] for x in re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S) for d in [json.loads(x)] if d.get("@type") == "FAQPage" for q in d["mainEntity"]]
+        n = {"": (11, 9), "/faq": (22, 18)}.get(p)
+        good = (w in t) == ON and "{{" not in t and "<!--mailing" not in h and (n is None or len(qs) == n[0 if ON else 1])
+        ok(good, f"{lang} {pre + p or '/'}: MAILING_LIVE parts {'on' if ON else 'off'} (FAQ JSON-LD {len(qs)})")
 print("FAILS:", len(fails))
