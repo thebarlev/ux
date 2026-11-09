@@ -905,7 +905,7 @@ LANG_CSS = """
 {root} .ls-i:not([aria-current]) small{margin-inline-end:28px}
 {root} .ls-i[aria-current]{background:var(--tint,#eef6fc)}
 @media(max-width:1060px){{root} .ls{padding:8px 9px;font-size:14px}{root} .ls-l{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}{root} .ls-s{display:inline}
-{root} header.ls-open{backdrop-filter:none;-webkit-backdrop-filter:none;background:#fff}
+{root} header.ls-open{backdrop-filter:none;background:#fff}
 {root} .ls-bg{position:fixed;inset:0;background:rgba(11,18,32,.45);z-index:1000}
 {root} .ls-m{position:fixed;top:auto;inset-inline:0;bottom:0;min-width:0;border-radius:20px 20px 0 0;border:0;padding:10px 16px calc(18px + env(safe-area-inset-bottom));z-index:1001;box-shadow:0 -10px 40px rgba(11,18,32,.18)}
 {root} .ls-t{position:static;width:auto;height:auto;clip:auto;padding:10px 12px 8px;font-size:16px;font-weight:700}
