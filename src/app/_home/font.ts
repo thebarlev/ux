@@ -1,10 +1,4 @@
-import { Heebo } from "next/font/google"
-
-// Heebo, Hebrew + Latin, only the weights the design uses; next/font preloads
-// them and serves them with font-display: swap.
-export const heebo = Heebo({
-  subsets: ["hebrew", "latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-  variable: "--font-heebo",
-})
+// Heebo, Hebrew + Latin, weights 400 to 800, with font-display: swap.
+// 052: hosted with the site (src/app/fonts.css, preloaded by src/lib/fonts.ts);
+// .variable is the class that sets --font-heebo, as next/font's was.
+export const heebo = { variable: "ux-font-heebo" } as const

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Script from "next/script";
-import { Assistant } from "next/font/google";
+import { ASSISTANT_VARIABLE, preloadFonts } from "@/lib/fonts";
 import { JsonLd, ORGANIZATION_SCHEMA, WEBSITE_SCHEMA } from "@/components/JsonLd";
 import { DeferredScripts } from "@/components/DeferredScripts";
 import { SiteHeader } from "@/app/_components/layout/SiteHeader";
@@ -11,6 +11,7 @@ import { TrackingProvider } from "@/app/_components/tracking/TrackingProvider";
 import { MetaPixelRouteTracker } from "@/app/_components/tracking/MetaPixelRouteTracker";
 import { getPixelId, metaPixelBootstrapScript } from "@/lib/analytics/meta-pixel";
 import { Suspense } from "react";
+import "../fonts.css";
 import "../globals.css";
 import "../mobile-type.css";
 import "../text-links.css";
@@ -22,13 +23,6 @@ const LeadPopupHost = dynamic(
 const WhatsAppButton = dynamic(
   () => import("@/app/_components/WhatsAppButton").then((m) => m.WhatsAppButton),
 )
-
-const assistant = Assistant({
-  variable: "--font-assistant",
-  subsets: ["hebrew", "latin"],
-  weight: ["400", "600", "700"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),
@@ -57,10 +51,11 @@ export default function RootLayoutEn({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  preloadFonts();
   const metaPixelId = getPixelId();
 
   return (
-    <html lang="en" dir="ltr" className={assistant.variable}>
+    <html lang="en" dir="ltr" className={ASSISTANT_VARIABLE}>
       <head>
         {/* No preconnect to Google, Meta or PostHog: even a warmed connection
             reaches them before the visitor has chosen in the cookie banner (tbl-031). */}

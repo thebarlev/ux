@@ -13,6 +13,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // 052: Node check scripts run by hand against the site, not site code
+    "scripts/checks/**",
   ]),
 ]);
 
