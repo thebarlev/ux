@@ -2,7 +2,8 @@ import type { Metadata } from "next"
 
 import { HomePage } from "@/app/_home/HomePage"
 import { LEGAL } from "@/app/_home/legal/account-deletion.he"
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+import { twinPaths } from "@/lib/i18n/twins"
+import { localeAlternates } from "@/lib/seo/hreflang"
 
 import "@/app/_home/text.he.css"
 
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
   description: "מידע על בקשת מחיקת חשבון בשירות Uxellent, כולל דרכי פנייה, זמני טיפול ושמירת מידע לפי דין.",
   alternates: {
     canonical: "/account-deletion",
-    languages: heEnAlternateLanguages("/account-deletion", "/en/account-deletion"),
+    languages: localeAlternates(twinPaths("/account-deletion")),
   },
 }
 

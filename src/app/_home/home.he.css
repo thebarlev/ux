@@ -845,6 +845,36 @@
 .uxh-he .lang a{padding-inline:0!important;margin:0!important}
 .uxh-he .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
 
+.uxh-he .ls{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:99px;font-weight:600;font-size:15px;line-height:1;color:var(--ink);background:none;border:0;font-family:inherit;cursor:pointer;white-space:nowrap}
+.uxh-he .ls:hover,.uxh-he .ls[aria-expanded=true]{background:#f2f4f7}
+.uxh-he .ls:focus-visible,.uxh-he .ls-i:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.uxh-he .ls-g{width:18px;height:18px;flex:none}
+.uxh-he .ls-c{width:15px;height:15px;flex:none;transition:transform .2s}
+.uxh-he .ls[aria-expanded=true] .ls-c{transform:rotate(180deg)}
+.uxh-he .ls-s{display:none}
+.uxh-he .ls-b{position:relative}
+.uxh-he .ls-m{position:absolute;top:calc(100% + 8px);inset-inline-end:0;min-width:230px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 40px rgba(11,18,32,.14);padding:8px;z-index:60;display:flex;flex-direction:column}
+.uxh-he .ls-m[hidden],.uxh-he .ls-bg[hidden]{display:none!important}
+.uxh-he .ls-t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.uxh-he .ls-i{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;color:var(--ink);font-weight:600;font-size:15px}
+.uxh-he .ls-i:hover{background:#f2f4f7}
+.uxh-he .ls-i small{margin-inline-start:auto;color:var(--ink2);font-size:12px;font-weight:600}
+.uxh-he .ls-i .ls-k{width:18px;height:18px;color:var(--brand);flex:none}
+.uxh-he .ls-i:not([aria-current]) small{margin-inline-end:28px}
+.uxh-he .ls-i[aria-current]{background:var(--tint,#eef6fc)}
+@media(max-width:1060px){.uxh-he .ls{padding:8px 9px;font-size:14px}.uxh-he .ls-l{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.uxh-he .ls-s{display:inline}
+.uxh-he header.ls-open{backdrop-filter:none;background:#fff}
+.uxh-he .ls-bg{position:fixed;inset:0;background:rgba(11,18,32,.45);z-index:1000}
+.uxh-he .ls-m{position:fixed;top:auto;inset-inline:0;bottom:0;min-width:0;border-radius:20px 20px 0 0;border:0;padding:10px 16px calc(18px + env(safe-area-inset-bottom));z-index:1001;box-shadow:0 -10px 40px rgba(11,18,32,.18)}
+.uxh-he .ls-t{position:static;width:auto;height:auto;clip:auto;padding:10px 12px 8px;font-size:16px;font-weight:700}
+.uxh-he .ls-i{padding:14px 12px;font-size:16px}}
+@media(max-width:360px){.uxh-he .ls-s{display:none}.uxh-he .ls{padding:8px}}
+/* with the switch in, the main button stays on one line down to 320px: a smaller logo and tighter gaps, as in uxb-033 */
+.uxh-he #hdr .btn-p{white-space:nowrap}
+@media(max-width:420px){.uxh-he #hdr .hd{gap:10px}.uxh-he #hdr .acts{gap:4px}.uxh-he #hdr .logo-svg{height:22px}}
+@media(max-width:360px){.uxh-he #hdr .logo-svg{height:20px}.uxh-he #hdr .btn-p{padding:9px 12px}}
+@media (prefers-reduced-motion:reduce){.uxh-he .ls-c{transition:none}}
+
 /* ---- mobile: one container level (tbl-025b) ---- */
 @media(max-width:1060px){
  .uxh-he .hw-stage{background:none;border-radius:0}.uxh-he .hw-stage::before{display:none}

@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 
 import { HomePage } from "@/app/_home/HomePage"
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+import { twinPaths } from "@/lib/i18n/twins"
+import { localeAlternates } from "@/lib/seo/hreflang"
 
 import "@/app/_home/blog.he.css"
 
@@ -10,7 +11,7 @@ const DESCRIPTION = "מאמרים קצרים על אתרים, קידום ו-AI, 
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/blog", languages: heEnAlternateLanguages("/blog", "/en/blog") },
+  alternates: { canonical: "/blog", languages: localeAlternates(twinPaths("/blog")) },
   title: TITLE,
   description: DESCRIPTION,
   openGraph: { title: TITLE, description: DESCRIPTION, url: "https://uxellent.com/blog", siteName: "Uxellent", locale: "he_IL", type: "website" },

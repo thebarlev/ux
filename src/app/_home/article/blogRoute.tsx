@@ -8,7 +8,8 @@ import { articleTopic, findArticle, isGuide, readTime, relatedCards } from "@/ap
 import type { Lang } from "@/app/_home/chrome"
 import { JsonLd, articleSchema } from "@/components/JsonLd"
 import { extractH2Headings } from "@/lib/redesign/extractHeadings"
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+import { LOCALES, localePath } from "@/lib/i18n/locales"
+import { localeAlternates } from "@/lib/seo/hreflang"
 
 /**
  * /blog/<slug> and /en/blog/<slug> (tbl-028): every card on the blog index,
@@ -26,14 +27,13 @@ export function articleMetadata(slug: string, lang: Lang): Metadata {
   const post = findArticle(slug, lang)
   if (!post) return {}
   const title = (post.metaTitle as string | undefined) ?? post.title
-  const hasTwin = Boolean(findArticle(slug, lang === "en" ? "he" : "en"))
   return {
     metadataBase: new URL(SITE),
     title: { absolute: title },
     description: post.description ?? undefined,
     alternates: {
       canonical: path(slug, lang),
-      ...(hasTwin ? { languages: heEnAlternateLanguages(path(slug, "he"), path(slug, "en")) } : {}),
+      languages: localeAlternates(Object.fromEntries(LOCALES.filter((l) => findArticle(slug, l.code as Lang)).map((l) => [l.code, localePath(`/blog/${slug}`, l.code)]))),
     },
     openGraph: { title, description: post.description ?? undefined, url: SITE + path(slug, lang), type: "article", locale: lang === "en" ? "en_US" : "he_IL" },
   }

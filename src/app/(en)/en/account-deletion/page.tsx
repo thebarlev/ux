@@ -2,7 +2,8 @@ import type { Metadata } from "next"
 
 import { HomePage } from "@/app/_home/HomePage"
 import { LEGAL } from "@/app/_home/legal/account-deletion.en"
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+import { twinPaths } from "@/lib/i18n/twins"
+import { localeAlternates } from "@/lib/seo/hreflang"
 
 import "@/app/_home/text.en.css"
 
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
   description: "Learn how to request account deletion from the Uxellent service, including support channels and data-retention notes.",
   alternates: {
     canonical: "/en/account-deletion",
-    languages: heEnAlternateLanguages("/account-deletion", "/en/account-deletion"),
+    languages: localeAlternates(twinPaths("/account-deletion")),
   },
 }
 

@@ -1,4 +1,4 @@
-import { isEnglishPath } from "@/lib/i18n/counterpartPath"
+import { COUNTRY_LOCALE, localeByCode, localeOf } from "@/lib/i18n/locales"
 import { GEO_HINT_COOKIE, LANG_PREF_COOKIE, readCookie } from "@/lib/i18n/langPrefCookie"
 
 /** Fired once the language prompt is closed without leaving the page; the
@@ -16,13 +16,17 @@ export function visitorCountry(): string | null {
   return readCookie(GEO_HINT_COOKIE)
 }
 
-/** The language to offer, or null. 050: the proxy now serves the browser's
- *  language on the first visit, so one case is left: a visitor in Israel, with
- *  no lang_pref, on an English page (an English browser), is offered Hebrew. */
-export function langToOffer(pathname: string): "he" | "en" | null {
+/** The language to offer, or null. 050: the proxy serves the browser's language
+ *  on the first visit, and gives the geo hint only on a page outside the root
+ *  language, to a browser that is not in it; 051: the country's language
+ *  (COUNTRY_LOCALE), when the site has it and the page is in another one. Today:
+ *  a visitor in Israel with an English browser, on an English page, is offered
+ *  Hebrew. */
+export function langToOffer(pathname: string): string | null {
   if (typeof document === "undefined" || pathname.startsWith("/admin")) return null
   if (readCookie(LANG_PREF_COOKIE)) return null
   const country = visitorCountry()
   if (!country) return null
-  return isEnglishPath(pathname) && country === "IL" ? "he" : null
+  const offer = localeByCode(COUNTRY_LOCALE[country])
+  return offer && offer.code !== localeOf(pathname).code ? offer.code : null
 }

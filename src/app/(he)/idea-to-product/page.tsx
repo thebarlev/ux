@@ -21,7 +21,8 @@ import { GrowthGuidesCard } from "@/components/marketing/GrowthGuidesCard"
 import { InlineLeadForm } from "@/app/_components/leads/InlineLeadForm"
 import { JsonLd, faqPageSchema } from "@/components/JsonLd"
 import { H2 } from "@/components/ui/Heading"
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+import { twinPaths } from "@/lib/i18n/twins"
+import { localeAlternates } from "@/lib/seo/hreflang"
 
 const CANONICAL = "/idea-to-product"
 
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     "מלווים יזמים, משקיעים ומייסדים בשלב הרעיון - מאפיון מוצר ומסמך דרישות, דרך עיצוב ממשק וחוויית משתמש (UI/UX), ועד פיתוח אפליקציות, בניית אתרים או מערכת מלאה. תהליך ברור, ביצוע מקצועי, פחות בלבול ופחות כסף מבוזר.",
   alternates: {
     canonical: CANONICAL,
-    languages: heEnAlternateLanguages("/idea-to-product", "/en/idea-to-product"),
+    languages: localeAlternates(twinPaths("/idea-to-product")),
   },
   openGraph: {
     title: "פיתוח רעיון לאפליקציה או אתר | אפיון מוצר, UI/UX ופיתוח מלא",

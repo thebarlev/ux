@@ -5,6 +5,7 @@ import { CHROME_FOOT_HE, CHROME_HEAD_HE } from "./chrome-markup.he"
 import { crumbHtml, crumbLd, markCurrent, type Crumb, type Lang } from "./chrome"
 import { heebo } from "./font"
 import { HomeBehaviors } from "./HomeBehaviors"
+import { fillLangSwitch } from "./lang-switch"
 
 import "./chrome.he.css"
 import "./chrome.en.css"
@@ -30,16 +31,19 @@ export function SiteChrome({
   current?: string
   /** after "Home"; none on pages without breadcrumbs (404) */
   crumbs?: readonly Crumb[]
-  /** the language switch; defaults to the two home pages */
-  paths?: { he: string; en: string }
+  /** the language switch: this page in each language it exists in; a language
+   *  missing here links to its home page (lang-switch.ts) */
+  paths?: Readonly<Record<string, string>>
   children: ReactNode
 }) {
   const root = `uxn-${lang}`
   const attrs = { className: `${root} ${heebo.variable}`, lang, dir: lang === "he" ? "rtl" : "ltr", style: { display: "contents" } } as const
-  const foot = SOURCE[lang].foot.replace("{{HE_PATH}}", paths?.he ?? "/").replace("{{EN_PATH}}", paths?.en ?? "/en")
+  // the switch goes in after the current page is marked, so its links keep their own aria-current
+  const head = fillLangSwitch(markCurrent(SOURCE[lang].head, current), lang, paths ?? {})
+  const foot = fillLangSwitch(markCurrent(SOURCE[lang].foot, current), lang, paths ?? {})
   return (
     <>
-      <div id={root} {...attrs} dangerouslySetInnerHTML={{ __html: markCurrent(SOURCE[lang].head, current) }} />
+      <div id={root} {...attrs} dangerouslySetInnerHTML={{ __html: head }} />
       {crumbs?.length && current ? (
         <>
           <div {...attrs}>
@@ -49,7 +53,7 @@ export function SiteChrome({
         </>
       ) : null}
       {children}
-      <div {...attrs} dangerouslySetInnerHTML={{ __html: markCurrent(foot, current) }} />
+      <div {...attrs} dangerouslySetInnerHTML={{ __html: foot }} />
       <HomeBehaviors lang={lang} rootId={root} />
     </>
   )

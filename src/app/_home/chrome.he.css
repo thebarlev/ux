@@ -109,15 +109,9 @@
 @keyframes bqfill{to{stroke-dashoffset:0}}
 @keyframes bqok{to{opacity:1;transform:none}}
 .uxn-he .copy{align-items:center}
-.uxn-he .lang{display:flex;gap:18px;font-size:14px}
-.uxn-he .lang a{color:var(--ink2);text-underline-offset:4px}
-.uxn-he .lang a:hover{color:var(--ink);text-decoration:underline}
-.uxn-he .lang a[aria-current]{color:var(--ink);font-weight:700}
 @media(max-width:1060px){.uxn-he .ft-pts li{align-items:flex-start}
 .uxn-he .ft-pts li::before{margin-top:.62em}}
 .uxn-he footer{padding-bottom:28px!important}
-.uxn-he .lang{gap:24px!important}
-.uxn-he .lang a{padding-inline:0!important}
 .uxn-he #hdr nav a[aria-current="page"]{color:var(--ink);font-weight:700;position:relative}
 .uxn-he #hdr nav a[aria-current="page"]::after{content:"";position:absolute;inset-inline:14px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,#0f72b3,#2a5fcf)}
 .uxn-he .menu a.m[aria-current="page"]{color:var(--brand-d);font-weight:700}
@@ -158,6 +152,38 @@
 .uxn-he .m-acts a.p{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;border-color:transparent!important;color:#fff!important}
 .uxn-he .m-acts a.p:hover{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important}
 .uxn-he footer{padding-bottom:28px!important}
-.uxn-he .lang{gap:24px!important}
-.uxn-he .lang a{padding-inline:0!important;margin:0!important}
+.uxn-he .ls{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:99px;font-weight:600;font-size:15px;line-height:1;color:var(--ink);background:none;border:0;font-family:inherit;cursor:pointer;white-space:nowrap}
+.uxn-he .ls:hover,.uxn-he .ls[aria-expanded=true]{background:#f2f4f7}
+.uxn-he .ls:focus-visible,.uxn-he .ls-i:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.uxn-he .ls-g{width:18px;height:18px;flex:none}
+.uxn-he .ls-c{width:15px;height:15px;flex:none;transition:transform .2s}
+.uxn-he .ls[aria-expanded=true] .ls-c{transform:rotate(180deg)}
+.uxn-he .ls-s{display:none}
+.uxn-he .ls-b{position:relative}
+.uxn-he .ls-m{position:absolute;top:calc(100% + 8px);inset-inline-end:0;min-width:230px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 40px rgba(11,18,32,.14);padding:8px;z-index:60;display:flex;flex-direction:column}
+.uxn-he .ls-m[hidden],.uxn-he .ls-bg[hidden]{display:none!important}
+.uxn-he .ls-t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.uxn-he .ls-i{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;color:var(--ink);font-weight:600;font-size:15px}
+.uxn-he .ls-i:hover{background:#f2f4f7}
+.uxn-he .ls-i small{margin-inline-start:auto;color:var(--ink2);font-size:12px;font-weight:600}
+.uxn-he .ls-i .ls-k{width:18px;height:18px;color:var(--brand);flex:none}
+.uxn-he .ls-i:not([aria-current]) small{margin-inline-end:28px}
+.uxn-he .ls-i[aria-current]{background:var(--tint,#eef6fc)}
+@media(max-width:1060px){.uxn-he .ls{padding:8px 9px;font-size:14px}
+.uxn-he .ls-l{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.uxn-he .ls-s{display:inline}
+.uxn-he header.ls-open{backdrop-filter:none;background:#fff}
+.uxn-he .ls-bg{position:fixed;inset:0;background:rgba(11,18,32,.45);z-index:1000}
+.uxn-he .ls-m{position:fixed;top:auto;inset-inline:0;bottom:0;min-width:0;border-radius:20px 20px 0 0;border:0;padding:10px 16px calc(18px + env(safe-area-inset-bottom));z-index:1001;box-shadow:0 -10px 40px rgba(11,18,32,.18)}
+.uxn-he .ls-t{position:static;width:auto;height:auto;clip:auto;padding:10px 12px 8px;font-size:16px;font-weight:700}
+.uxn-he .ls-i{padding:14px 12px;font-size:16px}}
+@media(max-width:360px){.uxn-he .ls-s{display:none}
+.uxn-he .ls{padding:8px}}
+.uxn-he #hdr .btn-p{white-space:nowrap}
+@media(max-width:420px){.uxn-he #hdr .hd{gap:10px}
+.uxn-he #hdr .acts{gap:4px}
+.uxn-he #hdr .logo-svg{height:22px}}
+@media(max-width:360px){.uxn-he #hdr .logo-svg{height:20px}
+.uxn-he #hdr .btn-p{padding:9px 12px}}
+@media (prefers-reduced-motion:reduce){.uxn-he .ls-c{transition:none}}
 .uxn-he .uxn-crumbs{padding-top:clamp(16px,2vw,40px)}.uxn-he .uxn-crumbs .crumb{margin:0}

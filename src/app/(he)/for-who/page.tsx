@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 
 import { HomePage } from "@/app/_home/HomePage"
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+import { twinPaths } from "@/lib/i18n/twins"
+import { localeAlternates } from "@/lib/seo/hreflang"
 
 import "@/app/_home/who.he.css"
 
@@ -10,7 +11,7 @@ const DESCRIPTION = "אתר תדמית, דף נחיתה או תיק עבודות
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/for-who", languages: heEnAlternateLanguages("/for-who", "/en/for-who") },
+  alternates: { canonical: "/for-who", languages: localeAlternates(twinPaths("/for-who")) },
   title: { absolute: TITLE },
   description: DESCRIPTION,
   openGraph: { title: TITLE, description: DESCRIPTION, url: "https://uxellent.com/for-who", siteName: "UXellent", locale: "he_IL", type: "website" },
