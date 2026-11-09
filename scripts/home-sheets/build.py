@@ -875,7 +875,7 @@ SITE040_CSS = {
 .ml-fl{display:grid;gap:8px}
 .ml-s{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:14px;padding:11px 14px;font-size:14.5px;opacity:0;transform:translateY(8px)}
 #mail.in .ml-s{animation:mlin .5s cubic-bezier(.16,1,.3,1) var(--d) forwards}
-.ml-s .n{flex:none;width:26px;height:26px;border-radius:8px;background:#e6f3fc;color:var(--brand-d);display:grid;place-items:center;font-weight:800;font-size:13px}
+.ml-s .n{margin-inline-start:0;flex:none;width:26px;height:26px;border-radius:8px;background:#e6f3fc;color:var(--brand-d);display:grid;place-items:center;font-weight:800;font-size:13px}
 .ml-s b{font-weight:700}
 .ml-s span{color:var(--ink2);font-size:13px;margin-inline-start:auto;white-space:nowrap}
 .ml-ok{margin-top:auto;border-top:1px solid var(--line);padding-top:14px;font-size:14.5px;font-weight:600;color:#1a7f4b;opacity:0}
