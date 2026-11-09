@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 
 import { HomePage } from "@/app/_home/HomePage"
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+import { twinPaths } from "@/lib/i18n/twins"
+import { localeAlternates } from "@/lib/seo/hreflang"
 
 import "@/app/_home/contact.en.css"
 
@@ -10,7 +11,7 @@ const DESCRIPTION = "A question about your site, our plans, or something that is
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),
-  alternates: { canonical: "/en/contact", languages: heEnAlternateLanguages("/contact", "/en/contact") },
+  alternates: { canonical: "/en/contact", languages: localeAlternates(twinPaths("/contact")) },
   title: TITLE,
   description: DESCRIPTION,
   openGraph: {

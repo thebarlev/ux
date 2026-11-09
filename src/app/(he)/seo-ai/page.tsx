@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { SiteFooter } from "@/app/_components/home/SiteFooter"
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+import { twinPaths } from "@/lib/i18n/twins"
+import { localeAlternates } from "@/lib/seo/hreflang"
 import { LogoRow } from "@/app/_components/home/LogoRow"
 import { PackagesSection } from "@/app/_components/home/PackagesSection"
 import type { PricePlan } from "@/app/_components/home/PriceSection"
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   alternates: {
     ...seoAiConfig.metadata.alternates,
     canonical: "/seo-ai",
-    languages: heEnAlternateLanguages("/seo-ai", "/en/seo-ai"),
+    languages: localeAlternates(twinPaths("/seo-ai")),
   },
 }
 

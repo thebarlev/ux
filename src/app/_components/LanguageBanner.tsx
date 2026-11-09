@@ -1,9 +1,9 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 import { usePathname } from "next/navigation"
 import { heebo } from "@/app/_home/font"
-import { counterpartPath, isEnglishPath } from "@/lib/i18n/counterpartPath"
+import { LOCALES, localeByCode, localeOf, localePath, basePath } from "@/lib/i18n/locales"
 import { setLangPrefCookie } from "@/lib/i18n/langPrefCookie"
 import { LANG_DONE_EVENT, langToOffer } from "@/lib/i18n/langPrompt"
 
@@ -48,11 +48,14 @@ function FlagIL() {
   )
 }
 
+// a language's flag in the prompt, when there is one
+const FLAGS: Record<string, ReactNode> = { en: <FlagUS />, he: <FlagIL /> }
+
 /** The same page in the other language: the page's own switch link when it
  *  has one (article slugs differ between languages), else the path mapping. */
-function hrefFor(lang: "he" | "en", pathname: string): string {
-  const own = document.querySelector<HTMLAnchorElement>(`nav.lang a[hreflang="${lang}"]`)
-  return own?.getAttribute("href") || counterpartPath(pathname)
+function hrefFor(lang: string, pathname: string): string {
+  const own = document.querySelector<HTMLAnchorElement>(`a[data-ls][hreflang="${lang}"]`)
+  return own?.getAttribute("href") || localePath(basePath(pathname), lang)
 }
 
 /** 039: the language prompt. 050: only a visitor in Israel on an English page,
@@ -64,16 +67,17 @@ function hrefFor(lang: "he" | "en", pathname: string): string {
  *  hint. Also records lang_pref when the footer switch is clicked. */
 export function LanguageBanner() {
   const pathname = usePathname() ?? "/"
-  const current = isEnglishPath(pathname) ? "en" : "he"
-  const [offer, setOffer] = useState<"he" | "en" | null>(null)
+  const current = localeOf(pathname).code
+  const [offer, setOffer] = useState<string | null>(null)
   const box = useRef<HTMLDivElement>(null)
 
   // the sheet pages' language switch is plain markup (nav.lang a[hreflang])
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
-      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>("nav.lang a[hreflang]")
+      // every language switch link (header, menu, footer: lang-switch.ts)
+      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>("a[data-ls][hreflang]")
       const target = a?.getAttribute("hreflang")
-      if (target === "he" || target === "en") setLangPrefCookie(target)
+      if (target && localeByCode(target)) setLangPrefCookie(target)
     }
     // auxclick: a middle-click opens the other language in a new tab, which must
     // not be sent back by the proxy (050)
@@ -124,7 +128,7 @@ export function LanguageBanner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offer])
 
-  function choose(lang: "he" | "en") {
+  function choose(lang: string) {
     setLangPrefCookie(lang)
     if (lang !== current) {
       window.location.assign(hrefFor(lang, pathname))
@@ -137,7 +141,7 @@ export function LanguageBanner() {
   if (!offer) return null
 
   // the language offered is the main button (blue); the current one is second
-  const buttons = offer === "en" ? (["en", "he"] as const) : (["he", "en"] as const)
+  const buttons = [offer, current].map((c) => LOCALES.find((l) => l.code === c)).filter((l) => l !== undefined)
   return (
     <div
       className={`uxl ${heebo.variable}`}
@@ -150,17 +154,17 @@ export function LanguageBanner() {
           <span lang="en">Choose your language</span> · <span lang="he" dir="rtl">בחרו שפה</span>
         </b>
         <div className="uxl-btns">
-          {buttons.map((lang) => (
+          {buttons.map((l) => (
             <button
-              key={lang}
+              key={l.code}
               type="button"
-              lang={lang}
-              dir={lang === "he" ? "rtl" : "ltr"}
-              className={`uxl-b${lang === offer ? " uxl-p" : ""}`}
-              onClick={() => choose(lang)}
+              lang={l.code}
+              dir={l.dir}
+              className={`uxl-b${l.code === offer ? " uxl-p" : ""}`}
+              onClick={() => choose(l.code)}
             >
-              <span className="uxl-f">{lang === "en" ? <FlagUS /> : <FlagIL />}</span>
-              {lang === "en" ? "English" : "עברית"}
+              {FLAGS[l.code] && <span className="uxl-f">{FLAGS[l.code]}</span>}
+              {l.name}
             </button>
           ))}
         </div>

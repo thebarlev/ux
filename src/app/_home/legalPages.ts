@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
-import { heEnAlternateLanguages } from "@/lib/seo/hreflang"
+import { twinPaths } from "@/lib/i18n/twins"
+import { localeAlternates } from "@/lib/seo/hreflang"
 
 import type { LegalPage } from "./HomePage"
 
@@ -40,7 +41,7 @@ export function legalMetadata(page: LegalPage, lang: "he" | "en"): Metadata {
     metadataBase: new URL("https://uxellent.com"),
     title: { absolute: title },
     description,
-    alternates: { canonical: lang === "en" ? en : he, languages: heEnAlternateLanguages(he, en) },
+    alternates: { canonical: lang === "en" ? en : he, languages: localeAlternates(twinPaths(he)) },
     openGraph: { title, description, url: `https://uxellent.com${lang === "en" ? en : he}`, siteName: "UXellent", locale: lang === "en" ? "en_US" : "he_IL", type: "website" },
     robots: { index: true, follow: true },
   }

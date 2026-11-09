@@ -1,4 +1,6 @@
 import type { ReactNode } from "react"
+import { fillLangSwitch } from "../lang-switch"
+import { twinPaths } from "@/lib/i18n/twins"
 
 import { ARTICLE_HTML_EN, ARTICLE_PARTS_EN } from "../article-markup.en"
 import { ARTICLE_HTML_HE, ARTICLE_PARTS_HE } from "../article-markup.he"
@@ -94,9 +96,8 @@ export function ArticlePage({
   const [pre, blue] = titleParts(title)
   const rootId = `uxa-${lang}`
 
-  const html = markCurrent(SOURCE[lang].html, current, blog)
-    .replace("{{HE_PATH}}", `/blog/${slug}`)
-    .replace("{{EN_PATH}}", `/en/blog/${slug}`)
+  // 051: the language switch goes to this article in each language it is written in
+  const html = fillLangSwitch(markCurrent(SOURCE[lang].html, current, blog), lang, twinPaths(`/blog/${slug}`))
     .replace("{{REL_H}}", k.rel)
     .replace("{{ALL_HREF}}", blog + k.hash)
     .replace("{{ALL_LABEL}}", k.all)

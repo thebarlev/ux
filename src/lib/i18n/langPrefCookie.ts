@@ -7,7 +7,7 @@ export const GEO_HINT_COOKIE = "geo_country"
 
 const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365
 
-export function setLangPrefCookie(locale: "he" | "en"): void {
+export function setLangPrefCookie(locale: string): void {
   if (typeof document === "undefined") return
   document.cookie = `${LANG_PREF_COOKIE}=${locale}; path=/; max-age=${ONE_YEAR_SECONDS}; samesite=lax`
 }

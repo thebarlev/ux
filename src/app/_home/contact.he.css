@@ -1003,6 +1003,36 @@
 .uxc-he .lang a{padding-inline:0!important;margin:0!important}
 .uxc-he .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
 
+.uxc-he .ls{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:99px;font-weight:600;font-size:15px;line-height:1;color:var(--ink);background:none;border:0;font-family:inherit;cursor:pointer;white-space:nowrap}
+.uxc-he .ls:hover,.uxc-he .ls[aria-expanded=true]{background:#f2f4f7}
+.uxc-he .ls:focus-visible,.uxc-he .ls-i:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.uxc-he .ls-g{width:18px;height:18px;flex:none}
+.uxc-he .ls-c{width:15px;height:15px;flex:none;transition:transform .2s}
+.uxc-he .ls[aria-expanded=true] .ls-c{transform:rotate(180deg)}
+.uxc-he .ls-s{display:none}
+.uxc-he .ls-b{position:relative}
+.uxc-he .ls-m{position:absolute;top:calc(100% + 8px);inset-inline-end:0;min-width:230px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 40px rgba(11,18,32,.14);padding:8px;z-index:60;display:flex;flex-direction:column}
+.uxc-he .ls-m[hidden],.uxc-he .ls-bg[hidden]{display:none!important}
+.uxc-he .ls-t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.uxc-he .ls-i{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;color:var(--ink);font-weight:600;font-size:15px}
+.uxc-he .ls-i:hover{background:#f2f4f7}
+.uxc-he .ls-i small{margin-inline-start:auto;color:var(--ink2);font-size:12px;font-weight:600}
+.uxc-he .ls-i .ls-k{width:18px;height:18px;color:var(--brand);flex:none}
+.uxc-he .ls-i:not([aria-current]) small{margin-inline-end:28px}
+.uxc-he .ls-i[aria-current]{background:var(--tint,#eef6fc)}
+@media(max-width:1060px){.uxc-he .ls{padding:8px 9px;font-size:14px}.uxc-he .ls-l{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.uxc-he .ls-s{display:inline}
+.uxc-he header.ls-open{backdrop-filter:none;-webkit-backdrop-filter:none;background:#fff}
+.uxc-he .ls-bg{position:fixed;inset:0;background:rgba(11,18,32,.45);z-index:1000}
+.uxc-he .ls-m{position:fixed;top:auto;inset-inline:0;bottom:0;min-width:0;border-radius:20px 20px 0 0;border:0;padding:10px 16px calc(18px + env(safe-area-inset-bottom));z-index:1001;box-shadow:0 -10px 40px rgba(11,18,32,.18)}
+.uxc-he .ls-t{position:static;width:auto;height:auto;clip:auto;padding:10px 12px 8px;font-size:16px;font-weight:700}
+.uxc-he .ls-i{padding:14px 12px;font-size:16px}}
+@media(max-width:360px){.uxc-he .ls-s{display:none}.uxc-he .ls{padding:8px}}
+/* with the switch in, the main button stays on one line down to 320px: a smaller logo and tighter gaps, as in uxb-033 */
+.uxc-he #hdr .btn-p{white-space:nowrap}
+@media(max-width:420px){.uxc-he #hdr .hd{gap:10px}.uxc-he #hdr .acts{gap:4px}.uxc-he #hdr .logo-svg{height:22px}}
+@media(max-width:360px){.uxc-he #hdr .logo-svg{height:20px}.uxc-he #hdr .btn-p{padding:9px 12px}}
+@media (prefers-reduced-motion:reduce){.uxc-he .ls-c{transition:none}}
+
 /* ---- contact form (tbl-022) ---- */
 .uxc-he [hidden]{display:none!important}
 .uxc-he .uxc-hp{position:absolute!important;inset-inline-start:-10000px;width:1px;height:1px;overflow:hidden}

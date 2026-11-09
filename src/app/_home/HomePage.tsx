@@ -2,6 +2,8 @@ import { articleCards, guideCards, type Card } from "./blog-data"
 import { crumbHtml, crumbLd, fill, markCurrent, type Crumb } from "./chrome"
 import { heebo } from "./font"
 import { HomeBehaviors } from "./HomeBehaviors"
+import { fillLangSwitch } from "./lang-switch"
+import { twinPaths } from "@/lib/i18n/twins"
 import { A11Y_COPY } from "./home.config"
 import { fillGates, fillPlans, fillPlanText, hasYearly, offersLd } from "./plan-fill"
 import { getPlans } from "@/lib/plans"
@@ -158,22 +160,28 @@ export async function HomePage({
   let html: string = SOURCE[page][lang].html
   let current: string | undefined
   let crumbs: Crumb[] = []
+  // 051: this page in each language it exists in, for the language switch
+  let langPaths: Record<string, string> = twinPaths("/")
   if (page === "text") {
     if (!legal || !paths) throw new Error("text page needs its text and paths")
     html = fillText(html, legal, paths)
     current = paths[lang]
     crumbs = [{ label: legal.title }]
+    langPaths = paths
   } else if (page === "legal") {
     if (!legalPage) throw new Error("legal page needs legalPage")
     html = LEGAL_HTML[lang][legalPage]
     current = `${lang === "en" ? "/en" : ""}/${legalPage}`
     crumbs = [{ label: LEGAL_LABEL[lang][legalPage] }]
+    langPaths = twinPaths(`/${legalPage}`)
   } else if (page !== "home" && page !== "nf") {
     current = PAGES[page][lang]
     crumbs = [{ label: PAGES[page].label[lang] }]
+    langPaths = twinPaths(PAGES[page].he)
     if (page === "blog") html = fillBlog(html, lang)
   }
   html = markCurrent(html, current).replace("{{CRUMB}}", current ? crumbHtml(lang, crumbs) : "")
+  html = fillLangSwitch(html, lang, langPaths)
   // tbl-034: plan prices and AI action counts, from the platform (src/lib/plans.ts);
   // 042: the yearly parts follow the data, the mailing parts MAILING_LIVE
   const gated = html.includes("<!--yearly-->")

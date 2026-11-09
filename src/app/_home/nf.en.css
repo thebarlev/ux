@@ -1178,3 +1178,33 @@
 .uxz-en .lang{gap:24px!important}
 .uxz-en .lang a{padding-inline:0!important;margin:0!important}
 .uxz-en .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
+
+.uxz-en .ls{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:99px;font-weight:600;font-size:15px;line-height:1;color:var(--ink);background:none;border:0;font-family:inherit;cursor:pointer;white-space:nowrap}
+.uxz-en .ls:hover,.uxz-en .ls[aria-expanded=true]{background:#f2f4f7}
+.uxz-en .ls:focus-visible,.uxz-en .ls-i:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.uxz-en .ls-g{width:18px;height:18px;flex:none}
+.uxz-en .ls-c{width:15px;height:15px;flex:none;transition:transform .2s}
+.uxz-en .ls[aria-expanded=true] .ls-c{transform:rotate(180deg)}
+.uxz-en .ls-s{display:none}
+.uxz-en .ls-b{position:relative}
+.uxz-en .ls-m{position:absolute;top:calc(100% + 8px);inset-inline-end:0;min-width:230px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 40px rgba(11,18,32,.14);padding:8px;z-index:60;display:flex;flex-direction:column}
+.uxz-en .ls-m[hidden],.uxz-en .ls-bg[hidden]{display:none!important}
+.uxz-en .ls-t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.uxz-en .ls-i{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;color:var(--ink);font-weight:600;font-size:15px}
+.uxz-en .ls-i:hover{background:#f2f4f7}
+.uxz-en .ls-i small{margin-inline-start:auto;color:var(--ink2);font-size:12px;font-weight:600}
+.uxz-en .ls-i .ls-k{width:18px;height:18px;color:var(--brand);flex:none}
+.uxz-en .ls-i:not([aria-current]) small{margin-inline-end:28px}
+.uxz-en .ls-i[aria-current]{background:var(--tint,#eef6fc)}
+@media(max-width:1060px){.uxz-en .ls{padding:8px 9px;font-size:14px}.uxz-en .ls-l{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.uxz-en .ls-s{display:inline}
+.uxz-en header.ls-open{backdrop-filter:none;-webkit-backdrop-filter:none;background:#fff}
+.uxz-en .ls-bg{position:fixed;inset:0;background:rgba(11,18,32,.45);z-index:1000}
+.uxz-en .ls-m{position:fixed;top:auto;inset-inline:0;bottom:0;min-width:0;border-radius:20px 20px 0 0;border:0;padding:10px 16px calc(18px + env(safe-area-inset-bottom));z-index:1001;box-shadow:0 -10px 40px rgba(11,18,32,.18)}
+.uxz-en .ls-t{position:static;width:auto;height:auto;clip:auto;padding:10px 12px 8px;font-size:16px;font-weight:700}
+.uxz-en .ls-i{padding:14px 12px;font-size:16px}}
+@media(max-width:360px){.uxz-en .ls-s{display:none}.uxz-en .ls{padding:8px}}
+/* with the switch in, the main button stays on one line down to 320px: a smaller logo and tighter gaps, as in uxb-033 */
+.uxz-en #hdr .btn-p{white-space:nowrap}
+@media(max-width:420px){.uxz-en #hdr .hd{gap:10px}.uxz-en #hdr .acts{gap:4px}.uxz-en #hdr .logo-svg{height:22px}}
+@media(max-width:360px){.uxz-en #hdr .logo-svg{height:20px}.uxz-en #hdr .btn-p{padding:9px 12px}}
+@media (prefers-reduced-motion:reduce){.uxz-en .ls-c{transition:none}}

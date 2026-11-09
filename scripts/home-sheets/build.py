@@ -443,6 +443,7 @@ def build(lang, cfg, images, page="home", legal=None):
 
     body = plan_tokens(body, lang, page)
     body = site_040(body, lang, page)
+    body = lang_slots(body)
 
     faq = [
         {"q": re.sub(r"<[^>]+>", "", q).strip(), "a": re.sub(r"<[^>]+>", "", a).strip()}
@@ -870,6 +871,53 @@ def text_markup(body, lang, cfg):
 
 # Site-wide (tbl-023), on every sheet page: the blue words in headings use the
 # button blue, and the footer's language links sit on the grid edge.
+def lang_slots(body):
+    """051: where the language switch goes (src/app/_home/lang-switch.ts fills
+    it in from src/lib/i18n/locales.ts): in the header next to the login link,
+    before the main button, and in the footer instead of the sheet's two links."""
+    body, nh = re.subn(r'(<div class="acts">\s*)(<a class="btn-g")', r"\1{{LANG_HEAD}}\n    \2", body, count=1)
+    body, nf = re.subn(r'<nav class="lang" aria-label="Language">(?:(?!</nav>).)*</nav>', "{{LANG_FOOT}}", body, count=1, flags=re.S)
+    assert (nh, nf) == (1, 1), (nh, nf)
+    return body
+
+
+# 051 (uxb-033): the language switch in the header. State A (two languages): a
+# link, globe and name; the short label up to 1060px, the globe alone up to
+# 360px. State B (three or more): a button and a menu under it, a sheet from
+# the bottom up to 1060px (the header drops its backdrop filter meanwhile, so
+# the sheet is fixed to the window, not the header).
+LANG_CSS = """
+{root} .ls{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:99px;font-weight:600;font-size:15px;line-height:1;color:var(--ink);background:none;border:0;font-family:inherit;cursor:pointer;white-space:nowrap}
+{root} .ls:hover,{root} .ls[aria-expanded=true]{background:#f2f4f7}
+{root} .ls:focus-visible,{root} .ls-i:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+{root} .ls-g{width:18px;height:18px;flex:none}
+{root} .ls-c{width:15px;height:15px;flex:none;transition:transform .2s}
+{root} .ls[aria-expanded=true] .ls-c{transform:rotate(180deg)}
+{root} .ls-s{display:none}
+{root} .ls-b{position:relative}
+{root} .ls-m{position:absolute;top:calc(100% + 8px);inset-inline-end:0;min-width:230px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 40px rgba(11,18,32,.14);padding:8px;z-index:60;display:flex;flex-direction:column}
+{root} .ls-m[hidden],{root} .ls-bg[hidden]{display:none!important}
+{root} .ls-t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+{root} .ls-i{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;color:var(--ink);font-weight:600;font-size:15px}
+{root} .ls-i:hover{background:#f2f4f7}
+{root} .ls-i small{margin-inline-start:auto;color:var(--ink2);font-size:12px;font-weight:600}
+{root} .ls-i .ls-k{width:18px;height:18px;color:var(--brand);flex:none}
+{root} .ls-i:not([aria-current]) small{margin-inline-end:28px}
+{root} .ls-i[aria-current]{background:var(--tint,#eef6fc)}
+@media(max-width:1060px){{root} .ls{padding:8px 9px;font-size:14px}{root} .ls-l{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}{root} .ls-s{display:inline}
+{root} header.ls-open{backdrop-filter:none;-webkit-backdrop-filter:none;background:#fff}
+{root} .ls-bg{position:fixed;inset:0;background:rgba(11,18,32,.45);z-index:1000}
+{root} .ls-m{position:fixed;top:auto;inset-inline:0;bottom:0;min-width:0;border-radius:20px 20px 0 0;border:0;padding:10px 16px calc(18px + env(safe-area-inset-bottom));z-index:1001;box-shadow:0 -10px 40px rgba(11,18,32,.18)}
+{root} .ls-t{position:static;width:auto;height:auto;clip:auto;padding:10px 12px 8px;font-size:16px;font-weight:700}
+{root} .ls-i{padding:14px 12px;font-size:16px}}
+@media(max-width:360px){{root} .ls-s{display:none}{root} .ls{padding:8px}}
+/* with the switch in, the main button stays on one line down to 320px: a smaller logo and tighter gaps, as in uxb-033 */
+{root} #hdr .btn-p{white-space:nowrap}
+@media(max-width:420px){{root} #hdr .hd{gap:10px}{root} #hdr .acts{gap:4px}{root} #hdr .logo-svg{height:22px}}
+@media(max-width:360px){{root} #hdr .logo-svg{height:20px}{root} #hdr .btn-p{padding:9px 12px}}
+@media (prefers-reduced-motion:reduce){{root} .ls-c{transition:none}}
+"""
+
 SITE_CSS = """
 /* ---- one blue in headings, footer edge (tbl-023) ---- */
 {root} :is(h1,h2) .bl{background:linear-gradient(90deg,var(--blue-a),var(--blue-b))!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
@@ -1606,7 +1654,9 @@ def extra_parts(body, lang, page):
 
 
 # classes the page scripts add, kept when the chrome CSS is trimmed
-JS_CLASSES = {"open", "x", "on", "in", "uxh-off", "hot", "scrolled", "crumb"}
+JS_CLASSES = {"open", "x", "on", "in", "uxh-off", "hot", "scrolled", "crumb",
+              # 051: the language switch, filled in when the page renders (lang-switch.ts)
+              "ls", "ls-g", "ls-l", "ls-s", "ls-c", "ls-k", "ls-b", "ls-bg", "ls-m", "ls-t", "ls-i", "ls-n", "ls-open"}
 
 
 def split_top(sel):
@@ -1851,6 +1901,7 @@ def finish_css(css, lang, page):
 """
     css += brand_blue_css(root)
     css += SITE_CSS.replace("{root}", root)
+    css += LANG_CSS.replace("{root}", root)
     if page == "contact":
         css += CONTACT_CSS.replace("{root}", root)
     elif page == "faq":

@@ -99,6 +99,45 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
       on(window, "keydown", (e) => { if ((e as KeyboardEvent).key === "Escape" && menu.classList.contains("open")) { setOpen(false); burger.focus() } })
     }
 
+    // -- 051: the language menu (three languages or more, lang-switch.ts): opens
+    //    under its button, or as a sheet from the bottom up to 1060px; arrows move
+    //    between the languages, Esc, the backdrop or a click outside close it, and
+    //    focus goes back to the button
+    root.querySelectorAll<HTMLElement>("[data-ls-menu]").forEach((box) => {
+      const btn = box.querySelector<HTMLButtonElement>("button.ls")
+      const list = box.querySelector<HTMLElement>(".ls-m")
+      const bg = box.querySelector<HTMLElement>(".ls-bg")
+      if (!btn || !list) return
+      const items = () => [...list.querySelectorAll<HTMLAnchorElement>(".ls-i")]
+      const setOpen = (o: boolean, back = false) => {
+        list.hidden = !o
+        if (bg) bg.hidden = !o
+        btn.setAttribute("aria-expanded", String(o))
+        hdr?.classList.toggle("ls-open", o)
+        if (o) (items().find((a) => a.hasAttribute("aria-current")) ?? items()[0])?.focus()
+        else if (back) btn.focus()
+      }
+      on(btn, "click", () => setOpen(list.hidden))
+      on(btn, "keydown", (e) => {
+        const k = (e as KeyboardEvent).key
+        if (k === "ArrowDown" || k === "ArrowUp") { e.preventDefault(); setOpen(true) }
+      })
+      on(list, "keydown", (e) => {
+        const k = (e as KeyboardEvent).key
+        const all = items()
+        const i = all.indexOf(document.activeElement as HTMLAnchorElement)
+        const go = (n: number) => { e.preventDefault(); all[(n + all.length) % all.length]?.focus() }
+        if (k === "ArrowDown") go(i + 1)
+        else if (k === "ArrowUp") go(i - 1)
+        else if (k === "Home") go(0)
+        else if (k === "End") go(all.length - 1)
+        else if (k === "Escape") { e.preventDefault(); setOpen(false, true) }
+        else if (k === "Tab") setOpen(false)
+      })
+      if (bg) on(bg, "click", () => setOpen(false, true))
+      on(window, "click", (e) => { if (!list.hidden && !box.contains(e.target as Node)) setOpen(false) })
+    })
+
     // -- contact form: check the fields, send to /api/site-contact, then thank
     const form = root.querySelector<HTMLFormElement>("[data-uxc-form]")
     if (form) {
