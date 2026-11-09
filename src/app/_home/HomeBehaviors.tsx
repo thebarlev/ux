@@ -683,16 +683,15 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
       }
     }
 
-    // -- "built right": rings fill once in view
-    const bq = root.querySelector<HTMLElement>("#bq")
-    if (bq) {
-      const io = observe(bq, (e) => {
+    // -- "built right": rings fill once in view; 048: the email account builds its sequence the same way
+    root.querySelectorAll<HTMLElement>("#bq, #mail").forEach((sec) => {
+      const io = observe(sec, (e) => {
         if (e[0].isIntersecting) {
-          bq.classList.add("in")
+          sec.classList.add("in")
           io.disconnect()
         }
       }, 0.3)
-    }
+    })
 
     // -- article charts fill once they scroll into view (CSS keeps them static with reduced motion)
     root.querySelectorAll<HTMLElement>(".ar-chart").forEach((c) => {
