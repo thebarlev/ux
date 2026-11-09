@@ -453,7 +453,7 @@ def build(lang, cfg, images, page="home", legal=None):
          **({"gate": "mailing"} if any(a <= m.start() < b for a, b in gated) else {})}
         for m in re.finditer(r"<summary>(.*?)<span class=\"pm\">\+</span></summary><div class=\"ans\">(.*?)</div>", body, re.S)
     ]
-    want = {"home": 11, "pricing": 6, "contact": 0, "faq": 20, "text": 0, "blog": 0, "article": 0, "features": 0, "who": 0, "nf": 0, "legal": 0}[page]
+    want = {"home": 11, "pricing": 6, "contact": 0, "faq": 22, "text": 0, "blog": 0, "article": 0, "features": 0, "who": 0, "nf": 0, "legal": 0}[page]
     assert len(faq) == want, f"expected {want} FAQ entries in {page}/{lang}, got {len(faq)}"
     name = page.upper()
     ts = (
@@ -727,6 +727,15 @@ FAQ_MAILING = {
            ("How do I build an automation, and can I change it?", "Write what you want to happen, for example \"a welcome email for every new subscriber, and an article a week later\", and the AI builds the sequence. You can edit the templates and automations whenever you like.")],
 }
 FAQ_DOMAIN_Q = {"he": "אפשר לחבר את האתר לדומיין שלי?", "en": "Can I connect my site to my domain?"}
+# 054: on the FAQ page the two are in a topic of their own, last, with two more
+FAQ_MAIL_TOPIC = {
+    "he": ("דיוור ואוטומציות", [
+        ("באילו חבילות יש דיוור ואוטומציות?", "בחבילות עסקי ופרו. בכל החבילות יש טופס שמייצר לידים, וכל פנייה נשמרת בחשבון."),
+        ("מי שנרשם יכול להסיר את עצמו?", "כן. בכל מייל יש קישור להסרה בלחיצה אחת, ומי שהסיר את עצמו לא יקבל עוד דיוור. ככה דורש החוק, ואנחנו דואגים לזה בשבילכם.")]),
+    "en": ("Email and automations", [
+        ("Which plans include email and automations?", "Business and Pro. Every plan has a lead form, and every enquiry is saved in your account."),
+        ("Can subscribers unsubscribe?", "Yes. Every email has a one-click unsubscribe link, and anyone who unsubscribes won’t get more emails. The law requires it, and we take care of it for you.")]),
+}
 AUP_MAILING = {
     "he": ('<a href="#u-mail">דיוור</a>',
            '<section class="lg-s" id="u-mail"><h2>דיוור</h2><p>מי ששולח דיוור מהחשבון שלו אחראי לשלוח אותו רק למי שהסכים לקבל אותו, כפי שדורש סעיף 30א לחוק התקשורת (בזק ושידורים). בכל דיוור צריכה להיות דרך פשוטה להסיר את עצמכם מהרשימה.</p><p>אם דיוור נשלח בלי הסכמה, אנחנו רשאים להשעות את הדיוור מהחשבון.</p></section>'),
@@ -788,15 +797,22 @@ def site_040(body, lang, page):
         k = body.index('<section class="sec zone" id="bq">')
         body = body[:k] + home_mail(lang) + body[k:]
     if page in ("home", "faq"):
-        # on the FAQ page the domain question opens "domain and publishing", so the two
-        # go at the end of the topic before it: still right before the domain question
-        qs = "".join(f'<details><summary>{q}<span class="pm">+</span></summary><div class="ans">{a}</div></details>' for q, a in FAQ_MAILING[lang])
-        dq = f"<details><summary>{FAQ_DOMAIN_Q[lang]}<span"
-        assert body.count(dq) == 1, (lang, page)
-        k = body.index(dq)
-        if page == "faq":
-            k = body.rindex("</div></div>", 0, k)
-        body = body[:k] + MAILING[0] + qs + MAILING[1] + body[k:]
+        qa = lambda pairs: "".join(f'<details><summary>{q}<span class="pm">+</span></summary><div class="ans">{a}</div></details>' for q, a in pairs)
+        if page == "home":
+            # the two, right before the domain question
+            dq = f"<details><summary>{FAQ_DOMAIN_Q[lang]}<span"
+            assert body.count(dq) == 1, lang
+            k = body.index(dq)
+            body = body[:k] + MAILING[0] + qa(FAQ_MAILING[lang]) + MAILING[1] + body[k:]
+        else:
+            # 054: a last topic, "email and automations", with its link last in the topic menu
+            title, more = FAQ_MAIL_TOPIC[lang]
+            nav = body.index("</nav>", body.index('<nav class="fq-nav"'))
+            body = body[:nav] + f'{MAILING[0]}<a href="#mailing">{title}</a>{MAILING[1]}' + body[nav:]
+            pay = body.index('<div class="fq-g" id="pay">')
+            end = body.index("</div></div>", pay) + len("</div></div>")
+            group = f'{MAILING[0]}<div class="fq-g" id="mailing"><h2 class="fq-h">{title}</h2><div class="qs">{qa(FAQ_MAILING[lang] + more)}</div></div>{MAILING[1]}'
+            body = body[:end] + group + body[end:]
     if page == "legal" and 'id="u-banned"' in body:
         nav, sec = AUP_MAILING[lang]
         link = re.search(r'<a href="#u-banned">[^<]*</a>', body)
