@@ -657,8 +657,28 @@ LEADS_FEATURE = {
 }
 # 048: the carousel's fifth card, as in עיצובים/לאישור-דף-הבית-דיוור-ואוטומציות.html (an envelope with a clock)
 HOME_LEADS_CARD = {
-    "he": ("דיוור", "דיוור ואוטומציות, מאותו חשבון.", "ניהול נרשמים, דיוור ואוטומציות שה-AI בונה. חלק מניהול האתר, בלי עוד מערכת.", "5 מתוך 5"),
-    "en": ("Email", "Email and automations, from the same account.", "Subscriber management, email and automations the AI builds. Part of running your site, with no extra system.", "5 of 5"),
+    "he": ("דיוור", "דיוור ואוטומציות, מאותו חשבון.", "ניהול נרשמים, דיוור ואוטומציות שה-AI בונה. חלק מניהול האתר, בלי עוד מערכת.", "2 מתוך 5"),
+    "en": ("Email", "Email and automations, from the same account.", "Subscriber management, email and automations the AI builds. Part of running your site, with no extra system.", "2 of 5"),
+}
+# 055: the hero says site, email and automations (עיצובים/לאישור-דיוור-בהירו.html; the copy is the
+# message's table). <span class="nw"> keeps a group on one line, so no word is left alone.
+HERO_055 = {
+    "he": [
+        ('<h1>האתר שלכם<span class="l2">במרחק משפט אחד.</span></h1>',
+         '<h1><span class="nw">מספרים ל-AI</span> <span class="nw">על העסק.</span><span class="l2">מקבלים <span class="nw">אתר, דיוור</span> ואוטומציות.</span></h1>'),
+        ('<p class="sub">אתר מעוצב לעסק שלכם, נבנה ב-AI תוך דקות. כתבו מה העסק עושה,<span class="br"></span> ותראו אותו נבנה מול העיניים.</p>',
+         '<p class="sub">תוך דקות נבנה לכם אתר מעוצב לעסק, עם טופס לידים, רשימת תפוצה<span class="br"></span> ואוטומציות שעובדות מהיום הראשון. בלי קוד ובלי <span class="nw">לחבר מערכות.</span></p>'),
+        ("</svg>באוויר בלחיצה אחת</span>", "</svg>דיוור ואוטומציות בפנים</span>"),
+        ("</span>מחבר טופס פניות</li>", "</span>מחבר טופס, דיוור ואוטומציות</li>"),
+    ],
+    "en": [
+        ('<h1>Your website,<span class="l2">one sentence away.</span></h1>',
+         '<h1>Tell AI what you do.<span class="l2">Get a site, <span class="nw nw-600">email and automations.</span></span></h1>'),
+        ('<p class="sub">A beautifully designed website for your business, built by AI in minutes.<span class="br"></span> Tell us what you do and watch it come together.</p>',
+         '<p class="sub">In minutes, you get a beautifully designed site with a lead form, a mailing list and automations that work from day one. No code, no tools to <span class="nw">stitch together.</span></p>'),
+        ("</svg>Live in one click</span>", "</svg>Email and automations built in</span>"),
+        ("</span>Setting up your contact form</li>", "</span>Connecting forms, email and automations</li>"),
+    ],
 }
 _ART = '<svg viewBox="0 0 100 100" fill="none" stroke="#0b1220" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="24" width="62" height="46" rx="8" fill="#fff"/><path d="M12 28l29 22 29-22"/><circle cx="74" cy="70" r="16" fill="#1990d8" stroke="none"/><path d="M74 62v8l5 4" stroke="#fff" stroke-width="4"/></svg>'
 
@@ -792,8 +812,14 @@ def site_040(body, lang, page):
         j = body.index(" </div></section>", i)
         kick, h3, p, lab = HOME_LEADS_CARD[lang]
         card = (f'{MAILING[0]}<div class="ben" role="group" aria-roledescription="slide" aria-label="{lab}" tabindex="0"><span class="pbar"></span>'
-                f'<div class="art">{_ART}</div><span class="kick">{kick}</span><h3>{h3}</h3><p>{p}</p></div>{MAILING[1]}\n')
-        body = body[:j] + card + body[j:]
+                f'<div class="art">{_ART}</div><span class="kick">{kick}</span><h3>{h3}</h3><p>{p}</p></div>{MAILING[1]}\n  ')
+        # 055: second, right after "studio-grade design" (fillGates renumbers the labels)
+        k = body.index('<div class="ben" role="group"', body.index('<div class="ben on"', i))
+        assert k < j, lang
+        body = body[:k] + card + body[k:]
+        for old, new in HERO_055[lang]:
+            assert body.count(old) == 1, (lang, old[:60])
+            body = body.replace(old, new)
         k = body.index('<section class="sec zone" id="bq">')
         body = body[:k] + home_mail(lang) + body[k:]
     if page in ("home", "faq"):
@@ -906,6 +932,10 @@ SITE040_CSS = {
 @keyframes mlcar{50%{border-color:transparent}}
 @media(prefers-reduced-motion:reduce){.ml-s,.ml-ok,#mail.in .ml-s,#mail.in .ml-ok{animation:none;opacity:1;transform:none}.ml-ai .tw{animation:none}}
 @media(max-width:1060px){.ml{grid-template-columns:1fr;gap:32px;margin-top:28px}.ml-app{height:500px}.ml-grid{grid-template-columns:1fr;gap:26px}.ml-p h3{font-size:22px}.ml-p p{font-size:20px}.ml-st b{font-size:20px}.ml-s{font-size:15px}}
+/* 055: the hero's groups stay together; on a phone the blue line wraps between them, the sub never ends on one word, and the three ticks may take two rows */
+.hero h1 .nw,.hero .sub .nw{white-space:nowrap}
+@media(max-width:599px){.hero h1 .nw.nw-600{white-space:normal}}
+@media(max-width:1060px){.zone.hero h1 .l2{white-space:normal}.zone.hero .go+.trust{flex-wrap:wrap;row-gap:8px}}
 """,
     "pricing": """
 .pr-all{text-align:center;font-size:16px;font-weight:600;color:var(--ink);margin-top:30px}
