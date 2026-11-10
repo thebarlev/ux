@@ -871,6 +871,10 @@
 @keyframes mlcar{50%{border-color:transparent}}
 @media(prefers-reduced-motion:reduce){.uxh-en .ml-s,.uxh-en .ml-ok,.uxh-en #mail.in .ml-s,.uxh-en #mail.in .ml-ok{animation:none;opacity:1;transform:none}.uxh-en .ml-ai .tw{animation:none}}
 @media(max-width:1060px){.uxh-en .ml{grid-template-columns:1fr;gap:32px;margin-top:28px}.uxh-en .ml-app{height:500px}.uxh-en .ml-grid{grid-template-columns:1fr;gap:26px}.uxh-en .ml-p h3{font-size:22px}.uxh-en .ml-p p{font-size:20px}.uxh-en .ml-st b{font-size:20px}.uxh-en .ml-s{font-size:15px}}
+/* 055: the hero's groups stay together; on a phone the blue line wraps between them, the sub never ends on one word, and the three ticks may take two rows */
+.uxh-en .hero h1 .nw,.uxh-en .hero .sub .nw{white-space:nowrap}
+@media(max-width:599px){.uxh-en .hero h1 .nw.nw-600{white-space:normal}}
+@media(max-width:1060px){.uxh-en .zone.hero h1 .l2{white-space:normal}.uxh-en .zone.hero .go+.trust{flex-wrap:wrap;row-gap:8px}}
 
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxh-en .gs-img,.uxh-en .a2-img{isolation:isolate}

@@ -20,9 +20,9 @@ const [P, OUT] = process.argv.slice(2); const K = process.env.VERCEL_BYPASS;
     const bad = !r.inCls || r.okOp !== '1' || !r.okInside || r.hscroll || r.prev !== 'how' || r.next !== 'bq' || r.appH !== (w > 1000 ? 470 : 500);
     if (bad) fails++; console.log(lang, w, JSON.stringify(r), bad ? 'FAIL' : 'ok');
     await mail.screenshot({ path: `${OUT}/mail-${lang}-${w}.png` });
-    // the fifth carousel card
+    // the email card, second since 055
     const ben = pg.locator('#ben'); await ben.scrollIntoViewIfNeeded();
-    const cards = pg.locator('#ben .ben'); await cards.nth(4).click(); await pg.waitForTimeout(1200);
+    const cards = pg.locator('#ben .ben'); await cards.nth(1).click(); await pg.waitForTimeout(1200);
     await ben.screenshot({ path: `${OUT}/card5-${lang}-${w}.png` });
     // the two questions open, in the home FAQ
     const faq = pg.locator('#faq');

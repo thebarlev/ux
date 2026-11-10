@@ -6,9 +6,10 @@ import { localeAlternates } from "@/lib/seo/hreflang"
 
 import "@/app/_home/home.he.css"
 
-const TITLE = "Uxellent | בניית אתר לעסק ב-AI, בעברית"
+// 055
+const TITLE = "UXellent · אתר, דיוור ואוטומציות ב-AI"
 const DESCRIPTION =
-  "אתר מעוצב לעסק שלכם, נבנה ב-AI תוך דקות. כתבו מה העסק עושה, ותראו אותו נבנה מול העיניים. בחינם, בלי ידע טכני."
+  "תוך דקות נבנה לכם אתר מעוצב לעסק, עם טופס לידים, רשימת תפוצה ואוטומציות שעובדות מהיום הראשון. בלי קוד ובלי לחבר מערכות."
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),
