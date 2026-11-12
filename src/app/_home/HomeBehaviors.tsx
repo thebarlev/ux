@@ -31,30 +31,8 @@ const FORM_COPY = {
 const SUPPORT = "support@uxellent.com"
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
-/** New professions that pop into "who it's for", with their icons (from the sheets). */
-// tbl-031: manufacturers, organizations and tech companies come first ("companies" is one of the fixed icons)
-const NEW_ORBS: Record<Lang, readonly string[]> = {
-  he: ["מפעלים", "ארגונים", "חברות טכנולוגיה", "רופאי שיניים", "מורים פרטיים", "וטרינרים", "שמאים", "מתורגמנים", "קוסמטיקאיות", "מאמני כושר", "גני אירועים"],
-  en: ["Manufacturers", "Organizations", "Tech companies", "Dentists", "Tutors", "Vets", "Appraisers", "Translators", "Beauticians", "Fitness trainers", "Event venues"],
-}
-const ORB_ICONS = [
-  // factory, organization (people), tech company (chip)
-  '<path d="M3 21V11l5 3v-3l5 3v-3l5 3V5h3v16z"/><path d="M6.5 18h2M11.5 18h2M16.5 18h2"/>',
-  '<circle cx="12" cy="7" r="2.6"/><circle cx="5.5" cy="10.5" r="2"/><circle cx="18.5" cy="10.5" r="2"/><path d="M7.5 20v-1.5a4.5 4.5 0 0 1 9 0V20M2.5 20v-1a3 3 0 0 1 4.2-2.8M21.5 20v-1a3 3 0 0 0-4.2-2.8"/>',
-  '<rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 10h4v4h-4zM9.5 3v4M14.5 3v4M9.5 17v4M14.5 17v4M3 9.5h4M3 14.5h4M17 9.5h4M17 14.5h4"/>',
-  '<path d="M7 4c-2 0-3 1.6-3 3.6 0 3 1.5 4.4 2 8 .3 2.4 1 4.4 2 4.4s1.4-2 1.7-4c.2-1.2.7-2 1.3-2s1.1.8 1.3 2c.3 2 .7 4 1.7 4s1.7-2 2-4.4c.5-3.6 2-5 2-8C20 5.6 19 4 17 4c-1.8 0-2.6 1-5 1S8.8 4 7 4z"/>',
-  '<path d="M3 8l9-4 9 4-9 4z"/><path d="M7 10v5c0 1.5 2.2 3 5 3s5-1.5 5-3v-5"/>',
-  '<circle cx="7" cy="9" r="1.8"/><circle cx="12" cy="6.5" r="1.8"/><circle cx="17" cy="9" r="1.8"/><path d="M12 12c-3 0-5 3-5 5s2 2.5 5 2.5 5-.5 5-2.5-2-5-5-5z"/>',
-  '<path d="M4 20h16M6 20V9l6-4 6 4v11"/><path d="M10 13h4M10 16h4"/>',
-  '<path d="M4 6h9M8.5 4v2M6 6c.8 3 3 5.5 6 6.5M11 6c-.6 2.6-2.6 5.4-6 6.5"/><path d="M13 20l4-9 4 9M14.4 17h5.2"/>',
-  '<path d="M12 3c2 3 5 5 5 9a5 5 0 0 1-10 0c0-4 3-6 5-9z"/>',
-  '<path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/>',
-  '<path d="M5 21V10l7-6 7 6v11"/><path d="M9 21v-6h6v6"/><path d="M12 7v0"/>',
-]
-
 /**
- * The sheets' behaviour, ported 1:1 (menu, benefits slider, "who it's for"
- * confetti orbs, "how it works" steps, "built right" rings) plus what the site
+ * The sheets' behaviour, ported 1:1 (menu, benefits slider, "how it works" steps, "built right" rings) plus what the site
  * needs on top: keyboard support for the tabs,
  * pausing animations of sections that are off screen, and full cleanup.
  */
@@ -269,162 +247,6 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
       reset()
     }
 
-    // -- "who it's for": no icon may touch another icon or the text, leave the
-    //    section, or be cut (tbl-021). The sheets place the icons by percent,
-    //    which only works at the widths they were drawn at, so every icon is
-    //    measured here and, if it collides, moved to the nearest free spot (or
-    //    left out when there is none). The new professions that pop in only
-    //    land on a free spot.
-    const box = root.querySelector<HTMLElement>(".who2")
-    if (box) {
-      type Rect = { l: number; t: number; r: number; b: number }
-      const FLOAT = 14 // the float animation lifts an icon by up to 14px
-      const GAP = 12 // between icons
-      const TEXT_GAP = 16 // between an icon and the heading, text and star
-      const hit = (a: Rect, b: Rect, g: number) => a.l < b.r + g && b.l < a.r + g && a.t < b.b + g && b.t < a.b + g
-      // the box an icon (with its label) can cover, in section coordinates,
-      // from layout only, so the float and pop-in transforms do not matter
-      const rectOf = (o: HTMLElement, dx = 0, dy = 0): Rect => ({
-        l: o.offsetLeft + dx, r: o.offsetLeft + o.offsetWidth + dx,
-        t: o.offsetTop - FLOAT + dy, b: o.offsetTop + o.offsetHeight + dy,
-      })
-      const textRects = (): Rect[] => {
-        const s = box.getBoundingClientRect()
-        const out: Rect[] = []
-        box.querySelectorAll<HTMLElement>(".who2-c .who2-star, .who2-c h2, .who2-c p, .who2-c .no > *").forEach((el) => {
-          const rg = document.createRange()
-          rg.selectNodeContents(el)
-          const rs = el.classList.contains("who2-star") ? [el.getBoundingClientRect()] : [...rg.getClientRects()]
-          for (const q of rs) if (q.width && q.height) out.push({ l: q.left - s.left, r: q.right - s.left, t: q.top - s.top, b: q.bottom - s.top })
-        })
-        return out
-      }
-      // nearest free offset (up to 240px away), or null
-      const OFFSETS: Array<[number, number]> = [[0, 0]]
-      for (let r = 8; r <= 240; r += 8) for (let k = 0; k < 16; k++) OFFSETS.push([Math.round(r * Math.cos((k * Math.PI) / 8)), Math.round(r * Math.sin((k * Math.PI) / 8))])
-      const findSpot = (o: HTMLElement, taken: Rect[], text: Rect[], reach = 240) => {
-        const mob = window.matchMedia("(max-width:1060px)").matches
-        const edge = mob ? 6 : 24
-        const W = box.clientWidth
-        const H = box.clientHeight
-        for (const [dx, dy] of OFFSETS) {
-          if (Math.hypot(dx, dy) > reach) break
-          const q = rectOf(o, dx, dy)
-          if (q.l < edge || q.r > W - edge || q.t < 6 || q.b > H - 6) continue
-          if (text.some((t) => hit(q, t, TEXT_GAP)) || taken.some((t) => hit(q, t, GAP))) continue
-          return { dx, dy, q }
-        }
-        return null
-      }
-      const placed = new Map<HTMLElement, Rect>()
-      const layout = () => {
-        placed.clear()
-        const text = textRects()
-        const taken: Rect[] = []
-        box.querySelectorAll<HTMLElement>(".orb:not(.new)").forEach((o) => {
-          o.style.margin = ""
-          o.style.visibility = ""
-          if (getComputedStyle(o).display === "none") return
-          const f = findSpot(o, taken, text)
-          if (!f) { o.style.visibility = "hidden"; return }
-          // the sheets place icons from the right, so a move is margin-right/top
-          o.style.marginRight = `${-f.dx}px`
-          o.style.marginTop = `${f.dy}px`
-          taken.push(f.q)
-          placed.set(o, f.q)
-        })
-      }
-      let raf = 0
-      const relayout = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { layout(); dropPopped() }) }
-      let dropPopped = () => {}
-      layout()
-      void document.fonts?.ready.then(relayout)
-      on(window, "resize", relayout)
-      cleanups.push(() => cancelAnimationFrame(raf))
-
-      // -- new professions pop in with confetti
-      if (!reduced) {
-        let alive = true
-        cleanups.push(() => { alive = false })
-        // 048: each new icon lands on a random free spot, a new one every time: at least
-        // POP_GAP from every icon (fixed, popped or fading) and from the text, inside
-        // the section, and away from the last spot; no free spot, no pop (mobile too)
-        const POP_GAP = 24
-        let last: Rect | null = null
-        let n = 0
-        let visible = false
-        const live: HTMLElement[] = []
-        const fading = new Set<HTMLElement>()
-        dropPopped = () => { live.splice(0).forEach((o) => o.remove()) }
-        const burst = (x: number, y: number) => {
-          for (let k = 0; k < 14; k++) {
-            const c = document.createElement("i")
-            c.className = "cf"
-            const a = Math.random() * Math.PI * 2
-            const d = 40 + Math.random() * 50
-            c.style.cssText = `left:${x}px;top:${y}px;--dx:${Math.cos(a) * d}px;--dy:${Math.sin(a) * d}px;--r:${Math.random() * 360}deg;background:${["#1990d8", "#7cc5f2", "#0b1220", "#c9e6f8"][k % 4]};${k % 3 ? "" : "border-radius:50%;"}`
-            box.appendChild(c)
-            window.setTimeout(() => c.remove(), 1100)
-          }
-        }
-        const add = () => {
-          const mob = window.matchMedia("(max-width:1060px)").matches
-          const MAX = mob ? 1 : 3
-          // the oldest icon leaves first, and the new one comes in once it is gone
-          if (live.length >= MAX) {
-            const r = live.shift()
-            if (r) {
-              fading.add(r)
-              r.classList.add("out")
-              window.setTimeout(() => { r.remove(); fading.delete(r); pop(mob) }, 600)
-              return
-            }
-          }
-          pop(mob)
-        }
-        const pop = (mob: boolean) => {
-          if (!alive) return
-          const W = box.clientWidth
-          const H = box.clientHeight
-          const label = NEW_ORBS[lang][n % NEW_ORBS[lang].length]
-          const icon = ORB_ICONS[n % ORB_ICONS.length]
-          const o = document.createElement("span")
-          o.className = "orb new"
-          o.setAttribute("aria-hidden", "true")
-          o.style.visibility = "hidden"
-          o.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icon}</svg><em>${label}</em>`
-          box.appendChild(o)
-          const taken = [...placed.values(), ...[...live, ...fading].map((x) => rectOf(x))]
-          const text = textRects()
-          o.style.cssText = "visibility:hidden;right:0;top:0"
-          const w = o.offsetWidth
-          const h = o.offsetHeight + FLOAT
-          const edge = mob ? 6 : 24
-          let f: { q: Rect } | null = null
-          for (let k = 0; k < 240 && !f; k++) {
-            const l = edge + Math.random() * (W - 2 * edge - w)
-            const t = 6 + Math.random() * (H - 12 - h)
-            const q = { l, r: l + w, t, b: t + h }
-            if (q.l < edge || q.r > W - edge || q.t < 6 || q.b > H - 6) continue
-            if (text.some((x) => hit(q, x, POP_GAP)) || taken.some((x) => hit(q, x, POP_GAP))) continue
-            if (last && Math.hypot((q.l + q.r - last.l - last.r) / 2, (q.t + q.b - last.t - last.b) / 2) < 2 * Math.max(w, h)) continue
-            f = { q }
-          }
-          n++
-          if (!f) { o.remove(); return } // no free spot right now: skip this pop
-          last = f.q
-          const right = W - f.q.r
-          const top = f.q.t + FLOAT
-          o.style.cssText = `right:${right}px;top:${top}px;--mr:${right}px;--mt:${top}px`
-          burst((f.q.l + f.q.r) / 2, f.q.t + FLOAT + 24)
-          live.push(o)
-        }
-        observe(box, (e) => { visible = e[0].isIntersecting }, 0.3)
-        const t = window.setInterval(() => { if (visible) add() }, 2600)
-        cleanups.push(() => window.clearInterval(t))
-      }
-    }
-
     // -- "how it works": four steps that advance on their own while in view
     const hw = root.querySelector<HTMLElement>("#hw")
     if (hw) {
@@ -522,65 +344,68 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
       })
     }
 
-    // -- pricing: the blue band drifts in one row and the centre item grows
-    //    (script from the design). Hebrew flows right, English flows left.
-    const mq = root.querySelector<HTMLElement>(".mq")
-    const strip = mq?.querySelector<HTMLElement>(".inc")
-    if (mq && strip && !reduced) {
-      const orig = [...strip.children] as HTMLElement[]
-      const clones: HTMLElement[] = []
-      for (let k = 0; k < 3; k++)
-        orig.forEach((e) => {
-          const c = e.cloneNode(true) as HTMLElement
-          c.setAttribute("aria-hidden", "true")
-          strip.appendChild(c)
-          clones.push(c)
-        })
-      const half = strip.scrollWidth / 4
-      let x = -half
-      let last = performance.now()
-      let raf = 0
-      let paused = false
-      let visible = true
-      const step = (t: number) => {
-        const dt = Math.min(64, t - last)
-        last = t
-        if (!paused) {
-          if (rtl) {
-            x += dt * 0.045
-            if (x >= 0) x -= half
-          } else {
-            x -= dt * 0.045
-            if (x <= -2 * half) x += half
+    // -- the moving strip (pricing, what you get and who it's for: the blue band;
+    //    the home hero since 057: the professions): drifts in one row and the
+    //    centre item grows (script from the design). Hebrew flows right,
+    //    English flows left. Every .mq on the page gets one.
+    root.querySelectorAll<HTMLElement>(".mq").forEach((mq) => {
+      const strip = mq.querySelector<HTMLElement>(".inc")
+      if (strip && !reduced) {
+        const orig = [...strip.children] as HTMLElement[]
+        const clones: HTMLElement[] = []
+        for (let k = 0; k < 3; k++)
+          orig.forEach((e) => {
+            const c = e.cloneNode(true) as HTMLElement
+            c.setAttribute("aria-hidden", "true")
+            strip.appendChild(c)
+            clones.push(c)
+          })
+        const half = strip.scrollWidth / 4
+        let x = -half
+        let last = performance.now()
+        let raf = 0
+        let paused = false
+        let visible = true
+        const step = (t: number) => {
+          const dt = Math.min(64, t - last)
+          last = t
+          if (!paused) {
+            if (rtl) {
+              x += dt * 0.045
+              if (x >= 0) x -= half
+            } else {
+              x -= dt * 0.045
+              if (x <= -2 * half) x += half
+            }
           }
+          strip.style.transform = `translateX(${x}px)`
+          const r = mq.getBoundingClientRect()
+          const cx = r.left + r.width / 2
+          const R = r.width * 0.3
+          for (const e of strip.children as HTMLCollectionOf<HTMLElement>) {
+            const bb = e.getBoundingClientRect()
+            const d = Math.abs(bb.left + bb.width / 2 - cx)
+            const k = Math.max(0, 1 - d / R)
+            e.style.transform = `scale(${(1 + 0.38 * k * k).toFixed(3)})`
+            e.classList.toggle("hot", k > 0.6)
+          }
+          raf = visible ? requestAnimationFrame(step) : 0
         }
-        strip.style.transform = `translateX(${x}px)`
-        const r = mq.getBoundingClientRect()
-        const cx = r.left + r.width / 2
-        const R = r.width * 0.3
-        for (const e of strip.children as HTMLCollectionOf<HTMLElement>) {
-          const bb = e.getBoundingClientRect()
-          const d = Math.abs(bb.left + bb.width / 2 - cx)
-          const k = Math.max(0, 1 - d / R)
-          e.style.transform = `scale(${(1 + 0.38 * k * k).toFixed(3)})`
-          e.classList.toggle("hot", k > 0.6)
-        }
-        raf = visible ? requestAnimationFrame(step) : 0
+        raf = requestAnimationFrame(step)
+        on(mq, "mouseenter", () => { paused = true })
+        on(mq, "mouseleave", () => { paused = false })
+        observe(mq, (e) => {
+          visible = e[0].isIntersecting
+          if (visible && !raf) { last = performance.now(); raf = requestAnimationFrame(step) }
+        }, 0)
+        cleanups.push(() => {
+          cancelAnimationFrame(raf)
+          clones.forEach((c) => c.remove())
+          strip.style.transform = ""
+          orig.forEach((e) => { e.style.transform = ""; e.classList.remove("hot") })
+        })
       }
-      raf = requestAnimationFrame(step)
-      on(mq, "mouseenter", () => { paused = true })
-      on(mq, "mouseleave", () => { paused = false })
-      observe(mq, (e) => {
-        visible = e[0].isIntersecting
-        if (visible && !raf) { last = performance.now(); raf = requestAnimationFrame(step) }
-      }, 0)
-      cleanups.push(() => {
-        cancelAnimationFrame(raf)
-        clones.forEach((c) => c.remove())
-        strip.style.transform = ""
-        orig.forEach((e) => { e.style.transform = ""; e.classList.remove("hot") })
-      })
-    }
+    })
 
     // -- what you get (uxb-021, tbl-025): the mockups play while on screen
     //    (script from the design). The first frame is in the markup, which is

@@ -15,7 +15,7 @@ const PAGES = [['home', '/', 'he'], ['home', '/en', 'en'], ['pricing', '/pricing
     await pg.goto(BASE + path, { waitUntil: 'networkidle' });
     await pg.evaluate(() => document.fonts.ready); await pg.waitForTimeout(1500);
     // every animation stopped at the same moment, so two runs compare pixel by pixel
-    await pg.evaluate(() => { document.getAnimations().forEach(a => { a.pause(); a.currentTime = 0 }); document.querySelectorAll('.orb.new,.cf').forEach(e => e.remove()) });
+    await pg.evaluate(() => { document.getAnimations().forEach(a => { a.pause(); a.currentTime = 0 }) });
     await pg.waitForTimeout(200);
     const used = await pg.evaluate(() => [...document.fonts].filter(f => f.status === 'loaded').map(f => `${f.family} ${f.weight}`));
     await pg.screenshot({ path: `${OUT}/${TAG}-${name}-${lang}-${w}.png` });
