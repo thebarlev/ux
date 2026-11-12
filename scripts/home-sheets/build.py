@@ -303,6 +303,67 @@ WHO_CARDS = {
 ORB_LABEL = {"he": "חברות", "en": "Companies"}
 
 
+# 057: a professions strip above the hero's h1, in place of the tag (עיצובים/לאישור-פס-מקצועות-בהירו.html).
+# The moving strip of the other pages (.mq/.inc/.in-c, HomeBehaviors), here with an icon and no band.
+# The icons are those of "who it's for" and its popping icons; tax advisors and studios are new, in the same style.
+_PI = {
+    "law": '<path d="M12 3v18M5 7h14M5 7l-2.5 6a3 3 0 0 0 5 0zM19 7l-2.5 6a3 3 0 0 0 5 0z"/>',
+    "clinic": '<path d="M6 4v5a4 4 0 0 0 8 0V4"/><path d="M10 13v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/>',
+    "acc": '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M16 15h0"/>',
+    "arch": '<path d="M4 20l6-14 6 14M6.5 14h7"/><path d="M14 4l6 2-2 6"/>',
+    "ther": '<path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/>',
+    "co": ORB_CO,
+    "fac": '<path d="M3 21V11l5 3v-3l5 3v-3l5 3V5h3v16z"/><path d="M6.5 18h2M11.5 18h2M16.5 18h2"/>',
+    "org": '<circle cx="12" cy="7" r="2.6"/><circle cx="5.5" cy="10.5" r="2"/><circle cx="18.5" cy="10.5" r="2"/><path d="M7.5 20v-1.5a4.5 4.5 0 0 1 9 0V20M2.5 20v-1a3 3 0 0 1 4.2-2.8M21.5 20v-1a3 3 0 0 0-4.2-2.8"/>',
+    "tax": '<path d="M6 3h9l3 3v15H6z"/><path d="M9.5 16.5l5-6"/><circle cx="10" cy="11" r="1.2"/><circle cx="14" cy="16" r="1.2"/>',
+    "des": '<path d="M3 21l3.5-1 11-11-2.5-2.5-11 11zM14 6.5l2.5 2.5"/>',
+    "photo": '<path d="M4 7h16v12H4z"/><circle cx="12" cy="13" r="3.2"/><path d="M8 7l1.5-3h5L16 7"/>',
+    "re": '<path d="M4 20h16M7 20V10l5-5 5 5v10"/><path d="M10 20v-5h4v5"/>',
+    "cons": '<path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2 8 12.7 4 8.8 9.5 8z"/>',
+    "tech": '<rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 10h4v4h-4zM9.5 3v4M14.5 3v4M9.5 17v4M14.5 17v4M3 9.5h4M3 14.5h4M17 9.5h4M17 14.5h4"/>',
+    "coach": '<path d="M5 4h14v6a7 7 0 0 1-14 0z"/><path d="M9 21h6M12 17v4"/>',
+    "studio": '<path d="M12 3a9 9 0 1 0 0 18c1.2 0 2-.8 2-1.9 0-1.4-1.1-1.7-1.1-2.9 0-1 .9-1.9 2-1.9H17a4 4 0 0 0 4-4C21 6.2 17 3 12 3z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="9.5" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/>',
+}
+HERO_PROS = {
+    "he": [("עורכי דין", "law"), ("קליניקות", "clinic"), ("רואי חשבון", "acc"), ("אדריכלים", "arch"), ("מטפלים", "ther"), ("חברות", "co"),
+           ("מפעלים", "fac"), ("ארגונים", "org"), ("יועצי מס", "tax"), ("מעצבים", "des"), ("צלמים", "photo"), ('נדל"ן', "re"),
+           ("יועצים", "cons"), ("חברות טכנולוגיה", "tech"), ("מאמנים", "coach"), ("סטודיואים", "studio")],
+    "en": [("Lawyers", "law"), ("Clinics", "clinic"), ("Accountants", "acc"), ("Architects", "arch"), ("Therapists", "ther"), ("Companies", "co"),
+           ("Manufacturers", "fac"), ("Organizations", "org"), ("Tax advisors", "tax"), ("Designers", "des"), ("Photographers", "photo"), ("Real estate", "re"),
+           ("Consultants", "cons"), ("Tech companies", "tech"), ("Coaches", "coach"), ("Studios", "studio")],
+}
+_PI_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+_CSS_GONE = re.compile(r"who2|\.orb\b|\.cf\b")
+
+
+def drop_css(css, pat):
+    """The rules whose selectors all match pat go (a selector list keeps its other parts), then empty @media blocks."""
+    def rule(m):
+        sels = [x for x in m.group(1).split(",") if not pat.search(x)]
+        return "" if not sels else ",".join(sels) + "{" + m.group(2) + "}"
+    css = re.sub(r"([^{}]*)\{([^{}]*)\}", lambda m: rule(m) if pat.search(m.group(1)) else m.group(0), css)
+    css = re.sub(r"@keyframes (?:popin|cf)\{(?:[^{}]*\{[^{}]*\})*\s*\}", "", css)
+    while True:
+        css, n = re.subn(r"@media[^{}]*\{\s*\}", "", css)
+        if not n:
+            return css
+
+
+def hero_057(body, css, lang):
+    d = ' dir="rtl"' if lang == "he" else ""
+    items = "".join(f'<span class="in-c"{d}>{_PI_SVG}{_PI[k]}</svg>{name}</span>' for name, k in HERO_PROS[lang])
+    label = ", ".join(name for name, _ in HERO_PROS[lang]).replace('"', "&quot;")
+    strip = f'<div class="mq hmq" role="img" aria-label="{label}"><div class="inc">{items}</div></div>'
+    body, n = re.subn(r'<span class="eyebrow">.*?</span>', lambda m: strip, body, count=1, flags=re.S)
+    assert n == 1, lang
+    # the "for every business" section and its popping icons leave the home page (/for-who keeps its own)
+    body, n = re.subn(r'\n<section class="sec zone" id="who">.*?</section>\n', "\n", body, count=1, flags=re.S)
+    assert n == 1 and "who2" not in body, lang
+    css = drop_css(css, _CSS_GONE)
+    assert not re.search(r"who2|\.orb\b|@keyframes (?:popin|cf)\b", css), lang
+    return body, css
+
+
 def positioning(body, css, lang, page):
     for old, new in POSITIONING.get((lang, page), []):
         assert body.count(old) == 1, (lang, page, old[:60])
@@ -349,6 +410,8 @@ def build(lang, cfg, images, page="home", legal=None):
     css = re.search(r"<style[^>]*>(.*?)</style>", src, re.S).group(1)
     body = sheet_body(src)
     body, css = positioning(body, css, lang, page)
+    if page == "home":
+        body, css = hero_057(body, css, lang)
 
     # -- one header, mobile menu and footer on every page (navkit, tbl-024)
     head, foot = chrome(lang)
@@ -932,6 +995,17 @@ SITE040_CSS = {
 @keyframes mlcar{50%{border-color:transparent}}
 @media(prefers-reduced-motion:reduce){.ml-s,.ml-ok,#mail.in .ml-s,#mail.in .ml-ok{animation:none;opacity:1;transform:none}.ml-ai .tw{animation:none}}
 @media(max-width:1060px){.ml{grid-template-columns:1fr;gap:32px;margin-top:28px}.ml-app{height:500px}.ml-grid{grid-template-columns:1fr;gap:26px}.ml-p h3{font-size:22px}.ml-p p{font-size:20px}.ml-st b{font-size:20px}.ml-s{font-size:15px}}
+/* 057: the carousel now follows the hero: the same gap as between the other sections (120 / 72; over the section rhythm rule) */
+.hero+#ben{padding-top:120px!important}
+@media(max-width:1060px){.hero+#ben{padding-top:72px!important}}
+/* 057: the professions strip, where the tag was (same height), without the band: grey text, the centre one dark */
+.hero .hmq{direction:ltr;overflow:hidden;height:42px;max-width:1000px;margin:0 auto;-webkit-mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
+.hero .hmq .inc{display:flex;flex-wrap:nowrap;align-items:center;width:max-content;height:100%;will-change:transform}
+.hero .hmq .in-c{display:inline-flex;align-items:center;gap:8px;flex:none;padding:0 26px;font-size:15.5px;font-weight:600;line-height:1;color:var(--ink2);white-space:nowrap;transform-origin:center;transition:color .2s}
+.hero .hmq .in-c svg{width:17px;height:17px;flex:none}
+.hero .hmq .in-c.hot{color:var(--ink)}
+@media(max-width:1060px){.hero .hmq .in-c{padding:0 20px;font-size:15px}}
+@media(prefers-reduced-motion:reduce){.hero .hmq{display:flex;justify-content:center}}
 /* 055: the hero's groups stay together; on a phone the blue line wraps between them, the sub never ends on one word, and the three ticks may take two rows */
 .hero h1 .nw,.hero .sub .nw{white-space:nowrap}
 @media(max-width:599px){.hero h1 .nw.nw-600{white-space:normal}}

@@ -1,12 +1,12 @@
-// node hero.cjs <base> <shots-dir>   (VERCEL_BYPASS for a preview) — 055: the hero copy (site, email and automations), the meta,
+// node hero.cjs <base> <shots-dir>   (VERCEL_BYPASS for a preview) — 055: the hero copy (site, email and automations; the tag above it is the professions strip since 057: hero-strip.cjs), the meta,
 // and the email card second in the carousel. At 1440, 390, 360, 320, he and en: h1 bigger than every h2, no horizontal
 // scroll, the h1 breaking only between 055's groups, and the sub not ending on a single word; screenshots of the hero and the second card
 const { chromium } = require('playwright');
 const [P, OUT] = process.argv.slice(2); const K = process.env.VERCEL_BYPASS;
 const WANT = {
-  he: { h1: 'מספרים ל-AI על העסק.מקבלים אתר, דיוור ואוטומציות.', tick: 'דיוור ואוטומציות בפנים', row: 'מחבר טופס, דיוור ואוטומציות', eyebrow: 'בניית אתרים ב-AI, בעברית',
+  he: { h1: 'מספרים ל-AI על העסק.מקבלים אתר, דיוור ואוטומציות.', tick: 'דיוור ואוטומציות בפנים', row: 'מחבר טופס, דיוור ואוטומציות',
         title: 'UXellent · אתר, דיוור ואוטומציות ב-AI', card: 'דיוור ואוטומציות, מאותו חשבון.', label: '2 מתוך 5', lines: { d: ['מספרים ל-AI על העסק.', 'מקבלים אתר, דיוור ואוטומציות.'], m: ['מספרים ל-AI', 'על העסק.', 'מקבלים אתר, דיוור', 'ואוטומציות.'] } },
-  en: { h1: 'Tell AI what you do.Get a site, email and automations.', tick: 'Email and automations built in', row: 'Connecting forms, email and automations', eyebrow: 'AI websites for every business',
+  en: { h1: 'Tell AI what you do.Get a site, email and automations.', tick: 'Email and automations built in', row: 'Connecting forms, email and automations',
         title: 'UXellent · AI website, email and automations', card: 'Email and automations, from the same account.', label: '2 of 5', lines: { d: ['Tell AI what you do.', 'Get a site,', 'email and automations.'], m: ['Tell AI what you do.', 'Get a site, email and', 'automations.'] } },
 };
 (async () => {
@@ -31,7 +31,6 @@ const WANT = {
       const cards = [...document.querySelectorAll('#ben .ben')];
       return { h1: h1.textContent, h1fs: fs(h1), h2fs: h2, h1lines: lines(h1), sublast: lines(sub).at(-1),
         tick: [...document.querySelectorAll('.hero .trust span')].at(-1).textContent, row: document.querySelector('.f-ai li.d5').textContent,
-        eyebrow: document.querySelector('.hero .eyebrow').textContent.replace(/^(חדש|New)/, ''),
         title: document.title, desc: document.querySelector('meta[name=description]').content, og: document.querySelector('meta[property="og:title"]').content,
         ogd: document.querySelector('meta[property="og:description"]').content,
         card2: cards[1]?.querySelector('h3').textContent, label2: cards[1]?.getAttribute('aria-label'), labels: cards.map(c => c.getAttribute('aria-label')),
@@ -43,7 +42,7 @@ const WANT = {
     if (!r.sublast.includes(' ')) errs.push('sub lone word');
     // the h1 breaks only where 055 says (its nowrap groups; in English those are whole from 600px)
     if (JSON.stringify(r.h1lines) !== JSON.stringify(W.lines[w > 1060 ? 'd' : 'm'])) errs.push('h1 lines');
-    if (r.tick !== W.tick || r.row !== W.row || r.eyebrow !== W.eyebrow) errs.push('copy');
+    if (r.tick !== W.tick || r.row !== W.row) errs.push('copy');
     if (r.title !== W.title || r.og !== W.title || r.desc !== r.subText || r.ogd !== r.subText) errs.push('meta');
     if (r.card2 !== W.card || r.label2 !== W.label || r.labels.length !== 5 || r.labels.some((l, i) => !l.startsWith(i + 1 + ' '))) errs.push('carousel');
     if (r.hscroll) errs.push('hscroll');

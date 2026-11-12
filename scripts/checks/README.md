@@ -16,7 +16,8 @@ Scripts used to verify each change against production or a preview. They are not
 | `lang-switch.cjs <base> [shots] [pages]` | the header language switch, no horizontal scroll (051) |
 | `lang-switch-menu.cjs <preview> <shots>` | the switch with 3+ languages: menu, sheet, keyboard (051) |
 | `lang-switch-clicks.cjs <base>` | switching language, no redirect loop (050) |
-| `who-icons.cjs <base> <lang> <width> [shots]` | "for every business" icons pop on free spots only (048) |
+| `hero.cjs <base> [shots]` | the hero copy, its line breaks, the home meta and the email card second (055) |
+| `hero-strip.cjs <base> [shots] [baseline]` | the professions strip in the hero, no "for every business" section, the h1 no lower than on the baseline (057) |
 | `mail-section.cjs <base> <shots>` | the home email section, card and questions with MAILING_LIVE (048) |
 | `faq-topic.cjs <base> [shots]` | the FAQ page's email topic: last in the menu, its anchor, four questions (054) |
 | `mail-steps.cjs <base>` | the step numbers in the email mockup (053) |
