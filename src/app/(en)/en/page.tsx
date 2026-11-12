@@ -6,10 +6,10 @@ import { localeAlternates } from "@/lib/seo/hreflang"
 
 import "@/app/_home/home.en.css"
 
-// 055
+// 055, 058
 const TITLE = "UXellent · AI website, email and automations"
 const DESCRIPTION =
-  "In minutes, you get a beautifully designed site with a lead form, a mailing list and automations that work from day one. No code, no tools to stitch together."
+  "In minutes, you get a beautifully designed site with a lead form, a mailing list and automations that work from day one."
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uxellent.com"),

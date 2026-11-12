@@ -303,9 +303,10 @@ WHO_CARDS = {
 ORB_LABEL = {"he": "חברות", "en": "Companies"}
 
 
-# 057: a professions strip above the hero's h1, in place of the tag (עיצובים/לאישור-פס-מקצועות-בהירו.html).
+# 057: a professions strip in the hero, in place of the tag (עיצובים/לאישור-פס-מקצועות-בהירו.html).
 # The moving strip of the other pages (.mq/.inc/.in-c, HomeBehaviors), here with an icon and no band.
-# The icons are those of "who it's for" and its popping icons; tax advisors and studios are new, in the same style.
+# The icons are those of "who it's for" and its popping icons; tax advisors is new, in the same style.
+# 058: below the h1, above the sub; 15 professions (no studios).
 _PI = {
     "law": '<path d="M12 3v18M5 7h14M5 7l-2.5 6a3 3 0 0 0 5 0zM19 7l-2.5 6a3 3 0 0 0 5 0z"/>',
     "clinic": '<path d="M6 4v5a4 4 0 0 0 8 0V4"/><path d="M10 13v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/>',
@@ -322,15 +323,14 @@ _PI = {
     "cons": '<path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2 8 12.7 4 8.8 9.5 8z"/>',
     "tech": '<rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 10h4v4h-4zM9.5 3v4M14.5 3v4M9.5 17v4M14.5 17v4M3 9.5h4M3 14.5h4M17 9.5h4M17 14.5h4"/>',
     "coach": '<path d="M5 4h14v6a7 7 0 0 1-14 0z"/><path d="M9 21h6M12 17v4"/>',
-    "studio": '<path d="M12 3a9 9 0 1 0 0 18c1.2 0 2-.8 2-1.9 0-1.4-1.1-1.7-1.1-2.9 0-1 .9-1.9 2-1.9H17a4 4 0 0 0 4-4C21 6.2 17 3 12 3z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="9.5" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/>',
 }
 HERO_PROS = {
     "he": [("עורכי דין", "law"), ("קליניקות", "clinic"), ("רואי חשבון", "acc"), ("אדריכלים", "arch"), ("מטפלים", "ther"), ("חברות", "co"),
            ("מפעלים", "fac"), ("ארגונים", "org"), ("יועצי מס", "tax"), ("מעצבים", "des"), ("צלמים", "photo"), ('נדל"ן', "re"),
-           ("יועצים", "cons"), ("חברות טכנולוגיה", "tech"), ("מאמנים", "coach"), ("סטודיואים", "studio")],
+           ("יועצים", "cons"), ("חברות טכנולוגיה", "tech"), ("מאמנים", "coach")],
     "en": [("Lawyers", "law"), ("Clinics", "clinic"), ("Accountants", "acc"), ("Architects", "arch"), ("Therapists", "ther"), ("Companies", "co"),
            ("Manufacturers", "fac"), ("Organizations", "org"), ("Tax advisors", "tax"), ("Designers", "des"), ("Photographers", "photo"), ("Real estate", "re"),
-           ("Consultants", "cons"), ("Tech companies", "tech"), ("Coaches", "coach"), ("Studios", "studio")],
+           ("Consultants", "cons"), ("Tech companies", "tech"), ("Coaches", "coach")],
 }
 _PI_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
 _CSS_GONE = re.compile(r"who2|\.orb\b|\.cf\b")
@@ -354,7 +354,9 @@ def hero_057(body, css, lang):
     items = "".join(f'<span class="in-c"{d}>{_PI_SVG}{_PI[k]}</svg>{name}</span>' for name, k in HERO_PROS[lang])
     label = ", ".join(name for name, _ in HERO_PROS[lang]).replace('"', "&quot;")
     strip = f'<div class="mq hmq" role="img" aria-label="{label}"><div class="inc">{items}</div></div>'
-    body, n = re.subn(r'<span class="eyebrow">.*?</span>', lambda m: strip, body, count=1, flags=re.S)
+    body, n = re.subn(r'\s*<span class="eyebrow">.*?</span>', "", body, count=1, flags=re.S)
+    assert n == 1, lang
+    body, n = re.subn(r"(<h1>.*?</h1>)", lambda m: m.group(1) + "\n  " + strip, body, count=1, flags=re.S)
     assert n == 1, lang
     # the "for every business" section and its popping icons leave the home page (/for-who keeps its own)
     body, n = re.subn(r'\n<section class="sec zone" id="who">.*?</section>\n', "\n", body, count=1, flags=re.S)
@@ -728,18 +730,18 @@ HOME_LEADS_CARD = {
 HERO_055 = {
     "he": [
         ('<h1>האתר שלכם<span class="l2">במרחק משפט אחד.</span></h1>',
-         '<h1><span class="nw">מספרים ל-AI</span> <span class="nw">על העסק.</span><span class="l2">מקבלים <span class="nw">אתר, דיוור</span> ואוטומציות.</span></h1>'),
+         '<h1><span class="nw">מספרים ל-<span class="ai">AI</span></span> <span class="nw">על העסק.</span><span class="l2">מקבלים <span class="nw">אתר, דיוור</span> ואוטומציות.</span></h1>'),
         ('<p class="sub">אתר מעוצב לעסק שלכם, נבנה ב-AI תוך דקות. כתבו מה העסק עושה,<span class="br"></span> ותראו אותו נבנה מול העיניים.</p>',
-         '<p class="sub">תוך דקות נבנה לכם אתר מעוצב לעסק, עם טופס לידים, רשימת תפוצה<span class="br"></span> ואוטומציות שעובדות מהיום הראשון. בלי קוד ובלי <span class="nw">לחבר מערכות.</span></p>'),
-        ("</svg>באוויר בלחיצה אחת</span>", "</svg>דיוור ואוטומציות בפנים</span>"),
+         '<p class="sub">תוך דקות נבנה לכם אתר מעוצב לעסק, עם טופס לידים, רשימת תפוצה<span class="br"></span> ואוטומציות שעובדות <span class="nw">מהיום הראשון.</span></p>'),
+        ("</svg>באוויר בלחיצה אחת</span>", "</svg>דיוור ואוטומציות</span>"),
         ("</span>מחבר טופס פניות</li>", "</span>מחבר טופס, דיוור ואוטומציות</li>"),
     ],
     "en": [
         ('<h1>Your website,<span class="l2">one sentence away.</span></h1>',
-         '<h1>Tell AI what you do.<span class="l2">Get a site, <span class="nw nw-600">email and automations.</span></span></h1>'),
+         '<h1>Tell <span class="ai">AI</span> what you do.<span class="l2">Get a site, <span class="nw nw-600">email and automations.</span></span></h1>'),
         ('<p class="sub">A beautifully designed website for your business, built by AI in minutes.<span class="br"></span> Tell us what you do and watch it come together.</p>',
-         '<p class="sub">In minutes, you get a beautifully designed site with a lead form, a mailing list and automations that work from day one. No code, no tools to <span class="nw">stitch together.</span></p>'),
-        ("</svg>Live in one click</span>", "</svg>Email and automations built in</span>"),
+         '<p class="sub">In minutes, you get a beautifully designed site with a lead form, a mailing list and automations that work from <span class="nw">day one.</span></p>'),
+        ("</svg>Live in one click</span>", "</svg>Email and automations</span>"),
         ("</span>Setting up your contact form</li>", "</span>Connecting forms, email and automations</li>"),
     ],
 }
@@ -998,18 +1000,25 @@ SITE040_CSS = {
 /* 057: the carousel now follows the hero: the same gap as between the other sections (120 / 72; over the section rhythm rule) */
 .hero+#ben{padding-top:120px!important}
 @media(max-width:1060px){.hero+#ben{padding-top:72px!important}}
-/* 057: the professions strip, where the tag was (same height), without the band: grey text, the centre one dark */
-.hero .hmq{direction:ltr;overflow:hidden;height:42px;max-width:1000px;margin:0 auto;-webkit-mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
+/* 057, 058: the professions strip between the h1 and the sub, without the band: grey text, the centre one in the blue line's blue */
+.hero .hmq{direction:ltr;overflow:hidden;height:32px;max-width:1000px;margin:18px auto 0;-webkit-mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
 .hero .hmq .inc{display:flex;flex-wrap:nowrap;align-items:center;width:max-content;height:100%;will-change:transform}
 .hero .hmq .in-c{display:inline-flex;align-items:center;gap:8px;flex:none;padding:0 26px;font-size:15.5px;font-weight:600;line-height:1;color:var(--ink2);white-space:nowrap;transform-origin:center;transition:color .2s}
 .hero .hmq .in-c svg{width:17px;height:17px;flex:none}
-.hero .hmq .in-c.hot{color:var(--ink)}
-@media(max-width:1060px){.hero .hmq .in-c{padding:0 20px;font-size:15px}}
+.hero .hmq .in-c.hot{color:var(--brand-d)}
+@media(max-width:1060px){.hero .hmq{margin-top:12px}.hero .hmq .in-c{padding:0 20px;font-size:15px}}
 @media(prefers-reduced-motion:reduce){.hero .hmq{display:flex;justify-content:center}}
-/* 055: the hero's groups stay together; on a phone the blue line wraps between them, the sub never ends on one word, and the three ticks may take two rows */
+/* 055: the hero's groups stay together; on a phone the blue line wraps between them, and the sub never ends on one word */
 .hero h1 .nw,.hero .sub .nw{white-space:nowrap}
 @media(max-width:599px){.hero h1 .nw.nw-600{white-space:normal}}
-@media(max-width:1060px){.zone.hero h1 .l2{white-space:normal}.zone.hero .go+.trust{flex-wrap:wrap;row-gap:8px}}
+@media(max-width:1060px){.zone.hero h1 .l2{white-space:normal}}
+/* 058: the three ticks stay on one line on a phone (mobile-type.css wraps them, at 16px), and may use some of
+   the side margins; from 360px down at 14px and tighter */
+@media(max-width:1060px){.hero .go+.trust{flex-wrap:nowrap;column-gap:10px;margin-inline:-8px}.hero .go+.trust span{gap:5px}}
+@media(max-width:360px){.hero .go+.trust{column-gap:8px;margin-inline:-11px}.hero .go+.trust span{font-size:14px!important;gap:4px}.hero .go+.trust svg{width:12px;height:12px}}
+@media(max-width:340px){.hero .go+.trust{column-gap:6px;margin-inline:-12px}}
+/* 058: "AI" in the h1 as heavy as the words around it */
+.hero h1 .ai{font-weight:600;letter-spacing:-.02em}
 """,
     "pricing": """
 .pr-all{text-align:center;font-size:16px;font-weight:600;color:var(--ink);margin-top:30px}
