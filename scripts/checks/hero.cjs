@@ -4,9 +4,9 @@
 const { chromium } = require('playwright');
 const [P, OUT] = process.argv.slice(2); const K = process.env.VERCEL_BYPASS;
 const WANT = {
-  he: { h1: 'מספרים ל-AI על העסק.מקבלים אתר, דיוור ואוטומציות.', tick: 'דיוור ואוטומציות בפנים', row: 'מחבר טופס, דיוור ואוטומציות',
+  he: { h1: 'מספרים ל-AI על העסק.מקבלים אתר, דיוור ואוטומציות.', tick: 'דיוור ואוטומציות', row: 'מחבר טופס, דיוור ואוטומציות',
         title: 'UXellent · אתר, דיוור ואוטומציות ב-AI', card: 'דיוור ואוטומציות, מאותו חשבון.', label: '2 מתוך 5', lines: { d: ['מספרים ל-AI על העסק.', 'מקבלים אתר, דיוור ואוטומציות.'], m: ['מספרים ל-AI', 'על העסק.', 'מקבלים אתר, דיוור', 'ואוטומציות.'] } },
-  en: { h1: 'Tell AI what you do.Get a site, email and automations.', tick: 'Email and automations built in', row: 'Connecting forms, email and automations',
+  en: { h1: 'Tell AI what you do.Get a site, email and automations.', tick: 'Email and automations', row: 'Connecting forms, email and automations',
         title: 'UXellent · AI website, email and automations', card: 'Email and automations, from the same account.', label: '2 of 5', lines: { d: ['Tell AI what you do.', 'Get a site,', 'email and automations.'], m: ['Tell AI what you do.', 'Get a site, email and', 'automations.'] } },
 };
 (async () => {
@@ -24,7 +24,7 @@ const WANT = {
         for (let n; (n = wk.nextNode());) for (const m of n.textContent.matchAll(/\S+/g)) { const rg = document.createRange(); rg.setStart(n, m.index); rg.setEnd(n, m.index + m[0].length);
           const rc = [...rg.getClientRects()].filter(x => x.width > 0); if (!rc.length) continue; const t = Math.round(rc[0].top);
           let L = tops.find(x => Math.abs(x.t - t) < 8); if (!L) tops.push(L = { t, w: [] }); L.w.push(m[0]) }
-        return tops.sort((a, b) => a.t - b.t).map(x => x.w.join(' ')) };
+        return tops.sort((a, b) => a.t - b.t).map(x => x.w.join(' ').replace(/- AI/, '-AI')) }; // "AI" is its own span (058)
       const h1 = document.querySelector('.hero h1'), sub = document.querySelector('.hero .sub');
       const fs = (e) => parseFloat(getComputedStyle(e).fontSize);
       const h2 = Math.max(...[...document.querySelectorAll('h2')].filter(e => e.offsetParent).map(fs));

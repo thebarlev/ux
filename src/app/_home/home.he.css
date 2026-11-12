@@ -819,18 +819,25 @@
 /* 057: the carousel now follows the hero: the same gap as between the other sections (120 / 72; over the section rhythm rule) */
 .uxh-he .hero+#ben{padding-top:120px!important}
 @media(max-width:1060px){.uxh-he .hero+#ben{padding-top:72px!important}}
-/* 057: the professions strip, where the tag was (same height), without the band: grey text, the centre one dark */
-.uxh-he .hero .hmq{direction:ltr;overflow:hidden;height:42px;max-width:1000px;margin:0 auto;-webkit-mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
+/* 057, 058: the professions strip between the h1 and the sub, without the band: grey text, the centre one in the blue line's blue */
+.uxh-he .hero .hmq{direction:ltr;overflow:hidden;height:32px;max-width:1000px;margin:18px auto 0;-webkit-mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
 .uxh-he .hero .hmq .inc{display:flex;flex-wrap:nowrap;align-items:center;width:max-content;height:100%;will-change:transform}
 .uxh-he .hero .hmq .in-c{display:inline-flex;align-items:center;gap:8px;flex:none;padding:0 26px;font-size:15.5px;font-weight:600;line-height:1;color:var(--ink2);white-space:nowrap;transform-origin:center;transition:color .2s}
 .uxh-he .hero .hmq .in-c svg{width:17px;height:17px;flex:none}
-.uxh-he .hero .hmq .in-c.hot{color:var(--ink)}
-@media(max-width:1060px){.uxh-he .hero .hmq .in-c{padding:0 20px;font-size:15px}}
+.uxh-he .hero .hmq .in-c.hot{color:var(--brand-d)}
+@media(max-width:1060px){.uxh-he .hero .hmq{margin-top:12px}.uxh-he .hero .hmq .in-c{padding:0 20px;font-size:15px}}
 @media(prefers-reduced-motion:reduce){.uxh-he .hero .hmq{display:flex;justify-content:center}}
-/* 055: the hero's groups stay together; on a phone the blue line wraps between them, the sub never ends on one word, and the three ticks may take two rows */
+/* 055: the hero's groups stay together; on a phone the blue line wraps between them, and the sub never ends on one word */
 .uxh-he .hero h1 .nw,.uxh-he .hero .sub .nw{white-space:nowrap}
 @media(max-width:599px){.uxh-he .hero h1 .nw.nw-600{white-space:normal}}
-@media(max-width:1060px){.uxh-he .zone.hero h1 .l2{white-space:normal}.uxh-he .zone.hero .go+.trust{flex-wrap:wrap;row-gap:8px}}
+@media(max-width:1060px){.uxh-he .zone.hero h1 .l2{white-space:normal}}
+/* 058: the three ticks stay on one line on a phone (mobile-type.css wraps them, at 16px), and may use some of
+   the side margins; from 360px down at 14px and tighter */
+@media(max-width:1060px){.uxh-he .hero .go+.trust{flex-wrap:nowrap;column-gap:10px;margin-inline:-8px}.uxh-he .hero .go+.trust span{gap:5px}}
+@media(max-width:360px){.uxh-he .hero .go+.trust{column-gap:8px;margin-inline:-11px}.uxh-he .hero .go+.trust span{font-size:14px!important;gap:4px}.uxh-he .hero .go+.trust svg{width:12px;height:12px}}
+@media(max-width:340px){.uxh-he .hero .go+.trust{column-gap:6px;margin-inline:-12px}}
+/* 058: "AI" in the h1 as heavy as the words around it */
+.uxh-he .hero h1 .ai{font-weight:600;letter-spacing:-.02em}
 
 /* ---- added by scripts/home-sheets/build.py ---- */
 .uxh-he .gs-img,.uxh-he .a2-img{isolation:isolate}
