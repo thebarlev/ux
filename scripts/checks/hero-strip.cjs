@@ -10,7 +10,7 @@ const N = 16;
   const b = await chromium.launch({ channel: 'chrome' }); let fails = 0;
   const open = async (base, lang, w, reduced) => {
     const ctx = await b.newContext({ viewport: { width: w, height: 900 }, deviceScaleFactor: w > 1000 ? 1 : 2, locale: lang === 'he' ? 'he-IL' : 'en-US',
-      reducedMotion: reduced ? 'reduce' : 'no-preference', extraHTTPHeaders: K && base === P ? { 'x-vercel-protection-bypass': K } : {} });
+      reducedMotion: reduced ? 'reduce' : 'no-preference', extraHTTPHeaders: K && base.includes('vercel.app') ? { 'x-vercel-protection-bypass': K } : {} });
     await ctx.addCookies([{ name: 'lang_pref', value: lang, url: base }, { name: 'ux_consent', value: '1%7C2026-11-09T00%3A00%3A00.000Z%7Ca0%7Cm0', url: base }]);
     const pg = await ctx.newPage();
     await pg.goto(base + (lang === 'en' ? '/en' : '/'), { waitUntil: 'networkidle' }); await pg.waitForTimeout(1200);
