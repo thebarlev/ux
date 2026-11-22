@@ -1,6 +1,6 @@
 import { CONSENT_EVENT, type Consent, hasConsentFor } from "@/lib/consent"
 
-import { getAttribution } from "./attribution"
+import { getAttribution, getAttributionFromUrl } from "./attribution"
 import {
   ATTR_COOKIE,
   ATTR_MAX_AGE,
@@ -26,10 +26,39 @@ function cookieSuffix(): string {
   return `; Path=/${domain ? `; Domain=${domain}` : ""}; SameSite=Lax${secure}`
 }
 
-/** Records this page view's campaign / external referrer, analytics consent only. */
-export function recordAttribution(pathname: string) {
-  if (typeof window === "undefined" || !hasConsentFor("analytics")) return
-  const touch = buildTouch(getAttribution(), document.referrer, pathname, getPageLanguage())
+let views = 0
+let landingPath: string | null = null
+
+const hasUtm = (a: Record<string, string | undefined>) =>
+  Boolean(a.utm_source || a.utm_medium || a.utm_campaign || a.utm_term || a.utm_content)
+
+/**
+ * A touch is recorded only where one really happens:
+ * - "view": the first page view of the document (its UTMs and external
+ *   referrer), or a later page whose own URL carries UTMs. Client-side
+ *   navigations without UTMs record nothing (document.referrer still holds the
+ *   original referrer and must not be re-counted).
+ * - "consent": analytics was just allowed; the session's landing UTMs, the
+ *   original referrer and the landing path (kept in memory only).
+ * Without analytics consent an existing cookie is removed instead.
+ */
+export function recordAttribution(pathname: string, reason: "view" | "consent" = "view") {
+  if (typeof window === "undefined") return
+  if (reason === "view") views++
+  if (landingPath === null) landingPath = pathname
+  if (!hasConsentFor("analytics")) {
+    if (readCookie(ATTR_COOKIE) !== undefined) clearAttribution()
+    return
+  }
+  let touch
+  if (reason === "consent") {
+    touch = buildTouch(getAttribution(), document.referrer, landingPath, getPageLanguage())
+  } else {
+    const fromUrl = getAttributionFromUrl(location.search)
+    const first = views === 1
+    if (!first && !hasUtm(fromUrl)) return
+    touch = buildTouch(fromUrl, first ? document.referrer : "", pathname, getPageLanguage())
+  }
   const existing = parseAttr(readCookie(ATTR_COOKIE))
   const next = mergeTouch(existing, touch)
   if (!next || next === existing) return
@@ -97,7 +126,7 @@ export function installAppCtaTracking(): () => void {
   const onConsentChange = (e: Event) => {
     const c = (e as CustomEvent<Consent>).detail
     if (!c) return
-    if (c.analytics) recordAttribution(location.pathname)
+    if (c.analytics) recordAttribution(location.pathname, "consent")
     else clearAttribution()
   }
   document.addEventListener("click", onAppLinkClick, true)

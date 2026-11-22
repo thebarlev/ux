@@ -97,3 +97,21 @@ test("source guards: no page_view forwarded, consent gate, GA4-only send_to", ()
   assert.match(cta, /recordAttribution[\s\S]*hasConsentFor\("analytics"\)/)
   assert.ok(!/gclid|fbclid/.test(readFileSync(new URL("../../src/lib/tracking/attributionCookie.ts", import.meta.url), "utf8").split("*/").slice(1).join("")), "no ad identifiers in the cookie")
 })
+
+test("review fix: campaign IDs and dated names survive; phone shapes don't", () => {
+  assert.equal(sanitizeValue("12345678901"), "12345678901")
+  assert.equal(sanitizeValue("bf_2026-11-22"), "bf_2026-11-22")
+  assert.equal(sanitizeValue("2026-11-22"), "2026-11-22")
+  assert.equal(sanitizeValue("+972501234567"), undefined)
+  assert.equal(sanitizeValue("0501234567"), undefined)
+  assert.equal(sanitizeValue("050 123 4567"), undefined)
+})
+
+test("review fix: a planted cookie is rebuilt from known fields only", () => {
+  const planted = { v: 1, ft: { ts: "2026-11-01T00:00:00Z", source: "x", evil: "<script>", lp: "javascript:alert(1)", ref: "a b/c", lang: "fr", term: "dan@x.com" }, lt: { ts: "2026-11-01T00:00:00Z" } }
+  const a = parseAttr(encodeURIComponent(JSON.stringify(planted)))
+  assert.deepEqual(a.ft, { ts: "2026-11-01T00:00:00.000Z", source: "x" })
+  assert.equal(parseAttr(encodeURIComponent(JSON.stringify({ v: 1, ft: { ts: "nope" }, lt: { ts: "nope" } }))), null)
+  assert.equal(parseAttr("x".repeat(2001)), null)
+  assert.equal(parseAttr(encodeURIComponent(JSON.stringify({ v: 1, ft: 5, lt: null }))), null)
+})

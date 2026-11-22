@@ -11,6 +11,15 @@ let fails = 0, checked = 0
 const fail = (m) => { fails++; console.log("FAIL | " + m) }
 const ent = (s) => s.replace(/&amp;/g, "&")
 
+// Vercel preview protection: VERCEL_BYPASS (env) sets the bypass cookie on the preview host only.
+const BYPASS = process.env.VERCEL_BYPASS
+async function unlock(c, base) {
+  if (!BYPASS || !base.includes("vercel.app")) return
+  const p = await c.newPage()
+  await p.goto(`${base}/?x-vercel-protection-bypass=${encodeURIComponent(BYPASS)}&x-vercel-set-bypass-cookie=true`)
+  await p.close()
+}
+const bypassHeaders = (base) => (BYPASS && base.includes("vercel.app") ? { "x-vercel-protection-bypass": BYPASS } : {})
 function expected(serverHref, isEn) {
   const u = new URL(serverHref)
   if (isEn && u.searchParams.get("lang") !== "en") u.searchParams.set("lang", "en")
@@ -27,12 +36,13 @@ function sameUrl(a, b) {
   const c = await b.newContext({ viewport: { width: 1280, height: 900 } })
   await c.addCookies([{ name: "ux_consent", value: "1%7C2026-11-22T00%3A00%3A00.000Z%7Ca1%7Cm0", domain: new URL(BASE).hostname, path: "/" }])
   await c.route(/googletagmanager|google-analytics|posthog|facebook|doubleclick/, (r) => r.abort())
+  await unlock(c, BASE)
   const navigated = []
   await c.route(/ai\.uxellent\.com/, (r) => { navigated.push(r.request().url()); r.fulfill({ status: 200, contentType: "text/html", body: "<html><body>app stub</body></html>" }) })
 
   for (const route of routes) {
     const isEn = route === "/en" || route.startsWith("/en/")
-    const res = await fetch(BASE + route, { headers: { "accept-language": isEn ? "en-US" : "he-IL" }, redirect: "manual" })
+    const res = await fetch(BASE + route, { headers: { ...bypassHeaders(BASE), "accept-language": isEn ? "en-US" : "he-IL" }, redirect: "manual" })
     if (res.status !== 200) continue
     const html = await res.text()
     const server = [...html.matchAll(/href="(https:\/\/ai\.uxellent\.com[^"]*)"/g)].map((m) => ent(m[1]))

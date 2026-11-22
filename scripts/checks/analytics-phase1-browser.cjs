@@ -5,6 +5,15 @@ const { chromium } = require("playwright")
 const BASE = process.argv[2] || "http://localhost:3917"
 let fails = 0
 const out = (ok, name, got) => { if (!ok) fails++; console.log(`${ok ? "OK  " : "FAIL"} | ${name} | ${got}`) }
+// Vercel preview protection: VERCEL_BYPASS (env) sets the bypass cookie on the preview host only.
+const BYPASS = process.env.VERCEL_BYPASS
+async function unlock(c, base) {
+  if (!BYPASS || !base.includes("vercel.app")) return
+  const p = await c.newPage()
+  await p.goto(`${base}/?x-vercel-protection-bypass=${encodeURIComponent(BYPASS)}&x-vercel-set-bypass-cookie=true`)
+  await p.close()
+}
+const bypassHeaders = (base) => (BYPASS && base.includes("vercel.app") ? { "x-vercel-protection-bypass": BYPASS } : {})
 const consent = (a, m) => `1%7C2026-11-22T00%3A00%3A00.000Z%7Ca${a}%7Cm${m}`
 
 async function ctx(b, locale, a, m) {
@@ -17,6 +26,7 @@ async function ctx(b, locale, a, m) {
     // keep the browser on the page when a link into the app is clicked (bubble phase, after the tracker)
     document.addEventListener("click", (e) => { if (e.target.closest?.('a[href*="ai.uxellent.com"]')) e.preventDefault() })
   })
+  await unlock(c, BASE)
   return c
 }
 const settle = (p) => p.mouse.move(5, 5).then(() => p.mouse.wheel(0, 50)).then(() => p.waitForTimeout(2500))
@@ -42,6 +52,11 @@ const appLinks = (p) => p.$$eval('a[href^="https://ai.uxellent.com"]', (as) => a
     const ck = (await c.cookies()).find((x) => x.name === "ux_attr")
     const attr = ck ? JSON.parse(decodeURIComponent(ck.value)) : null
     out(attr?.ft?.source === "reddit" && attr.ft.campaign === "qa1" && attr.ft.lang === "en" && !attr.ft.term && attr.ft.lp === "/en", "ux_attr first touch (email-like term dropped, path only)", ck?.value && decodeURIComponent(ck.value))
+    // review fix: a later page view without UTMs does not rewrite the touch
+    const before = (await c.cookies()).find((x) => x.name === "ux_attr")?.value
+    const p2 = await c.newPage(); await p2.goto(`${BASE}/en/pricing`); await settle(p2); await p2.close()
+    await p.evaluate(() => history.pushState({}, "", "/en/faq")); await p.waitForTimeout(300)
+    out((await c.cookies()).find((x) => x.name === "ux_attr")?.value === before, "later page views leave ux_attr unchanged", "")
     const a = p.locator('a[href^="https://ai.uxellent.com"]:visible').first()
     await a.dblclick()
     await p.waitForTimeout(300)
@@ -66,6 +81,17 @@ const appLinks = (p) => p.$$eval('a[href^="https://ai.uxellent.com"]', (as) => a
     const pv = await dlObjects(p, "vow_page_view")
     out(pv[0]?.page_language === "he" && pv[0]?.page_dir === "rtl", "HE: vow_page_view language", pv[0]?.page_language)
     out(!(await c.cookies()).some((x) => x.name === "ux_attr"), "direct visit writes no ux_attr", "")
+    await c.close()
+  }
+
+  // review fix: consent gone (expired / deleted) → a leftover ux_attr is removed on the next view
+  {
+    const c = await ctx(b, "en-US", 1, 0); const p = await c.newPage()
+    await p.goto(`${BASE}/en?utm_source=google`); await settle(p)
+    const had = (await c.cookies()).some((x) => x.name === "ux_attr")
+    await c.clearCookies({ name: "ux_consent" })
+    await p.goto(`${BASE}/en`); await settle(p)
+    out(had && !(await c.cookies()).some((x) => x.name === "ux_attr"), "consent cookie gone → ux_attr removed", `had=${had}`)
     await c.close()
   }
 

@@ -48,13 +48,19 @@ export type UtmInput = {
 }
 
 const EMAIL = /@/
-const PHONE_LIKE = /\d[\d\s\-().]{6,}\d/
+/** Phone-shaped: starts with + or 0, or digits broken by separators (9+ digits). Plain IDs pass. */
+function looksLikePhone(v: string): boolean {
+  if (!/^[+\d][\d\s\-().]*$/.test(v)) return false
+  const digits = v.replace(/\D/g, "").length
+  if (digits < 9) return false
+  return v.startsWith("+") || v.startsWith("0") || /[\s\-().]/.test(v)
+}
 
 /** Trims, caps, and drops anything that could be personal data. */
 export function sanitizeValue(raw: string | undefined | null): string | undefined {
   if (!raw) return undefined
   const v = raw.trim().slice(0, MAX_VALUE)
-  if (!v || EMAIL.test(v) || PHONE_LIKE.test(v)) return undefined
+  if (!v || EMAIL.test(v) || looksLikePhone(v)) return undefined
   return v
 }
 
@@ -114,12 +120,42 @@ export function serializeAttr(a: AttrCookie): string {
   return encodeURIComponent(JSON.stringify(a))
 }
 
+/** Upper bound for the raw cookie; anything larger is rejected, not trusted. */
+export const ATTR_MAX_RAW = 2000
+
+/**
+ * The cookie is readable and writable by every *.uxellent.com subdomain, so it
+ * is untrusted input: each touch is rebuilt from known fields only, each one
+ * re-validated, and anything else is dropped.
+ */
+function cleanTouch(t: unknown): Touch | null {
+  if (!t || typeof t !== "object") return null
+  const r = t as Record<string, unknown>
+  const str = (k: string) => (typeof r[k] === "string" ? sanitizeValue(r[k] as string) : undefined)
+  const ts = typeof r.ts === "string" && !Number.isNaN(Date.parse(r.ts)) ? new Date(r.ts).toISOString() : null
+  if (!ts) return null
+  const out: Touch = { ts }
+  for (const k of ["source", "medium", "campaign", "term", "content"] as const) {
+    const v = str(k)
+    if (v) out[k] = v
+  }
+  const ref = str("ref")
+  if (ref && /^[a-z0-9.-]+$/.test(ref)) out.ref = ref
+  const lp = str("lp")
+  if (lp && /^\/[^?#\s]*$/.test(lp)) out.lp = lp
+  if (r.lang === "he" || r.lang === "en") out.lang = r.lang
+  return out
+}
+
 export function parseAttr(raw: string | undefined | null): AttrCookie | null {
-  if (!raw) return null
+  if (!raw || raw.length > ATTR_MAX_RAW) return null
   try {
-    const a = JSON.parse(decodeURIComponent(raw)) as AttrCookie
-    if (!a || a.v !== ATTR_VERSION || typeof a.ft?.ts !== "string" || typeof a.lt?.ts !== "string") return null
-    return a
+    const a = JSON.parse(decodeURIComponent(raw)) as { v?: unknown; ft?: unknown; lt?: unknown }
+    if (!a || a.v !== ATTR_VERSION) return null
+    const ft = cleanTouch(a.ft)
+    const lt = cleanTouch(a.lt)
+    if (!ft || !lt) return null
+    return { v: ATTR_VERSION, ft, lt }
   } catch {
     return null
   }
