@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react"
 
 import { getPixelId, metaPixelBootstrapScript } from "@/lib/analytics/meta-pixel"
 import { CONSENT_EVENT, type Consent, hasConsentFor, onConsent } from "@/lib/consent"
+import { GA_MEASUREMENT_ID } from "@/lib/tracking/ga4"
 
 /**
  * The Meta Pixel is deliberately not loaded here.
@@ -28,7 +29,6 @@ import { CONSENT_EVENT, type Consent, hasConsentFor, onConsent } from "@/lib/con
  * The IDs are literals rather than env vars on purpose: a flag left unset in
  * one environment must not be able to silence measurement.
  */
-const GA_MEASUREMENT_ID = "G-HEX0NQF4WM"
 const GOOGLE_ADS_ID = "AW-17972291188"
 
 /**

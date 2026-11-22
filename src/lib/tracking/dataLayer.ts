@@ -1,5 +1,7 @@
-export type PageLanguage = "he"
-export type PageDir = "rtl"
+import { getPageLanguage, sendGa4Event } from "./ga4"
+
+export type PageLanguage = "he" | "en"
+export type PageDir = "rtl" | "ltr"
 
 export type TrackingService =
   | "web_development"
@@ -47,8 +49,8 @@ function getBasePayload(): BaseDataLayerPayload {
     timestamp: now,
     page_path: window.location.pathname,
     page_title: typeof document !== "undefined" ? document.title : "",
-    page_language: "he",
-    page_dir: "rtl",
+    page_language: getPageLanguage(),
+    page_dir: getPageLanguage() === "en" ? "ltr" : "rtl",
   }
 }
 
@@ -74,5 +76,18 @@ export function pushDataLayer(eventName: DataLayerEventName, payload: Record<str
   }
 
   window.dataLayer.push(event)
+
+  // The dataLayer objects above were read by GTM, which is gone; gtag.js does
+  // not forward them to GA4. Only the lead success is forwarded, as GA4's
+  // recommended generate_lead, with no lead details and no attribution (GA4
+  // has its own). vow_page_view is deliberately not forwarded: gtag's config
+  // already sends page_view, so forwarding it would double every page view.
+  if (eventName === "vow_lead_submit_success") {
+    sendGa4Event("generate_lead", {
+      form_id: typeof payload.form_location === "string" ? `lead_${payload.form_location}` : "lead_form",
+      lead_source: typeof payload.lead_source === "string" ? payload.lead_source : undefined,
+      page_language: base.page_language,
+    })
+  }
 }
 
