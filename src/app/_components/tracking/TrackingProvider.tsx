@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useRef } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 
+import { installAppCtaTracking, recordAttribution, rewriteAppLinksForLanguage } from "@/lib/tracking/appCtaTracking"
 import { getAttribution } from "@/lib/tracking/attribution"
 import { pushDataLayer } from "@/lib/tracking/dataLayer"
 import { inferPageContext } from "@/lib/tracking/pageContext"
@@ -17,6 +18,9 @@ export function TrackingProvider() {
 
   const lastPushedKeyRef = useRef<string | null>(null)
 
+  // One document-level listener for links into the app (cta_build_click, lang=en).
+  useEffect(() => installAppCtaTracking(), [])
+
   useEffect(() => {
     if (!pathname) return
     if (lastPushedKeyRef.current === routeKey) return
@@ -25,6 +29,8 @@ export function TrackingProvider() {
     const push = () => {
       const ctx = inferPageContext(pathname)
       const attribution = getAttribution()
+      recordAttribution(pathname)
+      rewriteAppLinksForLanguage()
       pushDataLayer("vow_page_view", {
         ...ctx,
         ...attribution,
