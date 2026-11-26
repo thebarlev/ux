@@ -91,8 +91,23 @@ const BILLED: Record<Lang, Record<Cur, string>> = {
   he: { ILS: "החיוב בשקלים", USD: "החיוב בדולרים" },
   en: { ILS: "Billed in ILS", USD: "Billed in USD" },
 }
-function noteHtml(lang: Lang, cur: Cur, intl: IntlDisplay) {
-  const text = cur === "USD" ? `${NOTE[lang].USD} · ${BILLED[lang][payCur(intl)]}` : NOTE[lang].ILS
+/**
+ * dij (owner, 26.11 23:12): option א' ("usd+ils") names the amount actually
+ * charged, in shekels: the final, VAT-included price (₪60 a month, ₪576 a
+ * year), never the base. Whole shekels from the one source; nothing computed
+ * here. It follows the monthly / yearly switch like the price (data-m / data-y).
+ */
+function chargedHtml(p: Plan | undefined, lang: Lang, yearly: boolean) {
+  const pr = prices(p, "ILS")
+  if (!pr) return ""
+  const m = lang === "he" ? `${money("ILS", pr.m)} לחודש` : `${money("ILS", pr.m)}/month`
+  if (!yearly || pr.y === undefined) return `: <span class="pl-chg">${m}</span>`
+  const y = lang === "he" ? `${money("ILS", pr.y * 12)} לשנה` : `${money("ILS", pr.y * 12)}/year`
+  return `: <span class="pl-chg" data-m="${m}" data-y="${y}">${y}</span>`
+}
+function noteHtml(p: Plan | undefined, lang: Lang, cur: Cur, intl: IntlDisplay, yearly: boolean) {
+  const charged = cur === "USD" && payCur(intl) === "ILS" ? chargedHtml(p, lang, yearly) : ""
+  const text = cur === "USD" ? `${NOTE[lang].USD} · ${BILLED[lang][payCur(intl)]}${charged}` : NOTE[lang].ILS
   return `<span class="pl-note" data-cur="${cur}"${hid(cur)}>${text}</span>`
 }
 
@@ -233,7 +248,7 @@ export function fillPlans(html: string, lang: Lang, { plans, intl }: PricingData
   let out = html
     .replace("{{PLAN_LIST_SWITCH}}", listSwitchHtml(lang, intl))
     .replace(/\{\{PLAN_PRICE:(\w+)\}\}/g, (_, id: PlanId) => each(intl, (cur) => priceHtml(plans[id], lang, cur, yearly)))
-    .replace(/\{\{PLAN_NOTE:(\w+)\}\}/g, () => each(intl, (cur) => noteHtml(lang, cur, intl)))
+    .replace(/\{\{PLAN_NOTE:(\w+)\}\}/g, (_, id: PlanId) => each(intl, (cur) => noteHtml(plans[id], lang, cur, intl, yearly)))
     .replace(/\{\{PLAN_YEAR:(\w+)\}\}/g, (_, id: PlanId) => each(intl, (cur) => yearHtml(plans[id], lang, cur, yearly)))
     .replace(/\{\{PLAN_ACT:(\w+)\}\}/g, (_, id: PlanId) => actHtml(plans[id], lang))
     .replace(/\{\{PLAN_BACKUP:(\w+)\}\}/g, (_, id: PlanId) => backupHtml(plans[id], lang))

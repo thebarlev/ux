@@ -322,7 +322,7 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
           b.tabIndex = isOn ? 0 : -1
           if (isOn && focus) b.focus()
         })
-        root.querySelectorAll<HTMLElement>(".pl-price b, .pl-yr").forEach((e) => {
+        root.querySelectorAll<HTMLElement>(".pl-price b, .pl-yr, .pl-chg").forEach((e) => {
           const v = e.dataset[k]
           if (v !== undefined) e.textContent = v
         })
