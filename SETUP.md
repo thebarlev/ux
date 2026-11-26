@@ -17,9 +17,7 @@
 - `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`: Your reCAPTCHA v3 site key (from [Google reCAPTCHA Admin](https://www.google.com/recaptcha/admin/create))
 - `RECAPTCHA_SECRET_KEY`: Your reCAPTCHA v3 secret key (keep this private!)
 
-### Required for Checkout/Payments:
-- `CARDCOM_TERMINAL_NUMBER`: Your Cardcom terminal number
-- `CARDCOM_API_USERNAME`: Your Cardcom API username
+### Required for the billing webhook (`api/billing/marketing-webhook`):
 - `VOW_BILLING_WEBHOOK_SECRET`: Secret for VOW app webhook authentication
 
 ## Database Setup

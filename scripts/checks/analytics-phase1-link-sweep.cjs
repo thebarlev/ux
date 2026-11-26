@@ -79,18 +79,12 @@ function sameUrl(a, b) {
     await p.close()
   }
 
-  // pricing billing toggle (HomeBehaviors rewrites billing=) keeps lang=en and plan
+  // AV-936: plan buttons carry no billing cycle and no price; the cycle is chosen in the platform
   {
     const p = await c.newPage(); await p.goto(BASE + "/en/pricing"); await p.mouse.wheel(0, 40); await p.waitForTimeout(1800)
-    const before = await p.$$eval('a[href*="billing="]', (as) => as.map((a) => a.href))
-    const toggle = p.locator('[data-k="m"], button:has-text("Monthly"), label:has-text("Monthly")').first()
-    if (before.length && await toggle.count()) {
-      await toggle.click(); await p.waitForTimeout(300)
-      const after = await p.$$eval('a[href*="billing="]', (as) => as.map((a) => a.href))
-      const ok = after.length === before.length && after.every((h) => { const u = new URL(h); return u.searchParams.get("billing") === "monthly" && u.searchParams.get("lang") === "en" && u.searchParams.get("plan") })
-      if (!ok) fail(`billing toggle: ${JSON.stringify(after)}`)
-      else console.log(`OK   | billing toggle → monthly, plan and lang=en kept (${after.length} links)`)
-    } else console.log(`SKIP | billing toggle not found (${before.length} billing links)`)
+    const withCycle = await p.$$eval('a[href*="billing="]', (as) => as.map((a) => a.href))
+    if (withCycle.length) fail(`plan links with billing=: ${JSON.stringify(withCycle)}`)
+    else console.log("OK   | no billing= in any link on /en/pricing")
     await p.close()
   }
 

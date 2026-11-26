@@ -443,11 +443,13 @@ def build(lang, cfg, images, page="home", legal=None):
             if v.startswith("#"):
                 nav[k] = ("/" if cfg["home"] == "/" else cfg["home"]) + v
     if page == "pricing":
-        # plan buttons: same platform URLs as the live pricing page, billing follows the switch
+        # plan buttons ⟵ the platform's sign-up, the only purchase path (AV-936, AV-938 §3a).
+        # No plan code, price or billing cycle in the URL: the plan and the price are
+        # chosen and set in the platform. English: lang=en (start-intent.ts).
         slugs = iter(["free", "start", "business", "pro"])
         def plan(m):
             slug = next(slugs)
-            href = f"{PLATFORM}?plan=free" if slug == "free" else f"{PLATFORM}?plan={slug}&amp;billing=yearly"
+            href = f"{PLATFORM}/start" + ("?lang=en" if lang == "en" else "")
             return f'<a class="pl-cta" href="{href}" data-plan="{slug}">{m.group(1)}</a>'
         body, nplans = re.subn(r'<a class="pl-cta" href="#">([^<]*)</a>', plan, body)
         assert nplans == 4, nplans

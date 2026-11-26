@@ -9,8 +9,8 @@
  *
  * Part A: the redesigned pages (home, pricing, contact, FAQ, text pages, blog, guides, articles, what you get; both languages): the approved
  *         L-mobile-type.css as is, on the page root instead of body.
- * Part B: every other page (the inner pages), by element. Admin and checkout
- *         have no site footer and are left out.
+ * Part B: every other page (the inner pages), by element. Admin has no
+ *         site footer and is left out.
  */
 
 /* ---------- Part A: home, pricing, contact, FAQ, text pages, blog, guides, articles, what you get (L-mobile-type.css as approved, body -> page root) ---------- */

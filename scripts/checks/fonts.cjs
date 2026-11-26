@@ -2,7 +2,7 @@
 // node fonts.cjs <base> <outdir> <tag>   (VERCEL_BYPASS for a preview)
 const { chromium } = require('playwright');
 const [BASE, OUT, TAG] = process.argv.slice(2); const K = process.env.VERCEL_BYPASS;
-const PAGES = [['home', '/', 'he'], ['home', '/en', 'en'], ['pricing', '/pricing', 'he'], ['pricing', '/en/pricing', 'en'], ['article', '/blog/automation', 'he'], ['checkout', '/checkout/success', 'he']];
+const PAGES = [['home', '/', 'he'], ['home', '/en', 'en'], ['pricing', '/pricing', 'he'], ['pricing', '/en/pricing', 'en'], ['article', '/blog/automation', 'he']];
 (async () => {
   const b = await chromium.launch({ channel: 'chrome' }); const report = {};
   for (const [name, path, lang] of PAGES) for (const w of [1440, 390]) {

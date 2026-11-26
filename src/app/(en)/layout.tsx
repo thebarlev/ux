@@ -81,7 +81,7 @@ export default function RootLayoutEn({
 
         {/* The language row above the header is gone: Hebrew is the focus, and
             the switch now lives quietly in the footer. SiteHeader returns null
-            on its own for /lp, /checkout, /thanks and /en, so no route
+            on its own for /lp, /thanks and /en, so no route
             conditions belong here. */}
         <SiteHeader />
         {children}
