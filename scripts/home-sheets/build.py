@@ -56,6 +56,10 @@ os.makedirs(OUT, exist_ok=True)
 os.makedirs(PUB, exist_ok=True)
 
 PLATFORM = "https://ai.uxellent.com"  # the address every CTA on the live site already uses
+# AV-938 phase b: the site's plan ids ⟵ the platform's closed list (planByCode in
+# lib/auth/start-intent.ts; an unknown code is dropped there). Free: no hint.
+# Kept in step with scripts/checks/plan-hint.test.mjs.
+PLATFORM_PLAN = {"free": None, "start": "basic", "business": "plus", "pro": "pro"}
 
 LANGS = {
     "he": {
@@ -443,13 +447,14 @@ def build(lang, cfg, images, page="home", legal=None):
             if v.startswith("#"):
                 nav[k] = ("/" if cfg["home"] == "/" else cfg["home"]) + v
     if page == "pricing":
-        # plan buttons ⟵ the platform's sign-up, the only purchase path (AV-936, AV-938 §3a).
-        # No plan code, price or billing cycle in the URL: the plan and the price are
-        # chosen and set in the platform. English: lang=en (start-intent.ts).
+        # plan buttons ⟵ the platform's sign-up, the only purchase path (AV-936, AV-938).
+        # A plan hint from the platform's closed list only; never a price or a billing
+        # cycle in the URL: the price is always set in the platform. English: lang=en.
         slugs = iter(["free", "start", "business", "pro"])
         def plan(m):
             slug = next(slugs)
-            href = f"{PLATFORM}/start" + ("?lang=en" if lang == "en" else "")
+            q = ([f"plan={PLATFORM_PLAN[slug]}"] if PLATFORM_PLAN[slug] else []) + (["lang=en"] if lang == "en" else [])
+            href = f"{PLATFORM}/start" + ("?" + "&amp;".join(q) if q else "")
             return f'<a class="pl-cta" href="{href}" data-plan="{slug}">{m.group(1)}</a>'
         body, nplans = re.subn(r'<a class="pl-cta" href="#">([^<]*)</a>', plan, body)
         assert nplans == 4, nplans
