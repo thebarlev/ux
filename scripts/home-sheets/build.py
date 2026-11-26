@@ -666,6 +666,11 @@ PLAN_RENAMES = {
         ("לעסק שרוצה דומיין משלו ונוכחות מלאה.", "לעסק שרוצה לשווק בעצמו: דיוור, אוטומציות וחיבור טפסים."),
     ],
     "en": [
+        # dhh (owner, 26.11): no "Billed in USD" while USD billing is not live; after it is,
+        # the line comes from the payment currency (plan data), never written by hand
+        ('<span class="pl-note">Billed in USD</span>', ""),
+        ("Every price on this page is in USD, and that’s what you’ll be billed.", "Every price on this page is in USD."),
+        ("Every price is in USD, and that’s what you’ll be billed.", "Every price is in USD."),
         ("A small line at the bottom of your site. It doesn’t appear on Pro. On Starter and Business you can remove it for $5 a month.", "A small line at the bottom of your site. You can remove it on any plan, at no cost."),
         ("Yes, on Business and Pro. Buy a domain from any registrar and we’ll connect it for you.", "Yes. If you bought a domain, you connect it to your site yourself, from the Starter plan up."),
         ("(usually around $15 a year) and we’ll connect it for you on Business and Pro.", "(usually around $15 a year) and connect it to your site yourself, from the Starter plan up."),
