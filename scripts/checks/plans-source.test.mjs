@@ -1,0 +1,101 @@
+// Plans from the platform's one price source (dgs §3).
+// Run: node --test scripts/checks/plans-source.test.mjs   (Node 24 strips TS types)
+import assert from "node:assert/strict"
+import { readFileSync } from "node:fs"
+import { test } from "node:test"
+
+import { PLAN_IDS, parsePricing } from "../../src/lib/plans-parse.ts"
+
+// The shape GET ai.uxellent.com/api/public/pricing answers (26.11.2026).
+const ANSWER = {
+  currency: "ILS",
+  plans: [
+    { code: "free", name: null, monthly: 0, yearlyPerMonth: 0, yearlyTotal: 0, usd: { monthly: 0, yearlyPerMonth: 0, yearlyTotal: 0 }, aiActionsPerMonth: 20 },
+    { code: "basic", name: "מתחילים", monthly: 60, yearlyPerMonth: 48, yearlyTotal: 576, usd: { monthly: 20, yearlyPerMonth: 16, yearlyTotal: 192 }, aiActionsPerMonth: 50 },
+    { code: "plus", name: "עסקי", monthly: 100, yearlyPerMonth: 80, yearlyTotal: 960, usd: { monthly: 30, yearlyPerMonth: 24, yearlyTotal: 288 }, aiActionsPerMonth: 100 },
+    { code: "pro", name: "פרו", monthly: 200, yearlyPerMonth: 160, yearlyTotal: 1920, usd: { monthly: 60, yearlyPerMonth: 48, yearlyTotal: 576 }, aiActionsPerMonth: 200 },
+  ],
+}
+const FEATURES = JSON.parse(readFileSync(new URL("../../data/plan-features.json", import.meta.url), "utf8"))
+
+test("platform codes map to the site's ids: basic ⟵ start, plus ⟵ business", () => {
+  const plans = parsePricing(ANSWER, FEATURES)
+  assert.deepEqual(Object.keys(plans).sort(), [...PLAN_IDS].sort())
+  assert.equal(plans.start.priceIlsMonth, 60)
+  assert.equal(plans.business.priceIlsMonth, 100)
+  assert.equal(plans.pro.priceIlsMonth, 200)
+})
+
+test("prices, yearly per month, USD and the AI quota come from the endpoint", () => {
+  const { start } = parsePricing(ANSWER, FEATURES)
+  assert.equal(start.priceIlsYear, 48)
+  assert.equal(start.priceUsdMonth, 20)
+  assert.equal(start.priceUsdYear, 16)
+  assert.equal(start.aiActionsMonth, 50)
+})
+
+test("the card facts come from the site's own file, unchanged from the old snapshot", () => {
+  const plans = parsePricing(ANSWER, FEATURES)
+  assert.equal(plans.start.backupDays, 30)
+  assert.equal(plans.free.backupDays, null)
+  assert.equal(plans.business.emailAutomations, true)
+  assert.equal(plans.start.emailAutomations, false)
+  assert.equal(plans.pro.leadForm, true)
+  assert.equal(plans.free.trialDays, null)
+})
+
+test("a malformed field is left out, never shown wrong", () => {
+  const bad = structuredClone(ANSWER)
+  bad.plans[1].monthly = "60"
+  bad.plans[2].usd = null
+  bad.plans[3].aiActionsPerMonth = -1
+  const plans = parsePricing(bad, FEATURES)
+  assert.equal(plans.start.priceIlsMonth, undefined)
+  assert.equal(plans.start.priceIlsYear, 48)
+  assert.equal(plans.business.priceUsdMonth, undefined)
+  assert.equal(plans.pro.aiActionsMonth, undefined)
+})
+
+test("unknown codes are skipped, a repeated code keeps the first", () => {
+  const extra = structuredClone(ANSWER)
+  extra.plans.push({ code: "enterprise", monthly: 999 }, { code: "basic", monthly: 1 })
+  const plans = parsePricing(extra, FEATURES)
+  assert.equal(Object.keys(plans).length, 4)
+  assert.equal(plans.start.priceIlsMonth, 60)
+})
+
+test("not an ILS plans list ⟵ null (the snapshot is used)", () => {
+  assert.equal(parsePricing(null, FEATURES), null)
+  assert.equal(parsePricing({ ok: false }, FEATURES), null)
+  assert.equal(parsePricing({ ...ANSWER, currency: "USD" }, FEATURES), null)
+  assert.equal(parsePricing({ currency: "ILS", plans: [] }, FEATURES), null)
+  // the old site-side shape (id / price_ils_month) is not read as prices
+  assert.equal(parsePricing({ plans: [{ id: "start", price_ils_month: 60 }] }, FEATURES), null)
+})
+
+test("no features file ⟵ prices still show, the fact lines go", () => {
+  const plans = parsePricing(ANSWER, undefined)
+  assert.equal(plans.start.priceIlsMonth, 60)
+  assert.equal(plans.start.backupDays, undefined)
+  assert.equal(plans.start.leadForm, undefined)
+})
+
+test("the committed snapshot parses (the site cannot boot without it)", () => {
+  const snap = JSON.parse(readFileSync(new URL("../../data/plans.snapshot.json", import.meta.url), "utf8"))
+  const plans = parsePricing(snap, FEATURES)
+  assert.ok(plans)
+  for (const id of PLAN_IDS) assert.equal(typeof plans[id]?.priceIlsMonth, "number", id)
+})
+
+// dhh: the international display switch comes from the platform; anything unknown is "ils"
+import { parseIntlDisplay } from "../../src/lib/plans-parse.ts"
+
+test("the international display switch: the three settings, and shekels for anything else", () => {
+  assert.equal(parseIntlDisplay({ ...ANSWER, international: { display: "usd" } }), "usd")
+  assert.equal(parseIntlDisplay({ ...ANSWER, international: { display: "usd+ils" } }), "usd+ils")
+  assert.equal(parseIntlDisplay({ ...ANSWER, international: { display: "ils" } }), "ils")
+  assert.equal(parseIntlDisplay(ANSWER), "ils")
+  assert.equal(parseIntlDisplay({ ...ANSWER, international: { display: "eur" } }), "ils")
+  assert.equal(parseIntlDisplay({ ...ANSWER, international: "usd" }), "ils")
+  assert.equal(parseIntlDisplay(null), "ils")
+})

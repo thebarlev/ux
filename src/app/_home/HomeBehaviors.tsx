@@ -312,7 +312,7 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
 
     // -- pricing: monthly / yearly switch (default yearly). Prices come from the
     //    design's data-m / data-y.
-    const bill = [...root.querySelectorAll<HTMLButtonElement>(".bill button")]
+    const bill = [...root.querySelectorAll<HTMLButtonElement>(".bill:not(.plist) button")]
     if (bill.length) {
       const set = (k: "m" | "y", focus = false) => {
         bill.forEach((b) => {
@@ -335,6 +335,70 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
           if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
             e.preventDefault()
             set(b.dataset.b === "m" ? "y" : "m", true)
+          }
+        })
+      })
+    }
+
+    // -- price list (dhh): Israeli in shekels or international in dollars, never
+    //    from the page's language. The server renders each currency part with
+    //    data-cur (plan-fill) and shows shekels; dollar parts exist only when the
+    //    platform's switch puts the dollar list on show. The visitor's country
+    //    picks the first list (display only: it never sets tax, which comes from
+    //    the billing details); a manual choice is kept and wins from then on.
+    if (root.querySelector('[data-cur="USD"]')) {
+      type List = "il" | "intl"
+      const KEY = "ux_pricelist"
+      const isList = (v: unknown): v is List => v === "il" || v === "intl"
+      const saved = (): List | null => {
+        try {
+          const v = localStorage.getItem(KEY)
+          return isList(v) ? v : null
+        } catch {
+          return null
+        }
+      }
+      const listBtns = [...root.querySelectorAll<HTMLButtonElement>(".plist button")]
+      const show = (list: List, focus = false) => {
+        const cur = list === "intl" ? "USD" : "ILS"
+        root.querySelectorAll<HTMLElement>("[data-cur]").forEach((e) => {
+          e.hidden = e.dataset.cur !== cur
+        })
+        listBtns.forEach((b) => {
+          const isOn = b.dataset.list === list
+          b.classList.toggle("on", isOn)
+          b.setAttribute("aria-checked", String(isOn))
+          b.tabIndex = isOn ? 0 : -1
+          if (isOn && focus) b.focus()
+        })
+      }
+      const choose = (list: List, focus = false) => {
+        try {
+          localStorage.setItem(KEY, list)
+        } catch {
+          // no storage: the choice holds for this page only
+        }
+        show(list, focus)
+      }
+      const first = saved()
+      if (first) show(first)
+      else {
+        fetch("/api/geo", { cache: "no-store" })
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d: { country?: unknown } | null) => {
+            // a choice made while this was on its way wins
+            if (saved() || typeof d?.country !== "string") return
+            show(d.country === "IL" ? "il" : "intl")
+          })
+          .catch(() => {})
+      }
+      listBtns.forEach((b) => {
+        b.tabIndex = b.classList.contains("on") ? 0 : -1
+        on(b, "click", () => isList(b.dataset.list) && choose(b.dataset.list))
+        on(b, "keydown", (e) => {
+          if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+            e.preventDefault()
+            choose(b.dataset.list === "il" ? "intl" : "il", true)
           }
         })
       })

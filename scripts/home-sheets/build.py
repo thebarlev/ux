@@ -588,6 +588,17 @@ PLAN_FEATURES = {
 }
 
 
+# dhh (owner, 26.11): two price lists, never chosen by language. The sheets'
+# currency-dependent copy becomes tokens; plan-fill writes it per currency.
+CUR_TERMS = {"he": "המחירים כוללים מע״מ.", "en": "Prices in US dollars."}
+CUR_ANSWER = {
+    ("he", "pricing"): "כן. כל המחירים בעמוד כוללים מע״מ.",
+    ("he", "faq"): "כן. כל המחירים כוללים מע״מ.",
+    ("en", "pricing"): "US dollars. Every price on this page is in USD, and that’s what you’ll be billed.",
+    ("en", "faq"): "US dollars. Every price is in USD, and that’s what you’ll be billed.",
+}
+
+
 def plan_tokens(body, lang, page):
     if page == "pricing":
         ids = iter(PLAN_IDS)
@@ -598,6 +609,10 @@ def plan_tokens(body, lang, page):
             a, n2 = re.subn(r'<span class="pl-yr"[^>]*>[^<]*</span>', "{{PLAN_YEAR:%s}}" % pid, a, count=1)
             a, n3 = re.subn(r'<div class="pl-act">.*?</div>', "{{PLAN_ACT:%s}}" % pid, a, count=1, flags=re.S)
             assert (n1, n2, n3) == (1, 0 if pid == "free" else 1, 1), (lang, pid, n1, n2, n3)
+            # dhh: the tax note follows the currency shown, never the language (plan-fill)
+            if pid != "free":
+                a, n4 = re.subn(r'<span class="pl-note">(?:כולל מע״מ|Billed in USD)</span>', "{{PLAN_NOTE:%s}}" % pid, a, count=1)
+                assert n4 == 1, (lang, pid, n4)
             a, nx = re.subn(r'<li>(?:(?!</li>).)*?(?:פי [23] פעולות AI|[23]× the AI actions)</span></li>', "", a, flags=re.S)
             assert nx == (0 if pid == "free" else 1), (lang, pid, nx)
             # tbl-035: no "Everything in X, plus:"; each card lists all it has, in one order for every card
@@ -616,7 +631,15 @@ def plan_tokens(body, lang, page):
         assert n == 4 and next(ids, None) is None, n
         body, nb = re.subn(r'<em>(?:20%-|Save 20%)</em>', "{{PLAN_SAVE_BADGE}}", body)
         assert nb == 1, nb
+    if page == "pricing":
+        # dhh: currency-dependent copy, filled per currency by plan-fill
+        assert body.count(CUR_TERMS[lang]) == 1, lang
+        body = body.replace(CUR_TERMS[lang], "{{PLAN_CUR_TERMS}}")
+        assert body.count('<div class="bill" role="radiogroup"') == 1, lang
+        body = body.replace('<div class="bill" role="radiogroup"', '{{PLAN_LIST_SWITCH}}<div class="bill" role="radiogroup"')
     if page in ("pricing", "faq"):
+        assert body.count(CUR_ANSWER[lang, page]) == 1, (lang, page)
+        body = body.replace(CUR_ANSWER[lang, page], "{{PLAN_CUR_ANSWER:%s}}" % page)
         assert body.count(PLAN_SAVE_ANSWER[lang]) == 1, (lang, page)
         body = body.replace(PLAN_SAVE_ANSWER[lang], "{{PLAN_SAVE_ANSWER}}")
     if page == "features":
@@ -666,11 +689,6 @@ PLAN_RENAMES = {
         ("לעסק שרוצה דומיין משלו ונוכחות מלאה.", "לעסק שרוצה לשווק בעצמו: דיוור, אוטומציות וחיבור טפסים."),
     ],
     "en": [
-        # dhh (owner, 26.11): no "Billed in USD" while USD billing is not live; after it is,
-        # the line comes from the payment currency (plan data), never written by hand
-        ('<span class="pl-note">Billed in USD</span>', ""),
-        ("Every price on this page is in USD, and that’s what you’ll be billed.", "Every price on this page is in USD."),
-        ("Every price is in USD, and that’s what you’ll be billed.", "Every price is in USD."),
         ("A small line at the bottom of your site. It doesn’t appear on Pro. On Starter and Business you can remove it for $5 a month.", "A small line at the bottom of your site. You can remove it on any plan, at no cost."),
         ("Yes, on Business and Pro. Buy a domain from any registrar and we’ll connect it for you.", "Yes. If you bought a domain, you connect it to your site yourself, from the Starter plan up."),
         ("(usually around $15 a year) and we’ll connect it for you on Business and Pro.", "(usually around $15 a year) and connect it to your site yourself, from the Starter plan up."),
@@ -1035,6 +1053,9 @@ SITE040_CSS = {
     "pricing": """
 .pr-all{text-align:center;font-size:16px;font-weight:600;color:var(--ink);margin-top:30px}
 .pr-all+.pr-foot{margin-top:8px}
+[data-cur][hidden]{display:none!important}
+[dir=rtl] .pl-price[data-cur=USD]{flex-direction:row;justify-content:flex-end}
+.plist+.bill{margin-top:12px}
 """,
 }
 

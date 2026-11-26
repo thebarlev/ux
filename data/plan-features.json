@@ -1,0 +1,7 @@
+{
+  "_note": "Site-owned plan facts the platform's pricing endpoint does not carry. No prices and no AI quota here: those come from ai.uxellent.com/api/public/pricing (data/plans.snapshot.json).",
+  "free": { "ai_actions_day": null, "trial_days": null, "lead_form": true, "mailing_list": false, "email_automations": false, "emails_month": null, "backup_days": null },
+  "start": { "ai_actions_day": null, "trial_days": null, "lead_form": true, "mailing_list": false, "email_automations": false, "emails_month": null, "backup_days": 30 },
+  "business": { "ai_actions_day": null, "trial_days": null, "lead_form": true, "mailing_list": false, "email_automations": true, "emails_month": null, "backup_days": 30 },
+  "pro": { "ai_actions_day": null, "trial_days": null, "lead_form": true, "mailing_list": false, "email_automations": true, "emails_month": null, "backup_days": 30 }
+}
