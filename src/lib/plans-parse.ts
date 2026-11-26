@@ -48,6 +48,25 @@ const flag = (v: unknown) => (typeof v === "boolean" ? v : undefined)
 const obj = (v: unknown) => (v !== null && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : {})
 
 /**
+ * dhh (owner, 26.11): two price lists only, Israeli in shekels and
+ * international in dollars, never chosen by the site's language. What a
+ * visitor on the international list is shown is a switch in the platform's
+ * admin (one switch for the site, the portal and the payment screen):
+ *   "ils"     everyone sees shekels (dollar list built, off) — until the owner
+ *             picks; the currency every customer is actually billed in today
+ *   "usd"     dollars
+ *   "usd+ils" dollars, plus a line that billing is in shekels
+ * The endpoint carries it as `international.display`; anything else ⟵ "ils".
+ */
+export const INTL_DISPLAYS = ["ils", "usd", "usd+ils"] as const
+export type IntlDisplay = (typeof INTL_DISPLAYS)[number]
+
+export function parseIntlDisplay(data: unknown): IntlDisplay {
+  const d = obj(obj(data).international).display
+  return INTL_DISPLAYS.find((x) => x === d) ?? "ils"
+}
+
+/**
  * The endpoint's answer (or the snapshot of it) plus the site's features, as
  * plans. null when it is not an ILS plans list at all.
  */

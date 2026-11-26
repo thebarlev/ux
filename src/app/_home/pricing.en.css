@@ -1021,3 +1021,8 @@
 .uxp-en .bill em{color:#106f41}
 .uxp-en .uxh-vh{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
 @media (prefers-reduced-motion:reduce){.uxp-en #inc .mq{-webkit-mask:none;mask:none}.uxp-en #inc .mq .inc{flex-wrap:wrap!important;justify-content:center!important;width:auto!important;gap:10px 0!important;transform:none!important}.uxp-en #inc .mq .in-c{transform:none!important}}
+
+/* dhh: two price lists (plan-fill data-cur, HomeBehaviors) */
+.uxp-en [data-cur][hidden]{display:none!important}
+[dir=rtl] .uxp-en .pl-price[data-cur=USD]{flex-direction:row;justify-content:flex-end}
+.uxp-en .plist+.bill{margin-top:12px}

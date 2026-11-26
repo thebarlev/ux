@@ -6,7 +6,7 @@ import { fillLangSwitch } from "./lang-switch"
 import { twinPaths } from "@/lib/i18n/twins"
 import { A11Y_COPY } from "./home.config"
 import { fillGates, fillPlans, fillPlanText, hasYearly, offersLd } from "./plan-fill"
-import { getPlans } from "@/lib/plans"
+import { getPricing } from "@/lib/plans"
 import { MAILING_LIVE } from "@/lib/flags"
 import { HOME_FAQ_EN, HOME_HTML_EN } from "./markup.en"
 import { HOME_FAQ_HE, HOME_HTML_HE } from "./markup.he"
@@ -185,11 +185,12 @@ export async function HomePage({
   // tbl-034: plan prices and AI action counts, from the platform (src/lib/plans.ts);
   // 042: the yearly parts follow the data, the mailing parts MAILING_LIVE
   const gated = html.includes("<!--yearly-->")
-  const plans = html.includes("{{PLAN_") || gated ? await getPlans() : null
-  const yearly = plans ? hasYearly(plans, lang) : false
-  if (plans) html = fillPlans(html, lang, plans)
+  // dhh: the plans and the international display switch, one read; currency never from lang
+  const pricing = html.includes("{{PLAN_") || gated ? await getPricing() : null
+  const yearly = pricing ? hasYearly(pricing.plans, pricing.intl) : false
+  if (pricing) html = fillPlans(html, lang, pricing)
   html = fillGates(html, lang, { yearly, mailing: MAILING_LIVE })
-  const offers = plans && page === "pricing" ? offersLd(lang, plans) : null
+  const offers = pricing && page === "pricing" ? offersLd(lang, pricing) : null
   const rootId = `${ROOT[page]}-${lang}`
   const faqLd = {
     "@context": "https://schema.org",
@@ -203,7 +204,7 @@ export async function HomePage({
       .map((f) => ({
         "@type": "Question",
         name: f.q,
-        acceptedAnswer: { "@type": "Answer", text: plans ? fillPlanText(f.a, lang, plans) : f.a },
+        acceptedAnswer: { "@type": "Answer", text: pricing ? fillPlanText(f.a, lang, pricing) : f.a },
       })),
   }
   return (

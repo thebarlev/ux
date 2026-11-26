@@ -86,3 +86,16 @@ test("the committed snapshot parses (the site cannot boot without it)", () => {
   assert.ok(plans)
   for (const id of PLAN_IDS) assert.equal(typeof plans[id]?.priceIlsMonth, "number", id)
 })
+
+// dhh: the international display switch comes from the platform; anything unknown is "ils"
+import { parseIntlDisplay } from "../../src/lib/plans-parse.ts"
+
+test("the international display switch: the three settings, and shekels for anything else", () => {
+  assert.equal(parseIntlDisplay({ ...ANSWER, international: { display: "usd" } }), "usd")
+  assert.equal(parseIntlDisplay({ ...ANSWER, international: { display: "usd+ils" } }), "usd+ils")
+  assert.equal(parseIntlDisplay({ ...ANSWER, international: { display: "ils" } }), "ils")
+  assert.equal(parseIntlDisplay(ANSWER), "ils")
+  assert.equal(parseIntlDisplay({ ...ANSWER, international: { display: "eur" } }), "ils")
+  assert.equal(parseIntlDisplay({ ...ANSWER, international: "usd" }), "ils")
+  assert.equal(parseIntlDisplay(null), "ils")
+})
