@@ -23,6 +23,7 @@ const CASES = [
 ]
 
 let bad = 0
+const PLAN_HINT = { free: null, start: "basic", business: "plus", pro: "pro" }
 for (const [path, want] of CASES) {
   for (const method of ["GET", "POST"]) {
     const res = await fetch(BASE + path, {
@@ -39,15 +40,15 @@ for (const [path, want] of CASES) {
   }
 }
 
-// the pricing buttons, both languages: the platform's sign-up, no plan code, price or cycle (AV-938 §3a)
+// the pricing buttons, both languages: the platform's sign-up with a plan hint from the closed list, no price or cycle (AV-938)
 for (const page of ["/pricing", "/en/pricing"]) {
   const html = await (await fetch(BASE + page, { headers })).text()
   const ctas = [...html.matchAll(/<a class="pl-cta" href="([^"]+)" data-plan="([a-z]+)"/g)].map((m) => [m[2], m[1].replace(/&amp;/g, "&")])
   const toCheckout = /href="(https:\/\/(www\.)?uxellent\.com)?\/(checkout|api\/checkout|api\/cardcom)/.test(html)
   for (const [plan, href] of ctas) {
     const u = new URL(href)
-    const wantSearch = page.startsWith("/en") ? "?lang=en" : ""
-    const ok = u.origin === "https://ai.uxellent.com" && u.pathname === "/start" && u.search === wantSearch
+    const want = new URLSearchParams([...(PLAN_HINT[plan] ? [["plan", PLAN_HINT[plan]]] : []), ...(page.startsWith("/en") ? [["lang", "en"]] : [])])
+    const ok = u.origin === "https://ai.uxellent.com" && u.pathname === "/start" && u.searchParams.toString() === want.toString()
     if (!ok) bad++
     console.log(`${ok ? "OK  " : "FAIL"} | ${page.padEnd(12)} ${plan.padEnd(9)} ⟵ ${href}`)
   }
