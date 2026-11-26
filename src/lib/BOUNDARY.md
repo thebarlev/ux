@@ -3,8 +3,6 @@
 ## Server-only (NEVER import in "use client" components)
 - `lib/supabase/admin.ts` - Supabase admin client
 - `lib/captcha/verify.ts` - reCAPTCHA server verification
-- `lib/checkout/createCheckout.ts` - Checkout logic
-- `lib/payments/cardcom.ts` - Cardcom payment integration
 - All `app/api/**/route.ts` - API route handlers
 
 These files use `import "server-only"` - importing them in client code will fail at build.

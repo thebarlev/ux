@@ -311,7 +311,7 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
     }
 
     // -- pricing: monthly / yearly switch (default yearly). Prices come from the
-    //    design's data-m / data-y; plan buttons keep billing= in step.
+    //    design's data-m / data-y.
     const bill = [...root.querySelectorAll<HTMLButtonElement>(".bill button")]
     if (bill.length) {
       const set = (k: "m" | "y", focus = false) => {
@@ -326,11 +326,7 @@ export function HomeBehaviors({ lang, rootId }: { lang: Lang; rootId: string }) 
           const v = e.dataset[k]
           if (v !== undefined) e.textContent = v
         })
-        root.querySelectorAll<HTMLAnchorElement>(".pl-cta[data-plan]").forEach((a) => {
-          if (a.dataset.plan === "free") return
-          // keep the exact URL format the live pricing page uses
-          a.setAttribute("href", a.getAttribute("href")!.replace(/billing=(monthly|yearly)/, `billing=${k === "m" ? "monthly" : "yearly"}`))
-        })
+        // AV-936: the plan buttons carry no billing cycle; it is chosen in the platform
       }
       bill.forEach((b) => {
         b.tabIndex = b.classList.contains("on") ? 0 : -1

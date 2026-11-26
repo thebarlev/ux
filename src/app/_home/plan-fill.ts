@@ -137,8 +137,6 @@ function renumberSlides(html: string, lang: Lang) {
 /** The page's gated parts, for any page (also those without plan placeholders). */
 export function fillGates(html: string, lang: Lang, opts: { yearly: boolean; mailing: boolean }) {
   let out = gate(gate(html, "yearly", opts.yearly), "mailing", opts.mailing)
-  // with no yearly billing, the plan buttons ask for monthly
-  if (!opts.yearly) out = out.replace(/billing=yearly/g, "billing=monthly")
   if (out.includes('aria-roledescription="slide"')) out = renumberSlides(out, lang)
   return out
 }

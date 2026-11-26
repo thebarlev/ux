@@ -56,7 +56,6 @@ export const HEADER_CTA = {
 /**
  * נתיבים שבהם ההאדר הגלובלי לא מרונדר:
  * - /lp — עמודי קמפיין מתוכננים בלי האדר (החלטה מתועדת).
- * - /checkout — מסך תשלום מינימלי (הכרעת ברירת מחדל 28.7).
  * - /thanks — לעמודי ההצלחה יש שורת "חזרה לאתר" משלהם.
  * - /en — בשלב 1 האנגלית נשארת עם HeaderEN דרך en/layout (שלב 2 יאחד).
  * - /, /pricing, /products, /how-it-works, /included, /blog — עיצוב 2026-08
@@ -65,7 +64,6 @@ export const HEADER_CTA = {
  */
 export const HEADERLESS_PATTERNS = [
   /^\/lp(\/|$)/,
-  /^\/checkout(\/|$)/,
   /^\/thanks(\/|$)/,
   /^\/en(\/|$)/,
   /^\/$/,
