@@ -25,6 +25,9 @@ export type Plan = {
   readonly priceIlsYear?: number
   readonly priceUsdMonth?: number
   readonly priceUsdYear?: number
+  /** SEC-agent6 (27.11): the yearly total as the source states it (yearlyTotal), never per-month × 12 here */
+  readonly priceIlsYearTotal?: number
+  readonly priceUsdYearTotal?: number
   readonly aiActionsMonth?: number
   /** null: no daily cap */
   readonly aiActionsDay?: number | null
@@ -87,6 +90,8 @@ export function parsePricing(data: unknown, features: unknown): Plans | null {
       priceIlsYear: amount(p.yearlyPerMonth),
       priceUsdMonth: amount(usd.monthly),
       priceUsdYear: amount(usd.yearlyPerMonth),
+      priceIlsYearTotal: amount(p.yearlyTotal),
+      priceUsdYearTotal: amount(usd.yearlyTotal),
       aiActionsMonth: count(p.aiActionsPerMonth),
       aiActionsDay: countOrNull(f.ai_actions_day),
       trialDays: countOrNull(f.trial_days),

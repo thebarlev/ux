@@ -99,3 +99,19 @@ test("the international display switch: the three settings, and shekels for anyt
   assert.equal(parseIntlDisplay({ ...ANSWER, international: "usd" }), "ils")
   assert.equal(parseIntlDisplay(null), "ils")
 })
+
+// SEC-agent6 (27.11, ux#17 דלתת dij): the yearly total comes from the source (yearlyTotal), never per-month × 12 in the site
+test("the yearly totals are the endpoint's yearlyTotal, as given", () => {
+  const odd = { currency: "ILS", plans: [{ code: "basic", monthly: 60, yearlyPerMonth: 48, yearlyTotal: 575, usd: { monthly: 15, yearlyPerMonth: 12, yearlyTotal: 143 } }] }
+  const p = parsePricing(odd, FEATURES).start
+  assert.equal(p.priceIlsYearTotal, 575)
+  assert.equal(p.priceUsdYearTotal, 143)
+  const none = parsePricing({ currency: "ILS", plans: [{ code: "basic", monthly: 60, yearlyPerMonth: 48 }] }, FEATURES).start
+  assert.equal(none.priceIlsYearTotal, undefined)
+})
+
+test("plan-fill never multiplies a price by 12", () => {
+  const src = readFileSync(new URL("../../src/app/_home/plan-fill.ts", import.meta.url), "utf8")
+  assert.doesNotMatch(src, /\*\s*12\b/)
+  assert.doesNotMatch(src, /\b12\s*\*/)
+})

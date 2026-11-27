@@ -43,7 +43,9 @@ const span = (cur: Cur, text: string) => `<span data-cur="${cur}"${hid(cur)}>${t
 function prices(p: Plan | undefined, cur: Cur) {
   const m = cur === "ILS" ? p?.priceIlsMonth : p?.priceUsdMonth
   const y = cur === "ILS" ? p?.priceIlsYear : p?.priceUsdYear
-  return m === undefined ? null : { m, y }
+  /** the yearly total from the source (yearlyTotal); a line that needs it is left out without it */
+  const t = cur === "ILS" ? p?.priceIlsYearTotal : p?.priceUsdYearTotal
+  return m === undefined ? null : { m, y, t }
 }
 
 /**
@@ -71,9 +73,9 @@ function priceHtml(p: Plan | undefined, lang: Lang, cur: Cur, yearly: boolean) {
 
 function yearHtml(p: Plan | undefined, lang: Lang, cur: Cur, yearly: boolean) {
   const pr = prices(p, cur)
-  if (!pr || !yearly || pr.y === undefined) return ""
+  if (!pr || !yearly || pr.y === undefined || pr.t === undefined) return ""
   const m = lang === "he" ? `${money(cur, pr.m)} בחיוב חודשי` : `${money(cur, pr.m)} billed monthly`
-  const y = lang === "he" ? `${money(cur, pr.y * 12)} בחיוב שנתי` : `${money(cur, pr.y * 12)} billed yearly`
+  const y = lang === "he" ? `${money(cur, pr.t)} בחיוב שנתי` : `${money(cur, pr.t)} billed yearly`
   return `<span class="pl-yr" data-cur="${cur}" data-m="${m}" data-y="${y}"${hid(cur)}>${y}</span>`
 }
 
@@ -94,15 +96,16 @@ const BILLED: Record<Lang, Record<Cur, string>> = {
 /**
  * dij (owner, 26.11 23:12): option א' ("usd+ils") names the amount actually
  * charged, in shekels: the final, VAT-included price (₪60 a month, ₪576 a
- * year), never the base. Whole shekels from the one source; nothing computed
- * here. It follows the monthly / yearly switch like the price (data-m / data-y).
+ * year), never the base. Both amounts are the source's own (monthly ·
+ * yearlyTotal, SEC-agent6); none is multiplied here. It follows the monthly /
+ * yearly switch like the price (data-m / data-y).
  */
 function chargedHtml(p: Plan | undefined, lang: Lang, yearly: boolean) {
   const pr = prices(p, "ILS")
   if (!pr) return ""
   const m = lang === "he" ? `${money("ILS", pr.m)} לחודש` : `${money("ILS", pr.m)}/month`
-  if (!yearly || pr.y === undefined) return `: <span class="pl-chg">${m}</span>`
-  const y = lang === "he" ? `${money("ILS", pr.y * 12)} לשנה` : `${money("ILS", pr.y * 12)}/year`
+  if (!yearly || pr.y === undefined || pr.t === undefined) return `: <span class="pl-chg">${m}</span>`
+  const y = lang === "he" ? `${money("ILS", pr.t)} לשנה` : `${money("ILS", pr.t)}/year`
   return `: <span class="pl-chg" data-m="${m}" data-y="${y}">${y}</span>`
 }
 function noteHtml(p: Plan | undefined, lang: Lang, cur: Cur, intl: IntlDisplay, yearly: boolean) {
@@ -300,7 +303,7 @@ export function offersLd(lang: Lang, { plans, intl }: PricingData) {
           priceSpecification: [
             { "@type": "UnitPriceSpecification", price: pr.m, priceCurrency: cur, billingDuration: "P1M" },
             // 042: a yearly price only once yearly billing is on
-            ...(yearly && pr.y !== undefined ? [{ "@type": "UnitPriceSpecification", price: pr.y * 12, priceCurrency: cur, billingDuration: "P1Y" }] : []),
+            ...(yearly && pr.t !== undefined ? [{ "@type": "UnitPriceSpecification", price: pr.t, priceCurrency: cur, billingDuration: "P1Y" }] : []),
           ],
         },
       ]
