@@ -1419,10 +1419,13 @@ VENDORS = {
     "en": ("<tr><td>PostHog</td><td>Measuring page views on uxellent.com</td><td><mark class=\"flag\">‼️ Fill in country</mark></td></tr>"
            "<tr><td>Google Analytics 4</td><td>Measuring visits to uxellent.com: pages viewed and where visitors came from</td><td><mark class=\"flag\">‼️ Fill in country</mark></td></tr>"),
 }
+# dij 3 (agent 8, 27.11 08:24): the platform's cancellation form, measured 200. It is Hebrew only today
+# (?lang=en is ignored, /en/cancel is 404), so the English page links to it too until an English form exists.
+CANCEL_FORM = PLATFORM + "/cancel"
 CANCEL_LINK = {
-    "he": (f'<div class="lg-cancel"><a class="ct-btn" href="{PLATFORM}">לטופס הביטול בחשבון</a>'
+    "he": (f'<div class="lg-cancel"><a class="ct-btn" href="{CANCEL_FORM}">לטופס הביטול בחשבון</a>'
            '<p class="ct-note">אפשר לבטל גם במייל ל-<a class="lnk" href="mailto:support@uxellent.com"><bdi>support@uxellent.com</bdi></a>.</p></div>'),
-    "en": (f'<div class="lg-cancel"><a class="ct-btn" href="{PLATFORM}">Go to the cancellation form in your account</a>'
+    "en": (f'<div class="lg-cancel"><a class="ct-btn" href="{CANCEL_FORM}">Go to the cancellation form in your account</a>'
            '<p class="ct-note">You can also cancel by email at <a class="lnk" href="mailto:support@uxellent.com">support@uxellent.com</a>.</p></div>'),
 }
 LEGAL_FIXES = {
