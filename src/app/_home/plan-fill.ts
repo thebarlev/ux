@@ -17,9 +17,15 @@ const NAME: Record<Lang, Record<PlanId, string>> = {
 const num = (n: number) => n.toLocaleString("en-US", { maximumFractionDigits: 2 })
 
 /** The monthly price, and the yearly one (per month) when there is one; null without a monthly price. */
-function prices(p: Plan | undefined, lang: Lang) {
-  const m = lang === "he" ? p?.priceIlsMonth : p?.priceUsdMonth
-  const y = lang === "he" ? p?.priceIlsYear : p?.priceUsdYear
+/**
+ * AV-1027 · the manager 27.11 15:02 (owner 14:56): the currency shown is the currency charged. While the
+ * international (USD) path is off, every customer pays in shekels, so both languages show the shekel
+ * prices (VAT included). The language never picks the currency (dhh); dollars come back only with ux#17,
+ * once USD billing is live. `lang` stays for the wording only.
+ */
+function prices(p: Plan | undefined, _lang: Lang) {
+  const m = p?.priceIlsMonth
+  const y = p?.priceIlsYear
   return m === undefined ? null : { m, y }
 }
 
@@ -34,7 +40,7 @@ export function hasYearly(plans: Plans, lang: Lang) {
   return paid.length > 0 && paid.every((pr) => pr!.y !== undefined)
 }
 
-const CUR = { he: "₪", en: "$" } as const
+const CUR = { he: "₪", en: "₪" } as const
 
 function priceHtml(p: Plan | undefined, lang: Lang, yearly: boolean) {
   const pr = prices(p, lang)
@@ -157,7 +163,7 @@ export function fillPlans(html: string, lang: Lang, plans: Plans) {
     .replace(/\{\{PLAN_SAVE_ANSWER\}\}/g, saveAnswer(plans, lang))
   if (from.length) {
     const min = num(Math.min(...from))
-    out = out.replace("{{PLAN_FROM}}", lang === "he" ? `מ-₪${min} לחודש` : `From $${min} a month`)
+    out = out.replace("{{PLAN_FROM}}", lang === "he" ? `מ-₪${min} לחודש` : `From ₪${min} a month`)
   } else {
     // the comparison table's price row goes when there is no price to show
     out = out.replace(/<tr>(?:(?!<tr>)[\s\S])*?\{\{PLAN_FROM\}\}[\s\S]*?<\/tr>/, "")
@@ -170,7 +176,7 @@ export const fillPlanText = (text: string, lang: Lang, plans: Plans) => text.rep
 /** schema.org offers for the pricing page, from the same data. */
 export function offersLd(lang: Lang, plans: Plans) {
   const yearly = hasYearly(plans, lang)
-  const currency = lang === "he" ? "ILS" : "USD"
+  const currency = "ILS"
   const url = lang === "he" ? "https://uxellent.com/pricing" : "https://uxellent.com/en/pricing"
   const offers = PLAN_IDS.flatMap((id) => {
     const pr = prices(plans[id], lang)

@@ -671,6 +671,12 @@ PLAN_RENAMES = {
         ('<span class="pl-note">Billed in USD</span>', ""),
         ("Every price on this page is in USD, and that’s what you’ll be billed.", "Every price on this page is in USD."),
         ("Every price is in USD, and that’s what you’ll be billed.", "Every price is in USD."),
+        # AV-1027 · the manager 27.11 15:02 (owner 14:56): the price shown is the price charged. While the
+        # international (USD) path is off every customer pays in shekels, so the English site shows shekels too
+        # (the same wording ux#17 uses for its shekel list). Never "USD" until USD billing is live.
+        ("US dollars. Every price on this page is in USD.", "Israeli shekels. Every price on this page includes VAT."),
+        ("US dollars. Every price is in USD.", "Israeli shekels, including VAT."),
+        ("Prices in US dollars.", "Prices in Israeli shekels, including VAT."),
         ("A small line at the bottom of your site. It doesn’t appear on Pro. On Starter and Business you can remove it for $5 a month.", "A small line at the bottom of your site. You can remove it on any plan, at no cost."),
         ("Yes, on Business and Pro. Buy a domain from any registrar and we’ll connect it for you.", "Yes. If you bought a domain, you connect it to your site yourself, from the Starter plan up."),
         ("(usually around $15 a year) and we’ll connect it for you on Business and Pro.", "(usually around $15 a year) and connect it to your site yourself, from the Starter plan up."),
