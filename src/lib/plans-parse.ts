@@ -28,6 +28,12 @@ export type Plan = {
   /** SEC-agent6 (27.11): the yearly total as the source states it (yearlyTotal), never per-month × 12 here */
   readonly priceIlsYearTotal?: number
   readonly priceUsdYearTotal?: number
+  /**
+   * dij (owner, 26.11 23:12) · #2996: the Israeli price split into base and VAT, computed on the
+   * platform in agorot (ilsVat). Per period, only when base + VAT is exactly that period's price;
+   * the site never computes VAT itself.
+   */
+  readonly vatIls?: { readonly month?: VatSplit; readonly yearPerMonth?: VatSplit; readonly yearTotal?: VatSplit }
   readonly aiActionsMonth?: number
   /** null: no daily cap */
   readonly aiActionsDay?: number | null
@@ -42,9 +48,17 @@ export type Plan = {
   /** 046: days of daily backup and restore; null: no backup line */
   readonly backupDays?: number | null
 }
+export type VatSplit = { readonly net: number; readonly vat: number }
 export type Plans = Partial<Record<PlanId, Plan>>
 
 const amount = (v: unknown) => (typeof v === "number" && Number.isFinite(v) && v >= 0 ? v : undefined)
+/** A base/VAT split, kept only when it adds up to the price to the agora (dij: "בסיס + מע״מ מסתכמים בדיוק"). */
+function vatSplit(v: unknown, price: number | undefined): VatSplit | undefined {
+  const o = v && typeof v === "object" ? (v as Record<string, unknown>) : {}
+  const net = amount(o.net), vat = amount(o.vat)
+  if (net === undefined || vat === undefined || price === undefined) return undefined
+  return Math.round(net * 100) + Math.round(vat * 100) === Math.round(price * 100) ? { net, vat } : undefined
+}
 const count = (v: unknown) => (typeof v === "number" && Number.isInteger(v) && v > 0 ? v : undefined)
 const countOrNull = (v: unknown) => (v === null ? null : count(v))
 const flag = (v: unknown) => (typeof v === "boolean" ? v : undefined)
@@ -92,6 +106,11 @@ export function parsePricing(data: unknown, features: unknown): Plans | null {
       priceUsdYear: amount(usd.yearlyPerMonth),
       priceIlsYearTotal: amount(p.yearlyTotal),
       priceUsdYearTotal: amount(usd.yearlyTotal),
+      vatIls: (() => {
+        const v = obj(p.ilsVat)
+        const out = { month: vatSplit(v.monthly, amount(p.monthly)), yearPerMonth: vatSplit(v.yearlyPerMonth, amount(p.yearlyPerMonth)), yearTotal: vatSplit(v.yearlyTotal, amount(p.yearlyTotal)) }
+        return out.month || out.yearPerMonth || out.yearTotal ? out : undefined
+      })(),
       aiActionsMonth: count(p.aiActionsPerMonth),
       aiActionsDay: countOrNull(f.ai_actions_day),
       trialDays: countOrNull(f.trial_days),

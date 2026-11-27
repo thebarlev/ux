@@ -115,3 +115,21 @@ test("plan-fill never multiplies a price by 12", () => {
   assert.doesNotMatch(src, /\*\s*12\b/)
   assert.doesNotMatch(src, /\b12\s*\*/)
 })
+
+// dij · #2996: the Israeli base + VAT come from the platform (ilsVat), kept only when they add up to the price
+test("ilsVat: base + VAT per period, as given, only when they add up to the price", () => {
+  const src = { currency: "ILS", plans: [{ code: "basic", monthly: 60, yearlyPerMonth: 48, yearlyTotal: 576,
+    ilsVat: { monthly: { net: 50.85, vat: 9.15 }, yearlyPerMonth: { net: 40.68, vat: 7.32 }, yearlyTotal: { net: 488.14, vat: 87.86 } } }] }
+  const v = parsePricing(src, FEATURES).start.vatIls
+  assert.deepEqual(v.month, { net: 50.85, vat: 9.15 })
+  assert.deepEqual(v.yearPerMonth, { net: 40.68, vat: 7.32 })
+  assert.deepEqual(v.yearTotal, { net: 488.14, vat: 87.86 })
+  const off = { currency: "ILS", plans: [{ code: "basic", monthly: 60, yearlyPerMonth: 48, ilsVat: { monthly: { net: 50.84, vat: 9.15 }, yearlyPerMonth: { net: "40.68", vat: 7.32 } } }] }
+  assert.equal(parsePricing(off, FEATURES).start.vatIls, undefined, "a split that does not add up, or is not a number, is dropped")
+  assert.equal(parsePricing({ currency: "ILS", plans: [{ code: "basic", monthly: 60 }] }, FEATURES).start.vatIls, undefined)
+})
+
+test("plan-fill never computes VAT (no rate, no 1.18, no division)", () => {
+  const src = readFileSync(new URL("../../src/app/_home/plan-fill.ts", import.meta.url), "utf8")
+  assert.doesNotMatch(src, /vatRate|\b1\.18\b|\b0\.18\b|\/\s*1\.|\*\s*0\.\d/)
+})

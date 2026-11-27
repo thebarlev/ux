@@ -108,9 +108,25 @@ function chargedHtml(p: Plan | undefined, lang: Lang, yearly: boolean) {
   const y = lang === "he" ? `${money("ILS", pr.t)} לשנה` : `${money("ILS", pr.t)}/year`
   return `: <span class="pl-chg" data-m="${m}" data-y="${y}">${y}</span>`
 }
+/**
+ * dij (owner, 26.11 23:12) · #2996: under the Hebrew shekel price, the base and the VAT it includes
+ * ("₪50.85 + מע״מ ₪9.15"), exactly as the platform split it (ilsVat, in agorot). Nothing is computed
+ * here; a period without a split that adds up shows the line as today. It follows the monthly /
+ * yearly switch like the price. ‼️ Owner's draft wording; merges with ux#17 after the accountant.
+ */
+const agorot = (n: number) => n.toFixed(2)
+function vatLineHtml(p: Plan | undefined, lang: Lang, yearly: boolean) {
+  if (lang !== "he") return ""
+  const m = p?.vatIls?.month
+  if (!m) return ""
+  const txt = (v: { net: number; vat: number }) => `₪${agorot(v.net)} + מע״מ ₪${agorot(v.vat)}`
+  const y = p?.vatIls?.yearPerMonth
+  if (!yearly || !y) return ` · <span class="pl-vat">${txt(m)}</span>`
+  return ` · <span class="pl-vat" data-m="${txt(m)}" data-y="${txt(y)}">${txt(y)}</span>`
+}
 function noteHtml(p: Plan | undefined, lang: Lang, cur: Cur, intl: IntlDisplay, yearly: boolean) {
   const charged = cur === "USD" && payCur(intl) === "ILS" ? chargedHtml(p, lang, yearly) : ""
-  const text = cur === "USD" ? `${NOTE[lang].USD} · ${BILLED[lang][payCur(intl)]}${charged}` : NOTE[lang].ILS
+  const text = cur === "USD" ? `${NOTE[lang].USD} · ${BILLED[lang][payCur(intl)]}${charged}` : NOTE[lang].ILS + vatLineHtml(p, lang, yearly)
   return `<span class="pl-note" data-cur="${cur}"${hid(cur)}>${text}</span>`
 }
 
