@@ -1,0 +1,73 @@
+{
+  "currency": "ILS",
+  "plans": [
+    {
+      "code": "free",
+      "ilsVat": {
+        "monthly": {
+          "net": 0,
+          "vat": 0
+        },
+        "yearlyPerMonth": {
+          "net": 0,
+          "vat": 0
+        },
+        "yearlyTotal": {
+          "net": 0,
+          "vat": 0
+        }
+      }
+    },
+    {
+      "code": "basic",
+      "ilsVat": {
+        "monthly": {
+          "net": 50.85,
+          "vat": 9.15
+        },
+        "yearlyPerMonth": {
+          "net": 40.68,
+          "vat": 7.32
+        },
+        "yearlyTotal": {
+          "net": 488.14,
+          "vat": 87.86
+        }
+      }
+    },
+    {
+      "code": "plus",
+      "ilsVat": {
+        "monthly": {
+          "net": 84.75,
+          "vat": 15.25
+        },
+        "yearlyPerMonth": {
+          "net": 67.8,
+          "vat": 12.2
+        },
+        "yearlyTotal": {
+          "net": 813.56,
+          "vat": 146.44
+        }
+      }
+    },
+    {
+      "code": "pro",
+      "ilsVat": {
+        "monthly": {
+          "net": 169.49,
+          "vat": 30.51
+        },
+        "yearlyPerMonth": {
+          "net": 135.59,
+          "vat": 24.41
+        },
+        "yearlyTotal": {
+          "net": 1627.12,
+          "vat": 292.88
+        }
+      }
+    }
+  ]
+}

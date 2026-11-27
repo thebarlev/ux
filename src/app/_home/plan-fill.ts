@@ -1,4 +1,5 @@
 import { PLAN_IDS, type Plan, type PlanId, type Plans } from "@/lib/plans"
+import { addsUpTo, agorot, type VatSplits } from "@/lib/vat-split-parse"
 
 /**
  * Fills the plan placeholders the sheets generator left in the markup
@@ -141,8 +142,32 @@ export function fillGates(html: string, lang: Lang, opts: { yearly: boolean; mai
   return out
 }
 
-export function fillPlans(html: string, lang: Lang, plans: Plans) {
+/**
+ * dij (owner, 26.11 23:12) · #2996: under the Hebrew shekel price, the base and the VAT it includes
+ * ("כולל מע״מ · ₪50.85 + מע״מ ₪9.15"), exactly as the platform split it (src/lib/vat-split.ts). Nothing is
+ * computed here, and a split that does not add up to the price on the card leaves the line as today.
+ * It follows the monthly / yearly switch like the price (data-m / data-y). Hebrew only.
+ */
+function vatLine(p: Plan | undefined, vat: VatSplits[keyof VatSplits], yearly: boolean) {
+  const pr = prices(p, "he")
+  if (!pr || !vat) return ""
+  const txt = (v: { net: number; vat: number }) => `₪${agorot(v.net)} + מע״מ ₪${agorot(v.vat)}`
+  const m = addsUpTo(vat.month, pr.m) ? vat.month : undefined
+  const y = addsUpTo(vat.yearPerMonth, pr.y) ? vat.yearPerMonth : undefined
+  if (yearly && pr.y !== undefined) {
+    if (!y) return ""
+    return m ? ` · <span class="pl-vat" data-m="${txt(m)}" data-y="${txt(y)}">${txt(y)}</span>` : ` · <span class="pl-vat">${txt(y)}</span>`
+  }
+  return m ? ` · <span class="pl-vat">${txt(m)}</span>` : ""
+}
+
+export function fillPlans(html: string, lang: Lang, plans: Plans, vat: VatSplits = {}) {
   const yearly = hasYearly(plans, lang)
+  if (lang === "he") {
+    html = html.replace(/<span class="pl-note">כולל מע״מ<\/span>\{\{PLAN_YEAR:(\w+)\}\}/g, (all, id: string) =>
+      id in vat ? `<span class="pl-note">כולל מע״מ${vatLine(plans[id as PlanId], vat[id as keyof VatSplits], yearly)}</span>{{PLAN_YEAR:${id}}}` : all,
+    )
+  }
   const save = savePct(plans, lang)
   const from = PLAN_IDS.map((id) => prices(plans[id], lang)?.m).filter((m): m is number => m !== undefined)
   let out = html

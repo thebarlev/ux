@@ -7,6 +7,7 @@ import { twinPaths } from "@/lib/i18n/twins"
 import { A11Y_COPY } from "./home.config"
 import { fillGates, fillPlans, fillPlanText, hasYearly, offersLd } from "./plan-fill"
 import { getPlans } from "@/lib/plans"
+import { getVatSplits } from "@/lib/vat-split"
 import { MAILING_LIVE } from "@/lib/flags"
 import { HOME_FAQ_EN, HOME_HTML_EN } from "./markup.en"
 import { HOME_FAQ_HE, HOME_HTML_HE } from "./markup.he"
@@ -187,7 +188,9 @@ export async function HomePage({
   const gated = html.includes("<!--yearly-->")
   const plans = html.includes("{{PLAN_") || gated ? await getPlans() : null
   const yearly = plans ? hasYearly(plans, lang) : false
-  if (plans) html = fillPlans(html, lang, plans)
+  // dij · #2996: the Hebrew cards show the base + VAT split (src/lib/vat-split.ts)
+  const vat = plans && lang === "he" && html.includes("{{PLAN_YEAR:") ? await getVatSplits() : {}
+  if (plans) html = fillPlans(html, lang, plans, vat)
   html = fillGates(html, lang, { yearly, mailing: MAILING_LIVE })
   const offers = plans && page === "pricing" ? offersLd(lang, plans) : null
   const rootId = `${ROOT[page]}-${lang}`
