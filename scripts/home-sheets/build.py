@@ -453,11 +453,21 @@ def build(lang, cfg, images, page="home", legal=None):
         slugs = iter(["free", "start", "business", "pro"])
         def plan(m):
             slug = next(slugs)
+            # AV-1028 §1 · p24 (1): USD payments are off, and no one abroad is charged in shekels without the
+            # owner. On the English page the paid plans keep their USD prices but lead to the existing
+            # contact form ("Notify me"), never to a purchase. The free plan and the Hebrew page are as before.
+            if lang == "en" and slug != "free":
+                return f'<a class="pl-cta" href="/en/contact" data-plan="{slug}">Notify me</a>'
             q = ([f"plan={PLATFORM_PLAN[slug]}"] if PLATFORM_PLAN[slug] else []) + (["lang=en"] if lang == "en" else [])
             href = f"{PLATFORM}/start" + ("?" + "&amp;".join(q) if q else "")
             return f'<a class="pl-cta" href="{href}" data-plan="{slug}">{m.group(1)}</a>'
         body, nplans = re.subn(r'<a class="pl-cta" href="#">([^<]*)</a>', plan, body)
         assert nplans == 4, nplans
+        if lang == "en":
+            # next to the price of every paid plan (AV-1028 §1)
+            body, nnote = re.subn(r'<div class="pl-meta">(\{\{PLAN_YEAR:(?:start|business|pro)\}\})</div>',
+                                  r'<div class="pl-meta">\1<span class="pl-note">USD payments are not yet available.</span></div>', body)
+            assert nnote == 3, nnote
         body = body.replace('<a class="cl-btn" href="#">', f'<a class="cl-btn" href="{PLATFORM}">', 1)
         # language switch: pricing <-> pricing
         body = body.replace('<a href="/" lang="he"', '<a href="/pricing" lang="he"').replace('<a href="/en" lang="en"', '<a href="/en/pricing" lang="en"')
